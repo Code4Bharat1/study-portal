@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+
+
+/* spin */
+@keyframes spin-once {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .animate-spin-once {
+    animation: spin-once 10s linear forwards; /* Runs the animation once */
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 2s ease forwards;
+  }
+  
