@@ -1,10 +1,19 @@
-'use client'
 
-import { useState } from "react";
+
+
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import {
+  FaDatabase, FaCogs, FaLayerGroup, FaSitemap, FaLock, FaRocket,
+  FaCopy, FaProjectDiagram, FaChevronDown, FaChevronUp
+} from 'react-icons/fa';
 
 const MongoDBSidebar = () => {
   const [isOpen, setIsOpen] = useState({});
+  const pathname = usePathname();
 
   const toggleDropdown = (section) => {
     setIsOpen((prev) => ({
@@ -13,152 +22,125 @@ const MongoDBSidebar = () => {
     }));
   };
 
+  const getLinkClass = (href) => (
+    `block p-2 rounded transition-all duration-200 ease-in-out
+    hover:bg-[#d0f0fd]
+    ${pathname === href ? 'bg-[#d0f0fd] font-semibold text-black' : 'text-gray-700'}`
+  );
+
   return (
-    <div className="w-64 bg-white text-black p-4 h-screen fixed">
-      <h2 className="text-2xl font-bold mb-6">MongoDB Tutorial</h2>
-      <nav className="space-y-2">
-        <ul>
+    <div className="w-70 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg overflow-hidden">
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">MongoDB Tutorial</h2>
+
+      {/* Scrollable list */}
+      <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+        <ul className="space-y-4 pb-29"> {/* <- pb-20 added for padding at bottom */}
           <li>
-            <a
-              href="/homemongodbpage"
-              className="block p-2 rounded-md hover:bg-green-300"
-            >
-              MongoDB HOME
-            </a>
+            <Link href="/homemongodbpage" className={getLinkClass("/homemongodbpage")}>
+              <FaDatabase className="inline mr-2 text-xl" /> MongoDB HOME
+            </Link>
           </li>
           <li>
-            <a
-              href="/apimongodb"
-              className="block p-2 rounded-md hover:bg-green-300"
-            >
-              MongoDB API
-            </a>
+            <Link href="/apimongodb" className={getLinkClass("/apimongodb")}>
+              <FaCogs className="inline mr-2 text-xl" /> MongoDB API
+            </Link>
           </li>
           <li>
-            <a
-              href="/installationMongo"
-              className="block p-2 rounded-md hover:bg-green-700"
-            >
-              MongoDB Installation
-            </a>
+            <Link href="/installationMongo" className={getLinkClass("/installationMongo")}>
+              <FaCogs className="inline mr-2 text-xl" /> Installation
+            </Link>
           </li>
           <li>
-            <a
-              href="/basicmongo"
-              className="block p-2 rounded-md hover:bg-green-700"
-            >
-              MongoDB Basics
-            </a>
+            <Link href="/basicmongo" className={getLinkClass("/basicmongo")}>
+              <FaLayerGroup className="inline mr-2 text-xl" /> Basics
+            </Link>
           </li>
           <li>
-            <a
-              href="/curdmongo"
-              className="block p-2 rounded-md hover:bg-green-700"
-            >
-              MongoDB CRUD Operations
-            </a>
+            <Link href="/curdmongo" className={getLinkClass("/curdmongo")}>
+              <FaCopy className="inline mr-2 text-xl" /> CRUD Operations
+            </Link>
           </li>
-          <li>
-            <a
-              href="#"
-              className="block p-2 rounded-md hover:bg-green-700"
-            >
-              MongoDB Collections
-            </a>
-          </li>
+
           <li>
             <button
-              onClick={() => toggleDropdown("aggregation")}
-              className="block w-full text-left p-2 rounded-md hover:bg-green-700"
+              className="w-full text-left flex items-center justify-between text-lg font-semibold"
+              onClick={() => toggleDropdown('aggregation')}
             >
-              MongoDB Aggregation
+              <span>MongoDB Aggregation</span>
+              {isOpen['aggregation'] ? <FaChevronUp /> : <FaChevronDown />}
             </button>
-            {isOpen.aggregation && (
-              <ul className="pl-4">
+            {isOpen['aggregation'] && (
+              <ul className="pl-6 mt-2 space-y-2">
                 <li>
-                  <a
-                    href="#"
-                    className="block p-2 rounded-md hover:bg-green-700"
-                  >
-                    Aggregation Pipeline
-                  </a>
+                  <Link href="/agrigationpipelinemongo" className={getLinkClass("/aggregation-pipeline")}>
+                    <FaProjectDiagram className="inline mr-2 text-xl" /> Aggregation Pipeline
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="block p-2 rounded-md hover:bg-green-700"
-                  >
-                    Group Stage
-                  </a>
+                  <Link href="/aggregationgroupstage" className={getLinkClass("/group-stage")}>
+                    <FaProjectDiagram className="inline mr-2 text-xl" /> Group Stage
+                  </Link>
                 </li>
               </ul>
             )}
           </li>
+
           <li>
             <button
-              onClick={() => toggleDropdown("indexes")}
-              className="block w-full text-left p-2 rounded-md hover:bg-green-700"
+              className="w-full text-left flex items-center justify-between text-lg font-semibold"
+              onClick={() => toggleDropdown('indexes')}
             >
-              MongoDB Indexes
+              <span>MongoDB Indexes</span>
+              {isOpen['indexes'] ? <FaChevronUp /> : <FaChevronDown />}
             </button>
-            {isOpen.indexes && (
-              <ul className="pl-4">
+            {isOpen['indexes'] && (
+              <ul className="pl-6 mt-2 space-y-2">
                 <li>
-                  <a
-                    href="#"
-                    className="block p-2 rounded-md hover:bg-green-700"
-                  >
-                    Index Types
-                  </a>
+                  <Link href="/indextypemongo" className={getLinkClass("/index-types")}>
+                    <FaLayerGroup className="inline mr-2 text-xl" /> Index Types
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="block p-2 rounded-md hover:bg-green-700"
-                  >
-                    Creating Indexes
-                  </a>
+                  <Link href="/indexcreatingmongo" className={getLinkClass("/creating-indexes")}>
+                    <FaLayerGroup className="inline mr-2 text-xl" /> Creating Indexes
+                  </Link>
                 </li>
               </ul>
             )}
           </li>
+
           <li>
-            <a
-              href="#"
-              className="block p-2 rounded-md hover:bg-green-700"
-            >
-              MongoDB Security
-            </a>
+            <Link href="/collectionmongo" className={getLinkClass("/collections")}>
+              <FaSitemap className="inline mr-2 text-xl" /> Collections
+            </Link>
           </li>
           <li>
-            <a
-              href="#"
-              className="block p-2 rounded-md hover:bg-green-700"
-            >
-              MongoDB Performance
-            </a>
+            <Link href="/mongoqueryoperator" className={getLinkClass("/security")}>
+              <FaLock className="inline mr-2 text-xl" /> Query Operator
+            </Link>
           </li>
           <li>
-            <a
-              href="#"
-              className="block p-2 rounded-md hover:bg-green-700"
-            >
-              MongoDB Replication
-            </a>
+            <Link href="/mongoUpdateoperator" className={getLinkClass("/performance")}>
+              <FaRocket className="inline mr-2 text-xl" /> Update Operator
+            </Link>
           </li>
           <li>
-            <a
-              href="#"
-              className="block p-2 rounded-md hover:bg-green-700"
-            >
-              MongoDB Sharding
-            </a>
+            <Link href="/mongoDriver" className={getLinkClass("/replication")}>
+              <FaCopy className="inline mr-2 text-xl" /> Mongodb Driver
+            </Link>
           </li>
-          {/* Continue adding other sections as needed */}
+          <li>
+            <Link href="/mongovaliadtion" className={getLinkClass("/sharding")}>
+              <FaProjectDiagram className="inline mr-2 text-xl" />  Validation
+            </Link>
+          </li>
         </ul>
-      </nav>
+      </div>
     </div>
   );
 };
 
 export default MongoDBSidebar;
+
+
+
