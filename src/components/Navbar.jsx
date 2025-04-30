@@ -9,27 +9,27 @@ export default function Navbar() {
   const [activeLink, setActiveLink] = useState(null);
 
   const menuItems = [
-    { name: 'MongoDb', link: '/firstmongo' },
-    { name: 'Express', link: '/express' },
+    { name: 'MONGODB', link: '/firstmongo' },
+    { name: 'EXPRESS', link: '/express' },
     { name: 'REACT', link: '/react' },
-    { name: 'NODE', link: '/CardNode' },
+    { name: 'NODE', link: '/NodeCard' },
     { name: 'JAVASCRIPT', link: '/javascript' },
     { name: 'SQL', link: '/sql' },
-    { name: 'PYTHON', link: '/python' },
+    { name: 'PYTHON', link: '/firstPython' },
     { name: 'JAVA', link: '/java' },
     { name: 'PHP', link: '/php' },
-    { name: 'W3.CSS', link: '/w3-css' },
-    { name: 'MYSQL', link: '/mysql' },
-    { name: 'EXCEL', link: '/excel' },
+    { name: 'HTML', link: '/w3-css' },
+    { name: 'CSS', link: '/Csscard' },
+    
   
   ];
 
   const navbarItems = [
     { name: 'Exercises', link: '/exercises' },
     { name: 'Services', link: '/services' },
-    { name: 'Search', link: '/' },
+    { name: 'Home', link: '/' },
     { name: 'Contact', link: '/contact' },
-    { name: 'Quizz_test', link: '/quizz' }, // New link added
+    { name: 'Quizz Test', link: '/quizz' }, // New link added
   ];
 
   const handleLinkClick = (link) => {
@@ -40,7 +40,7 @@ export default function Navbar() {
     <div className="relative">
       {/* Top Navbar */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-gray-100 shadow-lg">
-        <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
+        <div className="max-w-7xl mx-auto left-0 flex justify-between items-center px-4 py-3">
           {/* Logo */}
           <div className="text-3xl font-semibold flex items-center space-x-2">
             <PiFlowerLotusDuotone className="text-blue-600 w-8 h-8 animate-glow" />

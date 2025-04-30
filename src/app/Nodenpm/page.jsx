@@ -1,0 +1,13 @@
+import Navbar from '@/components/navbar'
+import  Sidebar  from '@/components/fullnodecontent/nodesidebar';
+import React from 'react'
+import Npm from"@/components/fullnodecontent/npmnode";
+export default function page() {
+  return (
+    <div>
+      <Navbar/>
+      <Sidebar/>
+      <Npm/>
+    </div>
+  )
+}

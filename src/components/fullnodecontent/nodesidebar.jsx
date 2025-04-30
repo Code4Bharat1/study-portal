@@ -1,114 +1,127 @@
 'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  FaChevronDown, FaChevronUp, FaHome, FaRegFileAlt, FaDatabase, 
-  FaUsers, FaCogs, FaServer, FaFolderOpen, FaLink, 
-  FaBoxOpen, FaBolt, FaUpload, FaEnvelopeOpenText 
+import {
+  FaHome, FaFileAlt, FaRocket, FaChevronDown, FaChevronUp,
+  FaServer, FaLayerGroup, FaSitemap, FaDownload, FaUsb, FaEnvelope, FaDatabase
 } from 'react-icons/fa';
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState({});
+const NodeSidebar = () => {
+  const [isOpen, setIsOpen] = useState({}); // State to manage dropdowns
   const pathname = usePathname();
 
+  // Toggle the dropdown visibility based on the section clicked
   const toggleDropdown = (section) => {
-    setIsOpen((prev) => ({
+    setIsOpen(prev => ({
       ...prev,
-      [section]: !prev[section],
+      [section]: !prev[section], // Toggle the specific section's dropdown
     }));
   };
 
-  const getLinkClass = (href) => (
-    `block p-2 rounded transition-all duration-200 ease-in-out
-      hover:bg-[#d0f0fd]
-      ${pathname === href ? 'bg-[#d0f0fd] font-semibold text-black' : 'text-gray-700'}`
-  );
+  // Get link class with enhanced active state management
+  const getLinkClass = (href) => {
+    return `block p-2 rounded transition-all duration-200 ease-in-out 
+      hover:bg-[#d0f0fd] hover:text-gray-900 
+      ${pathname === href 
+        ? 'bg-[#007bff] text-white font-semibold shadow-md border-l-4 border-white' 
+        : 'text-gray-700'}`;
+  };
 
   return (
-    <div className="w-64 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg">
-      {/* Header */}
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 shrink-0">Node.js Tutorial</h2>
+    <div className="w-70 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg overflow-hidden">
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Node.js Tutorial</h2>
 
-      {/* Menu */}
-      <ul className="overflow-y-auto flex-1 custom-scrollbar pr-2">
+      {/* Scrollable list */}
+      <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+        <ul className="space-y-4 pb-29">
+          <li>
+            <Link href="/NodeHome" className={getLinkClass("/nodehome")}>
+              <FaHome className="inline mr-2 text-xl" /> Node.js HOME
+            </Link>
+          </li>
+          <li>
+            <Link href="/NodeIntro" className={getLinkClass("/nodeintro")}>
+              <FaFileAlt className="inline mr-2 text-xl" /> Node.js Intro
+            </Link>
+          </li>
+          <li>
+            <Link href="/NodeGetStarted" className={getLinkClass("/getstarted")}>
+              <FaRocket className="inline mr-2 text-xl" /> Get Started
+            </Link>
+          </li>
 
-        {/* Static Links */}
-        <li className="mb-4">
-          <Link href="/HomeNode" className={getLinkClass("/HomeNode")}>
-            <FaHome className="inline mr-2 text-xl" /> Node.js HOME
-          </Link>
-        </li>
-        <li className="mb-4">
-          <Link href="/IntroNode" className={getLinkClass("/IntroNode")}>
-            <FaRegFileAlt className="inline mr-2 text-xl" /> Node.js Intro
-          </Link>
-        </li>
-        <li className="mb-4">
-          <Link href="/GetStartedNode" className={getLinkClass("/GetStartedNode")}>
-            <FaCogs className="inline mr-2 text-xl" /> Node.js Get Started
-          </Link>
-        </li>
-
-        {/* Dropdown Section */}
-        <li className="mb-4">
-          <button 
-            className="w-full text-left flex items-center justify-between text-lg font-semibold" 
-            onClick={() => toggleDropdown('nodeJs')}
-          >
-            <span>Node.js Modules</span>
-            {isOpen['nodeJs'] ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-          {isOpen['nodeJs'] && (
-            <ul className="pl-6 mt-2 space-y-2">
-              {[
-                { label: "HTTP Module", icon: <FaServer className="inline mr-2 text-xl" />, href: "/HttpModule" },
-                { label: "File System", icon: <FaFolderOpen className="inline mr-2 text-xl" />, href: "/FileSystem" },
-                { label: "URL Module", icon: <FaLink className="inline mr-2 text-xl" />, href: "/UrlModule" },
-                { label: "NPM", icon: <FaBoxOpen className="inline mr-2 text-xl" />, href: "/Npm" },
-                { label: "Events", icon: <FaBolt className="inline mr-2 text-xl" />, href: "/Events" },
-                { label: "Upload Files", icon: <FaUpload className="inline mr-2 text-xl" />, href: "/UploadFiles" },
-                { label: "Email", icon: <FaEnvelopeOpenText className="inline mr-2 text-xl" />, href: "/Email" }
-              ].map(({ label, icon, href }) => (
-                <li key={label}>
-                  <Link
-                    href={href}
-                    className={getLinkClass(href)}
-                  >
-                    {icon}
-                    {label}
+          {/* Modules Dropdown */}
+          <li>
+            <button
+              className="w-full text-left flex items-center justify-between text-lg font-semibold"
+              onClick={() => toggleDropdown('modules')}
+            >
+              <span>Modules</span>
+              {isOpen['modules'] ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
+            {isOpen['modules'] && (
+              <ul className="pl-6 mt-2 space-y-2">
+                <li>
+                  <Link href="/NodeModule" className={getLinkClass("/fsmodule")}>
+                    <FaFileAlt className="inline mr-2 text-xl" /> Module
                   </Link>
                 </li>
-              ))}
-            </ul>
-          )}
-        </li>
+                <li>
+                  <Link href="/NodeHttpModule" className={getLinkClass("/httpmodule")}>
+                    <FaServer className="inline mr-2 text-xl" /> HTTP Module
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/Nodefsmodule" className={getLinkClass("/fsmodule")}>
+                    <FaFileAlt className="inline mr-2 text-xl" /> File System Module
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/Nodestreammodule" className={getLinkClass("/streammodule")}>
+                    <FaLayerGroup className="inline mr-2 text-xl" /> Stream Module
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/Nodeeventsmodule" className={getLinkClass("/eventsmodule")}>
+                    <FaFileAlt className="inline mr-2 text-xl" /> Events Module
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/Nodepathmodule" className={getLinkClass("/pathmodule")}>
+                    <FaSitemap className="inline mr-2 text-xl" /> Path Module
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </li>
 
-        {/* Other Static Links */}
-        <li className="mb-4">
-          <Link href="/MySQLNode" className={getLinkClass("/MySQLNode")}>
-            <FaDatabase className="inline mr-2 text-xl" /> Node.js MySQL
-          </Link>
-        </li>
-        <li className="mb-4">
-          <Link href="/MongoDBNode" className={getLinkClass("/MongoDBNode")}>
-            <FaDatabase className="inline mr-2 text-xl" /> Node.js MongoDB
-          </Link>
-        </li>
-        <li className="mb-4">
-          <Link href="/RaspberryPi" className={getLinkClass("/RaspberryPi")}>
-            <FaUsers className="inline mr-2 text-xl" /> Raspberry Pi
-          </Link>
-        </li>
-        <li className="mb-4">
-          <Link href="/ReferenceNode" className={getLinkClass("/ReferenceNode")}>
-            <FaRegFileAlt className="inline mr-2 text-xl" /> Node.js Reference
-          </Link>
-        </li>
-      </ul>
+          {/* Other links */}
+          <li>
+            <Link href="/Nodenpm" className={getLinkClass("/npm")}>
+              <FaDownload className="inline mr-2 text-xl" /> NPM
+            </Link>
+          </li>
+          <li>
+            <Link href="/Nodeuploadfiles" className={getLinkClass("/uploadfiles")}>
+              <FaUsb className="inline mr-2 text-xl" /> Upload Files
+            </Link>
+          </li>
+          <li>
+            <Link href="/Nodeemail" className={getLinkClass("/email")}>
+              <FaEnvelope className="inline mr-2 text-xl" /> Email
+            </Link>
+          </li>
+          <li>
+            <Link href="/Nodemysql" className={getLinkClass("/mysql")}>
+              <FaDatabase className="inline mr-2 text-xl" /> MySQL
+            </Link>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
 
-export default Sidebar;
+export default NodeSidebar;

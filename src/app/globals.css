@@ -28,4 +28,34 @@
   .animate-fadeIn {
     animation: fadeIn 2s ease forwards;
   }
+  @keyframes footerSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes glowAnimation {
+    0% {
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3), 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.7), 0 0 25px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3), 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  .animate-footer {
+    animation: footerSlideIn 1s ease-out forwards;
+  }
+  
+  .animate-glow {
+    animation: glowAnimation 1s infinite alternate;
+  }
   
