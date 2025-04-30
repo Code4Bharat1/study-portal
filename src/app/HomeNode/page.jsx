@@ -1,7 +1,7 @@
 import Sidebar from '@/components/fullnodecontent/nodesidebar';
 import HomeNode from '@/components/fullnodecontent/HomeNode';
 import React from 'react';
-import Navbar from '@/components/navbar';
+import Navbar from '@/components/Navbar';
 
 function Page() {
   return (

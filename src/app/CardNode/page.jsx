@@ -1,7 +1,7 @@
 import React from 'react';
 //import Navbar from '@/component/navbar'
 import Card from '@/components/fullnodecontent/CardNode'
-import Navbar from '@/components/navbar';
+import Navbar from '@/components/Navbar';
 export default function page() {
   return (
     <div>

@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 
 
 
 'use client';
 
+=======
+"use client"
+>>>>>>> d249d97 (Add javascript pages)
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -142,5 +146,8 @@ const MongoDBSidebar = () => {
 
 export default MongoDBSidebar;
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> d249d97 (Add javascript pages)
