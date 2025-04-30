@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function ExpressHome() {
   return (
-    <div className="p-6 ml-60 ">
+    <div className="p-6 ml-72 ">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">Express Home</h1>
       <p className="text-lg text-gray-800 mb-6">
         Welcome to the Express.js tutorial! In this tutorial, you'll learn the fundamentals of Express, a powerful and minimalist web framework for Node.js. It helps you create robust APIs and web applications quickly and efficiently. By the end of this tutorial, you'll understand how to set up routes, handle middleware, serve static files, manage errors, and build full RESTful APIs with Express. Let's get started and unlock the power of backend web development!

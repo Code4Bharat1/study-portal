@@ -3,7 +3,7 @@ import React from 'react';
 function ExpressjwtIntegration() {
   return (
     <div className="ml-72 p-6 text-black">
-      <h1 className="text-3xl font-bold mb-6 text-yellow-600">JWT Integration in Express.js</h1>
+      <h1 className="text-3xl font-bold mb-6 ">JWT Integration in Express.js</h1>
 
       {/* What is JWT */}
       <section className="mb-8">

@@ -2,7 +2,7 @@ import React from 'react';
 
 function Epressrouteparameters() {
   return (
-    <div className="p-6 ml-60">
+    <div className="p-6 ml-72">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">Express Route Parameters</h1>
       
       <p className="text-lg text-gray-800 mb-6">

@@ -2,70 +2,82 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { SiMongodb, SiExpress, SiReact, SiNodedotjs, SiPython, SiMysql, SiPhp, SiJavascript } from 'react-icons/si';
 
 export default function QuizSelection() {
   const quizzes = [
-    { name: 'MongoDB', link: '/quizz/mongodb', color: 'from-green-500 to-emerald-600' },
-    { name: 'Express', link: '/quizz/express', color: 'from-blue-500 to-indigo-600' },
-    { name: 'React', link: '/quizz/react', color: 'from-cyan-500 to-teal-600' },
-    { name: 'Node.js', link: '/quizz/nodejs', color: 'from-lime-500 to-green-600' },
+    { name: 'MongoDB', link: '/quizz/mongodb', color: 'from-green-500 to-emerald-600', icon: <SiMongodb size={40} /> },
+    { name: 'Express', link: '/quizz/express', color: 'from-blue-500 to-indigo-600', icon: <SiExpress size={40} /> },
+    { name: 'React', link: '/quizz/react', color: 'from-cyan-500 to-teal-600', icon: <SiReact size={40} /> },
+    { name: 'Node.js', link: '/quizz/nodejs', color: 'from-lime-500 to-green-600', icon: <SiNodedotjs size={40} /> },
+    { name: 'Python', link: '#', color: 'from-yellow-500 to-orange-600', icon: <SiPython size={40} />, comingSoon: true },
+    { name: 'SQL', link: '#', color: 'from-blue-700 to-blue-900', icon: <SiMysql size={40} />, comingSoon: true },
+    { name: 'PHP', link: '#', color: 'from-purple-500 to-pink-600', icon: <SiPhp size={40} />, comingSoon: true },
+    { name: 'JavaScript', link: '#', color: 'from-yellow-400 to-amber-600', icon: <SiJavascript size={40} />, comingSoon: true },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 py-8 px-4 relative overflow-hidden">
-      {/* Background Decorative Elements */}
+    <div className="min-h-screen bg-gradient-to-br from-[#e0f2ff] via-indigo-100 to-purple-100 py-16 px-6 relative overflow-hidden">
+      {/* Background Particles */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.15 }}
+        animate={{ opacity: 0.2 }}
         transition={{ duration: 1 }}
       >
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
+        <div className="absolute top-[-80px] left-[-80px] w-[450px] h-[450px] bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
+        <div className="absolute bottom-[-80px] right-[-80px] w-[450px] h-[450px] bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
       </motion.div>
 
+      {/* Heading */}
       <motion.h1
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 text-center mb-10 tracking-tight"
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-700 text-center mb-16 drop-shadow-md tracking-tight"
       >
-        Select Your MERN Quiz
+        Choose Your Quiz
       </motion.h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto relative z-10">
+      {/* Quiz Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto z-10">
         {quizzes.map((quiz, index) => (
-          <Link href={quiz.link} key={index}>
+          <Link href={quiz.comingSoon ? '#' : quiz.link} key={index}>
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.15, ease: 'easeOut' }}
-              whileHover={{ 
-                scale: 1.05, 
-                y: -8, 
-                boxShadow: '0 15px 30px -5px rgba(0, 0, 0, 0.2)',
-                rotate: 1
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+              whileHover={{
+                scale: 1.08,
+                y: -8,
+                rotate: 0.5,
               }}
-              whileTap={{ scale: 0.97 }}
-              className={`bg-gradient-to-br ${quiz.color} rounded-3xl shadow-xl p-6 text-white text-center cursor-pointer overflow-hidden relative group`}
+              whileTap={{ scale: 0.96 }}
+              className={`relative bg-gradient-to-br ${quiz.color} rounded-3xl p-6 shadow-2xl cursor-pointer transition-all duration-300 group overflow-hidden`}
             >
-              {/* Subtle Card Background Effect */}
-              <motion.div
-                className="absolute inset-0 bg-white/10 rounded-3xl -z-10"
-                initial={{ scale: 0 }}
-                whileHover={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-              <h2 className="text-2xl font-semibold mb-2 group-hover:scale-105 transition-transform duration-300">
+              {/* Neon ring border on hover */}
+              <div className="absolute inset-0 border-2 border-white rounded-3xl opacity-0 group-hover:opacity-10 group-hover:animate-pulse transition duration-300 pointer-events-none" />
+
+              {/* Glass overlay */}
+              <div className="absolute inset-0 bg-white/10 backdrop-blur-lg rounded-3xl -z-10 opacity-0 group-hover:opacity-100 transition duration-300" />
+
+              {/* Icon */}
+              <div className="flex justify-center mb-4 text-white drop-shadow-md">{quiz.icon}</div>
+
+              {/* Title */}
+              <h2 className="text-2xl font-bold mb-2 text-white group-hover:scale-105 transition-transform">
                 {quiz.name}
               </h2>
-              <p className="text-sm text-white/80 group-hover:text-white transition-colors">
-                Test your {quiz.name} skills with 20 questions!
+
+              {/* Description */}
+              <p className={`text-sm text-white/80 group-hover:text-white transition-colors ${quiz.comingSoon ? 'text-gray-500' : ''}`}>
+                {quiz.comingSoon ? 'Coming Soon!' : `Test your ${quiz.name} knowledge with 20 questions!`}
               </p>
-              {/* Hover Arrow */}
+
+              {/* Arrow */}
               <motion.div
                 className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100"
-                initial={{ x: -10 }}
+                initial={{ x: -8 }}
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.2 }}
               >
@@ -78,15 +90,15 @@ export default function QuizSelection() {
         ))}
       </div>
 
-      {/* Subtle Footer */}
+      {/* Footer */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
-        className="mt-10 text-center"
+        transition={{ delay: 0.7, duration: 0.5 }}
+        className="mt-16 text-center"
       >
         <p className="text-sm text-gray-500">
-          Powered by <span className="font-semibold text-blue-600">Skill Bridge</span>
+          Powered by <span className="font-semibold text-indigo-600">Skill Bridge</span>
         </p>
       </motion.div>
     </div>

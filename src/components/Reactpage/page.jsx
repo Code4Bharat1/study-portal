@@ -31,7 +31,7 @@ export default function ReactPage() {
           {/* Right Section */}
           <div className="flex-1 bg-gray-100 rounded-xl shadow-md p-6">
             <h2 className="text-2xl font-semibold text-black mb-4">React Example:</h2>
-            <pre className="bg-white text-sm text-black p-4 rounded-lg overflow-x-auto border-l-4 border-green-500">
+            <pre className="bg-white text-sm text-black p-4 rounded-lg overflow-x-auto border-l-4 border-bg-[#f3e8ff]">
   {`import React from 'react';
   
   function App() {

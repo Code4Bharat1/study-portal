@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { User, Mail, ArrowRight } from 'lucide-react';
+import { PiFlowerLotusDuotone } from 'react-icons/pi'; // Icon import
 
 export default function QuizForm() {
   const [name, setName] = useState('');
@@ -47,6 +48,8 @@ export default function QuizForm() {
         >
           <div className="p-8">
             <div className="text-center mb-6">
+              {/* Logo */}
+              <PiFlowerLotusDuotone className="text-blue-600 w-8 h-8 mx-auto mb-2 animate-glow" />
               <motion.h1
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}

@@ -3,7 +3,7 @@ import React from 'react';
 
 function ExpressError() {
   return (
-    <div className="p-6 ml-60">
+    <div className="p-6 ml-72">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">Express Error Handling</h1>
       <p className="text-lg text-gray-800 mb-6">
         Error handling is a critical part of building robust Express applications. Express provides flexible tools to catch and handle errors gracefully so that your app doesn’t crash unexpectedly.

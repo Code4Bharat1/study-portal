@@ -2,71 +2,87 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import {
+  FaHome, FaInfoCircle, FaDownload, FaCube, FaExchangeAlt,
+  FaCode, FaPlug, FaCheckSquare, FaTachometerAlt, FaRocket,
+  FaChevronDown, FaChevronUp
+} from 'react-icons/fa';
 
 const ReactSidebar = () => {
   const [isOpen, setIsOpen] = useState({});
+  const pathname = usePathname();
 
   const toggleDropdown = (section) => {
     setIsOpen((prev) => ({
       ...prev,
-      [section]: true, // Always open, never toggles back to false
+      [section]: !prev[section],
     }));
   };
 
+  const getLinkClass = (href) => (
+    `block p-2 rounded transition-all duration-200 ease-in-out
+    hover:bg-pink-100
+    ${pathname === href ? 'bg-pink-100 font-semibold text-black' : 'text-gray-700'}`
+  );
+
   return (
-    <div className="absolute w-64 bg-white text-black p-4 overflow-y-auto">
-      <h2 className="text-2xl font-bold mb-6">React Tutorial</h2>
-      <nav className="space-y-2">
-        <ul className="space-y-1">
+    <div className="w-70 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg overflow-hidden">
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">React Tutorial</h2>
+
+      {/* Scrollable list */}
+      <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+        <ul className="space-y-4 pb-29">
           <li>
-            <Link href="/reacthome" className="block p-2 rounded-md hover:bg-pink-100">
-              React HOME
+            <Link href="/reacthome" className={getLinkClass("/reacthome")}>
+              <FaHome className="inline mr-2 text-xl" /> React HOME
             </Link>
           </li>
           <li>
-            <Link href="/reactintroduction" className="block p-2 rounded-md hover:bg-pink-100">
-              React Introduction
+            <Link href="/reactintroduction" className={getLinkClass("/reactintroduction")}>
+              <FaInfoCircle className="inline mr-2 text-xl" /> Introduction
             </Link>
           </li>
           <li>
-            <Link href="/reactinstallation" className="block p-2 rounded-md hover:bg-pink-100">
-              React Installation
+            <Link href="/reactinstallation" className={getLinkClass("/reactinstallation")}>
+              <FaDownload className="inline mr-2 text-xl" /> Installation
             </Link>
           </li>
           <li>
-            <Link href="/reactcomponents" className="block p-2 rounded-md hover:bg-pink-100">
-              Components
+            <Link href="/reactcomponents" className={getLinkClass("/reactcomponents")}>
+              <FaCube className="inline mr-2 text-xl" /> Components
             </Link>
           </li>
           <li>
-            <Link href="/reactprops" className="block p-2 rounded-md hover:bg-pink-100">
-              Props & State
+            <Link href="/reactprops" className={getLinkClass("/reactprops")}>
+              <FaExchangeAlt className="inline mr-2 text-xl" /> Props & State
             </Link>
           </li>
 
           {/* Hooks Section */}
           <li>
             <button
+              className="w-full text-left flex items-center justify-between text-lg font-semibold hover:bg-pink-100 p-2 rounded"
               onClick={() => toggleDropdown('hooks')}
-              className="block w-full text-left p-2 rounded-md hover:bg-pink-100"
             >
-              React Hooks
+              <span>React Hooks</span>
+              {isOpen['hooks'] ? <FaChevronUp /> : <FaChevronDown />}
             </button>
-            {isOpen.hooks && (
-              <ul className="pl-4 space-y-1">
+            {isOpen['hooks'] && (
+              <ul className="pl-6 mt-2 space-y-2">
                 <li>
-                  <Link href="/reactusestate" className="block p-2 rounded-md hover:bg-pink-100">
-                    useState
+                  <Link href="/reactusestate" className={getLinkClass("/reactusestate")}>
+                    <FaCode className="inline mr-2 text-xl" /> useState
                   </Link>
                 </li>
                 <li>
-                  <Link href="/reactuseeffect" className="block p-2 rounded-md hover:bg-pink-100">
-                    useEffect
+                  <Link href="/reactuseeffect" className={getLinkClass("/reactuseeffect")}>
+                    <FaCode className="inline mr-2 text-xl" /> useEffect
                   </Link>
                 </li>
                 <li>
-                  <Link href="/react_custom_hooks" className="block p-2 rounded-md hover:bg-pink-100">
-                    Custom Hooks
+                  <Link href="/react_custom_hooks" className={getLinkClass("/react_custom_hooks")}>
+                    <FaPlug className="inline mr-2 text-xl" /> Custom Hooks
                   </Link>
                 </li>
               </ul>
@@ -76,21 +92,22 @@ const ReactSidebar = () => {
           {/* Router Section */}
           <li>
             <button
+              className="w-full text-left flex items-center justify-between text-lg font-semibold hover:bg-pink-100 p-2 rounded"
               onClick={() => toggleDropdown('router')}
-              className="block w-full text-left p-2 rounded-md hover:bg-pink-100"
             >
-              React Router
+              <span>React Router</span>
+              {isOpen['router'] ? <FaChevronUp /> : <FaChevronDown />}
             </button>
-            {isOpen.router && (
-              <ul className="pl-4 space-y-1">
+            {isOpen['router'] && (
+              <ul className="pl-6 mt-2 space-y-2">
                 <li>
-                  <Link href="/reactroutingbasics" className="block p-2 rounded-md hover:bg-pink-100">
-                    Routing Basics
+                  <Link href="/reactroutingbasics" className={getLinkClass("/reactroutingbasics")}>
+                    <FaCode className="inline mr-2 text-xl" /> Routing Basics
                   </Link>
                 </li>
                 <li>
-                  <Link href="/reactdynamicroutes" className="block p-2 rounded-md hover:bg-pink-100">
-                    Dynamic Routes
+                  <Link href="/reactdynamicroutes" className={getLinkClass("/reactdynamicroutes")}>
+                    <FaCode className="inline mr-2 text-xl" /> Dynamic Routes
                   </Link>
                 </li>
               </ul>
@@ -98,27 +115,27 @@ const ReactSidebar = () => {
           </li>
 
           <li>
-            <Link href="/reactcontext" className="block p-2 rounded-md hover:bg-pink-100">
-              Context API
+            <Link href="/reactcontext" className={getLinkClass("/reactcontext")}>
+              <FaPlug className="inline mr-2 text-xl" /> Context API
             </Link>
           </li>
           <li>
-            <Link href="/reactformsandvalidation" className="block p-2 rounded-md hover:bg-pink-100">
-              Forms & Validation
+            <Link href="/reactformsandvalidation" className={getLinkClass("/reactformsandvalidation")}>
+              <FaCheckSquare className="inline mr-2 text-xl" /> Forms & Validation
             </Link>
           </li>
           <li>
-            <Link href="/reactperformance" className="block p-2 rounded-md hover:bg-pink-100">
-              React Performance
+            <Link href="/reactperformance" className={getLinkClass("/reactperformance")}>
+              <FaTachometerAlt className="inline mr-2 text-xl" /> Performance
             </Link>
           </li>
           <li>
-            <Link href="/reactdeployment" className="block p-2 rounded-md hover:bg-pink-100">
-              Deployment
+            <Link href="/reactdeployment" className={getLinkClass("/reactdeployment")}>
+              <FaRocket className="inline mr-2 text-xl" /> Deployment
             </Link>
           </li>
         </ul>
-      </nav>
+      </div>
     </div>
   );
 };
