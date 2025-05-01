@@ -16,9 +16,9 @@ export default function Navbar() {
     { name: 'JAVASCRIPT', link: '/javascript' },
     { name: 'SQL', link: '/sql' },
     { name: 'PYTHON', link: '/firstPython' },
-    { name: 'JAVA', link: '/java' },
+    { name: 'JAVA', link: '/firstJava' },
     { name: 'PHP', link: '/php' },
-    { name: 'HTML', link: '/w3-css' },
+    { name: 'HTML', link: '/firstHtml' },
     { name: 'CSS', link: '/Csscard' },
     
   

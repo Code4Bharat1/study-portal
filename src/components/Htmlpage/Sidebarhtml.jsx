@@ -93,7 +93,7 @@ const Sidebarhtml = () => {
             {isOpen['media'] && (
               <ul className="pl-6 mt-2 space-y-2">
                 <li>
-                  <Link href="/htmlimages" className={getLinkClass("/htmlimages")}>
+                  <Link href="/htmlImage" className={getLinkClass("/htmlimages")}>
                     <FaLayerGroup className="inline mr-2 text-xl" /> HTML Images
                   </Link>
                 </li>
@@ -112,32 +112,32 @@ const Sidebarhtml = () => {
           </li>
 
           <li>
-            <Link href="/htmltables" className={getLinkClass("/htmltables")}>
+            <Link href="/htmlTable" className={getLinkClass("/htmltables")}>
               <FaRocket className="inline mr-2 text-xl" /> HTML Tables
             </Link>
           </li>
 
           <li>
-            <Link href="/htmlcomments" className={getLinkClass("/htmlcomments")}>
-              <FaCopy className="inline mr-2 text-xl" /> HTML Comments
+            <Link href="/htmlBlock" className={getLinkClass("/htmlcomments")}>
+              <FaCopy className="inline mr-2 text-xl" />Block and Inline
             </Link>
           </li>
 
           <li>
-            <Link href="/htmlcss" className={getLinkClass("/htmlcss")}>
+            <Link href="/htmlCss" className={getLinkClass("/htmlcss")}>
               <FaProjectDiagram className="inline mr-2 text-xl" /> HTML & CSS
             </Link>
           </li>
 
           <li>
-            <Link href="/html5" className={getLinkClass("/html5")}>
-              <FaProjectDiagram className="inline mr-2 text-xl" /> HTML5 Features
+            <Link href="/htmlHeading" className={getLinkClass("/html5")}>
+              <FaProjectDiagram className="inline mr-2 text-xl" /> Heading
             </Link>
           </li>
 
           <li>
-            <Link href="/htmlbestpractices" className={getLinkClass("/htmlbestpractices")}>
-              <FaProjectDiagram className="inline mr-2 text-xl" /> HTML Best Practices
+            <Link href="/htmlID" className={getLinkClass("/htmlbestpractices")}>
+              <FaProjectDiagram className="inline mr-2 text-xl" />ID & CLASS
             </Link>
           </li>
         </ul>
