@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 'use client';
 import { FaHome, FaBook, FaQuestionCircle } from 'react-icons/fa';
 import { FaGithub, FaTwitter } from 'react-icons/fa';
@@ -120,3 +127,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
+

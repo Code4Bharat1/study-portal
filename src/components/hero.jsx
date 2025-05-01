@@ -1,6 +1,7 @@
 'use client';
 import { useState } from "react";
 import { FaSearch } from 'react-icons/fa';
+import { FaReact, FaServer, FaCode } from 'react-icons/fa';
 
 export default function Hero() {
   const [query, setQuery] = useState("");
@@ -12,8 +13,8 @@ export default function Hero() {
     { name: "Node.js", link: "/CardNode" },
     { name: "PHP", link: "/php-tutorial" },
     { name: "Python", link: "/python-tutorial" },
-    { name: "Express",link: "/express"},
-    { name: "Mongodb",link: "/firstmongo"},
+    { name: "Express", link: "/express" },
+    { name: "Mongodb", link: "/firstmongo" },
   ]);
 
   const filteredSuggestions = suggestions.filter((item) =>
@@ -23,17 +24,17 @@ export default function Hero() {
   return (
     <>
       <section className="relative text-center py-30 px-4 overflow-hidden">
-        {/* Video as Background */}
+        {/* Video Background */}
         <video
           className="absolute top-0 left-0 w-full h-full object-cover z-0 brightness-50"
-          src="/banner1.mp4" // Replace with your video path
+          src="/banner1.mp4"
           autoPlay
           loop
           muted
           playsInline
         />
 
-        {/* Content over the video */}
+        {/* Text & Search */}
         <div className="relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-gray-200">
             Learn to Code
@@ -55,9 +56,9 @@ export default function Hero() {
               <FaSearch />
             </span>
 
-            {/* Dropdown Suggestions */}
+            {/* Dropdown */}
             {query && filteredSuggestions.length > 0 && (
-              <ul className="absolute left-0 right-0 mt-13 bg-white border-2 border-gray-300 rounded-md shadow-lg">
+              <ul className="absolute left-0 right-0 mt-13 bg-white border-2 border-gray-300 rounded-md shadow-lg z-50">
                 {filteredSuggestions.map((suggestion, index) => (
                   <li key={index} className="px-6 py-2 text-gray-800">
                     <a
@@ -71,19 +72,57 @@ export default function Hero() {
               </ul>
             )}
           </div>
-
-          {/* Small Link */}
-          <a
-            href="#"
-            className="inline-block mt-6 text-base underline font-semibold text-green-600 hover:text-green-800"
-          >
-            Not Sure Where To Begin?
-          </a>
         </div>
-
-        {/* Optional: Dark Overlay for better text readability */}
-        <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-0"></div>
       </section>
+
+      {/* 💡 Card Section OUTSIDE the section tag */}
+      <div className="w-full flex justify-center px-4 mt-10 min-h-[200px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-6xl">
+          {/* Card 1 */}
+          <div className="bg-white/90 rounded-xl shadow-lg p-6 text-left hover:scale-105 transition transform duration-300">
+            <div className="flex items-center mb-4">
+              <FaReact className="w-6 h-6 text-gray-800 mr-3" />
+              <h3 className="text-xl font-bold text-gray-800">Frontend Basics</h3>
+            </div>
+            <p className="text-gray-600 text-sm">
+              Learn HTML, CSS, and JavaScript to build interactive websites from scratch.
+            </p>
+          </div>
+
+          {/* Card 2 */}
+          <div className="bg-white/90 rounded-xl shadow-lg p-6 text-left hover:scale-105 transition transform duration-300">
+            <div className="flex items-center mb-4">
+              <FaServer className="w-6 h-6 text-gray-800 mr-3" />
+              <h3 className="text-xl font-bold text-gray-800">Backend Development</h3>
+            </div>
+            <p className="text-gray-600 text-sm">
+              Dive into Node.js, Express, and databases to handle server-side logic.
+            </p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="bg-white/90 rounded-xl shadow-lg p-6 text-left hover:scale-105 transition transform duration-300">
+            <div className="flex items-center mb-4">
+              <FaCode className="w-6 h-6 text-gray-800 mr-3" />
+              <h3 className="text-xl font-bold text-gray-800">Full Stack Projects</h3>
+            </div>
+            <p className="text-gray-600 text-sm">
+              Combine frontend and backend skills to create real-world applications.
+            </p>
+          </div>
+        </div>
+      </div>
+      {/* Banner Section at the bottom */}
+<div className="mt-10 bg-black flex justify-center">
+  <a href="/quizz">  {/* Replace with the page you want to redirect to */}
+    <img
+      src="/last.png" // Replace this with your image path
+      alt="Coding Banner"
+      className="object-contain rounded-lg" // Adjust the height as needed
+    />
+  </a>
+</div>
+
     </>
   );
 }

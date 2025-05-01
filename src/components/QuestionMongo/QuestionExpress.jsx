@@ -1,5 +1,18 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
+import {
+  Database,
+  Server,
+  Atom,
+  Code,
+  Cpu,
+  Layers,
+  FileText,
+  Terminal,
+  GitBranch,
+  Monitor,
+  Layout,
+} from "lucide-react"; // import icons
 
 const questionsWithAnswers = [
   {
@@ -84,6 +97,16 @@ const questionsWithAnswers = [
   },
 ];
 
+const randomIcons = Array.from({ length: 50 }, () => {
+  const Icon = [Database, Server, Atom, Code, Cpu, Layers, FileText, Terminal, GitBranch, Monitor, Layout][Math.floor(Math.random() * 11)];
+  const top = Math.floor(Math.random() * 100);
+  const left = Math.floor(Math.random() * 100);
+  const size = Math.floor(Math.random() * 40) + 20;
+  const opacity = Math.random() * 0.5 + 0.2;
+  const rotate = Math.floor(Math.random() * 360);
+  return { Icon, top, left, size, opacity, rotate };
+});
+
 const QuestionExpress = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -92,23 +115,45 @@ const QuestionExpress = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Express.js Interview Questions</h1>
-      <div className="space-y-4">
-        {questionsWithAnswers.map((item, index) => (
-          <div key={index} className="border rounded-2xl shadow p-4 transition-all">
-            <button
-              onClick={() => toggleAnswer(index)}
-              className="w-full text-left flex justify-between items-center font-medium text-lg"
-            >
-              {item.question}
-              <span className="text-gray-500 text-xl">{activeIndex === index ? '−' : '+'}</span>
-            </button>
-            {activeIndex === index && (
-              <p className="mt-2 text-gray-700">{item.answer}</p>
-            )}
-          </div>
-        ))}
+    <div className="relative min-h-screen flex items-center justify-center p-6 overflow-hidden bg-white">
+      {/* Background Icons */}
+      {randomIcons.map(({ Icon, top, left, size, opacity, rotate }, index) => (
+        <div
+          key={index}
+          className="absolute z-0 text-indigo-500"
+          style={{
+            top: `${top}%`,
+            left: `${left}%`,
+            transform: `rotate(${rotate}deg)`,
+            opacity: opacity,
+            fontSize: `${size}px`,
+          }}
+        >
+          <Icon size={size} />
+        </div>
+      ))}
+
+      {/* Content Box */}
+      <div >
+        <h1 className="text-3xl font-bold mb-6 text-center">Express.js Interview Questions</h1>
+        <div className="space-y-4">
+          {questionsWithAnswers.map((item, index) => (
+            <div key={index} className="border rounded-2xl shadow p-4 transition-all w-[970px]">
+              <button
+                onClick={() => toggleAnswer(index)}
+                className="w-full text-left flex justify-between items-center font-medium text-lg"
+              >
+                {item.question}
+                <span className="text-gray-500 text-xl">
+                  {activeIndex === index ? "−" : "+"}
+                </span>
+              </button>
+              {activeIndex === index && (
+                <p className="mt-2 text-gray-700">{item.answer}</p>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

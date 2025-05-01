@@ -44,11 +44,7 @@ const CssSidebar = () => {
               <FaFileAlt className="inline mr-2 text-xl" /> CSS Intro
             </Link>
           </li>
-          <li>
-            <Link href="/CssGetStarted" className={getLinkClass('/cssgetstarted')}>
-              <FaRocket className="inline mr-2 text-xl" /> Get Started
-            </Link>
-          </li>
+        
 
           {/* Selectors Dropdown */}
           <li>
@@ -62,22 +58,22 @@ const CssSidebar = () => {
             {isOpen['selectors'] && (
               <ul className="pl-6 mt-2 space-y-2">
                 <li>
-                  <Link href="/CssBasicSelectors" className={getLinkClass('/basicselectors')}>
+                  <Link href="/CssBasic" className={getLinkClass('/basicselectors')}>
                     <FaCode className="inline mr-2 text-xl" /> Basic Selectors
                   </Link>
                 </li>
                 <li>
-                  <Link href="/CssCombinators" className={getLinkClass('/combinators')}>
+                  <Link href="/CssCombo" className={getLinkClass('/combinators')}>
                     <FaLayerGroup className="inline mr-2 text-xl" /> Combinators
                   </Link>
                 </li>
                 <li>
-                  <Link href="/CssPseudoClasses" className={getLinkClass('/pseudoclasses')}>
+                  <Link href="/CsspseClass" className={getLinkClass('/pseudoclasses')}>
                     <FaPaintBrush className="inline mr-2 text-xl" /> Pseudo-Classes
                   </Link>
                 </li>
                 <li>
-                  <Link href="/CssPseudoElements" className={getLinkClass('/pseudoelements')}>
+                  <Link href="/CssPseEle" className={getLinkClass('/pseudoelements')}>
                     <FaCube className="inline mr-2 text-xl" /> Pseudo-Elements
                   </Link>
                 </li>
@@ -87,12 +83,12 @@ const CssSidebar = () => {
 
           {/* Other links */}
           <li>
-            <Link href="/CssBoxModel" className={getLinkClass('/boxmodel')}>
+            <Link href="/CssBoxMod" className={getLinkClass('/boxmodel')}>
               <FaCube className="inline mr-2 text-xl" /> Box Model
             </Link>
           </li>
           <li>
-            <Link href="/CssFlexbox" className={getLinkClass('/flexbox')}>
+            <Link href="/CssFlex" className={getLinkClass('/flexbox')}>
               <FaLayerGroup className="inline mr-2 text-xl" /> Flexbox
             </Link>
           </li>
@@ -102,7 +98,7 @@ const CssSidebar = () => {
             </Link>
           </li>
           <li>
-            <Link href="/CssAnimations" className={getLinkClass('/animations')}>
+            <Link href="/CssAnimation" className={getLinkClass('/animations')}>
               <FaImage className="inline mr-2 text-xl" /> Animations
             </Link>
           </li>

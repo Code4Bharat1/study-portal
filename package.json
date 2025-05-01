@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.7.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

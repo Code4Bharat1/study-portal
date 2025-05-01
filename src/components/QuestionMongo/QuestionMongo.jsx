@@ -1,66 +1,162 @@
-'use client';
-import React from 'react';
-import { motion } from 'framer-motion';
+"use client";
+import React, { useState } from "react";
+import {
+  Database,
+  Server,
+  Atom,
+  Code,
+  Cpu,
+  Layers,
+  FileText,
+  Terminal,
+  GitBranch,
+  Monitor,
+  Layout,
+} from "lucide-react"; // import icons
 
-const questions = [
-  "What is MongoDB and how is it different from SQL databases?",
-  "Explain the concept of a document and a collection in MongoDB.",
-  "How do you insert a new document into a MongoDB collection?",
-  "What is the use of the `_id` field in MongoDB?",
-  "How can you retrieve all documents from a MongoDB collection?",
-  "How do you update a specific document in MongoDB?",
-  "What is the difference between `updateOne()` and `updateMany()`?",
-  "How do you delete documents from a MongoDB collection?",
-  "What are MongoDB indexes and why are they important?",
-  "How does MongoDB handle relationships between data (embedding vs referencing)?",
-  // Hard Level
-  "Explain the CAP theorem and how MongoDB fits into it.",
-  "What is sharding in MongoDB and how does it work?",
-  "How does MongoDB ensure data consistency in a replica set?",
-  "What is the WiredTiger storage engine and what are its advantages?",
-  "How do you perform aggregation operations in MongoDB? Explain `$group`, `$match`, and `$project` stages.",
-  "Describe how MongoDB handles concurrency and locking mechanisms.",
-  "How do you optimize MongoDB queries for performance?",
-  "Explain the difference between Replica Sets and Sharded Clusters.",
-  "What are transactions in MongoDB and how are they different from traditional SQL transactions?",
-  "How would you backup and restore a large MongoDB database efficiently?",
+const questionsWithAnswers = [
+  {
+    question: "What is MongoDB?",
+    answer: "MongoDB is a NoSQL, document-oriented database that stores data in flexible, JSON-like documents, allowing for dynamic schema design."
+  },
+  {
+    question: "What is the difference between MongoDB and SQL databases?",
+    answer: "MongoDB is a NoSQL database that uses collections and documents, whereas SQL databases are relational and use tables and rows."
+  },
+  {
+    question: "How do you connect to a MongoDB database?",
+    answer: "You can connect to MongoDB using the `mongoose.connect()` method with the MongoDB URI."
+  },
+  {
+    question: "What is a MongoDB document?",
+    answer: "A MongoDB document is a set of key-value pairs stored in BSON format (binary JSON) within a collection."
+  },
+  {
+    question: "What are collections in MongoDB?",
+    answer: "A collection in MongoDB is a group of MongoDB documents. It's equivalent to a table in relational databases."
+  },
+  {
+    question: "How do you perform CRUD operations in MongoDB?",
+    answer: "You use methods like `find()`, `insertOne()`, `updateOne()`, and `deleteOne()` to perform CRUD operations."
+  },
+  {
+    question: "What is an ObjectId in MongoDB?",
+    answer: "An ObjectId is a unique identifier automatically assigned to documents when they are inserted into a collection."
+  },
+  {
+    question: "How do you index data in MongoDB?",
+    answer: "You use `db.collection.createIndex()` to create indexes on fields to improve query performance."
+  },
+  {
+    question: "What is a replica set in MongoDB?",
+    answer: "A replica set is a group of MongoDB servers that maintain the same data set, ensuring high availability and redundancy."
+  },
+  {
+    question: "What is sharding in MongoDB?",
+    answer: "Sharding is a method used to distribute data across multiple machines, helping scale large databases."
+  },
+  {
+    question: "What is aggregation in MongoDB?",
+    answer: "Aggregation in MongoDB is the process of transforming and combining data from multiple documents using aggregation pipelines."
+  },
+  {
+    question: "What is the use of `find()` in MongoDB?",
+    answer: "`find()` is used to retrieve documents from a collection that match a specified query."
+  },
+  {
+    question: "How do you update documents in MongoDB?",
+    answer: "You use `updateOne()`, `updateMany()`, or `replaceOne()` to update documents in MongoDB."
+  },
+  {
+    question: "What is the `$set` operator in MongoDB?",
+    answer: "The `$set` operator is used to update the value of a field in a document."
+  },
+  {
+    question: "How do you delete documents in MongoDB?",
+    answer: "You use `deleteOne()` or `deleteMany()` to remove documents from a collection."
+  },
+  {
+    question: "What is the aggregation pipeline in MongoDB?",
+    answer: "The aggregation pipeline allows you to process data records and return computed results by using operators like `$match`, `$group`, `$sort`, etc."
+  },
+  {
+    question: "What are MongoDB's data types?",
+    answer: "MongoDB supports various data types, including string, integer, Boolean, array, object, and special types like `ObjectId` and `Date`."
+  },
+  {
+    question: "What is a `MongoClient` in MongoDB?",
+    answer: "The `MongoClient` is used to establish a connection to a MongoDB server or cluster, allowing you to interact with the database."
+  },
+  {
+    question: "How do you handle transactions in MongoDB?",
+    answer: "MongoDB supports multi-document transactions, allowing you to ensure atomicity across multiple operations within a session."
+  },
 ];
 
+const randomIcons = Array.from({ length: 50 }, () => {
+  const Icon = [Database, Server, Atom, Code, Cpu, Layers, FileText, Terminal, GitBranch, Monitor, Layout][Math.floor(Math.random() * 11)];
+  const top = Math.floor(Math.random() * 100);
+  const left = Math.floor(Math.random() * 100);
+  const size = Math.floor(Math.random() * 40) + 20;
+  const opacity = Math.random() * 0.5 + 0.2;
+  const rotate = Math.floor(Math.random() * 360);
+  return { Icon, top, left, size, opacity, rotate };
+});
+
 const QuestionMongo = () => {
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const toggleAnswer = (index) => {
+    setActiveIndex(index === activeIndex ? null : index);
+  };
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-100 via-white to-green-200 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Blurred Background Effects */}
-      <div className="absolute top-10 left-10 w-80 h-80 bg-green-300 rounded-full blur-3xl opacity-20"></div>
-      <div className="absolute bottom-10 right-10 w-80 h-80 bg-green-400 rounded-full blur-2xl opacity-30"></div>
+    <div className="relative min-h-screen flex items-center justify-center p-6 overflow-hidden bg-white">
+      {/* Background Icons */}
+      {randomIcons.map(({ Icon, top, left, size, opacity, rotate }, index) => (
+        <div
+          key={index}
+          className="absolute z-0 text-indigo-500"
+          style={{
+            top: `${top}%`,
+            left: `${left}%`,
+            transform: `rotate(${rotate}deg)`,
+            opacity: opacity,
+            fontSize: `${size}px`,
+          }}
+        >
+          <Icon size={size} />
+        </div>
+      ))}
 
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="w-full max-w-5xl text-center relative z-10"
-      >
-        <h1 className="text-3xl font-extrabold text-green-700 mb-12 tracking-tight">
-          🚀 MongoDB Interview Questions
-        </h1>
-
-        <div className="space-y-8 text-left">
-          {questions.map((question, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ x: 10 }}
-              transition={{ type: "spring", stiffness: 200 }}
-              className="group border-b border-green-300 pb-4"
-            >
-              <h2 className="text-2xl md:text-2xl font-semibold text-gray-800 group-hover:text-green-600 transition">
-                {index + 1}. {question}
-              </h2>
-            </motion.div>
+      {/* Content Box */}
+      <div >
+        <h1 className="text-3xl font-bold mb-6 text-center">MongoDB Interview Questions</h1>
+        <div className="space-y-4">
+          {questionsWithAnswers.map((item, index) => (
+            <div key={index} className="border rounded-2xl shadow p-4 transition-all w-[970px]">
+              <button
+                onClick={() => toggleAnswer(index)}
+                className="w-full text-left flex justify-between items-center font-medium text-lg"
+              >
+                {item.question}
+                <span className="text-gray-500 text-xl">
+                  {activeIndex === index ? "−" : "+"}
+                </span>
+              </button>
+              {activeIndex === index && (
+                <p className="mt-2 text-gray-700">{item.answer}</p>
+              )}
+            </div>
           ))}
         </div>
-      </motion.div>
-    </main>
+      </div>
+    </div>
   );
 };
+
+
+
 
 export default QuestionMongo;
 
