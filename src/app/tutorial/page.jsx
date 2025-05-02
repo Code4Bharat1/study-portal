@@ -20,7 +20,7 @@ export default function TutorialPage() {
     {
       name: 'MongoDB',
       icon: <SiMongodb className="text-green-600 w-12 h-12" />,
-      link: '/firstmongodb', // Link to MongoDB tutorial page
+      link: '/firstmongo', // Link to MongoDB tutorial page
     },
     {
       name: 'Express',
