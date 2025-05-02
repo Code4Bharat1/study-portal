@@ -1,22 +1,14 @@
-import Sidebar from '@/components/fullnodecontent/nodesidebar';
-import CardJS from '@/components/full-javascript-content/Card.jsx';
 import React from 'react';
-// import Navbar from '@/components/Navbar';
+import Navbar from '@/components/Navbar';
+import CardJS from '@/components/Javascript/Card';
 
-function Page() {
+export default function JavascriptMainPage() {
   return (
     <>
-      {/* <Navbar /> */}
-        <div className="mt-25">  {/* Sidebar Section */}
-        
-        {/* <Sidebar /> */}
-
-      {/* Content Section */}
-        <CardJS/></div>
-       
-    
+      <Navbar />
+      <main className="mt-24 px-4">
+        <CardJS />
+      </main>
     </>
   );
 }
-
-export default Page;

@@ -1,5 +1,5 @@
-import Sidebar from "@/components/full-javascript-content/Sidebar";
-import Home from "@/components/full-javascript-content/Home";
+import Sidebar from "@/components/Javascript/Sidebar";
+import Home from "@/components/Javascript/Home";
 import React from "react";
 import Navbar from "@/components/Navbar";
 

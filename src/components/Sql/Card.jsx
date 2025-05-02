@@ -1,33 +1,34 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 
-export default function FirstJavascript() {
+export default function FirstSQL() {
   const router = useRouter();
 
   const handleLearnClick = () => {
-    router.push('/javascript/home'); // adjust path if needed>
+    router.push('/sql/home'); // Adjust path if needed
   };
 
   const handleVideoClick = () => {
-    // Open JavaScript video in new tab
-    window.open('https://www.youtube.com/watch?v=sscX432bMZo', '_blank'); // freeCodeCamp JS tutorial
+    // Open SQL video in new tab
+    window.open('https://www.youtube.com/watch?v=HXV3zeQKqGY', '_blank'); // SQL Tutorial - MySQL (freeCodeCamp)
   };
 
   return (
-    <main className="min-h-screen bg-blue-100 flex items-center justify-center px-4">
+    <main className="min-h-screen bg-green-100 flex items-center justify-center px-4">
       <div className="flex flex-col md:flex-row max-w-6xl w-full bg-white rounded-lg shadow-lg p-6 gap-10">
         {/* Left Section */}
         <div className="flex-1 flex flex-col justify-center items-center text-center md:items-start md:text-left">
-          <h1 className="text-7xl font-bold text-black mb-4">JavaScript</h1>
+          <h1 className="text-7xl font-bold text-black mb-4">SQL</h1>
           <p className="text-xl text-black mb-6">
-            JavaScript is the programming language of the Web.
+            SQL is the language for working with databases.
           </p>
           <div className="flex flex-row gap-4 w-full md:w-auto">
             <button
               onClick={handleLearnClick}
-              className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition whitespace-nowrap"
+              className="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700 transition whitespace-nowrap"
             >
-              Learn JavaScript
+              Learn SQL
             </button>
             <button
               onClick={handleVideoClick}
@@ -36,35 +37,31 @@ export default function FirstJavascript() {
               Video Tutorial
             </button>
             <button className="bg-gray-900 text-white px-6 py-3 rounded-full hover:bg-gray-800 transition whitespace-nowrap">
-              JavaScript Project
+              SQL Project
             </button>
           </div>
         </div>
 
         {/* Right Section */}
         <div className="flex-1 bg-gray-100 rounded-xl shadow-md p-6">
-          <h2 className="text-2xl font-semibold text-black mb-4">JavaScript Example:</h2>
-          <pre className="bg-white text-sm text-blue-800 p-4 rounded-lg overflow-x-auto border-l-4 border-blue-500">
-{`<!DOCTYPE HTML>
-<html>
+          <h2 className="text-2xl font-semibold text-black mb-4">SQL Example:</h2>
+          <pre className="bg-white text-sm text-green-800 p-4 rounded-lg overflow-x-auto border-l-4 border-green-500">
+{`-- Create a table
+CREATE TABLE Customers (
+  id INT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100)
+);
 
-<body>
+-- Insert data
+INSERT INTO Customers (id, name, email)
+VALUES (1, 'John Doe', 'john@example.com');
 
-  <p>Before the script...</p>
-
-  <script>
-    alert( 'Hello, world!' );
-  </script>
-
-  <p>...After the script.</p>
-
-</body>
-
-</html>`}
+-- Query data
+SELECT * FROM Customers;`}
           </pre>
         </div>
       </div>
     </main>
   );
 }
-    

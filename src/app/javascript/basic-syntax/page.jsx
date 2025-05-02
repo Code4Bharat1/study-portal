@@ -1,20 +1,18 @@
-import React from "react";
-import Sidebar from "@/components/full-javascript-content/Sidebar";
-import Navbar from "@/components/Navbar";
-import BasicSyntax from "@/components/full-javascript-content/BasicSyntax";
-export default function page() {
+import React from 'react';
+import Navbar from '@/components/Navbar';
+import Sidebar from '@/components/Javascript/Sidebar';
+import ControlFlowContent from '@/components/Javascript/ControlFlow';
+
+export default function JavascriptControlFlowPage() {
   return (
-    <div>
+    <>
       <Navbar />
-      <div className="mt-30">
-        {/* Sidebar Section */}
-
+      <div className="flex mt-24 px-4 gap-6">
         <Sidebar />
-
-        {/* Content Section */}
-
-        <BasicSyntax />
+        <main className="flex-1">
+          <ControlFlowContent />
+        </main>
       </div>
-    </div>
+    </>
   );
 }

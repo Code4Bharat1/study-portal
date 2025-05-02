@@ -1,16 +1,16 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Javascript/Sidebar';
-import GetStartedPage from '@/components/Javascript/GetStarted';
+import VariableDatatypeContent from '@/components/Javascript/VariablesDatatype';
 
-export default function JavascriptGetStartedPage() {
+export default function JavascriptVariablesDatatypePage() {
   return (
     <>
       <Navbar />
       <div className="flex mt-24 px-4 gap-6">
         <Sidebar />
         <main className="flex-1">
-          <GetStartedPage />
+          <VariableDatatypeContent />
         </main>
       </div>
     </>

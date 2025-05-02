@@ -1,5 +1,5 @@
-import Sidebar from '@/components/Javascript/Sidebar';
-import Intro from '@/components/Javascript/Intro';
+import Sidebar from '@/components/Sql/Sidebar';
+import Intro from '@/components/Sql/Intro';
 import React from 'react';
 import Navbar from '@/components/Navbar';
 
