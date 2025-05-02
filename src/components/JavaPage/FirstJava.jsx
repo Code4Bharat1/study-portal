@@ -25,17 +25,17 @@ export default function FirstJava() {
           <div className="flex flex-col gap-4 w-full md:flex-row md:gap-3 md:w-auto">
             <button
               onClick={handleLearnClick}
-              className="bg-[#4a3f35] text-white px-6 py-3 rounded-full hover:bg-[#3a2e25] transition"
+              className="bg-[#9E768F] text-white px-6 py-3 rounded-full "
             >
               Learn Java
             </button>
             <button
               onClick={handleVideoClick}
-              className="bg-yellow-300 text-black px-6 py-3 rounded-full hover:bg-yellow-400 transition"
+              className="bg-[#CA7DF9] text-white px-6 py-3 rounded-full "
             >
               Video Tutorial
             </button>
-            <button className="bg-gray-900 text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
+            <button className="bg-[#9D6381] text-white px-6 py-3 rounded-full ">
               Java Project
             </button>
           </div>

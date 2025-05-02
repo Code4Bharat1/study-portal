@@ -1,7 +1,7 @@
 'use client';
 import { useState } from "react";
-import { FaSearch } from 'react-icons/fa';
-import { FaReact, FaServer, FaCode } from 'react-icons/fa';
+import { FaSearch, FaReact, FaServer, FaCode } from 'react-icons/fa';
+import { useTypewriter } from 'react-simple-typewriter';
 
 export default function Hero() {
   const [query, setQuery] = useState("");
@@ -15,12 +15,18 @@ export default function Hero() {
     { name: "Python", link: "/firstPython" },
     { name: "Express", link: "/express" },
     { name: "Mongodb", link: "/firstmongo" },
-    { name:  "Java"  , link:  "/firstJava"}
+    { name: "Java", link: "/firstJava" }
   ]);
 
   const filteredSuggestions = suggestions.filter((item) =>
     item.name.toLowerCase().includes(query.toLowerCase())
   );
+
+  const [text] = useTypewriter({
+    words: ['HTML,CSS,JavaScript,React,Node.js,Python,PHP'],
+    loop: true,
+    delaySpeed: 2000,
+  });
 
   return (
     <>
@@ -48,7 +54,7 @@ export default function Hero() {
           <div className="mt-8 flex justify-center max-w-xl mx-auto relative">
             <input
               type="text"
-              placeholder="Search our tutorials, e.g. HTML"
+              placeholder={`Search our tutorials, e.g. ${text}`}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-full px-6 py-3 rounded-l-md text-gray-200 text-sm border-2 border-gray-300 pl-10 focus:outline-none focus:ring-2 focus:ring-white bg-transparent"
@@ -113,17 +119,17 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      {/* Banner Section at the bottom */}
-<div className="mt-10 bg-black flex justify-center">
-  <a href="/quizz">  {/* Replace with the page you want to redirect to */}
-    <img
-      src="/last.png" // Replace this with your image path
-      alt="Coding Banner"
-      className="object-contain rounded-lg" // Adjust the height as needed
-    />
-  </a>
-</div>
 
+      {/* Banner Section at the bottom */}
+      <div className="mt-10 bg-black flex justify-center">
+        <a href="/quizz">
+          <img
+            src="/last.png"
+            alt="Coding Banner"
+            className="object-contain rounded-lg"
+          />
+        </a>
+      </div>
     </>
   );
 }

@@ -44,6 +44,18 @@
 
 // export default Exercise;
 
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 
 import React from "react";
@@ -62,6 +74,7 @@ import {
   Layout,
 } from "lucide-react";
 
+// Feature data
 const features = [
   {
     id: "01",
@@ -117,7 +130,14 @@ const features = [
   },
 ];
 
-const randomIcons = Array.from({ length: 50 }, () => {
+// Random background icons generation
+const randomIcons = Array.from({ length: 60 }, () => {
+  let top, left;
+  do {
+    top = Math.floor(Math.random() * 100);
+    left = Math.floor(Math.random() * 100);
+  } while (top > 30 && top < 70 && left > 25 && left < 75);
+
   const Icon = [
     Database,
     Server,
@@ -131,10 +151,9 @@ const randomIcons = Array.from({ length: 50 }, () => {
     Monitor,
     Layout,
   ][Math.floor(Math.random() * 11)];
-  const top = Math.floor(Math.random() * 100);
-  const left = Math.floor(Math.random() * 100);
+
   const size = Math.floor(Math.random() * 40) + 20;
-  const opacity = Math.random() * 0.5 + 0.2;
+  const opacity = Math.random() * 0.5 + 0.3;
   const rotate = Math.floor(Math.random() * 360);
   return { Icon, top, left, size, opacity, rotate };
 });
@@ -154,7 +173,7 @@ const Exercise = () => {
       {randomIcons.map(({ Icon, top, left, size, opacity, rotate }, index) => (
         <div
           key={index}
-          className="absolute z-0 text-indigo-500"
+          className="absolute z-0 text-gray-300"
           style={{
             top: `${top}%`,
             left: `${left}%`,
@@ -177,7 +196,7 @@ const Exercise = () => {
               onClick={() => handleCardClick(title, comingSoon)}
               className="relative w-64 h-72 bg-white bg-opacity-80 p-6 rounded-xl cursor-pointer transition-transform duration-300 transform hover:-translate-y-2 hover:shadow-2xl hover:scale-[1.02] border border-gray-200 shadow-lg"
             >
-              {/* Slanted Ribbon */}
+              {/* COMING SOON Ribbon */}
               {comingSoon && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
                   <div className="transform -rotate-45 bg-gradient-to-r from-gray-800 via-black to-gray-700 text-white text-sm font-semibold px-6 py-1 shadow-md opacity-90">
