@@ -17,9 +17,11 @@ export default function CssPage() {
                   Learn CSS
                 </button>
               </Link>
+              <Link href="/https://youtu.be/ESnrn1kAD4E?si=3_tiQWwfuAjikLKG">
               <button className="bg-yellow-200 text-black px-6 py-3 rounded-full hover:bg-yellow-300 transition">
                 Video Tutorial
               </button>
+              </Link>
               <button className="bg-gray-900 text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
                 CSS Reference
               </button>

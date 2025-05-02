@@ -161,11 +161,13 @@ export default function Navbar() {
   ];
 
   const navbarItems = [
+    { name: 'Home', link: '/' },
+    {name: 'Tutorial',link:'/tutorial'},
+    {name: 'Video',link:'/video'},
+    { name: 'Quizz Test', link: '/quizz' },
     { name: 'Exercises', link: '/exercises' },
     { name: 'Services', link: '/services' },
-    { name: 'Home', link: '/' },
     { name: 'Contact', link: '/contact' },
-    { name: 'Quizz Test', link: '/quizz' },
   ];
 
   return (
