@@ -166,7 +166,6 @@ export default function Navbar() {
     {name: 'Video',link:'/video'},
     { name: 'Quizz Test', link: '/quizz' },
     { name: 'Exercises', link: '/exercises' },
-    { name: 'Services', link: '/services' },
     { name: 'Contact', link: '/contact' },
     { name: 'Activity', link:'/activity'}
   ];
