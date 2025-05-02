@@ -1,6 +1,9 @@
+"use client";
+import useReadingTracker from "@/app/hook/useReadingTracker";
 import Link from "next/link";
 
 const Mongodbhome = () => {
+  useReadingTracker('homemongodbpage');
   return (
     <>
       <div className="p-6 ml-80">

@@ -11,8 +11,8 @@ export default function NodePage() {
             JavaScript runtime built on Chrome's V8 engine
           </p>
           <div className="flex flex-col gap-4 w-full md:flex-row md:gap-3 md:w-auto">
-            <Link href="/nodehome">
-              <button className="bg-[#6369D1] text-white px-6 py-3 rounded-full hover:bg-green-700 transition">
+            <Link href="/HomeNode">
+              <button className="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700 transition">
                 Learn Node.js
               </button>
             </Link>

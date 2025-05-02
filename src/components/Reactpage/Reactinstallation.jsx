@@ -1,6 +1,9 @@
+"use client";
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 function Reactinstallation() {
+  useReadingTracker('reactinstallation');
   return (
     <div className="p-6 ml-70">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">Installing React</h1>

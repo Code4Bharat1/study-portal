@@ -1,6 +1,9 @@
+"use client";
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react'
 
 const Mongocurd = () => {
+  useReadingTracker('curdmongo');
   return (
     <div className="p-6 ml-80">
       <div className="bg-white p-8 rounded-2xl shadow-2xl">

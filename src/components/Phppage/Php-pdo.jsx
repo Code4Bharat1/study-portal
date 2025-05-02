@@ -1,6 +1,9 @@
 'use client';
 
+import useReadingTracker from "@/app/hook/useReadingTracker";
+
 export default function PhpPdo() {
+  useReadingTracker('php-pdo');
   return (
     <div className="p-6 ml-70">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">PHP Data Objects (PDO)</h1>

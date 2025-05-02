@@ -1,7 +1,9 @@
+"use client";
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 const Basicmongo = () => {
-  
+  useReadingTracker('basicmongo');
   return (
     <>
       <div className="p-6 ml-80">

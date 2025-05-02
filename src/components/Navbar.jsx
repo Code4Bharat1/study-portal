@@ -168,6 +168,7 @@ export default function Navbar() {
     { name: 'Exercises', link: '/exercises' },
     { name: 'Services', link: '/services' },
     { name: 'Contact', link: '/contact' },
+    { name: 'Activity', link:'/activity'}
   ];
 
   return (
