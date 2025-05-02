@@ -1,4 +1,5 @@
-"use client"
+'use client';
+
 import { useEffect } from 'react';
 
 const useReadingTracker = (pageKey) => {
@@ -7,19 +8,24 @@ const useReadingTracker = (pageKey) => {
 
     const handleBeforeUnload = () => {
       const endTime = Date.now();
-      const timeSpent = Math.floor((endTime - startTime) / 60000); // minutes
+      const timeSpentInSeconds = Math.floor((endTime - startTime) / 1000); // in seconds
 
+      // Get existing data or initialize an empty object
       const storedData = JSON.parse(localStorage.getItem('readingStats')) || {};
 
-      storedData[pageKey] = (storedData[pageKey] || 0) + timeSpent;
+      // Add time spent to the correct page
+      storedData[pageKey] = (storedData[pageKey] || 0) + timeSpentInSeconds;
 
+      // Save back to localStorage
       localStorage.setItem('readingStats', JSON.stringify(storedData));
     };
 
+    // Listen for page unload or reload
     window.addEventListener('beforeunload', handleBeforeUnload);
 
+    // Cleanup on component unmount or route change
     return () => {
-      handleBeforeUnload(); // also handle if user navigates to another page
+      handleBeforeUnload(); // track time on navigation
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [pageKey]);

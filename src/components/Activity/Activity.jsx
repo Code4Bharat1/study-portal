@@ -29,12 +29,12 @@ const Activity = () => {
       {Object.keys(readingData).length === 0 ? (
         <p className="text-gray-500 text-lg mt-4">No history found.</p>
       ) : (
-        <div className="overflow-x-auto shadow-md rounded-lg bg-white">
+        <div className="overflow-x-auto shadow-lg rounded-lg bg-white">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-blue-100 text-blue-900 uppercase text-sm tracking-wider">
                 <th className="p-4 border-b border-gray-300">Topic</th>
-                <th className="p-4 border-b border-gray-300">Minutes Read</th>
+                <th className="p-4 border-b border-gray-300">Secund Read</th>
               </tr>
             </thead>
             <tbody>
@@ -47,7 +47,7 @@ const Activity = () => {
                     {topic}
                   </td>
                   <td className="p-4 border-b border-gray-200 text-blue-700 font-semibold">
-                    {minutes} min
+                    {minutes} sec
                   </td>
                 </tr>
               ))}
