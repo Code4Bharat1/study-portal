@@ -6,15 +6,16 @@ import { FaReact, FaServer, FaCode } from 'react-icons/fa';
 export default function Hero() {
   const [query, setQuery] = useState("");
   const [suggestions] = useState([
-    { name: "HTML", link: "/html-tutorial" },
-    { name: "CSS", link: "/css-tutorial" },
-    { name: "JavaScript", link: "/javascript-tutorial" },
+    { name: "HTML", link: "/firstHtml" },
+    { name: "CSS", link: "/Csscard" },
+    { name: "JavaScript", link: "/javascript" },
     { name: "React", link: "/react" },
     { name: "Node.js", link: "/CardNode" },
-    { name: "PHP", link: "/php-tutorial" },
-    { name: "Python", link: "/python-tutorial" },
+    { name: "PHP", link: "/php" },
+    { name: "Python", link: "/firstPython" },
     { name: "Express", link: "/express" },
     { name: "Mongodb", link: "/firstmongo" },
+    { name:  "Java"  , link:  "/firstJava"}
   ]);
 
   const filteredSuggestions = suggestions.filter((item) =>
