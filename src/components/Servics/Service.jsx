@@ -1,142 +1,63 @@
-// "use client";
-
-// import React from 'react';
-
-// const steps = [
-//   { id: '01', title: 'Defining clean Objectives for Service Design' },
-//   { id: '02', title: 'Understanding the users using data or User Personas' },
-//   { id: '03', title: 'Go through the current design ecosystem' },
-//   { id: '04', title: 'Identifying issues & optimizations in current design ecosystem' },
-//   { id: '05', title: 'Ideation or coming up with innovative solutions' },
-//   { id: '06', title: 'Testing and Iterating the changes' },
-// ];
-
-// const Service = () => {
-//   return (
-//     <div className="min-h-screen bg-white flex items-center justify-center px-6 py-12">
-//       <div className="relative w-[600px] h-[600px]">
-//         {/* Center Circle */}
-//         <div className="absolute top-1/2 left-1/2 w-52 h-52 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border-4 border-gray-300 flex items-center justify-center shadow-md">
-//           <div className="text-center">
-//             <p className="text-sm text-gray-500">Working Process of</p>
-//             <h2 className="text-xl font-bold text-gray-800">Service Design</h2>
-//           </div>
-//         </div>
-
-//         {/* Circular Steps */}
-//         {steps.map((step, index) => {
-//           const angle = (360 / steps.length) * index;
-//           const radius = 250;
-
-//           const x = radius * Math.cos((angle - 90) * (Math.PI / 180));
-//           const y = radius * Math.sin((angle - 90) * (Math.PI / 180));
-
-//           return (
-//             <div
-//               key={step.id}
-//               className="absolute w-48 text-center"
-//               style={{
-//                 top: `calc(50% + ${y}px)`,
-//                 left: `calc(50% + ${x}px)`,
-//                 transform: 'translate(-50%, -50%)',
-//               }}
-//             >
-//               <span className="block font-semibold text-green-700 mb-1">Step {step.id}</span>
-//               <p className="text-sm text-gray-600">{step.title}</p>
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Service;
-
 "use client";
 
-import React from 'react';
-import { Wrench, Users, Lightbulb } from 'lucide-react';
+import React, { useState } from 'react';
 
 const steps = [
-  { id: '01', title: 'Defining clean Objectives for Service Design' },
-  { id: '02', title: 'Understanding the users using data or User Personas' },
-  { id: '03', title: 'Go through the current design ecosystem' },
-  { id: '04', title: 'Identifying issues & optimizations in current design ecosystem' },
-  { id: '05', title: 'Ideation or coming up with innovative solutions' },
-  { id: '06', title: 'Testing and Iterating the changes' },
-];
-
-const services = [
-  { icon: <Wrench size={40} className="text-green-600" />, title: "Service Setup", description: "We help structure your services from scratch." },
-  { icon: <Users size={40} className="text-green-600" />, title: "User Research", description: "Understand your audience with our in-depth research." },
-  { icon: <Lightbulb size={40} className="text-green-600" />, title: "Creative Solutions", description: "Innovative ideas to improve your service experience." },
+  { id: '01', title: 'Researching Market Trends and Audience Preferences', description: 'Understanding the target market and identifying key trends is essential for designing a product that resonates with the audience.' },
+  { id: '02', title: 'Designing Wireframes and Initial Mockups', description: 'Creating basic wireframes and mockups helps visualize the design structure and get feedback early in the process.' },
+  { id: '03', title: 'Prototyping and Gathering User Feedback', description: 'Prototyping allows for real-world testing of the design and gathering actionable feedback from users.' },
+  { id: '04', title: 'Implementing Design Changes and Finalizing Layout', description: 'Final adjustments are made to the layout based on feedback and testing, ensuring the design is user-friendly and functional.' },
+  { id: '05', title: 'Testing for Usability and Accessibility', description: 'Ensuring the design is accessible to all users and easy to navigate through rigorous testing is a critical step.' },
+  { id: '06', title: 'Launch and Post-Launch Monitoring', description: 'After launching the product, it’s essential to monitor performance and gather data for continuous improvement.' },
 ];
 
 const Service = () => {
+  const [hoveredStep, setHoveredStep] = useState(null);
+  const [activeStep, setActiveStep] = useState(null);
+
   return (
-    <div className="min-h-screen bg-white px-6 py-12 flex flex-col items-center justify-start space-y-12">
-      
-      {/* Top Cards Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
-        {services.map((service, idx) => (
-          <div key={idx} className="bg-white border border-gray-200 rounded-2xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-lg transition">
-            <div className="mb-4">{service.icon}</div>
-            <h3 className="font-semibold text-lg text-gray-800 mb-2">{service.title}</h3>
-            <p className="text-sm text-gray-600">{service.description}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Circular Steps Section */}
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 flex items-center justify-center px-6 py-12">
       <div className="relative w-[600px] h-[600px]">
+
         {/* Center Circle */}
-        <div className="absolute top-1/2 left-1/2 w-52 h-52 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border-4 border-gray-300 flex items-center justify-center shadow-md">
+        <div className="absolute top-1/2 left-1/2 w-52 h-52 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border-4 border-gray-300 flex items-center justify-center shadow-lg z-10">
           <div className="text-center">
-            <p className="text-sm text-gray-500">Working Process of</p>
-            <h2 className="text-xl font-bold text-gray-800">Service Design</h2>
+            <p className="text-sm text-gray-500">The Process of</p>
+            <h2 className="text-xl font-semibold text-gray-800">Creative Design</h2>
           </div>
         </div>
 
-        {/* Circular Steps */}
-        <div className="absolute inset-0 flex items-center justify-center animate-spin-once">
-          {steps.map((step, index) => {
-            const angle = (360 / steps.length) * index;
-            const radius = 250;
-            const x = radius * Math.cos((angle - 90) * (Math.PI / 180));
-            const y = radius * Math.sin((angle - 90) * (Math.PI / 180));
-            return (
-              <div
-                key={step.id}
-                className="absolute w-48 text-center opacity-0 animate-fadeIn"
-                style={{
-                  top: `calc(50% + ${y}px)`,
-                  left: `calc(50% + ${x}px)`,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-                <span className="block font-semibold text-green-700 mb-1">Step {step.id}</span>
-                <p className="text-sm text-gray-600">{step.title}</p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+        {/* Circular Standing Cards */}
+        {steps.map((step, index) => {
+          const angle = (360 / steps.length) * index;
+          const radius = 250;
 
-      {/* Bottom Cards Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
-        {services.map((service, idx) => (
-          <div key={`bottom-${idx}`} className="bg-white border border-gray-200 rounded-2xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-lg transition">
-            <div className="mb-4">{service.icon}</div>
-            <h3 className="font-semibold text-lg text-gray-800 mb-2">{service.title}</h3>
-            <p className="text-sm text-gray-600">{service.description}</p>
-          </div>
-        ))}
+          const x = radius * Math.cos((angle - 90) * (Math.PI / 180));
+          const y = radius * Math.sin((angle - 90) * (Math.PI / 180));
+
+          return (
+            <div
+              key={step.id}
+              className={`absolute w-48 p-4 bg-white rounded-xl shadow-lg border border-blue-200 transition-all duration-300 hover:scale-110 hover:bg-blue-100 cursor-pointer ${
+                hoveredStep === step.id ? 'scale-110 bg-blue-100' : ''
+              }`}
+              style={{
+                top: `calc(50% + ${y}px)`,
+                left: `calc(50% + ${x}px)`,
+                transform: 'translate(-50%, -50%) rotate(0deg)',
+              }}
+              onMouseEnter={() => setHoveredStep(step.id)}
+              onMouseLeave={() => setHoveredStep(null)}
+              onClick={() => setActiveStep(step.id)}
+            >
+              <span className="block font-semibold text-blue-700 mb-1">Step {step.id}</span>
+              <p className="text-sm text-gray-600 font-medium">{step.title}</p>
+            </div>
+          );
+        })}
       </div>
-      
     </div>
   );
 };
 
 export default Service;
-

@@ -1,61 +1,64 @@
 @import "tailwindcss";
 
+@keyframes footerSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+@keyframes glowAnimation {
+  0% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3),
+                 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.7),
+                 0 0 25px rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3),
+                 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+}
 
-/* spin */
-@keyframes spin-once {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+.animate-footer {
+  animation: footerSlideIn 1s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glowAnimation 1.5s infinite alternate;
+}
+
+@keyframes columnFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .animate-spin-once {
-    animation: spin-once 10s linear forwards; /* Runs the animation once */
-  }
-  
-  .animate-fadeIn {
-    animation: fadeIn 2s ease forwards;
-  }
-  @keyframes footerSlideIn {
-    0% {
-      opacity: 0;
-      transform: translateY(50px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes glowAnimation {
-    0% {
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3), 0 0 10px rgba(255, 255, 255, 0.5);
-    }
-    50% {
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.7), 0 0 25px rgba(255, 255, 255, 0.8);
-    }
-    100% {
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3), 0 0 10px rgba(255, 255, 255, 0.5);
-    }
-  }
-  
-  .animate-footer {
-    animation: footerSlideIn 1s ease-out forwards;
-  }
-  
-  .animate-glow {
-    animation: glowAnimation 1s infinite alternate;
-  }
-  
+}
+
+.footer-column-animate {
+  opacity: 0;
+  animation: columnFadeUp 0.8s ease-out forwards;
+}
+
+.footer-column-delay-1 {
+  animation-delay: 0.2s;
+}
+.footer-column-delay-2 {
+  animation-delay: 0.4s;
+}
+.footer-column-delay-3 {
+  animation-delay: 0.6s;
+}
+.footer-column-delay-4 {
+  animation-delay: 0.8s;
+}

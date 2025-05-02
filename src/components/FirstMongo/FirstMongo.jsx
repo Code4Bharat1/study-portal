@@ -1,16 +1,16 @@
 'use client';
+import Link from "next/link";
 import { useRouter } from 'next/navigation';
 
 export default function FirstMongo() {
   const router = useRouter();
 
   const handleLearnClick = () => {
-    router.push('/homemongodbpage'); // adjust if needed
+    router.push('/homemongodbpage');
   };
 
   const handleVideoClick = () => {
-    // Open only the MongoDB video in a new tab
-    window.open('https://www.youtube.com/watch?v=J6mDkcqU_ZE', '_blank'); // MongoDB video
+    window.open('https://www.youtube.com/watch?v=J6mDkcqU_ZE', '_blank');
   };
 
   return (
@@ -35,9 +35,11 @@ export default function FirstMongo() {
             >
               Video Tutorial
             </button>
-            <button className="bg-gray-900 text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
-              MongoDB Project
-            </button>
+            <Link href="/mongodb-projects">
+              <button className="bg-gray-900 text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
+                MongoDB Project
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -45,23 +47,16 @@ export default function FirstMongo() {
         <div className="flex-1 bg-gray-100 rounded-xl shadow-md p-6">
           <h2 className="text-2xl font-semibold text-black mb-4">MongoDB Example:</h2>
           <pre className="bg-white text-sm text-green-800 p-4 rounded-lg overflow-x-auto border-l-4 border-green-500">
-{`// Insert document
-db.users.insertOne({
+{`db.users.insertOne({
   name: "John Doe",
   email: "john@example.com",
   age: 25
 })
-
-// Find all users
 db.users.find({})
-
-// Update a user
 db.users.updateOne(
   { name: "John Doe" },
   { $set: { age: 26 } }
 )
-
-// Delete a user
 db.users.deleteOne({ name: "John Doe" })`}
           </pre>
         </div>
@@ -69,7 +64,3 @@ db.users.deleteOne({ name: "John Doe" })`}
     </main>
   );
 }
-
-
-
-
