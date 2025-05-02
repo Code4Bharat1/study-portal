@@ -1,7 +1,9 @@
 'use client';
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React, { useEffect, useState } from 'react';
 
 function ReactuseEffect() {
+  useReadingTracker('reactuseeffect');
   const [count, setCount] = useState(0);
   const [text, setText] = useState('');
 

@@ -1,6 +1,9 @@
+"use client";
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 function Expressmiddleware() {
+  useReadingTracker('expressmiddleware');
   return (
     <div className="ml-72 p-6 text-black">
       <h1 className="text-3xl font-bold mb-4 text-yellow-600">Express Middleware</h1>

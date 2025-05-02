@@ -1,6 +1,8 @@
+"use client";
 import React from 'react';
 
 const Queryoperator = () => {
+  useReadingTracker('mongoqueryoperator');
   return (
     <>
       <div className="p-6 ml-80">

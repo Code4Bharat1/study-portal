@@ -1,6 +1,9 @@
+"use client";
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 function Reactintroduction() {
+  useReadingTracker('reactintroduction');
   return (
     <div className="p-6 ml-70">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">Introduction to React</h1>

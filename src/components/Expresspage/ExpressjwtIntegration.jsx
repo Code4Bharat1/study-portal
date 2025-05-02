@@ -1,6 +1,9 @@
+"use client";
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 function ExpressjwtIntegration() {
+  useReadingTracker('expressjwt');
   return (
     <div className="ml-72 p-6 text-black">
       <h1 className="text-3xl font-bold mb-6 ">JWT Integration in Express.js</h1>

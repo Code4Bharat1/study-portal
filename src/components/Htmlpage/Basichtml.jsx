@@ -1,6 +1,8 @@
+import useReadingTracker from "@/app/hook/useReadingTracker";
 import React from "react";
 
 const Basichtml = () => {
+  useReadingTracker('htmlBasic'); 
   return (
     <>
       <div className="p-6 ml-80">

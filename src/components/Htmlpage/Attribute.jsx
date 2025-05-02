@@ -1,6 +1,8 @@
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 const Attribute = () => {
+  useReadingTracker('htmlAttribute'); 
   return (
     <>
       <div className="p-6 ml-80">
