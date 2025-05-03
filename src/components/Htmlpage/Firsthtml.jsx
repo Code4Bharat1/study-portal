@@ -1,79 +1,226 @@
-'use client';
-import { useRouter } from 'next/navigation';
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
-export default function Firsthtml() {
-  const router = useRouter();
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3
+    }
+  }
+};
 
-  const handleLearnClick = () => {
-    router.push('/htmlHome'); // Adjust if needed
-  };
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
 
-  const handleVideoClick = () => {
-    // Open only the HTML video in a new tab
-    window.open('https://www.youtube.com/watch?v=pQN-pn6p3u0', '_blank'); // HTML video
-  };
+const buttonVariants = {
+  hover: { 
+    scale: 1.05, 
+    boxShadow: "0px 5px 15px rgba(0,0,0,0.1)",
+    transition: { duration: 0.2 }
+  },
+  tap: { scale: 0.98 }
+};
 
+const codeCardVariants = {
+  hover: {
+    y: -8,
+    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+    transition: { 
+      duration: 0.3,
+      ease: "easeOut"
+    }
+  }
+};
+
+export default function HtmlPage() {
   return (
-    <main className="min-h-screen bg-[#82b6b7] flex items-center justify-center px-4">
-      <div className="flex flex-col md:flex-row max-w-6xl w-full bg-white/0 rounded-lg shadow-lg p-6 gap-10">
-        {/* Left Section */}
-        <div className="flex-1 flex flex-col justify-center items-center text-center md:items-start md:text-left">
-          <h1 className="text-7xl font-bold text-black mb-4">HTML</h1>
-          <p className="text-xl text-black mb-6">
-            A standard markup language for documents designed to be displayed in a web browser.
-          </p>
-          <div className="flex flex-col gap-4 w-full md:flex-row md:gap-3 md:w-auto">
-            <button
-              onClick={handleLearnClick}
-              className="bg-[#2f4d4e] text-white px-6 py-3 rounded-full hover:bg-blue-700 transition"
+    <main className="min-h-screen bg-gradient-to-br from-[#e6f3ff] via-[#cce6ff] to-[#99ccff] animate-gradient-shift flex items-center justify-center p-4">
+      <motion.div
+        className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="flex flex-col lg:flex-row">
+          {/* Left Content */}
+          <motion.div 
+            className="flex-1 p-8 md:p-12 flex flex-col justify-center"
+            variants={itemVariants}
+          >
+            <div className="mb-2">
+              <motion.span 
+                className="inline-block px-3 py-1 text-sm font-semibold text-blue-600 bg-blue-100 rounded-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                Markup Language
+              </motion.span>
+            </div>
+            
+            <motion.h1 
+              className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight"
+              variants={itemVariants}
             >
-              Learn HTML
-            </button>
-            <button 
-              onClick={handleVideoClick} 
-              className="bg-yellow-200 text-black px-6 py-3 rounded-full hover:bg-yellow-300 transition"
+              Build Web Pages with <span className="text-blue-600 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">HTML</span>
+            </motion.h1>
+            
+            <motion.p 
+              className="text-lg md:text-xl text-gray-600 mb-8"
+              variants={itemVariants}
             >
-              Video Tutorial
-            </button>
-            <button className="bg-gray-900 text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
-              HTML Project
-            </button>
-          </div>
-        </div>
-
-        {/* Right Section */}
-        <div className="flex-1 bg-gray-100 rounded-xl shadow-md p-6">
-          <h2 className="text-2xl font-semibold text-black mb-4">HTML Example:</h2>
-          <pre className="bg-white text-sm text-[#47595a] p-4 rounded-lg overflow-x-auto border-l-4 border-blue-500">
-{`<!-- HTML Structure -->
-<!DOCTYPE html>
+              Create the structure of web pages with HTML, the standard markup language for the web.
+            </motion.p>
+            
+            <motion.div 
+              className="flex flex-wrap gap-4 mb-8"
+              variants={containerVariants}
+            >
+              {[
+                { 
+                  href: "/htmlHome", 
+                  text: "Get Started", 
+                  bg: "bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700",
+                  textColor: "text-white",
+                  shadow: "shadow-lg shadow-blue-500/20"
+                },
+                { 
+                  href: "https://www.youtube.com/watch?v=pQN-pn6p3u0", 
+                  text: "Video Tutorial", 
+                  bg: "bg-white hover:bg-gray-50",
+                  textColor: "text-gray-700",
+                  border: "border border-gray-200",
+                  shadow: "shadow-sm hover:shadow-md"
+                },
+                { 
+                  href: "/projects?tech=html", 
+                  text: "View Projects", 
+                  bg: "bg-gray-900 hover:bg-gray-800",
+                  textColor: "text-white",
+                  shadow: "shadow-lg hover:shadow-xl"
+                }
+              ].map((button, index) => (
+                <motion.div
+                  key={button.text}
+                  variants={itemVariants}
+                  custom={index}
+                >
+                  <Link href={button.href} rel={button.href.startsWith("http") ? "noopener noreferrer" : undefined}>
+                    <motion.button
+                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200`}
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                    >
+                      {button.text}
+                    </motion.button>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+            
+            <motion.div 
+              className="flex flex-col sm:flex-row sm:items-center gap-4 text-gray-500"
+              variants={itemVariants}
+            >
+              <span className="text-sm sm:text-base">Trusted by industry leaders:</span>
+              <div className="flex flex-wrap gap-2">
+                {['Google', 'Mozilla', 'W3C', 'GitHub', 'Adobe', 'Shopify'].map((company, i) => (
+                  <motion.span 
+                    key={company} 
+                    className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {company}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+          
+          {/* Right Content */}
+          <motion.div 
+            className="flex-1 bg-gradient-to-br from-blue-50 to-cyan-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
+            variants={itemVariants}
+          >
+            {/* Decorative elements */}
+            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-blue-200/30 blur-xl"></div>
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-cyan-200/30 blur-xl"></div>
+            
+            <div className="w-full max-w-md relative z-10">
+              <motion.div 
+                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+                variants={codeCardVariants}
+                whileHover="hover"
+                aria-hidden="true"
+              >
+                <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3 flex items-center">
+                  <div className="flex space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="ml-4 text-sm text-gray-300 font-mono">index.html</div>
+                </div>
+                <div className="relative">
+                  <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
+                    <code className="block whitespace-pre">
+{`<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>HTML Page</title>
 </head>
 <body>
     <h1>Welcome to HTML!</h1>
-    <p>This is an example paragraph.</p>
+    <p>This is a paragraph.</p>
     <ul>
         <li>Item 1</li>
         <li>Item 2</li>
         <li>Item 3</li>
     </ul>
-    <div class="container">
-        <h2>HTML Basics</h2>
-        <p>HTML stands for HyperText Markup Language.</p>
-    </div>
 </body>
 </html>`}
-          </pre>
+                    </code>
+                  </pre>
+                  <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className="mt-8 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                <p className="text-gray-600 mb-4">Try HTML right in your browser</p>
+                <Link href="https://jsfiddle.net/" rel="noopener noreferrer">
+                  <motion.button
+                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    <span className="relative z-10">Open JSFiddle</span>
+                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 opacity-0 hover:opacity-100 transition-opacity"></span>
+                  </motion.button>
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </main>
   );
 }
-
-
-
-
-
-

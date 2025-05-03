@@ -105,28 +105,27 @@ const features = [
     title: "Python",
     description: "Master continuous integration and deployment pipelines.",
     icon: Cpu,
-    comingSoon: true,
+    
   },
   {
     id: "06",
     title: "Java",
     description: "Design intuitive and user-friendly interfaces.",
     icon: Layers,
-    comingSoon: true,
   },
   {
     id: "07",
     title: "Sql",
     description: "Learn how to write unit and integration tests.",
     icon: FileText,
-    comingSoon: true,
+    
   },
   {
     id: "08",
     title: "C++",
     description: "Master Git and collaborative workflows.",
     icon: GitBranch,
-    comingSoon: true,
+    
   },
 ];
 
