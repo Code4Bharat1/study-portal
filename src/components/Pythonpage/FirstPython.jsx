@@ -1,69 +1,92 @@
-'use client';
-import { useRouter } from 'next/navigation';
+import { FaStar } from "react-icons/fa";
 
-export default function FirstPython() {
-  const router = useRouter();
-
-  const handleLearnClick = () => {
-    router.push('/pythonHome'); // adjust path if needed
-  };
-
-  const handleVideoClick = () => {
-    // Open Python video in new tab
-    window.open('https://www.youtube.com/watch?v=_uQrJ0TkZlc', '_blank'); // Python video by freeCodeCamp
-  };
-
+export default function LearnPythonCard() {
   return (
-    <main className="min-h-screen bg-blue-100 flex items-center justify-center px-4">
-      <div className="flex flex-col md:flex-row max-w-6xl w-full bg-white/0 rounded-lg shadow-lg p-6 gap-10">
-        {/* Left Section */}
-        <div className="flex-1 flex flex-col justify-center items-center text-center md:items-start md:text-left">
-          <h1 className="text-7xl font-bold text-black mb-4">Python</h1>
-          <p className="text-xl text-black mb-6">
-            A powerful, easy-to-learn programming language
-          </p>
-          <div className="flex flex-col gap-4 w-full md:flex-row md:gap-3 md:w-auto">
-            <button
-              onClick={handleLearnClick}
-              className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition"
-            >
-              Learn Python
-            </button>
-            <button
-              onClick={handleVideoClick}
-              className="bg-yellow-200 text-black px-6 py-3 rounded-full hover:bg-yellow-300 transition"
-            >
-              Video Tutorial
-            </button>
-            <button className="bg-gray-900 text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
-              Python Project
-            </button>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 py-12 px-4 flex justify-center items-center">
+      <div className="bg-white rounded-3xl shadow-xl w-full max-w-6xl p-10 flex flex-col gap-10 md:flex-row">
+        
+        {/* Left Side - Info */}
+        <div className="flex-1 space-y-6">
+          <div className="flex items-center gap-4">
+            <img
+              src="/python-icon.png"
+              alt="Python Logo"
+              className="w-16 h-16 rounded-full shadow-md"
+            />
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">Learn Python Programming</h1>
+              <p className="text-gray-600 text-sm mt-1">
+                Start your Python journey with beginner-friendly lessons and real-world projects.
+              </p>
+            </div>
+          </div>
+
+          {/* Rating & Meta */}
+          <div className="flex items-center gap-6 text-sm text-gray-700">
+            <div className="flex items-center text-yellow-500 font-medium">
+              <FaStar className="mr-1" /> 4.6
+            </div>
+            <span>27 Lessons</span>
+            <span>Beginner</span>
+            <span>224k Learners</span>
+          </div>
+
+          {/* Button */}
+          <button className="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition">
+            Resume Learning
+          </button>
+
+          {/* Progress */}
+          <div>
+            <p className="text-sm text-gray-500 mb-1">Progress: 5%</p>
+            <div className="w-full bg-gray-200 h-2 rounded-full">
+              <div className="bg-indigo-500 h-full w-[5%] rounded-full"></div>
+            </div>
+          </div>
+
+          {/* Up Next Cards */}
+          <div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-3">Up Next</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {["Practice Python", "Problem Solving", "Python Projects"].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl text-center shadow-sm hover:shadow-md transition"
+                >
+                  <p className="font-medium text-indigo-800">{item}</p>
+                  <span className="text-indigo-500 text-xs font-semibold mt-1 inline-block">
+                    Continue
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Right Section */}
-        <div className="flex-1 bg-gray-100 rounded-xl shadow-md p-6">
-          <h2 className="text-2xl font-semibold text-black mb-4">Python Example:</h2>
-          <pre className="bg-white text-sm text-blue-800 p-4 rounded-lg overflow-x-auto border-l-4 border-blue-500">
-{`# Define a function
-def greet(name):
-    return f"Hello, {name}!"
+        {/* Right Side - Python Code Example */}
+        <div className="flex-1 space-y-4">
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">Python Code Example</h3>
 
-# Use the function
-print(greet("John"))
+          <p className="text-sm text-gray-600">
+            Here’s a beginner-friendly example demonstrating conditionals and string formatting in Python:
+          </p>
 
-# List operations
-fruits = ["apple", "banana", "cherry"]
-fruits.append("orange")
-print(fruits)
+          <div className="bg-gray-200 text-blue-500 p-6 rounded-xl text-xs font-mono overflow-x-auto shadow-inner leading-relaxed">
+            <div className="mb-2 text-blue-500 font-semibold">Python</div>
+            <pre>
+{`name = "Amaan"
+age = 19
 
-# Dictionary
-user = {"name": "John", "age": 25}
-user["age"] = 26
-print(user)`}
-          </pre>
+print("Hello, Python!")
+
+if age >= 18:
+    print(f"{name} is an adult.")
+else:
+    print(f"{name} is not an adult.")`}
+            </pre>
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

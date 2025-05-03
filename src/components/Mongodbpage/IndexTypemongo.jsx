@@ -1,7 +1,11 @@
+"use client";
+import useReadingTracker from "@/app/hook/useReadingTracker";
 import React from "react";
 
 const IndexTypemongo = () => {
+  useReadingTracker('indextypemongo');
   return (
+
     <>
       <div className="p-6 ml-80">
         <div className="bg-white p-6 rounded-lg shadow-md">

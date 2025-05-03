@@ -8,11 +8,17 @@ import ReactHome from "@/components/Reactpage/ReactHome";
 
 export default function ReactPage() {
   return (
-    <div className="flex">
-      <Sidebar />
-      <main className="flex-1 bg-white min-h-screen">
-        <ReactHome />
-      </main>
-    </div>
+
+    <div className="min-h-screen flex flex-col">
+       <ReactHome />
+  
+  <Sidebar />
+  
+
+  {/* Footer at the bottom */}
+
+</div>
+
+
   );
 }

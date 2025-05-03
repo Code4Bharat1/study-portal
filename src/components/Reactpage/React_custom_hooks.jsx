@@ -1,7 +1,9 @@
 'use client';
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React, { useState, useEffect } from 'react';
 
 function useWindowWidth() {
+  useReadingTracker('reacthooks');
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {

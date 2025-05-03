@@ -1,7 +1,9 @@
 "use client";
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React, { useState } from 'react';
 
 export default function Reactprops() {
+  useReadingTracker('reactprops');
   // Example of state usage
   const [count, setCount] = useState(0); // Declaring state for the count
 

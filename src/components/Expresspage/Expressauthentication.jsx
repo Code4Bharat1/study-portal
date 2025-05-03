@@ -1,6 +1,9 @@
+"use client";
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 function Expressauthentication() {
+  useReadingTracker('expressauth');
   return (
     <div className="p-6 ml-72">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">Authentication in Express.js</h1>

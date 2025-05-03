@@ -1,6 +1,9 @@
+"use client";
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 const Driver = () => {
+  useReadingTracker('mongoDriver');
   return (
     <>
       <div className="p-6 ml-80">

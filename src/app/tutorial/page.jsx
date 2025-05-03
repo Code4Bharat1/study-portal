@@ -20,7 +20,7 @@ export default function TutorialPage() {
     {
       name: 'MongoDB',
       icon: <SiMongodb className="text-green-600 w-12 h-12" />,
-      link: '/firstmongodb', // Link to MongoDB tutorial page
+      link: '/firstmongo', // Link to MongoDB tutorial page
     },
     {
       name: 'Express',
@@ -29,7 +29,7 @@ export default function TutorialPage() {
     },
     {
       name: 'React',
-      icon: <SiReact className="text-blue-500 w-12 h-12 animate-spin" />,
+      icon: <SiReact className="text-blue-500 w-12 h-12 " />,
       link: '/react', // Link to React tutorial page
     },
     {
@@ -117,12 +117,12 @@ export default function TutorialPage() {
       </div>
 
       <h1 className="text-3xl font-bold mb-8 text-blue-700 z-10">Tutorials</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl w-full px-4 z-10">
+      <div className="grid grid-cols-1 sm:grid-cols-5 md:grid-cols gap-8 max-w-5xl w-full px-4 z-10">
         {tutorials.map((item, index) => (
           <Link
             key={index}
             href={item.link}
-            className="flex flex-col items-center justify-center p-6 border rounded-xl shadow-lg hover:shadow-blue-400 transition-all text-center hover:scale-105 bg-white bg-opacity-90"
+            className="flex flex-col items-center justify-center p-6  rounded-xl shadow-lg hover:shadow-gray-500 transition-all text-center hover:scale-105 bg-white bg-opacity-90"
           >
             {item.icon}
             <p className="mt-3 text-lg font-semibold text-gray-700">{item.name}</p>

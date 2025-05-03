@@ -11,6 +11,7 @@ export default function Home() {
   <div className="mt-20"><Hero/></div>
   <ExerciseFirst/>
   <Service/>
+  
   <Contact/>
   
   </>

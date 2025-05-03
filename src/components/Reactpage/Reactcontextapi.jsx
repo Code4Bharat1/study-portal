@@ -1,7 +1,9 @@
 'use client';
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 function Reactcontextapi() {
+  useReadingTracker('reactcontext');
   return (
     <div className="p-6 ml-70">
       <h1 className="text-3xl text-gray-800 font-bold mb-6">React Context API</h1>

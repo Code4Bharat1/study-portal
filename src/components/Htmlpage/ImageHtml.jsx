@@ -1,6 +1,8 @@
+import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 const ImageHtml = () => {
+  useReadingTracker('htmlImage'); 
   return (
     <>
       <div className="p-6 ml-80">

@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Validation = () => {
+  useReadingTracker('mongovaliadtion');
   return (
     <>
       <div className="p-6 ml-80">
