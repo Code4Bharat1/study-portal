@@ -1,6 +1,8 @@
+
 import Link from "next/link";
 
 const Mongodbhome = () => {
+ 
   return (
     <>
       <div className="p-6 ml-80">

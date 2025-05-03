@@ -1,6 +1,8 @@
 // 'use client';
 // import Link from "next/link";
 // import { useRouter } from 'next/navigation';
+// import { SiMongodb } from "react-icons/si";
+
 
 // export default function FirstMongo() {
 //   const router = useRouter();
@@ -14,8 +16,13 @@
 //   };
 
 //   return (
-//     <main className="min-h-screen bg-green-100 flex items-center justify-center px-4">
-//       <div className="flex flex-col md:flex-row max-w-6xl w-full bg-white/0 rounded-lg shadow-lg p-6 gap-10 ">
+//     <main className="min-h-screen bg-white flex items-center justify-center px-4">
+
+//          {/* Background Icons */}
+     
+      
+
+//       <div className="flex flex-col md:flex-row max-w-6xl w-full bg-green-100 rounded-lg shadow-lg p-6 gap-10">
 //         {/* Left Section */}
 //         <div className="flex-1 flex flex-col justify-center items-center text-center md:items-start md:text-left">
 //           <h1 className="text-7xl font-bold text-black mb-4">MongoDB</h1>
@@ -31,7 +38,7 @@
 //             </button>
 //             <button 
 //               onClick={handleVideoClick} 
-//               className="bg-yellow-200 text-black px-6 py-3 rounded-full hover:bg-yellow-300 transition"
+//               className="bg-[#d8d0a4] text-black px-6 py-3 rounded-full hover:bg-yellow-200 transition"
 //             >
 //               Video Tutorial
 //             </button>
@@ -57,7 +64,14 @@
 //   { name: "John Doe" },
 //   { $set: { age: 26 } }
 // )
-// db.users.deleteOne({ name: "John Doe" })`}
+// db.users.deleteOne({ name: "John Doe" })
+
+// // Delete a user
+// db.users.deleteOne({ name: "John Doe" })
+
+// // Count users in a city
+// db.users.countDocuments({ city: "London" })
+// `}
 //           </pre>
 //         </div>
 //       </div>
@@ -66,10 +80,24 @@
 // }
 
 
+
+
+
+
+
 'use client';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-import { SiMongodb, SiReact, SiPython,SiNextdotjs, SiJavascript } from 'react-icons/si';
+import { SiMongodb } from "react-icons/si";
+import { FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJsSquare
+  ,
+  FaPython,
+  FaJava,
+  FaGithub,
+ 
+  FaLinux,
+  FaDatabase
+ } from 'react-icons/fa';
 
 export default function FirstMongo() {
   const router = useRouter();
@@ -83,38 +111,26 @@ export default function FirstMongo() {
   };
 
   return (
-    <main className="min-h-screen bg-white flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Decorative background icons */}
-      <div className="absolute top-10 left-10  z-0 rotate-23">
-        <SiMongodb className="text-green-600 text-[80px]" />
-      </div>
-      <div className="absolute top-1/3 right-10 z-0">
-        <SiReact className="text-blue-500 text-[56px]" />
-      </div>
+    <main className="min-h-screen bg-white flex items-center justify-center px-4">
 
-      <div className="absolute top-30 right-89 z-44">
-      <SiPython className="text-yellow-300 text-[60px]" />
-      </div>
-      <div className="absolute top-85 left-20  z-44">
-      <SiNextdotjs className="text-red-200 text-[50px]" />
-      </div>
+         {/* Background Icons */}
+         <div className="absolute  z-0 pointer-events-none">
+        <FaReact className="absolute top-47 right-150 text-blue-500 text-[55px] animate-spin-slow" />
+        <FaNodeJs className="absolute top-34 left-143 text-green-400 text-[54px]" />
+        <FaHtml5 className="absolute bottom-23 right-153 text-orange-400 text-[54px] rotate-12" />
+        <FaCss3Alt className="absolute bottom-60 left-50 text-blue-400 text-[50px] rotate-12" />
+        <FaJsSquare className="absolute bottom-23 right-12  text-yellow-400 text-[50px]" />
+        <FaPython className="absolute bottom-18 left-100 text-yellow-500 text-[50px]" />
+<FaJava className="absolute top-55 right-23 text-red-600 text-[50px]" />
+<FaGithub className="absolute top- 22 right-220 text-black text-[50px]" />
+<SiMongodb className="absolute top-30 right-60 text-green-600 text-[50px]" />
 
-
-      <div className="absolute bottom-20 right-230  z-44 rotate-34">
-      <SiJavascript className="text-orange-300 text-[55px]" />
+<FaLinux className="absolute bottom-76 right-150 text-gray-700 text-[50px]" />
+<FaDatabase className="absolute bottom-75 right-54 text-purple-300 text-[50px] rotate-23" />
       </div>
+      
 
-      <div className="absolute top-45 right-230  z-44">
-      <SiNextdotjs className="text-black text-[40px]" />
-      </div>
-
-      <div className="absolute top-45 right-230  z-44">
-      <SiNextdotjs className="text-black text-[40px]" />
-      </div>
-    
-
-      {/* Green inner box */}
-      <div className="relative z-10 flex flex-col md:flex-row max-w-6xl w-full bg-green-100 rounded-lg shadow-lg p-6 gap-10">
+      <div className="flex flex-col md:flex-row max-w-6xl w-full bg-green-100 rounded-lg shadow-lg p-6 gap-10">
         {/* Left Section */}
         <div className="flex-1 flex flex-col justify-center items-center text-center md:items-start md:text-left">
           <h1 className="text-7xl font-bold text-black mb-4">MongoDB</h1>
@@ -130,7 +146,7 @@ export default function FirstMongo() {
             </button>
             <button 
               onClick={handleVideoClick} 
-              className="bg-yellow-200 text-black px-6 py-3 rounded-full hover:bg-yellow-300 transition"
+              className="bg-[#d8d0a4] text-black px-6 py-3 rounded-full hover:bg-yellow-200 transition"
             >
               Video Tutorial
             </button>
@@ -144,25 +160,25 @@ export default function FirstMongo() {
 
         {/* Right Section */}
         <div className="flex-1 bg-gray-100 rounded-xl shadow-md p-6">
-          <h2 className="text-2xl font-semibold text-black mb-4 relative z-10">MongoDB Example:</h2>
-          <pre className="relative z-10 bg-white text-sm text-green-800 p-4 rounded-lg overflow-x-auto border-l-4 border-green-500">
-{`// Insert document
-db.users.insertOne({
+          <h2 className="text-2xl font-semibold text-black mb-4">MongoDB Example:</h2>
+          <pre className="bg-white text-sm text-green-800 p-4 rounded-lg overflow-x-auto border-l-4 border-green-500">
+{`db.users.insertOne({
   name: "John Doe",
   email: "john@example.com",
+  age: 25
 })
-
-// Find documents
 db.users.find({})
-db.users.find({ age: { $gte: 18 } })
-// Update document
 db.users.updateOne(
   { name: "John Doe" },
-  { $set: { age: 26, role: "superadmin" } }
+  { $set: { age: 26 } }
 )
-// Delete document
 db.users.deleteOne({ name: "John Doe" })
 
+// Delete a user
+db.users.deleteOne({ name: "John Doe" })
+
+// Count users in a city
+db.users.countDocuments({ city: "London" })
 `}
           </pre>
         </div>
@@ -170,5 +186,15 @@ db.users.deleteOne({ name: "John Doe" })
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
 
 

@@ -113,16 +113,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      {/* Banner Section at the bottom */}
-<div className="mt-10 bg-black flex justify-center">
-  <a href="/quizz">  {/* Replace with the page you want to redirect to */}
-    <img
-      src="/last.png" // Replace this with your image path
-      alt="Coding Banner"
-      className="object-contain rounded-lg" // Adjust the height as needed
-    />
-  </a>
-</div>
+
 
     </>
   );
