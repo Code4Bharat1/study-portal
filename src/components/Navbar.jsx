@@ -8,20 +8,19 @@ import { usePathname } from 'next/navigation';
 export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const menuItems = [
-    { name: 'MONGODB', link: '/firstmongo' },
-    { name: 'EXPRESS', link: '/express' },
-    { name: 'REACT', link: '/react' },
-    { name: 'NODE', link: '/NodeCard' },
-    { name: 'JAVASCRIPT', link: '/javascript' },
-    { name: 'SQL', link: '/sql' },
-    { name: 'PYTHON', link: '/firstPython' },
-    { name: 'JAVA', link: '/firstJava' },
-    { name: 'PHP', link: '/php' },
-    { name: 'HTML', link: '/firstHtml' },
-    { name: 'CSS', link: '/Csscard' },
+    { name: "HTML", link: "/firstHtml" },
+    { name: "CSS", link: "/Csscard" },
+    { name: "JavaScript", link: "/javascript" },
+    { name: "React", link: "/react" },
+    { name: "Node.js", link: "/CardNode" },
+    { name: "PHP", link: "/php" },
+    { name: "Python", link: "/firstPython" },
+    { name: "Express", link: "/express" },
+    { name: "Mongodb", link: "/firstmongo" },
+    { name: "Java", link: "/firstJava" }
   ];
 
   const learningItems = [
@@ -36,6 +35,11 @@ export default function Navbar() {
     { name: 'Contact', link: '/contact' },
     { name: 'Activity', link: '/activity' },
   ];
+
+  // Filtered items based on search query
+  const filteredMenuItems = menuItems.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="relative">
@@ -94,6 +98,17 @@ export default function Navbar() {
             </li>
           </ul>
 
+          {/* 🔍 Search Bar (hidden on mobile) */}
+          <div className="hidden md:flex items-center ml-170">  {/* Adjust margin-left */}
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="px-3 py-1 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+            />
+          </div>
+
           {/* Buttons - Right */}
           <div className="hidden md:flex items-center gap-4 ml-auto">
             <Link href="/register">
@@ -122,23 +137,27 @@ export default function Navbar() {
 
       {/* Horizontal Scroll Menu */}
       <div className="fixed top-[60px] left-0 w-full backdrop-blur-md bg-gray-200 border-t border-b border-white/30 flex items-center px-4 py-1 gap-6 shadow-md z-40 overflow-x-auto whitespace-nowrap">
-        {menuItems.map((item, index) => {
-          const isActive = pathname.replace(/\/$/, '') === item.link.replace(/\/$/, '');
+        {filteredMenuItems.length > 0 ? (
+          filteredMenuItems.map((item, index) => {
+            const isActive = pathname.replace(/\/$/, '') === item.link.replace(/\/$/, '');
 
-          return (
-            <Link
-              href={item.link}
-              key={index}
-              className={`text-gray-800 text-sm font-semibold transition-all duration-300 px-4 py-2 relative ${
-                isActive
-                  ? 'text-black after:content-[""] after:absolute after:left-0 after:-bottom-0.5 after:w-full after:h-[2px] after:bg-black'
-                  : 'hover:text-blue-600'
-              }`}
-            >
-              {item.name}
-            </Link>
-          );
-        })}
+            return (
+              <Link
+                href={item.link}
+                key={index}
+                className={`text-gray-800 text-sm font-semibold transition-all duration-300 px-4 py-2 relative ${
+                  isActive
+                    ? 'text-black after:content-[""] after:absolute after:left-0 after:-bottom-0.5 after:w-full after:h-[2px] after:bg-black'
+                    : 'hover:text-blue-600'
+                }`}
+              >
+                {item.name}
+              </Link>
+            );
+          })
+        ) : (
+          <span className="text-sm text-gray-500">No items found</span>
+        )}
       </div>
 
       {/* Mobile Menu */}
