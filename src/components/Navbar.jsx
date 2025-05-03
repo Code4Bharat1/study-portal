@@ -36,9 +36,8 @@ export default function Navbar() {
     { name: 'Activity', link: '/activity' },
   ];
 
-  // Filtered items based on search query
   const filteredMenuItems = menuItems.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) 
   );
 
   return (
@@ -53,53 +52,59 @@ export default function Navbar() {
             <span className="logo-shine text-blue-700">Bridge</span>
           </div>
 
-          {/* Center Menu */}
-          <ul className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex items-center gap-8 text-black text-sm font-semibold w-max">
-            {navbarItems.map((item, index) => (
-              <li key={index}>
-                <Link
-                  href={item.link}
-                  className={`hover:text-blue-500 hover:border-b-2 hover:border-black transition-all duration-300 cursor-pointer pb-1 ${
-                    pathname === item.link
-                      ? 'border-b-2 border-black text-blue-500'
+          {/* ======================= CENTER MENU START ======================= */}
+          {/* Highlighted with border and background for visibility */}
+          <div className=" ">
+            <ul className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex items-center gap-8 text-black text-sm font-semibold w-max">
+              {navbarItems.map((item, index) => (
+                <li key={index}>
+                  <Link
+                    href={item.link}
+                    className={`hover:text-blue-500 hover:border-b-2 hover:border-black transition-all duration-300 cursor-pointer pb-1 ${
+                      pathname === item.link
+                        ? 'border-b-2 border-black text-blue-500'
+                        : ''
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+
+              {/* Dropdown with delay effect */}
+              <li className="relative group">
+                <span
+                  className={`cursor-pointer pb-1 hover:text-blue-500 ${
+                    learningItems.some((i) => pathname === i.link)
+                      ? 'text-blue-500 border-b-2 border-black'
                       : ''
                   }`}
                 >
-                  {item.name}
-                </Link>
+                  Learning ▾
+                </span>
+                <ul className="invisible opacity-0 translate-y-[-10px] group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 
+                             absolute top-full left-0 mt-2 bg-white shadow-md rounded-lg min-w-[150px] z-50 
+                             transition-all duration-300 delay-200">
+                  {learningItems.map((item, index) => (
+                    <li key={index}>
+                      <Link
+                        href={item.link}
+                        className={`block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100 hover:text-blue-600 ${
+                          pathname === item.link ? 'bg-blue-100 text-blue-600' : ''
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </li>
-            ))}
+            </ul>
+          </div>
+          {/* ======================= CENTER MENU END ======================= */}
 
-            {/* Dropdown */}
-            <li className="relative group">
-              <span
-                className={`cursor-pointer pb-1 hover:text-blue-500 ${
-                  learningItems.some((i) => pathname === i.link)
-                    ? 'text-blue-500 border-b-2 border-black'
-                    : ''
-                }`}
-              >
-                Learning ▾
-              </span>
-              <ul className="absolute top-full left-0 mt-2 bg-white shadow-md rounded-lg hidden group-hover:block min-w-[150px] z-50">
-                {learningItems.map((item, index) => (
-                  <li key={index}>
-                    <Link
-                      href={item.link}
-                      className={`block px-4 py-2 text-sm text-gray-800 hover:bg-blue-100 hover:text-blue-600 ${
-                        pathname === item.link ? 'bg-blue-100 text-blue-600' : ''
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </ul>
-
-          {/* 🔍 Search Bar (hidden on mobile) */}
-          <div className="hidden md:flex items-center ml-170">  {/* Adjust margin-left */}
+          {/* Search Bar (hidden on mobile) */}
+          <div className="hidden md:flex items-center ml-170">
             <input
               type="text"
               placeholder="Search..."

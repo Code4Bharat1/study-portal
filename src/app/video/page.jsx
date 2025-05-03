@@ -1,13 +1,13 @@
-'use client';
-import 'font-awesome/css/font-awesome.min.css';
+"use client";
+import "font-awesome/css/font-awesome.min.css";
 import {
   FaStar,
   FaUser,
   FaBook,
   FaArrowLeft,
   FaArrowRight,
-} from 'react-icons/fa';
-import { useRef } from 'react';
+} from "react-icons/fa";
+import { useRef } from "react";
 
 export default function CourseCards() {
   const scrollRef = useRef();
@@ -16,78 +16,78 @@ export default function CourseCards() {
     const { current } = scrollRef;
     if (current) {
       current.scrollBy({
-        left: direction === 'left' ? -300 : 300,
-        behavior: 'smooth',
+        left: direction === "left" ? -300 : 300,
+        behavior: "smooth",
       });
     }
   };
 
   const courseData = [
     {
-      title: 'Python with Beginner DSA',
-      subtitle: 'PYTHON FOR BEGINNERS',
+      title: "Python with Beginner DSA",
+      subtitle: "PYTHON FOR BEGINNERS",
       description:
-        'Learn the basics of Python and data structures. Use practice modules to boost your coding and...',
-      rating: '4.6 (103.4k+)',
+        "Learn the basics of Python and data structures. Use practice modules to boost your coding and...",
+      rating: "4.6 (103.4k+)",
       courses: 6,
-      learners: '451k+ learners',
-      image: '/py.png',
-      youtubeLink: 'https://www.youtube.com/watch?v=eWRfhZUzrAc',
+      learners: "451k+ learners",
+      image: "/py.png",
+      youtubeLink: "https://www.youtube.com/watch?v=eWRfhZUzrAc",
     },
     {
-      title: 'Learn Data Structures and Algorithms',
-      subtitle: 'DATA STRUCTURE & ALGO MASTERY',
+      title: "Learn Data Structures and Algorithms",
+      subtitle: "DATA STRUCTURE & ALGO MASTERY",
       description:
-        'Learn and practice problems on Linked Lists, Stacks, Queues, and more...',
-      rating: '4.6 (72.9k+)',
+        "Learn and practice problems on Linked Lists, Stacks, Queues, and more...",
+      rating: "4.6 (72.9k+)",
       courses: 23,
-      learners: '125k+ learners',
-      image: '/dsa.png',
-      youtubeLink: 'https://www.youtube.com/watch?v=8hly31xKli0',
+      learners: "125k+ learners",
+      image: "/dsa.png",
+      youtubeLink: "https://www.youtube.com/watch?v=8hly31xKli0",
     },
     {
-      title: 'React JS for Front-end Development',
-      subtitle: 'REACT FOR WEB DEVELOPMENT',
+      title: "React JS for Front-end Development",
+      subtitle: "REACT FOR WEB DEVELOPMENT",
       description:
-        'Start with the fundamentals—learn to build dynamic interfaces using JSX, components, and hooks...',
-      rating: '4.7 (94k+)',
+        "Start with the fundamentals—learn to build dynamic interfaces using JSX, components, and hooks...",
+      rating: "4.7 (94k+)",
       courses: 4,
-      learners: '178k+ learners',
-      image: '/reactjs.png',
-      youtubeLink: 'https://www.youtube.com/watch?v=SqcY0GlETPk',
+      learners: "178k+ learners",
+      image: "/reactjs.png",
+      youtubeLink: "https://www.youtube.com/watch?v=SqcY0GlETPk",
     },
     {
-      title: 'MongoDB for Beginners',
-      subtitle: 'BACKEND DATABASE',
+      title: "MongoDB for Beginners",
+      subtitle: "BACKEND DATABASE",
       description:
-        'Learn how to model data, create documents, and build robust NoSQL backends using MongoDB...',
-      rating: '4.5 (40k+)',
+        "Learn how to model data, create documents, and build robust NoSQL backends using MongoDB...",
+      rating: "4.5 (40k+)",
       courses: 5,
-      learners: '85k+ learners',
-      image: '/mongo.png',
-      youtubeLink: 'https://www.youtube.com/watch?v=ExcRbA7fy_A',
+      learners: "85k+ learners",
+      image: "/mongo.png",
+      youtubeLink: "https://www.youtube.com/watch?v=ExcRbA7fy_A",
     },
     {
-      title: 'Express.js Crash Course',
-      subtitle: 'WEB FRAMEWORK',
+      title: "Express.js Crash Course",
+      subtitle: "WEB FRAMEWORK",
       description:
-        'Build RESTful APIs and backend apps using Express.js, a minimal and flexible Node.js framework...',
-      rating: '4.4 (32k+)',
+        "Build RESTful APIs and backend apps using Express.js, a minimal and flexible Node.js framework...",
+      rating: "4.4 (32k+)",
       courses: 3,
-      learners: '68k+ learners',
-      image: '/expres.png',
-      youtubeLink: 'https://www.youtube.com/watch?v=SccSCuHhOw0',
+      learners: "68k+ learners",
+      image: "/expres.png",
+      youtubeLink: "https://www.youtube.com/watch?v=SccSCuHhOw0",
     },
     {
-      title: 'Node.js Fundamentals',
-      subtitle: 'JAVASCRIPT RUNTIME',
+      title: "Node.js Fundamentals",
+      subtitle: "JAVASCRIPT RUNTIME",
       description:
-        'Understand the core of Node.js, event-driven architecture, modules, and backend development...',
-      rating: '4.6 (52k+)',
+        "Understand the core of Node.js, event-driven architecture, modules, and backend development...",
+      rating: "4.6 (52k+)",
       courses: 6,
-      learners: '105k+ learners',
-      image: '/node.png',
-      youtubeLink: 'https://www.youtube.com/watch?v=f2EqECiTBL8',
+      learners: "105k+ learners",
+      image: "/node.png",
+      youtubeLink: "https://www.youtube.com/watch?v=f2EqECiTBL8",
     },
   ];
 
@@ -96,7 +96,9 @@ export default function CourseCards() {
       {/* Title Row */}
       <div className="flex items-center justify-center gap-3 py-6">
         <i className="fas fa-arrow-left text-blue-400 w-6 h-6"></i>
-        <h2 className="text-xl font-semibold text-gray-800">Featured Courses</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Featured Courses
+        </h2>
         <i className="fas fa-arrow-left text-blue-400 w-6 h-6 transform scale-x-[-1]"></i>
       </div>
 
@@ -105,7 +107,7 @@ export default function CourseCards() {
         {/* Left Scroll Button */}
         <button
           className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100"
-          onClick={() => scroll('left')}
+          onClick={() => scroll("left")}
         >
           <FaArrowLeft size={18} />
         </button>
@@ -155,7 +157,7 @@ export default function CourseCards() {
                   href={course.youtubeLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 block w-full bg-red-600 text-white text-sm py-1.5 text-center rounded hover:bg-red-700"
+                  className="mt-3 block w-full bg-blue-400 text-white text-sm py-1.5 text-center rounded hover:bg-blue-600"
                 >
                   Watch on YouTube
                 </a>
@@ -167,7 +169,7 @@ export default function CourseCards() {
         {/* Right Scroll Button */}
         <button
           className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100"
-          onClick={() => scroll('right')}
+          onClick={() => scroll("right")}
         >
           <FaArrowRight size={18} />
         </button>
