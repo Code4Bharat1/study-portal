@@ -2,8 +2,8 @@
 
 const DOMManipulationPage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-8">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-6 ml-80 mt-30 ">
+        <div className="bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-4xl font-bold mb-6">🌐 DOM Manipulation</h1>
         <p className="mb-4">
           The Document Object Model (DOM) represents the structure of an HTML document. Using JavaScript, you can manipulate the DOM to dynamically change the content, structure, and style of a webpage. DOM manipulation is a powerful way to make interactive and dynamic web pages.

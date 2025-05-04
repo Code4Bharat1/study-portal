@@ -2,8 +2,8 @@
 
 const DataTypes = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-6 ml-80 mt-30 ">
+        <div className="bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-4xl font-bold">SQL Data Types</h1>
         <p className="text-lg">
           SQL supports various data types to store different kinds of data like numbers, text, dates, and more.

@@ -2,8 +2,8 @@
 
 const DeletePage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-6 ml-80 mt-30 ">
+        <div className="bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-4xl font-bold">SQL DELETE Statement</h1>
         <p className="text-lg">
           The <strong>DELETE</strong> statement in SQL is used to remove one or more records from a table.
@@ -51,4 +51,5 @@ WHERE age &lt; 18 AND grade = 'F';`}</code>
           Deleting data is permanent. Use with caution.
         </p>
       </div>
-    <
+    </div>
+    )}

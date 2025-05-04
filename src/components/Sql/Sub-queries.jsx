@@ -2,8 +2,8 @@
 
 const SubQueriesPage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-6 ml-80 mt-30 ">
+        <div className="bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-4xl font-bold">SQL Subqueries</h1>
         <p className="text-lg">
           A <strong>subquery</strong> is a query nested inside another query. It can be used in <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code> statements to perform operations that rely on the results of another query.

@@ -1,19 +1,15 @@
-import Image from "next/image";
-import Hero from "@/components/hero";
-import Navbar from "@/components/Navbar";
-import Service from "@/components/Servics/Service";
-import Contact from "@/components/Contact/Contact";
-import ExerciseFirst from "@/components/Exercisefirst/ExerciseFirst";
+import Hero from "@/components/Hero";
+import Service from "@/components/Service";
+import Contact from "@/components/Contact";
+import ExerciseFirst from "@/components/Exercise/Card";
+
 export default function Home() {
   return (
-  <>
-  <Navbar/>
-  <div className="mt-20"><Hero/></div>
-  <ExerciseFirst/>
-  <Service/>
-  
-  <Contact/>
-  
-  </>
+    <>
+      <Hero />
+      <ExerciseFirst />
+      <Service />
+      <Contact />
+    </>
   );
 }

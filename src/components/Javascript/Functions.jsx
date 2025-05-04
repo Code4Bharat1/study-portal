@@ -2,8 +2,8 @@
 
 const Functions = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-8">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-6 ml-80 mt-30 ">
+        <div className="bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-4xl font-bold mb-6">⚙️ Functions in JavaScript</h1>
         <p className="mb-4">
           Functions are one of the fundamental building blocks in JavaScript. They allow you to group code into reusable blocks that can be executed when called. Functions can accept input, process it, and return an output.

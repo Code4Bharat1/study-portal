@@ -2,10 +2,8 @@
 
 const Home = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
-        {" "}
-        {/* Updated to shadow-xl for a more pronounced shadow */}
+    <div className="p-6 ml-80">
+      <div className="bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-4xl font-bold">Welcome to Javascript Home</h1>
         <p className="text-lg">
           What is Javascript and why should you learn it?

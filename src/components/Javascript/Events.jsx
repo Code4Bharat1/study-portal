@@ -2,8 +2,8 @@
 
 const EventsPage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-8">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-6 ml-80 mt-30 ">
+        <div className="bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-4xl font-bold mb-6">🎉 JavaScript Events</h1>
         <p className="mb-4">
           In JavaScript, events are actions that occur in the system that you can respond to. Examples of events include a user clicking a button, hovering over an element, or pressing a key on the keyboard. Handling events allows your web pages to interact dynamically with the user.

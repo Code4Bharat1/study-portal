@@ -2,8 +2,8 @@
 
 const UpdatePage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-6 ml-80 mt-30 ">
+        <div className="bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-4xl font-bold">SQL UPDATE Statement</h1>
         <p className="text-lg">
           The SQL <code>UPDATE</code> statement is used to modify existing records in a table. You can update one or more columns in a row, based on a specified condition.

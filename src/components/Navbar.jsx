@@ -13,26 +13,26 @@ export default function Navbar() {
   const searchRef = useRef(null);
 
   const menuItems = [
-    { name: "HTML", link: "/firstHtml" },
-    { name: "CSS", link: "/Csscard" },
-    { name: "JavaScript", link: "/javascript" },
-    { name: "React", link: "/react" },
-    { name: "Node.js", link: "/CardNode" },
-    { name: "PHP", link: "/php" },
-    { name: "Python", link: "/firstPython" },
-    { name: "Express", link: "/express" },
-    { name: "Mongodb", link: "/firstmongo" },
-    { name: "Java", link: "/firstJava" },
-    { name: "Sql", link: "/sql" },
-    { name: "MySql", link: "/mysql" },
-    { name: "Next.js", link: "/nextjs" },
+    { name: "HTML", link: "/cards/html" },
+    { name: "CSS", link: "/cards/css" },
+    { name: "JavaScript", link: "/cards/javascript" },
+    { name: "React", link: "cards/react/" },
+    { name: "Node.js", link: "/cards/node" },
+    { name: "PHP", link: "/cards/php" },
+    { name: "Python", link: "/cards/python" },
+    { name: "Express", link: "/cards/express" },
+    { name: "Mongodb", link: "/cards/mongodb" },
+    { name: "Java", link: "/cards/java" },
+    { name: "Sql", link: "/cards/sql" },
+    { name: "MySql", link: "/cards/mysql" },
+    { name: "Next.js", link: "/cards/next" },
   ];
 
   const learningItems = [
     { name: "Tutorial", link: "/tutorial" },
     { name: "Video", link: "/video" },
-    { name: "Quizz Test", link: "/quizz" },
-    { name: "Exercises", link: "/exercises" },
+    { name: "Quiz Test", link: "/cards/quiz" },
+    { name: "Exercise", link: "/cards/exercise" },
   ];
 
   const navbarItems = [
@@ -65,9 +65,9 @@ export default function Navbar() {
   };
 
   return (
-    <div className="relative">
+    <div className="fixed top-0 left-0 w-full z-50">
       {/* Top Navbar */}
-      <nav className="fixed top-0 left-0 w-full z-50 bg-gray-100 shadow-lg">
+      <nav className= "top-0 left-0 w-full bg-gray-100 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo - Left */}
