@@ -19,53 +19,53 @@ export default function TutorialPage() {
   const tutorials = [
     {
       name: 'MongoDB',
-      icon: <SiMongodb className="text-green-600 w-12 h-12" />,
-      link: '/firstmongo', // Link to MongoDB tutorial page
+      icon: <SiMongodb className="text-green-600 w-12 h-12 group-hover:text-white" />,
+      link: '/firstmongo',
     },
     {
       name: 'Express',
-      icon: <SiExpress className="text-black w-12 h-12" />,
-      link: '/express', // Link to Express tutorial page
+      icon: <SiExpress className="text-black w-12 h-12 group-hover:text-white" />,
+      link: '/express',
     },
     {
       name: 'React',
-      icon: <SiReact className="text-blue-500 w-12 h-12 " />,
-      link: '/react', // Link to React tutorial page
+      icon: <SiReact className="text-blue-500 w-12 h-12 group-hover:text-white" />,
+      link: '/react',
     },
     {
       name: 'Node.js',
-      icon: <SiNodedotjs className="text-green-700 w-12 h-12" />,
-      link: '/NodeCard', // Link to Node.js tutorial page
+      icon: <SiNodedotjs className="text-green-700 w-12 h-12 group-hover:text-white" />,
+      link: '/NodeCard',
     },
     {
       name: 'JavaScript',
-      icon: <SiJavascript className="text-yellow-400 w-12 h-12" />,
-      link: '/javascript', // Link to JavaScript tutorial page
+      icon: <SiJavascript className="text-yellow-400 w-12 h-12 group-hover:text-white" />,
+      link: '/javascript',
     },
     {
       name: 'Python',
-      icon: <SiPython className="text-blue-700 w-12 h-12" />,
-      link: '/firstPython', // Link to Python tutorial page
+      icon: <SiPython className="text-blue-700 w-12 h-12 group-hover:text-white" />,
+      link: '/firstPython',
     },
     {
       name: 'Java',
-      icon: <FaJava className="text-red-600 w-12 h-12" />,
-      link: '/firstJava', // Link to Java tutorial page
+      icon: <FaJava className="text-red-600 w-12 h-12 group-hover:text-white" />,
+      link: '/firstJava',
     },
     {
       name: 'PHP',
-      icon: <SiPhp className="text-indigo-600 w-12 h-12" />,
-      link: '/php', // Link to PHP tutorial page
+      icon: <SiPhp className="text-indigo-600 w-12 h-12 group-hover:text-white" />,
+      link: '/php',
     },
     {
       name: 'HTML',
-      icon: <SiHtml5 className="text-orange-500 w-12 h-12" />,
-      link: '/firstHtml', // Link to HTML tutorial page
+      icon: <SiHtml5 className="text-orange-500 w-12 h-12 group-hover:text-white" />,
+      link: '/firstHtml',
     },
     {
       name: 'CSS',
-      icon: <SiCss3 className="text-blue-600 w-12 h-12" />,
-      link: '/Csscard', // Link to CSS tutorial page
+      icon: <SiCss3 className="text-blue-600 w-12 h-12 group-hover:text-white" />,
+      link: '/Csscard',
     },
   ];
 
@@ -97,8 +97,8 @@ export default function TutorialPage() {
             fontSize: `${Math.random() * 40 + 20}px`,
             transform: `rotate(${Math.random() * 360}deg)`,
             position: 'absolute',
-            opacity: 0.1, // Increased opacity for better visibility
-            transition: 'opacity 1s ease-in-out', // Added transition for smoother animation
+            opacity: 0.1,
+            transition: 'opacity 1s ease-in-out',
           },
         };
       });
@@ -122,10 +122,12 @@ export default function TutorialPage() {
           <Link
             key={index}
             href={item.link}
-            className="flex flex-col items-center justify-center p-6  rounded-xl shadow-lg hover:shadow-gray-500 transition-all text-center hover:scale-105 bg-white bg-opacity-90"
+            className="flex flex-col items-center justify-center p-6 rounded-xl shadow hover:shadow-md transition-all text-center hover:scale-105 bg-white bg-opacity-90 hover:bg-blue-600 group"
           >
             {item.icon}
-            <p className="mt-3 text-lg font-semibold text-gray-700">{item.name}</p>
+            <p className="mt-3 text-lg font-semibold text-gray-700 group-hover:text-white">
+              {item.name}
+            </p>
           </Link>
         ))}
       </div>
