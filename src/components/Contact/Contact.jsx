@@ -167,20 +167,20 @@ const Contact = () => {
         <div className="absolute top-[-80px] left-1/2 transform -translate-x-1/2 w-[90%] md:w-[85%] bg-gray-100 rounded-xl shadow-lg p-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
           <div className="relative pt-10">
             <div className="absolute top-[-60px] left-1/2 transform -translate-x-1/2">
-              <Mail className="w-17 h-14 bg-gray-50 text-blue-600 p-2 rounded-full shadow-md" />
+              <Mail className="w-15 h-15 bg-gray-50 text-blue-600 shadow-md rounded-xl p-1 bg-white" />
             </div>
-            <h4 className="text-2xl font-medium text-black mb-1 mt-6">EMAIL</h4>
+            <h4 className="text-xl font-bold text-black mb-1 mt-6">Email</h4>
             <p className="text-gray-700">
               ourclub55@email.com <br /> support678@email.com
             </p>
           </div>
 
           <div className="relative pt-10">
-            <div className="absolute top-[-50px] left-1/2 transform -translate-x-1/2">
-              <Phone className="w-16 h-14 bg-gray-50 text-blue-600 p-2 rounded-full shadow-md" />
+            <div className="absolute top-[-60px] left-1/2 transform -translate-x-1/2">
+              <Phone className="w-15 h-15 bg-gray-50 text-blue-600 p-2 rounded-xl p-1 bg-white shadow-md" />
             </div>
             <h4 className="text-xl font-bold text-black mb-1 mt-6">
-              PHONE (LANDLINE)
+              Phone (Landline)
             </h4>
             <p className="text-gray-700">
               + 912 3 567 8987 <br /> + 912 5 252 3336
@@ -188,11 +188,11 @@ const Contact = () => {
           </div>
 
           <div className="relative pt-10">
-            <div className="absolute top-[-50px] left-1/2 transform -translate-x-1/2">
-              <MapPin className="w-14 h-14 bg-gray-50 text-blue-600 p-2 rounded-full shadow-md" />
+            <div className="absolute top-[-60px] left-1/2 transform -translate-x-1/2">
+              <MapPin className="w-15 h-15 bg-gray-50 text-blue-600 rounded-xl p-1 bg-white shadow-md" />
             </div>
             <h4 className="text-xl font-bold text-black mb-1 mt-6">
-              OUR OFFICE LOCATION
+              Our Office Location
             </h4>
             <p className="text-gray-700">
               The Interior Design Studio Company <br />
