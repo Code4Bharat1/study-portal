@@ -34,7 +34,7 @@ export default function Hero() {
         {/* Video Background */}
         <video
           className="absolute top-0 left-0 w-full h-full object-cover z-0 brightness-50"
-          src="/t.mp4"
+          src="/home-banner.mp4"
           autoPlay
           loop
           muted
