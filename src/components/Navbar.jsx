@@ -24,7 +24,7 @@ export default function Navbar() {
     { name: "Mongodb", link: "/firstmongo" },
     { name: "Java", link: "/firstJava" },
     { name: "Sql", link: "/sql" },
-    { name: "MySql", link: "/mysql" },
+    { name: "MySql", link: "/mysqlpage" },
     { name: "Next.js", link: "/next.js" },
   ];
 

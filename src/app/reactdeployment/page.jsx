@@ -1,8 +1,7 @@
 // pages/react.jsx
 
-import Reactcomponents from "@/components/Reactpage/Reactcomponents";
-import Sidebar from "@/components/Reactpage/React_Sidebar";
-import Reactcontextapi from "@/components/Reactpage/Reactcontextapi";
+
+import Sidebar from "@/components/Reactpage/React_Sidebar"
 import Reactdeployment from "@/components/Reactpage/Reactdeployment";
 //import ReactHome from "@/components/Reactpage/ReactHome";
 
