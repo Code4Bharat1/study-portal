@@ -78,11 +78,7 @@ const MediaAudio = () => {
           </div>
 
           {/* CTA */}
-          <div className="mt-6">
-            <button className="bg-[#304343] text-white py-2 px-6 rounded-lg hover:bg-[#628789] transition">
-              Try Embedding an Audio File &raquo;
-            </button>
-          </div>
+         
         </div>
       </div>
     </>

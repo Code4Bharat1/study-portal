@@ -102,11 +102,7 @@ function validateForm() {
           </div>
 
           {/* CTA */}
-          <div className="mt-6">
-            <button className="bg-[#395152] text-white py-2 px-6 rounded-lg hover:bg-[#7ea0a1] transition">
-              Try Form Validation &raquo;
-            </button>
-          </div>
+       
         </div>
       </div>
     </>

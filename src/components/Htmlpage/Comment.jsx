@@ -81,11 +81,7 @@ const Comment = () => {
           </div>
 
           {/* CTA */}
-          <div className="mt-6">
-            <button className="bg-[#547475] text-white py-2 px-6 rounded-lg hover:bg-[#658283] transition">
-              Try writing HTML comments now &raquo;
-            </button>
-          </div>
+         
         </div>
       </div>
     </>

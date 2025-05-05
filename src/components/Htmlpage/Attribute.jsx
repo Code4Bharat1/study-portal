@@ -76,11 +76,7 @@ const Attribute = () => {
           </div>
 
           {/* Call to Action */}
-          <div className="mt-6">
-            <button className="bg-[#547475] text-white py-2 px-6 rounded-lg hover:bg-[#80a5a6] transition">
-              Learn more about HTML Elements &raquo;
-            </button>
-          </div>
+         
         </div>
       </div>
     </>

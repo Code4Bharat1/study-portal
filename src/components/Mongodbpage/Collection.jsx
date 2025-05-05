@@ -88,11 +88,7 @@ db.products.insertOne({ name: "Phone", price: 299 });
           </div>
 
           {/* CTA */}
-          <div className="mt-6">
-            <button className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition">
-              Explore Collections in MongoDB &raquo;
-            </button>
-          </div>
+        
         </div>
       </div>
     </>

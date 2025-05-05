@@ -2,6 +2,7 @@
 import { FaHome, FaBook, FaQuestionCircle, FaGithub } from 'react-icons/fa';
 import { PiFlowerLotusDuotone } from 'react-icons/pi';
 import { Facebook, Twitter, Youtube, Linkedin, Instagram } from 'lucide-react';
+import Link from 'next/link';
 
 const Footer = () => {
   return (
@@ -31,10 +32,10 @@ const Footer = () => {
             <span>Main Menu</span>
           </h3>
           <ul className="space-y-1 text-sm text-gray-300">
-            <li className="hover:text-white cursor-pointer">Home</li>
-            <li className="hover:text-white cursor-pointer">Services</li>
-            <li className="hover:text-white cursor-pointer">Contact</li>
-            <li className="hover:text-white cursor-pointer">Exercise</li>
+            <li className="hover:text-white cursor-pointer " >  <Link href="/">Home</Link></li>
+            <li className="hover:text-white cursor-pointer"  >  <Link href="/services">Service</Link></li>
+            <li className="hover:text-white cursor-pointer">  <Link href="/contact">Contact</Link></li>
+            <li className="hover:text-white cursor-pointer">  <Link href="/exercises">Exercise</Link></li>
           </ul>
         </div>
 
@@ -45,9 +46,9 @@ const Footer = () => {
             <span>Academic</span>
           </h3>
           <ul className="space-y-1 text-sm text-gray-300">
-            <li className="hover:text-white cursor-pointer">Courses</li>
-            <li className="hover:text-white cursor-pointer">E-Learning</li>
-            <li className="hover:text-white cursor-pointer">Solutions</li>
+            <li className="hover:text-white cursor-pointer"><Link href="/tutorial">Tutorial</Link></li>
+            <li className="hover:text-white cursor-pointer"><Link href="/video">E-learning</Link></li>
+          
           </ul>
         </div>
 
@@ -55,11 +56,14 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold mb-2 text-white flex items-center space-x-2">
             <FaQuestionCircle className="w-5 h-5 text-white" />
-            <span>Help</span>
+            <span>Tracker</span>
           </h3>
           <ul className="space-y-1 text-sm text-gray-300">
-            <li className="hover:text-white cursor-pointer">Progress Tracker</li>
-            <li className="hover:text-white cursor-pointer">Technical Support</li>
+            <li className="hover:text-white cursor-pointer"><Link href="/activity">Progress Tracker</Link></li>
+         
+            <li className="hover:text-white cursor-pointer"><Link href="/testimonials">Testimonials</Link></li>
+
+            
           </ul>
         </div>
 

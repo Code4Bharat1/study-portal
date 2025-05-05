@@ -86,11 +86,7 @@ const Form = () => {
           </div>
 
           {/* CTA Button */}
-          <div className="mt-6">
-            <button className="bg-[#2e4748] text-white py-2 px-6 rounded-lg hover:bg-[#82b6b7] transition">
-              Practice HTML Forms &raquo;
-            </button>
-          </div>
+       
         </div>
       </div>
     </>

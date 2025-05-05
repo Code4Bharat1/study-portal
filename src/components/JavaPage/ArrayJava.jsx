@@ -126,11 +126,7 @@ System.out.println(matrix[0][0]);  // Output: 1`}
           </div>
 
           {/* Call to Action */}
-          <div className="mt-6">
-            <button className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-800 transition">
-              Start Learning More Java Concepts &raquo;
-            </button>
-          </div>
+          
         </div>
       </div>
     </>

@@ -103,11 +103,7 @@ const Basichtml = () => {
           </div>
 
           {/* CTA */}
-          <div className="mt-6">
-            <button className="bg-[#547475] text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition">
-              Practice HTML Now &raquo;
-            </button>
-          </div>
+       
         </div>
       </div>
     </>

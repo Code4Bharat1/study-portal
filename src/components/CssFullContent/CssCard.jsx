@@ -48,18 +48,18 @@ const codeCardVariants = {
 export default function CssPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#ffe6e0] via-[#ffdcd3] to-[#ffd2c6] animate-gradient-shift flex items-center justify-center p-4">
-       <SiCss3 className="absolute top-30 left-50 text-blue-500 text-4xl z-34 rotate-12" />
-  <SiCss3 className="absolute top-30 right-34 text-blue-500 text-4xl z-34 rotate-12" />
-  <SiCss3 className="absolute top-40 right-90 text-blue-500 text-4xl z-34 rotate-34" />
-  <SiCss3 className="absolute top-90 left-23 text-blue-500 text-4xl z-34 rotate-34" />
+       <SiCss3 className="absolute top-30 left-50 text-red-400 text-4xl z-34 rotate-12" />
+  <SiCss3 className="absolute top-30 right-34 text-red-400 text-4xl z-34 rotate-12" />
+  <SiCss3 className="absolute top-40 right-90 text-red-400 text-4xl z-34 rotate-34" />
+  <SiCss3 className="absolute top-90 left-23 text-red-400 text-4xl z-34 rotate-34" />
 
-  <SiCss3 className="absolute bottom-16 left-12 text-blue-500 text-4xl z-34" />
-  <SiCss3 className="absolute top-[30%] left-[5%] text-blue-500 text-5xl z-34" />
-  <SiCss3 className="absolute top-[40%] right-[8%] text-blue-500 text-5xl z-34" />
-  <SiCss3 className="absolute bottom-20 right-[10%] text-blue-500 text-5xl z-34" />
-  <SiCss3 className="absolute top-[6%] right-[55%] text-blue-500 text-6xl z-34" />
-  <SiCss3 className="absolute top-5 right-[40%] w-12 h-12 text-blue-600 z-34" />
-  <SiCss3 className="absolute bottom-4 right-4 w-10 h-10 text-blue-400 text-5xl z-34" />
+  <SiCss3 className="absolute bottom-16 left-12 text-red-400 text-4xl z-34" />
+  <SiCss3 className="absolute top-[30%] left-[5%] text-red-400 text-5xl z-34" />
+  <SiCss3 className="absolute top-[40%] right-[8%] text-red-400 text-5xl z-34" />
+  <SiCss3 className="absolute bottom-20 right-[10%] text-red-400 text-5xl z-34" />
+  <SiCss3 className="absolute top-[6%] right-[55%] text-red-400 text-6xl z-34" />
+  <SiCss3 className="absolute top-5 right-[40%] w-12 h-12 text-red-400 z-34" />
+  <SiCss3 className="absolute bottom-4 right-4 w-10 h-10 text-red-400 text-5xl z-34" />
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}

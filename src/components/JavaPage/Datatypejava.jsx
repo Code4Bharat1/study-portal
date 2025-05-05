@@ -90,11 +90,7 @@ const Datatypejava = () => {
           </div>
 
           {/* CTA */}
-          <div className="mt-6">
-            <button className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition">
-              Proceed to Java Operators &raquo;
-            </button>
-          </div>
+         
         </div>
       </div>
     </>

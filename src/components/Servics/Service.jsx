@@ -105,7 +105,7 @@
 
 
 'use client';
-
+import Link from 'next/link';
 import {
   FaRobot,
   FaCode,
@@ -188,9 +188,11 @@ export default function Service() {
             <br />sharpen your problem-solving skills.
           </p>
 
-          <button className="bg-blue-600 text-white px-10 py-2 rounded-md hover:bg-blue-700 transition cursor-pointer">
+         <Link href='/tutorial'>
+         <button className="bg-blue-600 text-white px-10 py-2 rounded-md hover:bg-blue-700 transition cursor-pointer">
             Get Started
           </button>
+         </Link>
                   {/* 🔽 New Icon Row Below Button */}
         {/* 🔽 Icon Row with Wavy Vertical Offsets and Natural Colors */}
 <div className="mt-6 flex justify-center lg:justify-start gap-6 text-5xl cursor-pointer">

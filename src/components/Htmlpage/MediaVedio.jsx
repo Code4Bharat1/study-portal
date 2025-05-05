@@ -78,11 +78,7 @@ const MediaVedio = () => {
           </div>
 
           {/* CTA */}
-          <div className="mt-6">
-            <button className="bg-[#596e6f] text-white py-2 px-6 rounded-lg hover:bg-[#759d9e] transition">
-              Try Embedding a Video &raquo;
-            </button>
-          </div>
+          
         </div>
       </div>
     </>

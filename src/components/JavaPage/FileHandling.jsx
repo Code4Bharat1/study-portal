@@ -148,11 +148,7 @@ public class DeleteFile {
           </div>
 
           {/* Call to Action */}
-          <div className="mt-6">
-            <button className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-800 transition">
-              Next: Learn about Java Multithreading &raquo;
-            </button>
-          </div>
+        
         </div>
       </div>
     </>

@@ -134,11 +134,7 @@ db.sales.aggregate([
           </div>
 
           {/* Call to Action */}
-          <div className="mt-6">
-            <button className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition">
-              Start exploring MongoDB aggregation pipeline now &raquo;
-            </button>
-          </div>
+       
         </div>
       </div>
     </>

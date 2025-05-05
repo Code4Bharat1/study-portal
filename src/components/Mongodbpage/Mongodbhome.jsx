@@ -108,11 +108,7 @@ const Mongodbhome = () => {
           </div>
 
           {/* Call to Action Section */}
-          <div className="mt-6">
-            <button className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition">
-              Start learning MongoDB now &raquo;
-            </button>
-          </div>
+          
         </div>
       </div>
     </>

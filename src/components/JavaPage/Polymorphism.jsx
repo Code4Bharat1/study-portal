@@ -110,11 +110,7 @@ Dog d = (Dog) a;       // Downcasting (safe here because 'a' is actually a Dog)`
           </div>
 
           {/* CTA */}
-          <div className="mt-6">
-            <button className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-800 transition">
-              Explore Next: Encapsulation in Java &raquo;
-            </button>
-          </div>
+          
         </div>
       </div>
     </>
