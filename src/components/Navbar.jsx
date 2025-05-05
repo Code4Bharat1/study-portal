@@ -212,7 +212,7 @@ export default function Navbar() {
 
         {/* Horizontal Scroll Menu - Always shows all items */}
         <div className="w-full bg-white border-t border-gray-200 px-4 py-2 shadow-inner overflow-x-auto whitespace-nowrap scrollbar-hide">
-          <div className="inline-flex space-x-6">
+          <div className="inline-flex space-x-12">
             {menuItems.map((item, index) => {
               const isActive =
                 pathname.replace(/\/$/, "") === item.link.replace(/\/$/, "");

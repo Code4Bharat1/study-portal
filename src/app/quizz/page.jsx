@@ -1,56 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { User, Mail, ArrowRight } from 'lucide-react';
-import { PiFlowerLotusDuotone } from 'react-icons/pi';
+import { PiFlowerLotusDuotone } from 'react-icons/pi'; // Icon import
 
 export default function QuizForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setError('You must be logged in to start the quiz.');
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch('http://localhost:5000/api/auth/user', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-
-        const data = await response.json();
-        setUserEmail(data.email);
-        setEmail(data.email);
-      } catch (err) {
-        setError(err.message || 'Failed to fetch user data');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token'); // Check for auth token
     if (!token) {
       setError('You must be logged in to start the quiz.');
       return;
@@ -61,26 +26,9 @@ export default function QuizForm() {
       return;
     }
 
-    if (email !== userEmail) {
-      setError('You can only start the quiz with your logged-in email.');
-      return;
-    }
-
     localStorage.setItem('quizUser', JSON.stringify({ name, email }));
     router.push('/quizz/quizzes');
   };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 flex items-center justify-center p-4 relative overflow-hidden">
@@ -159,7 +107,6 @@ export default function QuizForm() {
                     onChange={(e) => setName(e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-200/50 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all bg-white/50 text-gray-800 placeholder-gray-400 shadow-sm text-sm"
                     placeholder="Your name"
-                    required
                   />
                   <motion.div
                     className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-l-xl"
@@ -190,14 +137,20 @@ export default function QuizForm() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-gray-200/50 rounded-xl bg-gray-100/50 text-gray-600 shadow-sm text-sm cursor-not-allowed"
-                    readOnly
+                    className="w-full px-4 py-2.5 border border-gray-200/50 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all bg-white/50 text-gray-800 placeholder-gray-400 shadow-sm text-sm"
+                    placeholder="Your email"
                   />
                   <motion.div
                     className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-l-xl"
                     initial={{ height: 0 }}
-                    animate={{ height: '100%' }}
+                    animate={{ height: email ? '100%' : 0 }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  />
+                  <motion.div
+                    className="absolute inset-0 rounded-xl -z-10 bg-blue-100/20"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: email ? 1 : 0 }}
+                    transition={{ duration: 0.3 }}
                   />
                 </div>
               </motion.div>
