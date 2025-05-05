@@ -25,7 +25,7 @@ export default function Navbar() {
     { name: "Java", link: "/firstJava" },
     { name: "Sql", link: "/sql" },
     { name: "MySql", link: "/mysql" },
-    { name: "Next.js", link: "/nextjs" },
+    { name: "Next.js", link: "/next.js" },
   ];
 
   const learningItems = [

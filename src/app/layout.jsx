@@ -1,9 +1,9 @@
+"use client";
 // app/layout.jsx
-
 import Navbar from '@/components/Navbar'; // adjust the path if needed
 import './globals.css'; // or your global styles
 import Footer from '@/components/Footer/Footer';
-//import Footer from '@/components/Footer/Footer';
+import { SessionProvider } from "next-auth/react";
 
 export default function RootLayout({ children }) {
   return (
@@ -11,7 +11,9 @@ export default function RootLayout({ children }) {
       <body className='bg-white'>
         <Navbar />
         <div className='mt-25'>
-        <main>{children}</main>
+    <SessionProvider>
+      {children}
+    </SessionProvider>
         </div>
         <Footer/>
       </body>

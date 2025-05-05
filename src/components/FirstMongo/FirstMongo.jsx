@@ -1,6 +1,22 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { FaNodeJs, FaReact, FaDatabase, FaAws } from "react-icons/fa";
+import { 
+  SiNextdotjs, 
+  SiMongodb, 
+  SiExpress, 
+  SiTypescript, 
+  SiGraphql, 
+  SiDocker, 
+  SiPostgresql, 
+  SiRedis, 
+  SiJavascript, 
+  SiPython, 
+  SiJava, 
+  SiGo, 
+  SiKubernetes 
+} from "react-icons/si";
 
 // Animation variants
 const containerVariants = {
@@ -43,11 +59,123 @@ const codeCardVariants = {
   }
 };
 
+const iconVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i) => ({
+    opacity: 0.8,
+    y: 0,
+    transition: {
+      delay: i * 0.05,
+      duration: 0.5
+    }
+  }),
+  hover: {
+    opacity: 1,
+    scale: 1.2,
+    transition: { duration: 0.3 }
+  }
+};
+
 export default function MongoPage() {
+  // Define all icon components explicitly
+  const iconComponents = {
+    SiMongodb,
+    FaNodeJs,
+    SiNextdotjs,
+    FaReact,
+    SiExpress,
+    SiTypescript,
+    SiJavascript,
+    SiGraphql,
+    SiDocker,
+    SiPostgresql,
+    SiRedis,
+    FaAws,
+    FaDatabase,
+    SiPython,
+    SiJavascript,
+    SiGo,
+    SiKubernetes
+  };
+
+  // Define techIcons with icon components
+  const techIcons = [
+    { icon: iconComponents.SiMongodb, name: "MongoDB", color: "text-green-600", delay: 0 },
+    { icon: iconComponents.FaNodeJs, name: "Node.js", color: "text-green-800", delay: 0.1 },
+    { icon: iconComponents.SiNextdotjs, name: "Next.js", color: "text-black", delay: 0.2 },
+    { icon: iconComponents.FaReact, name: "React", color: "text-blue-500", delay: 0.3 },
+    { icon: iconComponents.SiExpress, name: "Express", color: "text-gray-800", delay: 0.4 },
+    { icon: iconComponents.SiTypescript, name: "TypeScript", color: "text-blue-600", delay: 0.5 },
+    { icon: iconComponents.SiJavascript, name: "JavaScript", color: "text-yellow-400", delay: 0.6 },
+    { icon: iconComponents.SiGraphql, name: "GraphQL", color: "text-pink-600", delay: 0.7 },
+    { icon: iconComponents.SiDocker, name: "Docker", color: "text-blue-400", delay: 0.8 },
+    { icon: iconComponents.SiPostgresql, name: "PostgreSQL", color: "text-blue-800", delay: 0.9 },
+    { icon: iconComponents.SiRedis, name: "Redis", color: "text-red-600", delay: 1.0 },
+    { icon: iconComponents.FaAws, name: "AWS", color: "text-orange-500", delay: 1.1 },
+    { icon: iconComponents.FaDatabase, name: "Database", color: "text-gray-600", delay: 1.2 },
+    { icon: iconComponents.SiPython, name: "Python", color: "text-blue-300", delay: 1.3 },
+    { icon: iconComponents.SiJava, name: "Java", color: "text-red-500", delay: 1.4 },
+    { icon: iconComponents.SiGo, name: "Go", color: "text-blue-600", delay: 1.5 },
+    { icon: iconComponents.SiKubernetes, name: "Kubernetes", color: "text-blue-500", delay: 1.6 }
+  ];
+
+  // Filter out undefined icons and log them for debugging
+  const validTechIcons = techIcons.filter(tech => {
+    if (!tech.icon) {
+      console.warn(`Icon for ${tech.name} is undefined`);
+      return false;
+    }
+    return true;
+  });
+
+  // Filter icons for small screens
+  const displayedIcons = (typeof window !== 'undefined' && window.innerWidth < 640 
+    ? validTechIcons.slice(0, 8) 
+    : validTechIcons);
+
+  // Generate random positions for icons
+  const generateRandomPosition = () => {
+    const positions = [];
+    const isSmallScreen = typeof window !== 'undefined' && window.innerWidth < 640;
+    
+    for (let i = 0; i < displayedIcons.length; i++) {
+      positions.push({
+        top: `${isSmallScreen ? 10 + Math.random() * 60 : 10 + Math.random() * 80}%`,
+        left: `${isSmallScreen ? 5 + Math.random() * 80 : 5 + Math.random() * 90}%`,
+        rotate: Math.random() * 360
+      });
+    }
+    return positions;
+  };
+
+  const iconPositions = generateRandomPosition();
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#e6f7e6] via-[#ccffcc] to-[#99ff99] animate-gradient-shift flex items-center justify-center p-4">
+    <main className="min-h-screen bg-gradient-to-br from-[#e6f7e6] via-[#ccffcc] to-[#99ff99] animate-gradient-shift flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background tech icons */}
+      <div className="absolute inset-0 overflow-visible pointer-events-none z-0">
+        {displayedIcons.map((tech, i) => (
+          <motion.div
+            key={`${tech.name}-${i}`}
+            className={`absolute ${tech.color} z-0`}
+            style={{
+              top: iconPositions[i].top,
+              left: iconPositions[i].left,
+              transform: `rotate(${iconPositions[i].rotate}deg)`
+            }}
+            custom={i}
+            variants={iconVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+          >
+            <tech.icon size={typeof window !== 'undefined' && window.innerWidth < 640 ? 30 : 50} />
+          </motion.div>
+        ))}
+      </div>
+
       <motion.div
-        className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
+        className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20 relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -210,7 +338,7 @@ db.users.deleteOne({ name: "John Doe" });`}
                 <p className="text-gray-600 mb-4">Try MongoDB right in your browser</p>
                 <Link href="https://www.mongodb.com/playground" rel="noopener noreferrer">
                   <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all relative overflow-hidden"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"

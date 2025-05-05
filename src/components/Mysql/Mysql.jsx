@@ -43,9 +43,9 @@ const codeCardVariants = {
   }
 };
 
-export default function NextJSPage() {
+export default function MySQLPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#e0f7fa] via-[#b2ebf2] to-[#80deea] animate-gradient-shift flex items-center justify-center p-4">
+    <main className="min-h-screen bg-gradient-to-br from-[#f3e8ff] via-[#ede9fe] to-[#ddd6fe] animate-gradient-shift flex items-center justify-center p-4">
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
@@ -60,12 +60,12 @@ export default function NextJSPage() {
           >
             <div className="mb-2">
               <motion.span 
-                className="inline-block px-3 py-1 text-sm font-semibold text-cyan-600 bg-cyan-100 rounded-full"
+                className="inline-block px-3 py-1 text-sm font-semibold text-violet-600 bg-violet-100 rounded-full"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                React Framework
+                Relational Database
               </motion.span>
             </div>
             
@@ -73,14 +73,14 @@ export default function NextJSPage() {
               className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight"
               variants={itemVariants}
             >
-              Build Modern Apps with <span className="text-cyan-600 bg-gradient-to-r from-cyan-600 to-cyan-400 bg-clip-text text-transparent">Next.js</span>
+              Manage Data with <span className="text-violet-600 bg-gradient-to-r from-violet-600 to-violet-400 bg-clip-text text-transparent">MySQL</span>
             </motion.h1>
             
             <motion.p 
               className="text-lg md:text-xl text-gray-600 mb-8"
               variants={itemVariants}
             >
-              Create fast, scalable, and SEO-friendly web applications with server-side rendering, static generation, and a powerful developer experience.
+              Build reliable, scalable, and secure applications with MySQL, the world's most popular open-source relational database.
             </motion.p>
             
             <motion.div 
@@ -89,14 +89,14 @@ export default function NextJSPage() {
             >
               {[
                 { 
-                  href: "/nextjshome", 
+                  href: "/mysqlhome", 
                   text: "Get Started", 
-                  bg: "bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700",
+                  bg: "bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700",
                   textColor: "text-white",
-                  shadow: "shadow-lg shadow-cyan-500/20"
+                  shadow: "shadow-lg shadow-violet-500/20"
                 },
                 { 
-                  href: "https://www.youtube.com/watch?v=SSun4Z4dZ_4", 
+                  href: "https://www.youtube.com/watch?v=7S_tz1z_5bA", 
                   text: "Video Tutorial", 
                   bg: "bg-white hover:bg-gray-50",
                   textColor: "text-gray-700",
@@ -104,7 +104,7 @@ export default function NextJSPage() {
                   shadow: "shadow-sm hover:shadow-md"
                 },
                 { 
-                  href: "/projects?tech=nextjs", 
+                  href: "/projects?tech=mysql", 
                   text: "View Projects", 
                   bg: "bg-gray-900 hover:bg-gray-800",
                   textColor: "text-white",
@@ -136,7 +136,7 @@ export default function NextJSPage() {
             >
               <span className="text-sm sm:text-base">Trusted by industry leaders:</span>
               <div className="flex flex-wrap gap-2">
-                {['Vercel', 'Netflix', 'Hulu', 'Nike', 'Atlassian', 'Shopify'].map((company) => (
+                {['Google', 'Facebook', 'Twitter', 'YouTube', 'Uber', 'Airbnb'].map((company) => (
                   <motion.span 
                     key={company} 
                     className="px-3 py-1 bg-gray-100 rounded-full text-sm"
@@ -152,12 +152,12 @@ export default function NextJSPage() {
           
           {/* Right Content */}
           <motion.div 
-            className="flex-1 bg-gradient-to-br from-cyan-50 to-cyan-100 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
+            className="flex-1 bg-gradient-to-br from-violet-50 to-violet-100 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
             variants={itemVariants}
           >
             {/* Decorative elements */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-cyan-200/30 blur-xl"></div>
-            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-cyan-300/30 blur-xl"></div>
+            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-violet-200/30 blur-xl"></div>
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-violet-300/30 blur-xl"></div>
             
             <div className="w-full max-w-md relative z-10">
               <motion.div 
@@ -171,28 +171,26 @@ export default function NextJSPage() {
                     <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   </div>
-                  <div className="ml-4 text-sm text-gray-300 font-mono">page.js</div>
+                  <div className="ml-4 text-sm text-gray-300 font-mono">query.sql</div>
                 </div>
                 <div className="relative">
                   <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
                     <code className="block whitespace-pre">
-{`"use client";
-import { useState } from "react";
+{`-- Create a table
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL
+);
 
-export default function Counter() {
-  const [count, setCount] = useState(0);
+-- Insert data
+INSERT INTO users (name, email)
+VALUES ('John Doe', 'john@example.com');
 
-  return (
-    <div>
-      <p>Count: {count}</p>
-      <button 
-        onClick={() => setCount(count + 1)}
-      >
-        Increment
-      </button>
-    </div>
-  );
-}`}
+-- Query data
+SELECT * FROM users
+WHERE email = 'john@example.com';
+`}
                     </code>
                   </pre>
                   <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
@@ -205,16 +203,16 @@ export default function Counter() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                <p className="text-gray-600 mb-4">Try Next.js right in your browser</p>
-                <Link href="https://codesandbox.io/s/nextjs">
+                <p className="text-gray-600 mb-4">Try MySQL right in your browser</p>
+                <Link href="https://www.db-fiddle.com">
                   <motion.button
                     className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
                   >
-                    <span className="relative z-10">Open Sandbox</span>
-                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-600 to-cyan-400 opacity-0 hover:opacity-100 transition-opacity"></span>
+                    <span className="relative z-10">Open DB Fiddle</span>
+                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-violet-600 to-violet-400 opacity-0 hover:opacity-100 transition-opacity"></span>
                   </motion.button>
                 </Link>
               </motion.div>
