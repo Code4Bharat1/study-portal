@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { SiNodedotjs } from "react-icons/si";
 
 // Animation variants
 const containerVariants = {
@@ -46,6 +47,19 @@ const codeCardVariants = {
 export default function NodePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#e6f7e6] via-[#ccffcc] to-[#99ff99] animate-gradient-shift flex items-center justify-center p-4">
+
+<SiNodedotjs className="absolute top-30 left-50 text-green-600 text-4xl z-34 rotate-12" />
+  <SiNodedotjs className="absolute top-30 right-34 text-green-600 text-4xl z-34 rotate-12" />
+  <SiNodedotjs className="absolute top-40 right-90 text-green-600 text-4xl z-34 rotate-34" />
+  <SiNodedotjs className="absolute top-90 left-23 text-green-600 text-4xl z-34 rotate-34" />
+
+  <SiNodedotjs className="absolute bottom-16 left-12 text-green-600 text-4xl z-34" />
+  <SiNodedotjs className="absolute top-[30%] left-[5%] text-green-600 text-5xl z-34" />
+  <SiNodedotjs className="absolute top-[40%] right-[8%] text-green-600 text-5xl z-34" />
+  <SiNodedotjs className="absolute bottom-20 right-[10%] text-green-600 text-5xl z-34" />
+  <SiNodedotjs className="absolute top-[6%] right-[55%] text-green-600 text-4xl z-34" />
+  <SiNodedotjs className="absolute top-5 right-[40%] w-12 h-12 text-green-600 z-34" />
+  <SiNodedotjs className="absolute bottom-4 right-4 w-10 h-10 text-green-500 text-5xl z-34" />
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}

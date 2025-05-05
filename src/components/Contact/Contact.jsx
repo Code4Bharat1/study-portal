@@ -151,7 +151,7 @@ const Contact = () => {
           />
           <button
             type="submit"
-            className="md:col-span-2 cursor-pointer mt-4 px-12 py-3 bg-blue-400 text-white font-semibold rounded-full hover:bg-blue-600 transition"
+            className="md:col-span-2 cursor-pointer mt-4 px-12 py-3 bg-blue-500 text-white font-semibold rounded-full hover:bg-blue-600 transition"
           >
             SUBMIT
           </button>
@@ -162,7 +162,7 @@ const Contact = () => {
       <div className="mb-33"></div>
 
       {/* CONTACT INFO SECTION */}
-      <div className="relative w-full h-[260px] bg-blue-400">
+      <div className="relative w-full h-[260px] bg-blue-600">
         <div className="absolute top-[-80px] left-1/2 transform -translate-x-1/2 w-[90%] md:w-[85%] bg-gray-100 rounded-xl shadow-lg p-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
           {/* EMAIL */}
           <div className="relative pt-10">
@@ -190,7 +190,7 @@ const Contact = () => {
 
           {/* LOCATION */}
           <div className="relative pt-10">
-            <div className="absolute top-[-50px] left-1/2 transform -translate-x-1/2 w-14 h-14 bg-gray-50 text-blue-600 rounded-full shadow-md flex items-center justify-center">
+            <div className="absolute top-[-50px] left-1/2 transform -translate-x-1/2 w-14 h-14 bg-gray-50 text-blue-700 rounded-full shadow-md flex items-center justify-center">
               <MapPin className="w-6 h-6" />
             </div>
             <h4 className="text-xl font-bold text-black mb-1 mt-6">

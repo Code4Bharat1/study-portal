@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-
+import { FaJava } from 'react-icons/fa'; // Importing FaJava from FontAwesome
 // Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -46,6 +46,19 @@ const codeCardVariants = {
 export default function JavaPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#fff7e6] via-[#fff1cc] to-[#ffeb99] animate-gradient-shift flex items-center justify-center p-4">
+  <FaJava className="absolute top-30 left-50 text-red-600 text-6xl z-34 rotate-12" />
+      <FaJava className="absolute top-30 right-34 text-red-600 text-6xl z-34 rotate-12" />
+      <FaJava className="absolute top-40 right-90 text-red-600 text-6xl z-34 rotate-34" />
+      <FaJava className="absolute top-90 left-23 text-red-600 text-6xl z-34 rotate-34" />
+
+      <FaJava className="absolute bottom-16 left-12 text-red-600 text-6xl z-34" />
+      <FaJava className="absolute top-[30%] left-[5%] text-red-600 text-5xl z-34" />
+      <FaJava className="absolute top-[40%] right-[8%] text-red-600 text-5xl z-34" />
+      <FaJava className="absolute bottom-20 right-[10%] text-red-600 text-5xl z-34" />
+      <FaJava className="absolute top-[6%] right-[55%] text-red-600 text-6xl z-34" />
+      <FaJava className="absolute top-5 right-[40%] w-12 h-12 text-red-700 z-34" />
+      <FaJava className="absolute bottom-4 right-4 w-10 h-10 text-red-500 text-5xl z-34" />
+
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-
+import { SiJavascript } from "react-icons/si";
 // Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -46,6 +46,22 @@ const codeCardVariants = {
 export default function JavaScriptPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#fffbe6] via-[#fff5cc] to-[#ffef99] animate-gradient-shift flex items-center justify-center p-4">
+   
+
+
+  <SiJavascript className="absolute top-30 left-50 text-yellow-400 text-4xl z-34 rotate-12" />
+  <SiJavascript className="absolute top-30 right-34 text-yellow-400 text-4xl z-34 rotate-12" />
+  <SiJavascript className="absolute top-40 right-90 text-yellow-400 text-4xl z-34 rotate-34" />
+  <SiJavascript className="absolute top-90 left-23 text-yellow-400 text-4xl z-34 rotate-34" />
+
+  <SiJavascript className="absolute bottom-16 left-12 text-yellow-400 text-4xl z-34" />
+  <SiJavascript className="absolute top-[30%] left-[5%] text-yellow-400 text-5xl z-34" />
+  <SiJavascript className="absolute top-[40%] right-[8%] text-yellow-400 text-5xl z-34" />
+  <SiJavascript className="absolute bottom-20 right-[10%] text-yellow-400 text-5xl z-34" />
+  <SiJavascript className="absolute top-[6%] right-[55%] text-yellow-400 text-4xl z-34" />
+  <SiJavascript className="absolute top-5 right-[40%] w-12 h-12 text-yellow-500 z-34" />
+  <SiJavascript className="absolute bottom-4 right-4 w-10 h-10 text-yellow-300 text-5xl z-34" />
+
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
