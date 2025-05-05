@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { FaDatabase } from "react-icons/fa";
 
 // Animation variants
 const containerVariants = {
@@ -45,7 +46,20 @@ const codeCardVariants = {
 
 export default function MySQLPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#f3e8ff] via-[#ede9fe] to-[#ddd6fe] animate-gradient-shift flex items-center justify-center p-4">
+    <main className="min-h-screen bg-gradient-to-br from-[#e0f7fa] via-[#b2ebf2] to-[#80deea] animate-gradient-shift flex items-center justify-center p-4">
+      
+  <FaDatabase className="absolute top-30 left-50 text-blue-600 text-6xl z-34 rotate-12" />
+  <FaDatabase className="absolute top-30 right-34 text-blue-600 text-6xl z-34 rotate-12" />
+  <FaDatabase className="absolute top-40 right-90 text-blue-600 text-6xl z-34 rotate-34" />
+  <FaDatabase className="absolute top-90 left-23 text-blue-600 text-6xl z-34 rotate-34" />
+
+  <FaDatabase className="absolute bottom-16 left-12 text-blue-600 text-6xl z-34" />
+  <FaDatabase className="absolute top-[30%] left-[5%] text-blue-600 text-5xl z-34" />
+  <FaDatabase className="absolute top-[40%] right-[8%] text-blue-600 text-5xl z-34" />
+  <FaDatabase className="absolute bottom-20 right-[10%] text-blue-600 text-5xl z-34" />
+  <FaDatabase className="absolute top-[6%] right-[55%] text-blue-600 text-6xl z-34" />
+  <FaDatabase className="absolute top-5 right-[40%] w-12 h-12 text-blue-600 z-34" />
+  <FaDatabase className="absolute bottom-4 right-4 w-10 h-10 text-blue-500 text-5xl z-34" />
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
@@ -60,7 +74,7 @@ export default function MySQLPage() {
           >
             <div className="mb-2">
               <motion.span 
-                className="inline-block px-3 py-1 text-sm font-semibold text-violet-600 bg-violet-100 rounded-full"
+                className="inline-block px-3 py-1 text-sm font-semibold text-cyan-600 bg-cyan-100 rounded-full"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
@@ -73,7 +87,7 @@ export default function MySQLPage() {
               className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight"
               variants={itemVariants}
             >
-              Manage Data with <span className="text-violet-600 bg-gradient-to-r from-violet-600 to-violet-400 bg-clip-text text-transparent">MySQL</span>
+              Manage Data with <span className="text-cyan-600 bg-gradient-to-r from-cyan-600 to-cyan-400 bg-clip-text text-transparent">MySQL</span>
             </motion.h1>
             
             <motion.p 
@@ -89,11 +103,11 @@ export default function MySQLPage() {
             >
               {[
                 { 
-                  href: "/mysqlhome", 
+                  href: "/mysql-home", 
                   text: "Get Started", 
-                  bg: "bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700",
+                  bg: "bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700",
                   textColor: "text-white",
-                  shadow: "shadow-lg shadow-violet-500/20"
+                  shadow: "shadow-lg shadow-cyan-500/20"
                 },
                 { 
                   href: "https://www.youtube.com/watch?v=7S_tz1z_5bA", 
@@ -152,12 +166,12 @@ export default function MySQLPage() {
           
           {/* Right Content */}
           <motion.div 
-            className="flex-1 bg-gradient-to-br from-violet-50 to-violet-100 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
+            className="flex-1 bg-gradient-to-br from-cyan-50 to-cyan-100 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
             variants={itemVariants}
           >
             {/* Decorative elements */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-violet-200/30 blur-xl"></div>
-            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-violet-300/30 blur-xl"></div>
+            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-cyan-200/30 blur-xl"></div>
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-cyan-300/30 blur-xl"></div>
             
             <div className="w-full max-w-md relative z-10">
               <motion.div 
@@ -212,7 +226,7 @@ WHERE email = 'john@example.com';
                     whileTap="tap"
                   >
                     <span className="relative z-10">Open DB Fiddle</span>
-                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-violet-600 to-violet-400 opacity-0 hover:opacity-100 transition-opacity"></span>
+                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-600 to-cyan-400 opacity-0 hover:opacity-100 transition-opacity"></span>
                   </motion.button>
                 </Link>
               </motion.div>
