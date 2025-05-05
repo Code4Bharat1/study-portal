@@ -36,7 +36,7 @@ const CssSidebar = () => {
         <ul className="space-y-4 pb-29">
           <li>
             <Link href="/CssHome" className={getLinkClass('/csshome')}>
-              <FaHome className="inline mr-2 text-xl" /> CSS HOME
+              <FaHome className="inline mr-2 text-xl" /> CSS HOME 
             </Link>
           </li>
           <li>
@@ -73,7 +73,7 @@ const CssSidebar = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/CssPseEle" className={getLinkClass('/pseudoelements')}>
+                  <Link href="/CssPseELe" className={getLinkClass('/pseudoelements')}>
                     <FaCube className="inline mr-2 text-xl" /> Pseudo-Elements
                   </Link>
                 </li>
