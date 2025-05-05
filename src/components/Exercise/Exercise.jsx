@@ -21,50 +21,58 @@ const features = [
   {
     id: "01",
     title: "Mongodb",
-    description: "Fit your coursework around your existing commitments and obligations.",
+    description: "Master NoSQL database concepts and document-based storage with MongoDB.",
     icon: Database,
+    comingSoon: false,
   },
   {
     id: "02",
     title: "Express",
-    description: "Learn from industry experts with real-world experience.",
+    description: "Build robust backend applications using Express.js framework.",
     icon: Server,
+    comingSoon: false,
   },
   {
     id: "03",
     title: "React",
-    description: "Explore a wide range of development courses.",
+    description: "Create interactive user interfaces with React component architecture.",
     icon: Atom,
+    comingSoon: false,
   },
   {
     id: "04",
     title: "Node js",
-    description: "Stay updated with latest backend practices.",
+    description: "Develop scalable server-side applications with Node.js runtime.",
     icon: Code,
+    comingSoon: false,
   },
   {
     id: "05",
     title: "Python",
-    description: "Master continuous integration and deployment pipelines.",
-    icon: Cpu,
+    description: "Learn versatile Python programming for various applications.",
+    icon: Cpu,  // Using Cpu as Python icon alternative
+    comingSoon: true,
   },
   {
     id: "06",
     title: "Java",
-    description: "Design intuitive and user-friendly interfaces.",
-    icon: Layers,
+    description: "Build enterprise-level applications with Java programming.",
+    icon: Layers,  // Using Layers as Java icon alternative
+    comingSoon: true,
   },
   {
     id: "07",
     title: "Sql",
-    description: "Learn how to write unit and integration tests.",
-    icon: FileText,
+    description: "Master relational database management with SQL queries.",
+    icon: FileText,  // Using FileText as SQL icon alternative
+    comingSoon: true,
   },
   {
     id: "08",
     title: "C++",
-    description: "Master Git and collaborative workflows.",
-    icon: GitBranch,
+    description: "Develop high-performance applications with C++ programming.",
+    icon: Terminal,  // Using Terminal as C++ icon alternative
+    comingSoon: true,
   },
 ];
 
@@ -134,15 +142,6 @@ const Exercise = () => {
               onClick={() => handleCardClick(title, comingSoon)}
               className="relative w-64 h-72 bg-white bg-opacity-80 p-6 rounded-xl cursor-pointer transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl hover:scale-[1.02] border border-gray-200 shadow-lg group hover:bg-blue-600"
             >
-              {/* COMING SOON Ribbon */}
-              {comingSoon && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                  <div className="transform -rotate-45 bg-gradient-to-r from-gray-800 via-black to-gray-700 text-white text-sm font-semibold px-6 py-1 shadow-md opacity-90">
-                    COMING SOON
-                  </div>
-                </div>
-              )}
-
               {/* Card Content */}
               <div className="flex flex-col items-center justify-center text-center h-full z-10 relative pt-2">
                 <div className="flex items-center justify-center w-14 h-14 bg-indigo-100 rounded-full mb-2 mt-[-8px] group-hover:bg-blue-500">
@@ -150,7 +149,11 @@ const Exercise = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 group-hover:text-white">{title}</h3>
                 <p className="text-gray-700 text-sm mt-2 px-2 group-hover:text-white">{description}</p>
-                {!comingSoon && (
+                {comingSoon ? (
+                  <button className="mt-4 text-sm font-semibold text-indigo-600 group-hover:text-white cursor-default">
+                    Coming Soon....
+                  </button>
+                ) : (
                   <button className="mt-4 text-sm font-semibold text-indigo-600 group-hover:text-white hover:underline">
                     Learn more →
                   </button>
