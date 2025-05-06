@@ -16,22 +16,38 @@ export default function NodeJSQuizPage() {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
   const [isTimeUp, setIsTimeUp] = useState(false);
-
-  const questions = [
-    { question: 'What is Node.js?', options: ['A front-end framework', 'A JavaScript runtime', 'A database', 'A CSS preprocessor'], correctAnswer: 'A JavaScript runtime', category: 'Basics' },
-    { question: 'Which module creates an HTTP server in Node.js?', options: ['fs', 'http', 'path', 'url'], correctAnswer: 'http', category: 'Modules' },
-    { question: 'What is the purpose of the `package.json` file in Node.js?', options: ['Store application code', 'Manage dependencies', 'Define routes', 'Handle database connections'], correctAnswer: 'Manage dependencies', category: 'Configuration' },
-    { question: 'What is the Event Loop in Node.js?', options: ['A database query', 'A routing mechanism', 'A process for handling asynchronous tasks', 'A UI component'], correctAnswer: 'A process for handling asynchronous tasks', category: 'Concepts' },
-    { question: 'Which module handles file operations in Node.js?', options: ['fs', 'http', 'os', 'path'], correctAnswer: 'fs', category: 'Modules' },
-    { question: 'What does `npm` stand for?', options: ['Node Package Manager', 'New Package Module', 'Node Project Manager', 'Node Process Module'], correctAnswer: 'Node Package Manager', category: 'Tools' },
-    { question: 'How do you export a module in Node.js?', options: ['export default', 'module.exports', 'export', 'require()'], correctAnswer: 'module.exports', category: 'Modules' },
-    { question: 'What is the purpose of `require()` in Node.js?', options: ['Import modules', 'Export modules', 'Run the server', 'Handle events'], correctAnswer: 'Import modules', category: 'Modules' },
-    { question: 'What is a Promise in Node.js?', options: ['A database connection', 'An object for asynchronous operations', 'A routing method', 'A styling tool'], correctAnswer: 'An object for asynchronous operations', category: 'Asynchronous' },
-    { question: 'What is the purpose of `async/await` in Node.js?', options: ['Handle synchronous code', 'Simplify asynchronous code', 'Manage state', 'Render templates'], correctAnswer: 'Simplify asynchronous code', category: 'Asynchronous' },
-  ];
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    if (!quizCompleted && !selectedOption && !isTimeUp) {
+    const fetchQuestions = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/quizz');
+        return;
+      }
+      try {
+        const response = await fetch(`http://localhost:5000/api/questions/${quizType}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setQuestions(data);
+        } else {
+          console.error(data.error);
+          router.push('/quizz/quizzes');
+        }
+      } catch (error) {
+        console.error('Error fetching questions:', error);
+        router.push('/quizz/quizzes');
+      }
+    };
+    fetchQuestions();
+  }, [quizType, router]);
+
+  useEffect(() => {
+    if (!quizCompleted && !selectedOption && !isTimeUp && questions.length > 0) {
       const timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
@@ -61,7 +77,7 @@ export default function NodeJSQuizPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentQuestion, selectedOption, quizCompleted, isTimeUp]);
+  }, [currentQuestion, selectedOption, quizCompleted, isTimeUp, questions, score]);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -69,9 +85,9 @@ export default function NodeJSQuizPage() {
     setFeedback({ isCorrect, correctAnswer: questions[currentQuestion].correctAnswer });
     if (isCorrect) {
       setScore(score + 1);
-      new Audio('/sounds/correct.mp3').play().catch(() => {});
+      new Audio('/correct.mp3').play().catch(() => {});
     } else {
-      new Audio('/sounds/incorrect.mp3').play().catch(() => {});
+      new Audio('/incorrect.mp3').play().catch(() => {});
     }
 
     setTimeout(() => {
@@ -140,6 +156,10 @@ export default function NodeJSQuizPage() {
     );
   }
 
+  if (questions.length === 0) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-600">Loading questions...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 bg-[url('/pattern.svg')] bg-opacity-10">
       <motion.div
@@ -168,12 +188,8 @@ export default function NodeJSQuizPage() {
       >
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
           <div className="flex items-center mb-4 sm:mb-0">
-            <img
-              src="/nodejs.png"
-              alt="Node.js Logo Freedom"
-              className="h-14 w-auto mr-4"
-            />
-            <h1 className="text-4xl font-extrabold text-indigo-700">Node.js Quiz</h1>
+            <img src="/nodejs.png" alt="NodeJS Logo" className="h-14 w-auto mr-4" />
+            <h1 className="text-4xl font-extrabold text-indigo-700">NodeJS Quiz</h1>
           </div>
           <div className="flex items-center gap-6">
             <motion.div
@@ -199,7 +215,6 @@ export default function NodeJSQuizPage() {
           </div>
         </div>
 
-        {/* Progress Bar */}
         <div className="w-full bg-gray-200/50 rounded-full h-3 mb-8">
           <motion.div
             className="bg-gradient-to-r from-indigo-500 to-indigo-700 h-3 rounded-full"
@@ -209,7 +224,6 @@ export default function NodeJSQuizPage() {
           />
         </div>
 
-        {/* Timer with Progress Circle */}
         <div className="text-center mb-8 relative">
           <svg className="w-20 h-20 mx-auto" viewBox="0 0 36 36">
             <path
@@ -281,7 +295,7 @@ export default function NodeJSQuizPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.8 }}
               transition={{ duration: 0.3, type: 'spring', stiffness: 100 }}
-              className="mt-6 px-6 py-4 roundedourd-xl font-semibold text-center shadow-md bg-red-100/80 text-red-800 flex items-center justify-center gap-2 backdrop-blur-sm"
+              className="mt-6 px-6 py-4 rounded-xl font-semibold text-center shadow-md bg-red-100/80 text-red-800 flex items-center justify-center gap-2 backdrop-blur-sm"
             >
               <FaClock className="text-xl" />
               Time's Up! Correct answer: {questions[currentQuestion].correctAnswer}

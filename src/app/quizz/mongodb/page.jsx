@@ -16,22 +16,38 @@ export default function MongoDBQuizPage() {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
   const [isTimeUp, setIsTimeUp] = useState(false);
-
-  const questions = [
-    { question: 'What is MongoDB primarily used for?', options: ['Relational database', 'NoSQL database', 'Caching', 'Message queue'], correctAnswer: 'NoSQL database', category: 'Basics' },
-    { question: 'Which command creates a new database in MongoDB?', options: ['use', 'create', 'db.create', 'new'], correctAnswer: 'use', category: 'Commands' },
-    { question: 'What data format does MongoDB use to store documents?', options: ['JSON', 'BSON', 'XML', 'YAML'], correctAnswer: 'BSON', category: 'Data Storage' },
-    { question: 'Which operator is used to query documents in MongoDB?', options: ['$query', '$find', '$match', '$select'], correctAnswer: '$match', category: 'Queries' },
-    { question: 'How do you insert a single document in MongoDB?', options: ['db.collection.insert()', 'db.collection.add()', 'db.collection.save()', 'db.collection.push()'], correctAnswer: 'db.collection.insert()', category: 'Operations' },
-    { question: 'What is the purpose of the _id field in MongoDB?', options: ['Optional identifier', 'Unique identifier', 'Index name', 'Collection name'], correctAnswer: 'Unique identifier', category: 'Schema' },
-    { question: 'What is the aggregation pipeline in MongoDB used for?', options: ['Data backup', 'Data transformation', 'User authentication', 'Schema validation'], correctAnswer: 'Data transformation', category: 'Aggregation' },
-    { question: 'What is sharding in MongoDB?', options: ['Data encryption', 'Data partitioning', 'Data indexing', 'Data compression'], correctAnswer: 'Data partitioning', category: 'Scaling' },
-    { question: 'What is the default port for MongoDB?', options: ['27017', '8080', '3306', '5432'], correctAnswer: '27017', category: 'Configuration' },
-    { question: 'What is the purpose of MongoDB Atlas?', options: ['Local database', 'Cloud-hosted MongoDB', 'Query language', 'Schema designer'], correctAnswer: 'Cloud-hosted MongoDB', category: 'Services' },
-  ];
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    if (!quizCompleted && !selectedOption && !isTimeUp) {
+    const fetchQuestions = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/quizz');
+        return;
+      }
+      try {
+        const response = await fetch(`http://localhost:5000/api/questions/${quizType}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setQuestions(data);
+        } else {
+          console.error(data.error);
+          router.push('/quizz/quizzes');
+        }
+      } catch (error) {
+        console.error('Error fetching questions:', error);
+        router.push('/quizz/quizzes');
+      }
+    };
+    fetchQuestions();
+  }, [quizType, router]);
+
+  useEffect(() => {
+    if (!quizCompleted && !selectedOption && !isTimeUp && questions.length > 0) {
       const timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
@@ -61,7 +77,7 @@ export default function MongoDBQuizPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentQuestion, selectedOption, quizCompleted, isTimeUp]);
+  }, [currentQuestion, selectedOption, quizCompleted, isTimeUp, questions, score]);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -69,9 +85,9 @@ export default function MongoDBQuizPage() {
     setFeedback({ isCorrect, correctAnswer: questions[currentQuestion].correctAnswer });
     if (isCorrect) {
       setScore(score + 1);
-      new Audio('/sounds/correct.mp3').play().catch(() => {});
+      new Audio('/correct.mp3').play().catch(() => {});
     } else {
-      new Audio('/sounds/incorrect.mp3').play().catch(() => {});
+      new Audio('/incorrect.mp3').play().catch(() => {});
     }
 
     setTimeout(() => {
@@ -140,6 +156,10 @@ export default function MongoDBQuizPage() {
     );
   }
 
+  if (questions.length === 0) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-600">Loading questions...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 bg-[url('/pattern.svg')] bg-opacity-10">
       <motion.div
@@ -168,11 +188,7 @@ export default function MongoDBQuizPage() {
       >
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
           <div className="flex items-center mb-4 sm:mb-0">
-            <img
-              src="/mongodb.png"
-              alt="MongoDB Logo"
-              className="h-14 w-auto mr-4"
-            />
+            <img src="/mongodb.png" alt="MongoDB Logo" className="h-14 w-auto mr-4" />
             <h1 className="text-4xl font-extrabold text-indigo-700">MongoDB Quiz</h1>
           </div>
           <div className="flex items-center gap-6">
@@ -199,7 +215,6 @@ export default function MongoDBQuizPage() {
           </div>
         </div>
 
-        {/* Progress Bar */}
         <div className="w-full bg-gray-200/50 rounded-full h-3 mb-8">
           <motion.div
             className="bg-gradient-to-r from-indigo-500 to-indigo-700 h-3 rounded-full"
@@ -209,7 +224,6 @@ export default function MongoDBQuizPage() {
           />
         </div>
 
-        {/* Timer with Progress Circle */}
         <div className="text-center mb-8 relative">
           <svg className="w-20 h-20 mx-auto" viewBox="0 0 36 36">
             <path

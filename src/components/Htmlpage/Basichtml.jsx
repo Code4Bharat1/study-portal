@@ -1,3 +1,4 @@
+"use client";
 import useReadingTracker from "@/app/hook/useReadingTracker";
 import React from "react";
 

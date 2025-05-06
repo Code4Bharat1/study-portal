@@ -16,22 +16,38 @@ export default function ExpressQuizPage() {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
   const [isTimeUp, setIsTimeUp] = useState(false);
-
-  const questions = [
-    { question: 'What is Express.js?', options: ['A database', 'A web framework for Node.js', 'A front-end library', 'A testing tool'], correctAnswer: 'A web framework for Node.js', category: 'Basics' },
-    { question: 'Which method handles HTTP GET requests in Express?', options: ['app.post()', 'app.get()', 'app.put()', 'app.delete()'], correctAnswer: 'app.get()', category: 'Methods' },
-    { question: 'What is middleware in Express?', options: ['A database connector', 'A function that processes requests', 'A routing protocol', 'A template engine'], correctAnswer: 'A function that processes requests', category: 'Concepts' },
-    { question: 'What does `app.use()` do in Express?', options: ['Defines a route', 'Mounts middleware', 'Sends a response', 'Creates a server'], correctAnswer: 'Mounts middleware', category: 'Middleware' },
-    { question: 'Which Express method sends a JSON response?', options: ['res.send()', 'res.json()', 'res.render()', 'res.redirect()'], correctAnswer: 'res.json()', category: 'Responses' },
-    { question: 'How do you access URL parameters in Express?', options: ['req.query', 'req.params', 'req.body', 'req.url'], correctAnswer: 'req.params', category: 'Requests' },
-    { question: 'What is the purpose of `express.Router()`?', options: ['Handle HTTP methods', 'Create modular routes', 'Parse JSON', 'Serve static files'], correctAnswer: 'Create modular routes', category: 'Routing' },
-    { question: 'Which middleware parses incoming JSON payloads?', options: ['express.json()', 'express.urlencoded()', 'express.static()', 'express.cookie()'], correctAnswer: 'express.json()', category: 'Middleware' },
-    { question: 'What is the default port for an Express server?', options: ['8080', '3000', '5000', '27017'], correctAnswer: '3000', category: 'Configuration' },
-    { question: 'Which method starts an Express server?', options: ['app.start()', 'app.listen()', 'app.run()', 'app.serve()'], correctAnswer: 'app.listen()', category: 'Server' },
-  ];
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    if (!quizCompleted && !selectedOption && !isTimeUp) {
+    const fetchQuestions = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/quizz');
+        return;
+      }
+      try {
+        const response = await fetch(`http://localhost:5000/api/questions/${quizType}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setQuestions(data);
+        } else {
+          console.error(data.error);
+          router.push('/quizz/quizzes');
+        }
+      } catch (error) {
+        console.error('Error fetching questions:', error);
+        router.push('/quizz/quizzes');
+      }
+    };
+    fetchQuestions();
+  }, [quizType, router]);
+
+  useEffect(() => {
+    if (!quizCompleted && !selectedOption && !isTimeUp && questions.length > 0) {
       const timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
@@ -61,7 +77,7 @@ export default function ExpressQuizPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentQuestion, selectedOption, quizCompleted, isTimeUp]);
+  }, [currentQuestion, selectedOption, quizCompleted, isTimeUp, questions, score]);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -69,9 +85,9 @@ export default function ExpressQuizPage() {
     setFeedback({ isCorrect, correctAnswer: questions[currentQuestion].correctAnswer });
     if (isCorrect) {
       setScore(score + 1);
-      new Audio('/sounds/correct.mp3').play().catch(() => {});
+      new Audio('/correct.mp3').play().catch(() => {});
     } else {
-      new Audio('/sounds/incorrect.mp3').play().catch(() => {});
+      new Audio('/incorrect.mp3').play().catch(() => {});
     }
 
     setTimeout(() => {
@@ -140,6 +156,10 @@ export default function ExpressQuizPage() {
     );
   }
 
+  if (questions.length === 0) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-600">Loading questions...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 bg-[url('/pattern.svg')] bg-opacity-10">
       <motion.div
@@ -168,11 +188,7 @@ export default function ExpressQuizPage() {
       >
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
           <div className="flex items-center mb-4 sm:mb-0">
-            <img
-              src="/express.png"
-              alt="Express.js Logo"
-              className="h-14 w-auto mr-4"
-            />
+            <img src="/express.png" alt="Express Logo" className="h-14 w-auto mr-4" />
             <h1 className="text-4xl font-extrabold text-indigo-700">Express Quiz</h1>
           </div>
           <div className="flex items-center gap-6">
@@ -199,7 +215,6 @@ export default function ExpressQuizPage() {
           </div>
         </div>
 
-        {/* Progress Bar */}
         <div className="w-full bg-gray-200/50 rounded-full h-3 mb-8">
           <motion.div
             className="bg-gradient-to-r from-indigo-500 to-indigo-700 h-3 rounded-full"
@@ -209,7 +224,6 @@ export default function ExpressQuizPage() {
           />
         </div>
 
-        {/* Timer with Progress Circle */}
         <div className="text-center mb-8 relative">
           <svg className="w-20 h-20 mx-auto" viewBox="0 0 36 36">
             <path
