@@ -3,20 +3,26 @@ import useReadingTracker from '@/app/hook/useReadingTracker';
 import React, { useState, useEffect } from 'react';
 
 function useWindowWidth() {
+  // Track reading activity for custom hooks
   useReadingTracker('reacthooks');
+
+  // State to store the current window width
   const [width, setWidth] = useState(window.innerWidth);
 
+  // Effect to listen for window resize events and update width state
   useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    const handleResize = () => setWidth(window.innerWidth);  // Update width on resize
+    window.addEventListener('resize', handleResize);  // Add event listener
 
-  return width;
+    // Cleanup on unmount: Remove the event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);  // Empty dependency array: runs only once (on mount)
+
+  return width;  // Return the current window width
 }
 
 function React_custom_hooks() {
+  // Use the custom hook to get the window width
   const windowWidth = useWindowWidth();
 
   return (
@@ -40,16 +46,16 @@ function React_custom_hooks() {
 {`import { useState, useEffect } from 'react';
 
 function useWindowWidth() {
-  const [width, setWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState(window.innerWidth);  // Initialize state with window width
 
   useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    const handleResize = () => setWidth(window.innerWidth);  // Update width on resize
+    window.addEventListener('resize', handleResize);  // Add event listener
 
-  return width;
+    return () => window.removeEventListener('resize', handleResize);  // Cleanup on unmount
+  }, []);  // Empty dependency array: runs only once (on mount)
+
+  return width;  // Return current window width
 }`}
           </code>
         </pre>
@@ -60,7 +66,7 @@ function useWindowWidth() {
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
           <code className="text-pink-500">
-{`const width = useWindowWidth();
+{`const width = useWindowWidth();  // Use the custom hook to get the window width
 return <p>Window width: {width}px</p>;`}
           </code>
         </pre>
@@ -75,24 +81,24 @@ return <p>Window width: {width}px</p>;`}
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
           <code className="text-pink-500">
 {`function useFetch(url) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);  // State for storing fetched data
+  const [loading, setLoading] = useState(true);  // State to track loading status
 
   useEffect(() => {
-    fetch(url)
-      .then(res => res.json())
+    fetch(url)  // Fetch data from the given URL
+      .then(res => res.json())  // Parse the response as JSON
       .then(data => {
-        setData(data);
-        setLoading(false);
+        setData(data);  // Set the fetched data to the state
+        setLoading(false);  // Mark loading as false
       });
-  }, [url]);
+  }, [url]);  // Re-run this effect when the URL changes
 
-  return { data, loading };
+  return { data, loading };  // Return the data and loading state
 }`}
           </code>
         </pre>
 
-        <p className="text-gray-800 mb-4">Usage:</p>
+        <p className="text-gray-800 mb-4">Usage of the custom fetch hook:</p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
           <code className="text-pink-500">
 {`const { data, loading } = useFetch('https://api.example.com/posts');`}
@@ -119,7 +125,7 @@ return <p>Window width: {width}px</p>;`}
         </p>
 
         <button className="mt-8 bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Learn About useReducer →
+          Learn About useReducer →  {/* Placeholder for additional learning */}
         </button>
       </div>
     </div>

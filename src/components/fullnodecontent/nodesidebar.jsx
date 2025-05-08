@@ -38,12 +38,12 @@ const NodeSidebar = () => {
         <ul className="space-y-4 pb-29">
           <li>
             <Link href="/NodeHome" className={getLinkClass("/nodehome")}>
-              <FaHome className="inline mr-2 text-xl" /> Node.js HOME
+              <FaHome className="inline mr-2 text-xl" /> Node.js Roadmap 
             </Link>
           </li>
           <li>
             <Link href="/NodeIntro" className={getLinkClass("/nodeintro")}>
-              <FaFileAlt className="inline mr-2 text-xl" /> Node.js Intro
+              <FaFileAlt className="inline mr-2 text-xl" /> Node.js Introduction
             </Link>
           </li>
           <li>
