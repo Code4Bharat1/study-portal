@@ -1,21 +1,49 @@
 "use client";
-// app/layout.jsx
-import Navbar from '@/components/Navbar'; // adjust the path if needed
-import './globals.css'; // or your global styles
+import { usePathname } from 'next/navigation';
+import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer/Footer';
+import Chatbot from '@/components/Chatbot';
+import './globals.css';
 import { SessionProvider } from "next-auth/react";
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname();
+
+  // List of routes where Chatbot should NOT appear
+  const hiddenChatbotRoutes = [
+    "/", 
+    "/quizz/express",
+    "/quizz/mongodb",
+    "/quizz/nodejs",
+    "/quizz/react",
+    "/quizz/quizzes",
+    "/quizz",
+    "/contact",
+    "/activity",
+    "/tutorial",
+    "/exercises",
+    "/questionmongodb",
+    "/questionexpress",
+    "/questionreact",
+    "/questionnodejs" ,// fixed typo from 'excerercises'
+    "/testimonials"
+  ];
+
+  const showChatbot = !hiddenChatbotRoutes.includes(pathname);
+
   return (
     <html lang="en">
-      <body className='bg-white'>
+      <body className="bg-white">
         <Navbar />
-        <div className='mt-25'>
-    <SessionProvider>
-      {children}
-    </SessionProvider>
+        <div className="mt-25">
+          <SessionProvider>
+            {children}
+          </SessionProvider>
         </div>
-        <Footer/>
+
+        {showChatbot && <Chatbot />}
+
+        <Footer />
       </body>
     </html>
   );

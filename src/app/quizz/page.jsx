@@ -23,7 +23,7 @@ export default function QuizForm() {
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [errors.general, name, email, password]);
+  }, [errors.general]);
 
   const validateForm = () => {
     const newErrors = { name: '', email: '', password: '', general: '' };
@@ -71,6 +71,11 @@ export default function QuizForm() {
       if (response.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('quizUser', JSON.stringify({ name, email }));
+
+        // Increment login count
+        const loginCount = parseInt(localStorage.getItem(`loginCount_${email}`) || '0', 10);
+        localStorage.setItem(`loginCount_${email}`, loginCount + 1);
+
         router.push('/quizz/quizzes');
       } else {
         setErrors((prev) => ({
@@ -121,9 +126,9 @@ export default function QuizForm() {
                 Quiz Adventure
               </motion.h1>
               <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
+                 initial={{ opacity: 0, y: 15 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="text-gray-500 text-sm max-w-xs mx-auto"
               >
                 Sign in to start or create an account
@@ -284,7 +289,6 @@ export default function QuizForm() {
               </motion.div>
 
               <motion.div
-                strana
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
