@@ -38,6 +38,7 @@ export default function Navbar() {
     { name: "Video", link: "/video" },
     { name: "Quizz Test", link: "/quizz" },
     { name: "Exercises", link: "/exercises" },
+    { name: "Best Practices", link: "/bestpracticecard" },
   ];
 
   const navbarItems = [
