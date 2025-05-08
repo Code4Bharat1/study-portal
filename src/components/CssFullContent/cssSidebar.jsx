@@ -36,12 +36,12 @@ const CssSidebar = () => {
         <ul className="space-y-4 pb-29">
           <li>
             <Link href="/CssHome" className={getLinkClass('/csshome')}>
-              <FaHome className="inline mr-2 text-xl" /> CSS HOME 
+              <FaHome className="inline mr-2 text-xl" /> CSS Roadmap 
             </Link>
           </li>
           <li>
             <Link href="/CssIntro" className={getLinkClass('/cssintro')}>
-              <FaFileAlt className="inline mr-2 text-xl" /> CSS Intro
+              <FaFileAlt className="inline mr-2 text-xl" /> CSS Introduction
             </Link>
           </li>
         

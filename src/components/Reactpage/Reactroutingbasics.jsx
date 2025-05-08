@@ -3,7 +3,9 @@ import useReadingTracker from '@/app/hook/useReadingTracker';
 import React from 'react';
 
 function Reactroutingbasics() {
+  // Custom hook to track which page is being read or viewed.
   useReadingTracker('reactrouter');
+  
   return (
     <div className="p-6 ml-70">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">React Routing Basics</h1>
@@ -11,6 +13,7 @@ function Reactroutingbasics() {
         React Router is the standard library for routing in React. It enables navigation between different components, handling browser history, and dynamic URLs.
       </p>
 
+      {/* Section: Installing React Router */}
       <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">Installing React Router</h2>
         <p className="text-gray-800 mb-2">To get started, install the package using:</p>
@@ -18,6 +21,7 @@ function Reactroutingbasics() {
           <code>npm install react-router-dom</code>
         </pre>
 
+        {/* Section: Basic Setup of React Router */}
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">Basic Setup</h2>
         <p className="text-gray-800 mb-4">
           Wrap your app in a <code>BrowserRouter</code> and define routes using <code>Routes</code> and <code>Route</code> components:
@@ -42,6 +46,7 @@ function App() {
           </code>
         </pre>
 
+        {/* Section: Linking Between Pages */}
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">Linking Between Pages</h2>
         <p className="text-gray-800 mb-4">
           Use the <code>Link</code> component to navigate between routes without reloading the page:
@@ -62,6 +67,7 @@ function Navbar() {
           </code>
         </pre>
 
+        {/* Section: Using Route Parameters */}
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">Using Route Parameters</h2>
         <p className="text-gray-800 mb-4">
           You can use dynamic segments in your routes (e.g., <code>:id</code>) to render pages based on parameters:
@@ -85,6 +91,7 @@ function UserProfile() {
           </code>
         </pre>
 
+        {/* Section: Navigate Programmatically */}
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">Navigate Programmatically</h2>
         <p className="text-gray-800 mb-4">
           Use the <code>useNavigate</code> hook to navigate programmatically (e.g., after form submission):
@@ -106,6 +113,7 @@ function Login() {
           </code>
         </pre>
 
+        {/* Section: 404 Page (Not Found) */}
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">404 Page (Not Found)</h2>
         <p className="text-gray-800 mb-4">Use a wildcard <code>*</code> route to display a fallback for unknown URLs:</p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
@@ -114,6 +122,7 @@ function Login() {
           </code>
         </pre>
 
+        {/* Section: Summary */}
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">Summary</h2>
         <ul className="list-disc list-inside text-gray-800 mb-6 space-y-2">
           <li>Use <code>BrowserRouter</code> to enable routing</li>
@@ -123,6 +132,7 @@ function Login() {
           <li>Handle 404 pages with <code>path="*"</code></li>
         </ul>
 
+        {/* Next Button */}
         <button className="mt-8 bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-600">
           Next: Nested Routing →
         </button>

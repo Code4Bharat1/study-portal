@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BsChatDots } from 'react-icons/bs';
 import { PiFlowerLotusDuotone } from 'react-icons/pi';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function GeminiChat() {
   const [showChat, setShowChat] = useState(false);
@@ -48,15 +48,30 @@ export default function GeminiChat() {
     if (!text) return null;
     return text.split('\n').map((line, i) => {
       if (line.startsWith('**') && line.endsWith('**')) {
-        return <p key={i} className="font-bold text-black my-2">{line.replace(/\*\*/g, '')}</p>;
+        return (
+          <p key={i} className="font-bold my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+            {line.replace(/\*\*/g, '')}
+          </p>
+        );
       }
       if (line.startsWith('* ')) {
-        return <li key={i} className="list-disc ml-5 my-1 text-black">{line.substring(2)}</li>;
+        return (
+          <li key={i} className="list-disc ml-5 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+            {line.substring(2)}
+          </li>
+        );
       }
       if (line.match(/^#+\s/)) {
         const level = line.match(/^#+/)[0].length;
         const HeadingTag = `h${Math.min(6, level)}`;
-        return <HeadingTag key={i} className={`font-bold text-black my-3 text-${7 - level}xl`}>{line.replace(/^#+\s/, '')}</HeadingTag>;
+        return (
+          <HeadingTag
+            key={i}
+            className={`font-bold my-3 text-${7 - level}xl bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent`}
+          >
+            {line.replace(/^#+\s/, '')}
+          </HeadingTag>
+        );
       }
       if (line.trim() === '') {
         return <br key={i} />;
@@ -67,15 +82,23 @@ export default function GeminiChat() {
           <p key={i} className="my-2">
             {parts.map((part, j) =>
               j % 2 === 1 ? (
-                <code key={j} className="bg-gray-600 px-1.5 py-0.5 rounded text-sm font-mono text-white">{part}</code>
+                <code key={j} className="bg-gray-600 px-1.5 py-0.5 rounded text-sm font-mono text-white">
+                  {part}
+                </code>
               ) : (
-                <span key={j} className="text-black">{part}</span>
+                <span key={j} className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+                  {part}
+                </span>
               )
             )}
           </p>
         );
       }
-      return <p key={i} className="my-2 text-black">{line}</p>;
+      return (
+        <p key={i} className="my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+          {line}
+        </p>
+      );
     });
   };
 
@@ -92,7 +115,7 @@ export default function GeminiChat() {
       {/* Floating Button */}
       {!showChat && (
         <motion.div
-          className="fixed bottom-6 right-6 w-30 h-12 bg-gradient-to-r from-gray-700 to-gray-900 rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:from-gray-800 hover:to-black transition-all duration-300 z-50"
+          className="fixed bottom-6 right-6 w-30 h-12 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:from-gray-800 hover:to-black transition-all duration-300 z-50"
           onClick={toggleChat}
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -113,7 +136,7 @@ export default function GeminiChat() {
           transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           {/* Header */}
-          <div className="p-4 bg-black text-white flex justify-between items-center">
+          <div className="p-4 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white flex justify-between items-center">
             <div className="flex items-center">
               <PiFlowerLotusDuotone className="text-blue-400 w-6 h-6 mr-2" />
               <strong className="text-lg">SkillBridge AI Assistant</strong>
@@ -130,20 +153,30 @@ export default function GeminiChat() {
           <div className="flex-1 p-4 bg-white border border-2 overflow-y-auto">
             {!prompt && !response && !loading && (
               <div className="mb-4">
-                <div className="font-bold text-black mb-2">SkillBridge</div>
-                <div className="text-black text-sm">How could I help you?</div>
+                <div className="font-bold text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent mb-2">
+                  SkillBridge
+                </div>
+                <div className="text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+                  How could I help you?
+                </div>
               </div>
             )}
             {prompt && (
               <div className="mb-4">
-                <div className="font-bold text-black mb-2">You</div>
-                <div className="text-black text-sm">{prompt}</div>
+                <div className="font-bold text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent mb-2">
+                  You
+                </div>
+                <div className="text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+                  {prompt}
+                </div>
               </div>
             )}
             {response && (
               <div className="mb-4">
-                <div className="font-bold text-black mb-2">SkillBridge</div>
-                <div className="text-black text-sm">{formatResponse(response)}</div>
+                <div className="font-bold text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent mb-2">
+                  SkillBridge
+                </div>
+                <div className="text-sm">{formatResponse(response)}</div>
               </div>
             )}
             {loading && (
@@ -174,7 +207,7 @@ export default function GeminiChat() {
           </div>
 
           {/* Input */}
-          <div className="p-3 border-t border-gray-700 bg-black">
+          <div className="p-3 border-t border-gray-700 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364]">
             <form onSubmit={handleSubmit} className="flex items-center gap-2">
               <textarea
                 value={prompt}
@@ -185,7 +218,7 @@ export default function GeminiChat() {
               <button
                 type="submit"
                 disabled={loading || !prompt.trim()}
-                className={`bg-gradient-to-r from-gray-700 to-gray-900 text-white p-2 rounded-lg hover:from-gray-800 hover:to-black focus:outline-none transition duration-200 ${
+                className={`bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white p-2 rounded-lg hover:from-gray-800 hover:to-black focus:outline-none transition duration-200 ${
                   loading || !prompt.trim() ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >

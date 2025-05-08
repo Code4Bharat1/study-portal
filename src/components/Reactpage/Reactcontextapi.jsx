@@ -1,11 +1,61 @@
 'use client';
 import useReadingTracker from '@/app/hook/useReadingTracker';
-import React from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
 function Reactcontextapi() {
   useReadingTracker('reactcontext');
+
+  // Step 1: Create the context
+  const MyContext = createContext();
+
+  // Step 2: Set up the provider component
+  function MyContextProvider({ children }) {
+    const [user, setUser] = useState({ name: 'John Doe', loggedIn: false });
+
+    const login = (userData) => {
+      setUser({ ...user, ...userData, loggedIn: true });
+    };
+
+    const logout = () => {
+      setUser({ ...user, loggedIn: false });
+    };
+
+    return (
+      <MyContext.Provider value={{ user, login, logout }}>
+        {children}
+      </MyContext.Provider>
+    );
+  }
+
+  // Step 3: Consuming Context with useContext Hook
+  function UserProfile() {
+    const { user, login, logout } = useContext(MyContext);
+
+    return (
+      <div>
+        <h2>User Profile</h2>
+        {user.loggedIn ? (
+          <div>
+            <h3>Welcome, {user.name}!</h3>
+            <button onClick={logout} className="mt-4 bg-pink-500 text-white px-4 py-2 rounded-lg">Logout</button>
+          </div>
+        ) : (
+          <div>
+            <h3>Please log in.</h3>
+            <button
+              onClick={() => login({ name: 'Jane Doe' })}
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
+            >
+              Login as Jane
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 max-w-4xl ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-6">React Context API</h1>
 
       <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
@@ -136,6 +186,10 @@ export function useAuth() {
           Next: Building a Theme Switcher with Context →
         </button>
       </div>
+
+      <MyContextProvider>
+        <UserProfile />
+      </MyContextProvider>
     </div>
   );
 }

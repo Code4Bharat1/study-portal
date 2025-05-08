@@ -1,15 +1,16 @@
-'use client'
+'use client';
 
 const NodeGetStartedPage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10"> {/* Updated to shadow-xl for a more pronounced shadow */}
+    <div className="p-8  mx-auto text-black space-y-6">
+      <div className="bg-white max-w-4xl p-8 rounded-lg shadow-xl space-y-6 ml-80">
+        {/* Updated to shadow-xl for a more pronounced shadow */}
         <h1 className="text-4xl font-bold">Get Started with Node.js</h1>
         <p className="text-lg">Setting up your first Node.js project.</p>
-        
+
         <h2 className="text-2xl font-semibold">Prerequisites</h2>
         <ul className="list-disc pl-6 space-y-2">
-          <li><strong>Install Node.js:</strong> First, download and install Node.js from the official website: <a href="https://nodejs.org" className="text-blue-500">https://nodejs.org</a>. Make sure to choose the LTS version for stability.</li>
+          <li><strong>Install Node.js:</strong> First, download and install Node.js from the official website: <a href="https://nodejs.org" className="text-blue-500" target="_blank" rel="noopener noreferrer">https://nodejs.org</a>. Make sure to choose the LTS version for stability.</li>
           <li><strong>Text Editor:</strong> Use a text editor like VSCode, Sublime Text, or Atom for writing your Node.js code.</li>
           <li><strong>Terminal:</strong> You should be comfortable using the command line/terminal for running commands.</li>
         </ul>
@@ -36,7 +37,6 @@ cd my-node-project`}
 {`touch app.js`}
             </code>
           </pre>
-
         </ol>
 
         <h2 className="text-2xl font-semibold">First Node.js Script</h2>
@@ -65,6 +65,15 @@ console.log('Hello, World!');`}
           <li>Learn about Node.js modules and how to use them (e.g., <code>http</code>, <code>fs</code>, etc.).</li>
           <li>Experiment with creating a simple HTTP server to handle requests.</li>
           <li>Explore npm to install external packages for your project (e.g., Express.js, a popular web framework).</li>
+        </ul>
+
+        {/* Optional Section for Troubleshooting */}
+        <h2 className="text-2xl font-semibold">Troubleshooting</h2>
+        <p>If you encounter any issues during setup, here are some tips:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Make sure Node.js is installed correctly by running <code>node -v</code> to check the version.</li>
+          <li>If you get an error when running the script, double-check the file path and ensure you're in the correct directory.</li>
+          <li>Ensure your terminal/command prompt is running with the correct permissions.</li>
         </ul>
       </div>
     </div>
