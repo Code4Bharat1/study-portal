@@ -1,22 +1,21 @@
 "use client";
 
-const ApiRoutesPage = () => {
+const NextApiRoutesPage = () => {
   return (
     <div>
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-4xl font-bold mb-6">API Routes in Next.js</h1>
         <p className="mb-4">
-          Think of API Routes like the kitchen staff behind the scenes at a restaurant. They handle special tasks like preparing ingredients (data), sending orders (requests), and giving back results (responses).
+          <span className="font-semibold">For Beginners:</span> Think of API Routes like a friendly librarian who takes your request for a book, finds it in the library, and hands it to you. They connect your app to information or actions.  
+          <span className="font-semibold">For Coders:</span> API Routes in Next.js enable server-side logic within your app, turning files in the <code>/pages/api</code> or <code>/app/api</code> directory into serverless endpoints.
         </p>
 
         {/* What are API Routes? */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">1. What Are API Routes?</h2>
           <p className="mb-4">
-            API Routes in Next.js let you write backend code (like fetching data from a database or sending a message) directly inside your project. It’s like having your frontend and backend in one kitchen!
-          </p>
-          <p className="mb-4">
-            These routes are placed inside a special <code>/pages/api</code> folder, and each file becomes a unique API endpoint.
+            <span className="font-semibold">For Beginners:</span> Imagine API Routes as a magic mailbox. You send a message (like asking for data), and it replies with what you need, all within your app.  
+            <span className="font-semibold">For Coders:</span> API Routes let you create backend functionality in Next.js without a separate server. Each file in <code>/pages/api</code> (or <code>/app/api</code> in the App Router) becomes an HTTP endpoint, handling requests and responses.
           </p>
         </section>
 
@@ -24,26 +23,27 @@ const ApiRoutesPage = () => {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">2. Basic Example: Hello API</h2>
           <p className="mb-4">
-            Here’s how you can make a simple API route that says "Hello!":
+            <span className="font-semibold">For Beginners:</span> Picture a note you send to the librarian saying, “Say hello!” She writes back, “Hello from the library!” This is how an API route works.  
+            <span className="font-semibold">For Coders:</span> Below is a simple API route that responds with a JSON message when accessed via a GET request.
           </p>
 
           <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
-            <code>{`// pages/api/hello.js
+            <code>{`// pages/api/hello.js (or app/api/hello/route.js in App Router)
 export default function handler(req, res) {
   res.status(200).json({ message: "Hello from the server!" });
 }`}</code>
           </pre>
-
           <p className="mb-4">
-            Visit <code>/api/hello</code> in your browser and you’ll see a JSON message. That’s your backend in action!
+            <span className="font-semibold">For Coders:</span> Visiting <code>/api/hello</code> triggers this function, returning a 200 status and a JSON response. In the App Router, use <code>app/api/hello/route.js</code> with <code>export async function GET(req)</code>.
           </p>
         </section>
 
-        {/* Real-world Analogy */}
+        {/* API Routes Analogy */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">3. Analogy: API Route as a Waiter</h2>
+          <h2 className="text-2xl font-semibold mb-4">3. API Route as a Librarian</h2>
           <p className="mb-4">
-            Imagine you're in a restaurant. You tell the waiter what you want. The waiter goes to the kitchen, gets your food, and brings it back to you. That's what an API route does — it takes your request, talks to a server or database, and gives you back a response.
+            <span className="font-semibold">For Beginners:</span> An API Route is like a librarian who listens to what you want (like a book title), searches the library (or other places), and brings you the answer.  
+            <span className="font-semibold">For Coders:</span> API Routes handle HTTP requests (GET, POST, etc.), process logic, interact with databases or external services, and return responses, all within Next.js’s serverless environment.
           </p>
         </section>
 
@@ -51,48 +51,75 @@ export default function handler(req, res) {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">4. Handling Different Requests (GET, POST)</h2>
           <p className="mb-4">
-            Just like you can order different meals (starter, main, dessert), an API can respond to different types of requests: GET (get data), POST (send data), etc.
+            <span className="font-semibold">For Beginners:</span> The librarian can handle different requests. A “GET” is like asking for a book; a “POST” is like giving her a new book to store.  
+            <span className="font-semibold">For Coders:</span> API Routes can process various HTTP methods. The <code>req.method</code> property determines the request type, allowing different logic for each.
           </p>
 
           <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
-            <code>{`export default function handler(req, res) {
+            <code>{`// pages/api/data.js
+export default function handler(req, res) {
   if (req.method === 'GET') {
-    res.status(200).json({ message: 'This is a GET request' });
+    res.status(200).json({ message: 'Here is your data' });
   } else if (req.method === 'POST') {
     const data = req.body;
-    res.status(200).json({ message: 'Data received', data });
+    res.status(200).json({ message: 'Data saved', data });
   }
 }`}</code>
           </pre>
+          <p className="mb-4">
+            <span className="font-semibold">For Coders:</span> This route responds to GET with a message and to POST by echoing the request body. In App Router, use <code>export async function POST(req)</code> for method-specific handlers.
+          </p>
         </section>
 
         {/* When to Use API Routes */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">5. When Should You Use API Routes?</h2>
           <p className="mb-4">
-            Use API routes when you need to:
+            <span className="font-semibold">For Beginners:</span> Use API Routes when your app needs to fetch information (like a weather report), save user input (like a form), or talk to other services.  
+            <span className="font-semibold">For Coders:</span> API Routes are ideal for:
           </p>
           <ul className="list-disc ml-6 mb-4">
-            <li>Send or receive data from a database</li>
-            <li>Handle form submissions</li>
-            <li>Connect to third-party APIs (like weather or payments)</li>
+            <li>Querying databases (e.g., MongoDB, PostgreSQL)</li>
+            <li>Handling form submissions or user inputs</li>
+            <li>Integrating with third-party APIs (e.g., payment gateways)</li>
+            <li>Server-side logic without a dedicated backend</li>
           </ul>
         </section>
 
-        {/* Final Notes */}
+        {/* Advanced Concepts */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">6. Final Notes</h2>
+          <h2 className="text-2xl font-semibold mb-4">6. Advanced Concepts</h2>
           <p className="mb-4">
-            API Routes are like secret behind-the-scenes helpers in your app. They allow you to do powerful backend tasks without setting up a separate server.
+            <span className="font-semibold">For Beginners:</span> Advanced API Routes are like a librarian who checks your library card, organizes books, and handles mistakes gracefully.  
+            <span className="font-semibold">For Coders:</span> Key advanced features include:
+            - **Authentication:** Secure routes using tokens or middleware (e.g., NextAuth.js).  
+            - **Database Integration:** Connect to databases via ORMs like Prisma or direct queries.  
+            - **Error Handling:** Validate inputs and return meaningful errors.
+          </p>
+
+          <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
+            <code>{`// pages/api/greet.js
+export default function handler(req, res) {
+  try {
+    const { name } = req.body;
+    if (!name) throw new Error("Name is required");
+    res.status(200).json({ message: \`Hello, \${name}!\` });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}`}</code>
+          </pre>
+          <p className="mb-4">
+            <span className="font-semibold">For Coders:</span> This route checks for a <code>name</code> in the POST body, responds with a greeting, or throws a 400 error if invalid. Use middleware like <code>next-connect</code> for complex routes.
           </p>
         </section>
 
         <p className="italic text-blue-300">
-          Backend and frontend in one — that's the magic of Next.js!
+          API Routes make your Next.js app powerful by handling backend tasks seamlessly, whether you’re a beginner or a pro!
         </p>
       </div>
     </div>
   );
 };
 
-export default ApiRoutesPage;
+export default NextApiRoutesPage;
