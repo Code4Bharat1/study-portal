@@ -32,9 +32,14 @@ const Sidebarhtml = () => {
       {/* Scrollable list */}
       <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
         <ul className="space-y-4 pb-29">
+        <li>
+            <Link href="/roadmapHtml" className={getLinkClass("/homehtmlpage")}>
+              <FaDatabase className="inline mr-2 text-xl" /> Roadmap
+            </Link>
+          </li>
           <li>
             <Link href="/htmlHome" className={getLinkClass("/homehtmlpage")}>
-              <FaDatabase className="inline mr-2 text-xl" /> HTML HOME
+              <FaDatabase className="inline mr-2 text-xl" /> HTML Introduction
             </Link>
           </li>
           <li>

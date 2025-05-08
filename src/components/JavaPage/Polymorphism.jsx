@@ -9,7 +9,10 @@ const Polymorphism = () => {
 
           {/* Introduction */}
           <p className="mt-4 text-lg text-gray-600">
-            <strong>Polymorphism</strong> is one of the core principles of Object-Oriented Programming (OOP). The word "polymorphism" means "many forms". In Java, polymorphism allows objects to be treated as instances of their parent class rather than their actual class. The behavior is determined at runtime or compile-time depending on the type of polymorphism.
+            <strong>Polymorphism</strong> is a fundamental concept in Object-Oriented Programming (OOP) that means “many forms”. It allows objects to behave in multiple ways based on their data type or class. In Java, polymorphism enables a common interface to interact with different types of objects, allowing for code flexibility and reusability.
+          </p>
+          <p className="mt-2 text-lg text-gray-600">
+            Java supports two types of polymorphism:
           </p>
 
           {/* Types of Polymorphism */}
@@ -21,12 +24,14 @@ const Polymorphism = () => {
             </ul>
           </div>
 
-          {/* Method Overloading */}
+          {/* Compile-Time Polymorphism */}
           <div className="mt-6">
-            <h2 className="text-2xl font-semibold text-gray-800">1. Method Overloading (Compile-time)</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">1. Compile-time Polymorphism (Method Overloading)</h2>
             <p className="mt-4 text-lg text-gray-600">
-              Method overloading occurs when two or more methods in the same class have the same name but different parameters (type, number, or order). It is resolved at compile time.
+              Compile-time polymorphism occurs when the method to be executed is determined at compile time. It is achieved by **method overloading**, where multiple methods have the same name but different parameters (different number, types, or order).
             </p>
+
+            <h3 className="mt-4 text-xl font-semibold text-gray-700">Example:</h3>
             <pre className="mt-4 p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
 {`class Calculator {
     int add(int a, int b) {
@@ -40,16 +45,28 @@ const Polymorphism = () => {
     int add(int a, int b, int c) {
         return a + b + c;
     }
+
+    public static void main(String[] args) {
+        Calculator calc = new Calculator();
+        System.out.println(calc.add(5, 10));           // Output: 15
+        System.out.println(calc.add(2.5, 3.7));        // Output: 6.2
+        System.out.println(calc.add(1, 2, 3));         // Output: 6
+    }
 }`}
             </pre>
+            <p className="mt-2 text-lg text-gray-600">
+              Here, the method `add` is overloaded with different parameter types and counts. The appropriate version is chosen by the compiler.
+            </p>
           </div>
 
-          {/* Method Overriding */}
+          {/* Runtime Polymorphism */}
           <div className="mt-6">
-            <h2 className="text-2xl font-semibold text-gray-800">2. Method Overriding (Runtime)</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">2. Runtime Polymorphism (Method Overriding)</h2>
             <p className="mt-4 text-lg text-gray-600">
-              Method overriding occurs when a subclass provides a specific implementation of a method that is already defined in its superclass. The method call is resolved at runtime.
+              Runtime polymorphism is achieved through **method overriding**, where a subclass provides a specific implementation of a method defined in its superclass. The method call is resolved at runtime based on the object’s actual type.
             </p>
+
+            <h3 className="mt-4 text-xl font-semibold text-gray-700">Example:</h3>
             <pre className="mt-4 p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
 {`class Animal {
     void sound() {
@@ -64,27 +81,55 @@ class Dog extends Animal {
     }
 }
 
+class Cat extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Cat meows");
+    }
+}
+
 public class TestPolymorphism {
     public static void main(String[] args) {
-        Animal a = new Dog(); // Upcasting
-        a.sound(); // Outputs: Dog barks
+        Animal a;
+
+        a = new Dog();
+        a.sound(); // Output: Dog barks
+
+        a = new Cat();
+        a.sound(); // Output: Cat meows
     }
 }`}
             </pre>
+            <p className="mt-2 text-lg text-gray-600">
+              Even though the reference is of type `Animal`, the actual method called depends on the object (`Dog` or `Cat`) assigned at runtime.
+            </p>
           </div>
 
           {/* Upcasting and Downcasting */}
           <div className="mt-6">
             <h2 className="text-2xl font-semibold text-gray-800">Upcasting and Downcasting</h2>
             <p className="mt-4 text-lg text-gray-600">
-              <strong>Upcasting</strong> refers to treating a subclass object as if it were a superclass object.
+              <strong>Upcasting</strong> refers to treating a subclass object as an instance of its superclass. This is commonly used in polymorphism and is always safe.
               <br />
-              <strong>Downcasting</strong> is casting back to the original subclass (not recommended unless necessary and must be done with caution).
+              <strong>Downcasting</strong> means casting a superclass reference back to its subclass. This is risky and should be done carefully, usually after type checking.
             </p>
+
+            <h3 className="mt-4 text-xl font-semibold text-gray-700">Example:</h3>
             <pre className="mt-4 p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
-{`Animal a = new Dog(); // Upcasting
-Dog d = (Dog) a;       // Downcasting (safe here because 'a' is actually a Dog)`}
+{`Animal animal = new Dog();  // Upcasting
+animal.sound();              // Outputs: Dog barks
+
+Dog dog = (Dog) animal;      // Downcasting (safe here)
+dog.sound();`}
             </pre>
+          </div>
+
+          {/* Real-life Scenario */}
+          <div className="mt-6">
+            <h2 className="text-2xl font-semibold text-gray-800">Real-Life Analogy</h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Think of a remote control (superclass) that can operate different types of devices like TVs, ACs, or fans (subclasses). You use the same remote (reference) to control various devices (objects), and the behavior changes based on the device (object type).
+            </p>
           </div>
 
           {/* Advantages */}
@@ -92,9 +137,10 @@ Dog d = (Dog) a;       // Downcasting (safe here because 'a' is actually a Dog)`
             <h2 className="text-2xl font-semibold text-gray-800">Advantages of Polymorphism</h2>
             <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
               <li>Improves code reusability and maintainability</li>
-              <li>Makes the code more flexible and extensible</li>
-              <li>Supports a cleaner, modular design using interfaces and inheritance</li>
-              <li>Allows for dynamic method dispatch</li>
+              <li>Reduces complexity by letting one interface handle multiple behaviors</li>
+              <li>Enables dynamic method dispatch (important for frameworks and libraries)</li>
+              <li>Supports extensible and flexible application design</li>
+              <li>Improves testing by allowing mock implementations of interfaces</li>
             </ul>
           </div>
 
@@ -102,15 +148,14 @@ Dog d = (Dog) a;       // Downcasting (safe here because 'a' is actually a Dog)`
           <div className="mt-6">
             <h2 className="text-2xl font-semibold text-gray-800">Best Practices</h2>
             <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
-              <li>Use interfaces or abstract classes to generalize behavior</li>
-              <li>Avoid excessive overloading with unclear method signatures</li>
-              <li>Ensure proper use of @Override annotation</li>
-              <li>Prefer upcasting when working with polymorphism</li>
+              <li>Use interfaces or abstract classes to define common behaviors</li>
+              <li>Apply method overloading only when it improves readability</li>
+              <li>Always use <code>@Override</code> annotation to prevent errors</li>
+              <li>Prefer upcasting to generalize behavior and improve flexibility</li>
+              <li>Use polymorphism to reduce conditional logic (if-else, switch)</li>
             </ul>
           </div>
 
-          {/* CTA */}
-          
         </div>
       </div>
     </>

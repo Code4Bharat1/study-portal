@@ -57,40 +57,40 @@ export default function CourseCards() {
       courses: 6,
       learners: "451k+ learners",
       image: "/py.png",
-      youtubeLink: "https://www.youtube.com/watch?v=eWRfhZUzrAc",
+      youtubeLink: "https://www.youtube.com/watch?v=t2_Q2BRzeEE&list=PLGjplNEQ1it8-0CmoljS5yeV-GlKSUEt0",
     },
     {
-      title: "Learn Data Structures and Algorithms",
-      subtitle: "DATA STRUCTURE & ALGO MASTERY",
+      title: "HTML",
+      subtitle: "HYPER TEXT MARKUP LANGUAGE",
       description:
-        "Learn and practice problems on Linked Lists, Stacks, Queues, and more advanced algorithms.",
+        "Learn HTML to structure web pages using elements like headings, paragraphs, links, images, and forms.",
       rating: "4.6 (72.9k+)",
       courses: 23,
       learners: "125k+ learners",
-      image: "/dsa.png",
-      youtubeLink: "https://www.youtube.com/watch?v=8hly31xKli0",
+      image: "/htmlyoutube.png",
+      youtubeLink: "https://www.youtube.com/watch?v=HcOc7P5BMi4",
     },
     {
-      title: "React JS for Front-end Development",
-      subtitle: "REACT FOR WEB DEVELOPMENT",
+      title: "CSS",
+      subtitle: " Cascading Style Sheets.",
       description:
-        "Start with the fundamentals—learn to build dynamic interfaces using JSX, components, and hooks.",
+        "Master CSS to style and layout web pages with colors, fonts, spacing, and responsive design techniques.",
       rating: "4.7 (94k+)",
       courses: 4,
       learners: "178k+ learners",
-      image: "/reactjs.png",
-      youtubeLink: "https://www.youtube.com/watch?v=SqcY0GlETPk",
+      image: "/cssyoutube.png",
+      youtubeLink: "https://www.youtube.com/watch?v=ESnrn1kAD4E",
     },
     {
       title: "MongoDB for Beginners",
-      subtitle: "BACKEND DATABASE",
+      subtitle: " DATABASE",
       description:
         "Learn how to model data, create documents, and build robust NoSQL backends using MongoDB Atlas.",
       rating: "4.5 (40k+)",
       courses: 5,
       learners: "85k+ learners",
       image: "/mongo.png",
-      youtubeLink: "https://www.youtube.com/watch?v=ExcRbA7fy_A",
+      youtubeLink: "https://www.youtube.com/watch?v=J6mDkcqU_ZE",
     },
     {
       title: "Express.js Crash Course",
@@ -101,18 +101,103 @@ export default function CourseCards() {
       courses: 3,
       learners: "68k+ learners",
       image: "/expres.png",
-      youtubeLink: "https://www.youtube.com/watch?v=SccSCuHhOw0",
+      youtubeLink: "https://www.youtube.com/watch?v=7H_QH9nipNs",
     },
     {
       title: "Node.js Fundamentals",
-      subtitle: "JAVASCRIPT RUNTIME",
+      subtitle: "Node js",
       description:
         "Understand the core of Node.js, event-driven architecture, modules, and backend development.",
       rating: "4.6 (52k+)",
       courses: 6,
       learners: "105k+ learners",
       image: "/node.png",
-      youtubeLink: "https://www.youtube.com/watch?v=f2EqECiTBL8",
+      youtubeLink: "https://www.youtube.com/watch?v=AZzV3wZCvI4&list=PL78RhpUUKSwfeSOOwfE9x6l5jTjn5LbY3",
+    },
+    
+// second
+
+    {
+      title: "Javascript Fundamentals",
+      subtitle: "JAVASCRIPT",
+      description:
+      "Master the fundamentals of JavaScript, including variables, functions, DOM manipulation, and asynchronous programming.",
+      rating: "4.6 (52k+)",
+      courses: 6,
+      learners: "105k+ learners",
+      image: "/js.png",
+      youtubeLink: "https://www.youtube.com/watch?v=ajdRvxDWH4w&list=PLGjplNEQ1it_oTvuLRNqXfz_v_0pq6unW",
+    },
+    ,
+    {
+      title: "React Fundamentals",
+      subtitle: "React",
+      description:
+       "Learn React's component-based architecture, state management, hooks, and building dynamic user interfaces.",
+      rating: "4.6 (52k+)",
+      courses: 6,
+      learners: "105k+ learners",
+      image: "/react1.png",
+      youtubeLink: "https://www.youtube.com/watch?v=4z9bvgTlxKw&list=PLwGdqUZWnOp1Rab71vx2zMF6qpwGDB2Z1",
+    },
+    ,
+    {
+      title: "PHP Fundamentals",
+      subtitle: "PHP",
+      description:
+       "Explore PHP for server-side scripting, form handling, database interaction, and dynamic web development.",
+      rating: "4.6 (52k+)",
+      courses: 6,
+      learners: "105k+ learners",
+      image: "/php.png",
+      youtubeLink: "https://www.youtube.com/watch?v=D4DXbRsQAOA&list=PL8p2I9GklV44cSOlKzB_0TrzxEgwfvicK",
+    },
+
+    //third
+    {
+      title: "Java Fundamentals",
+      subtitle: "Java",
+      description:
+      "Understand Java's object-oriented principles, syntax, multithreading, and its use in building robust applications.",
+      rating: "4.6 (52k+)",
+      courses: 6,
+      learners: "105k+ learners",
+      image: "/java.png",
+      youtubeLink: "https://www.youtube.com/watch?v=yRpLlJmRo2w&list=PLfqMhTWNBTe3LtFWcvwpqTkUSlB32kJop",
+    },
+
+    {
+      title: "SQL Fundamentals",
+      subtitle: "SQL",
+      description:
+       "Learn SQL to manage, query, and manipulate relational databases using commands like SELECT, INSERT, and JOIN.",
+      rating: "4.6 (52k+)",
+      courses: 6,
+      learners: "105k+ learners",
+      image: "/sql1.png",
+      youtubeLink: "https://www.youtube.com/watch?v=323H_mOOWQ4&list=PLxCzCOWd7aiFbom4rYyl5qROgqYuCuAPD",
+    },
+    {
+      title: "MySQL Fundamentals",
+      subtitle: "MYSQL",
+      description:
+     "Learn MySQL, a popular relational database system, to efficiently store, retrieve, and manage structured data.",
+      rating: "4.6 (52k+)",
+      courses: 6,
+      learners: "105k+ learners",
+      image: "/mysql.png",
+      youtubeLink: "https://www.youtube.com/watch?v=KKgN_w71x3E&list=PLjVLYmrlmjGeyCPgdHL2vWmEGKxcpsC0E",
+    },
+    {
+      title: "Nextjs full course ",
+      subtitle: "Nextjs",
+      description:
+      "Discover Next.js for building fast, scalable React applications with features like server-side rendering and routing.",
+      rating: "4.6 (52k+)",
+      courses: 6,
+      learners: "105k+ learners",
+      image: "/nextjs.png",
+      youtubeLink: "https://www.youtube.com/watch?v=eaQc7vbV4po",
     },
 
   ];
@@ -129,11 +214,11 @@ export default function CourseCards() {
       </div>
 
       {/* Scrollable Cards Section */}
-      <div className="relative py-10 px-4">
+      <div className="relative py-10 px-4 cursor-pointer">
         {/* Left Scroll Button */}
         {showLeftArrow && (
           <button
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100 transition-opacity duration-300"
+            className="absolute left-2 cursor-pointer top-1/2 transform -translate-y-1/2 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100 transition-opacity duration-300"
             onClick={() => scroll("left")}
           >
             <FaArrowLeft size={18} />
@@ -198,7 +283,7 @@ export default function CourseCards() {
         {/* Right Scroll Button */}
         {showRightArrow && (
           <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100 transition-opacity duration-300"
+            className=" cursor-pointer absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100 transition-opacity duration-300"
             onClick={() => scroll("right")}
           >
             <FaArrowRight size={18} />

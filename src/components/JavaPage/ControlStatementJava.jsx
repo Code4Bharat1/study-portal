@@ -2,110 +2,189 @@ import React from 'react';
 
 const ControlStatementJava = () => {
   return (
-    <>
-      <div className="p-6 ml-80">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h1 className="text-4xl font-semibold text-gray-800">Java Control Statements</h1>
+    <div className="p-6 ml-80">
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h1 className="text-4xl font-semibold text-gray-800">Java Control Statements</h1>
 
-          {/* Introduction */}
-          <p className="mt-4 text-lg text-gray-600">
-            Control statements in Java are used to control the flow of execution in a program. They allow you to make decisions, repeat tasks, or jump to different parts of the code based on certain conditions.
+        {/* Introduction */}
+        <p className="mt-4 text-lg text-gray-600">
+          In Java, control statements are used to control the flow of the program based on conditions or repeated execution of code. There are three main categories:
+        </p>
+
+        <ul className="mt-2 text-lg text-gray-600 list-disc pl-6">
+          <li><strong>Decision-Making Statements</strong></li>
+          <li><strong>Looping Statements</strong></li>
+          <li><strong>Jump Statements</strong></li>
+        </ul>
+
+        {/* 1. Decision-Making Statements */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">1. Decision-Making Statements</h2>
+          <p className="mt-2 text-lg text-gray-600">
+            These statements are used to make decisions based on certain conditions. If the condition is true, a block of code is executed.
           </p>
 
-          {/* Types of Control Statements */}
-          <div className="mt-6">
-            <h2 className="text-2xl font-semibold text-gray-800">Types of Control Statements</h2>
-            <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
-              <li><strong>Decision-making Statements:</strong> <code>if</code>, <code>if-else</code>, <code>switch</code></li>
-              <li><strong>Looping Statements:</strong> <code>for</code>, <code>while</code>, <code>do-while</code></li>
-              <li><strong>Jump Statements:</strong> <code>break</code>, <code>continue</code>, <code>return</code></li>
-            </ul>
-          </div>
+          {/* if Statement */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">a. if Statement</h3>
+          <p className="text-lg text-gray-600">
+            Executes a block if the condition is true.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+{`int age = 20;
+if (age >= 18) {
+    System.out.println("You are eligible to vote.");
+}`}
+          </pre>
 
-          {/* Decision-making */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">1. Decision-Making Statements</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              These statements help the program make decisions based on conditions.
-            </p>
-
-            <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
-{`int num = 10;
+          {/* if-else Statement */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">b. if-else Statement</h3>
+          <p className="text-lg text-gray-600">
+            Executes one block if the condition is true, another block if false.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+{`int num = -5;
 if (num > 0) {
     System.out.println("Positive number");
 } else {
-    System.out.println("Non-positive number");
+    System.out.println("Negative number");
 }`}
-            </pre>
+          </pre>
 
-            <pre className="mt-4 p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+          {/* else-if ladder */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">c. else-if Ladder</h3>
+          <p className="text-lg text-gray-600">
+            Useful when there are multiple conditions to check.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+{`int marks = 75;
+if (marks >= 90) {
+    System.out.println("Grade A");
+} else if (marks >= 75) {
+    System.out.println("Grade B");
+} else {
+    System.out.println("Grade C");
+}`}
+          </pre>
+
+          {/* switch Statement */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">d. switch Statement</h3>
+          <p className="text-lg text-gray-600">
+            Used to select one of many blocks to execute based on a variable's value.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
 {`int day = 3;
 switch (day) {
     case 1: System.out.println("Monday"); break;
     case 2: System.out.println("Tuesday"); break;
-    default: System.out.println("Another day");
+    case 3: System.out.println("Wednesday"); break;
+    default: System.out.println("Invalid day");
 }`}
-            </pre>
-          </div>
+          </pre>
+        </div>
 
-          {/* Looping Statements */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">2. Looping Statements</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Looping statements are used when you want to execute a block of code repeatedly.
-            </p>
+        {/* 2. Looping Statements */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">2. Looping Statements</h2>
+          <p className="mt-2 text-lg text-gray-600">
+            Looping statements allow repeating a set of instructions until a condition is met.
+          </p>
 
-            <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
-              <li><strong>for loop:</strong> Used when the number of iterations is known.</li>
-              <li><strong>while loop:</strong> Used when the number of iterations is not known in advance.</li>
-              <li><strong>do-while loop:</strong> Executes the block at least once before checking the condition.</li>
-            </ul>
-
-            <pre className="mt-4 p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
-{`for (int i = 0; i < 5; i++) {
-    System.out.println("Value: " + i);
+          {/* for loop */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">a. for loop</h3>
+          <p className="text-lg text-gray-600">
+            Used when the number of iterations is known.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+{`for (int i = 1; i <= 5; i++) {
+    System.out.println("Count: " + i);
 }`}
-            </pre>
-          </div>
+          </pre>
 
-          {/* Jump Statements */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">3. Jump Statements</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Jump statements are used to transfer control to other parts of the program.
-            </p>
+          {/* while loop */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">b. while loop</h3>
+          <p className="text-lg text-gray-600">
+            Executes a block as long as the condition is true.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+{`int i = 1;
+while (i <= 3) {
+    System.out.println("i = " + i);
+    i++;
+}`}
+          </pre>
 
-            <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
-              <li><strong>break:</strong> Exits the loop or switch statement.</li>
-              <li><strong>continue:</strong> Skips the current iteration and continues with the next one.</li>
-              <li><strong>return:</strong> Exits from the current method and optionally returns a value.</li>
-            </ul>
+          {/* do-while loop */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">c. do-while loop</h3>
+          <p className="text-lg text-gray-600">
+            Similar to while loop but ensures the loop executes at least once.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+{`int j = 1;
+do {
+    System.out.println("j = " + j);
+    j++;
+} while (j <= 3);`}
+          </pre>
+        </div>
 
-            <pre className="mt-4 p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+        {/* 3. Jump Statements */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">3. Jump Statements</h2>
+          <p className="mt-2 text-lg text-gray-600">
+            These statements alter the flow of execution.
+          </p>
+
+          {/* break */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">a. break</h3>
+          <p className="text-lg text-gray-600">
+            Exits the loop or switch immediately.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+{`for (int i = 1; i <= 5; i++) {
+    if (i == 3) break;
+    System.out.println("i = " + i);
+}`}
+          </pre>
+
+          {/* continue */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">b. continue</h3>
+          <p className="text-lg text-gray-600">
+            Skips the current iteration and moves to the next one.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
 {`for (int i = 1; i <= 5; i++) {
     if (i == 3) continue;
-    System.out.println(i);
+    System.out.println("i = " + i);
 }`}
-            </pre>
-          </div>
+          </pre>
 
-          {/* Best Practices */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Best Practices</h2>
-            <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
-              <li>Use proper indentation for better readability.</li>
-              <li>Avoid deeply nested <code>if-else</code> blocks—consider using <code>switch</code> when appropriate.</li>
-              <li>Use <code>break</code> and <code>continue</code> judiciously to avoid confusing flow.</li>
-              <li>Always ensure your loop termination conditions are reachable to avoid infinite loops.</li>
-            </ul>
-          </div>
+          {/* return */}
+          <h3 className="mt-4 text-xl font-semibold text-gray-700">c. return</h3>
+          <p className="text-lg text-gray-600">
+            Exits from the current method and optionally returns a value.
+          </p>
+          <pre className="p-4 bg-gray-100 text-[#37474f] rounded-lg overflow-auto">
+{`public static int getSquare(int num) {
+    return num * num;
+}`}
+          </pre>
+        </div>
 
-          {/* Call to Action */}
-         
+        {/* Best Practices */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">Best Practices</h2>
+          <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
+            <li>Use proper indentation and naming for clarity.</li>
+            <li>Use `switch` for cleaner multi-condition checks instead of nested `if-else`.</li>
+            <li>Avoid infinite loops by ensuring loop termination conditions are correct.</li>
+            <li>Use `break` and `continue` with care to avoid unexpected program flow.</li>
+            <li>Always comment complex logic for better understanding.</li>
+          </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
 export default ControlStatementJava;
+

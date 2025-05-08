@@ -4,170 +4,149 @@ import React from 'react';
 
 const Basicmongo = () => {
   useReadingTracker('basicmongo');
+
   return (
-    <>
-      <div className="p-6 ml-80">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h1 className="text-4xl font-semibold text-gray-800">Basic MongoDB Operations</h1>
+    <div className="p-6 ml-80">
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h1 className="text-4xl font-semibold text-gray-800">Basic MongoDB Operations</h1>
 
-          {/* Introduction Section */}
+        {/* Introduction */}
+        <p className="mt-4 text-lg text-gray-600">
+          <strong>MongoDB</strong> ek <strong>NoSQL (non-relational)</strong> database hai jo data ko JSON-like <strong>documents</strong> ke form mein store karta hai. Yeh flexible aur scalable database system hota hai, jisme aapko table aur row ka concept nahi milta — balki <strong>collections</strong> aur <strong>documents</strong> ka use hota hai.
+        </p>
+
+        {/* What is a Document? */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">What is a Document?</h2>
           <p className="mt-4 text-lg text-gray-600">
-            MongoDB is a powerful, flexible, and scalable NoSQL database that stores data in JSON-like documents. This
-            section will introduce you to basic MongoDB operations such as creating databases, creating collections, and
-            performing CRUD operations (Create, Read, Update, Delete).
+            MongoDB mein data <strong>document</strong> ke form mein store hota hai. Document ek <strong>key-value pair</strong> hota hai, jo JSON format jaise dikhta hai, lekin internally yeh BSON (Binary JSON) format mein hota hai.
           </p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`{
+  name: "Alice",
+  age: 25,
+  email: "alice@example.com"
+}`}
+          </pre>
+          <p className="mt-4 text-lg text-gray-600">
+            Upar diya gaya example ek single document ka hai jisme teen fields (name, age, email) store hain.
+          </p>
+        </div>
 
-          {/* Connecting to MongoDB Section */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Connecting to MongoDB</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              To connect to MongoDB, open your terminal or command prompt and type the following command:
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`mongo`}
-            </pre>
-            <p className="mt-4 text-lg text-gray-600">
-              This will connect to the default MongoDB server running on <strong>localhost</strong> at port <strong>27017</strong>.
-            </p>
-            <p className="mt-4 text-lg text-gray-600">
-              To connect to a specific database, use the following command:
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`use myDatabase`}
-            </pre>
-            <p className="mt-4 text-lg text-gray-600">
-              Replace <strong>myDatabase</strong> with the name of the database you want to connect to.
-            </p>
-          </div>
+        {/* What is a Collection? */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">What is a Collection?</h2>
+          <p className="mt-4 text-lg text-gray-600">
+            Collection MongoDB ka ek logical grouping hota hai documents ka. Ye ek <strong>table</strong> jaise kaam karta hai (relational database ke comparison mein).
+          </p>
+          <p className="mt-4 text-lg text-gray-600">
+            Example: Agar aapke paas 100 users hain, toh sabhi users ke documents ko aap <strong>users</strong> collection mein store karenge.
+          </p>
+        </div>
 
-          {/* Creating a Database Section */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Creating a Database</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              MongoDB databases are created automatically when you insert data. To create a database, simply use the
-              <code>use</code> command. If the database does not exist, MongoDB will create it for you:
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`use myDatabase`}
-            </pre>
-            <p className="mt-4 text-lg text-gray-600">
-              This command will create a database named <strong>myDatabase</strong> if it doesn’t already exist.
-            </p>
-          </div>
+        {/* What is a Database? */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">What is a Database?</h2>
+          <p className="mt-4 text-lg text-gray-600">
+            Database multiple collections ka set hota hai. MongoDB mein aap har application ke liye alag database bana sakte hain.
+          </p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`use myDatabase`}
+          </pre>
+          <p className="mt-4 text-lg text-gray-600">
+            Agar <strong>myDatabase</strong> naam ka database exist nahi karta, toh MongoDB ise create kar lega.
+          </p>
+        </div>
 
-          {/* Creating a Collection Section */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Creating a Collection</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              In MongoDB, a collection is similar to a table in a relational database. To create a collection, use the
-              <code>db.createCollection()</code> method:
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`db.createCollection("myCollection")`}
-            </pre>
-            <p className="mt-4 text-lg text-gray-600">
-              This creates a collection named <strong>myCollection</strong> within the current database.
-            </p>
-            <p className="mt-4 text-lg text-gray-600">
-              However, you don’t need to explicitly create collections in MongoDB. If you insert a document into a collection
-              that doesn’t exist, MongoDB will automatically create the collection.
-            </p>
-          </div>
+        {/* Connecting to MongoDB */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">Connecting to MongoDB</h2>
+          <p className="mt-4 text-lg text-gray-600">Terminal mein likhe:</p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">mongo</pre>
+          <p className="mt-4 text-lg text-gray-600">
+            Is command se aap MongoDB server (localhost:27017) se connect ho jaoge.
+          </p>
+        </div>
 
-          {/* Inserting Data into MongoDB Section */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Inserting Data into a Collection</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              To insert data into a collection, use the <code>insertOne()</code> method for inserting a single document:
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`db.myCollection.insertOne({ name: "John", age: 30 })`}
-            </pre>
-            <p className="mt-4 text-lg text-gray-600">
-              This command inserts a single document into the <strong>myCollection</strong> collection.
-            </p>
-            <p className="mt-4 text-lg text-gray-600">
-              To insert multiple documents, use the <code>insertMany()</code> method:
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`db.myCollection.insertMany([{ name: "Jane", age: 25 }, { name: "Mark", age: 40 }])`}
-            </pre>
-          </div>
+        {/* CRUD Operations in MongoDB */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">CRUD Operations in MongoDB</h2>
+          <p className="mt-4 text-lg text-gray-600">
+            MongoDB mein aap CRUD operations perform kar sakte ho — <strong>Create</strong>, <strong>Read</strong>, <strong>Update</strong>, <strong>Delete</strong>.
+          </p>
+        </div>
 
-          {/* Reading Data from MongoDB Section */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Reading Data from MongoDB</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              To retrieve documents from a collection, use the <code>find()</code> method. This command returns all documents:
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`db.myCollection.find()`}
-            </pre>
-            <p className="mt-4 text-lg text-gray-600">
-              To filter the results, pass a query object. For example, to find documents where the <strong>age</strong> is greater than 30:
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`db.myCollection.find({ age: { $gt: 30 } })`}
-            </pre>
-            <p className="mt-4 text-lg text-gray-600">
-              The query above will return documents where the <strong>age</strong> field is greater than 30.
-            </p>
-          </div>
+        {/* CREATE */}
+        <div className="mt-6">
+          <h3 className="text-xl font-semibold text-gray-800">1. Create</h3>
+          <p className="mt-2 text-lg text-gray-600">Single document insert karne ke liye:</p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`db.users.insertOne({ name: "Aman", age: 22 })`}
+          </pre>
+          <p className="mt-2 text-lg text-gray-600">Multiple documents insert karne ke liye:</p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`db.users.insertMany([
+  { name: "Raj", age: 30 },
+  { name: "Neha", age: 27 }
+])`}
+          </pre>
+        </div>
 
-          {/* Updating Data in MongoDB Section */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Updating Data in MongoDB</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              To update a document, use the <code>updateOne()</code> method. For example, to update a document where the
-              <strong>name</strong> is "John":
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`db.myCollection.updateOne(
-  { name: "John" },
-  { $set: { age: 35 } }
+        {/* READ */}
+        <div className="mt-6">
+          <h3 className="text-xl font-semibold text-gray-800">2. Read</h3>
+          <p className="mt-2 text-lg text-gray-600">Sabhi documents dekhne ke liye:</p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`db.users.find()`}
+          </pre>
+          <p className="mt-2 text-lg text-gray-600">Filter ke sath:</p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`db.users.find({ age: { $gt: 25 } })`}
+          </pre>
+        </div>
+
+        {/* UPDATE */}
+        <div className="mt-6">
+          <h3 className="text-xl font-semibold text-gray-800">3. Update</h3>
+          <p className="mt-2 text-lg text-gray-600">Single document update karne ke liye:</p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`db.users.updateOne(
+  { name: "Aman" },
+  { $set: { age: 24 } }
 )`}
-            </pre>
-            <p className="mt-4 text-lg text-gray-600">
-              This will update the <strong>age</strong> field of the document where the <strong>name</strong> is "John" to 35.
-            </p>
-            <p className="mt-4 text-lg text-gray-600">
-              To update multiple documents, use the <code>updateMany()</code> method.
-            </p>
-          </div>
+          </pre>
+          <p className="mt-2 text-lg text-gray-600">Multiple documents update karne ke liye:</p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`db.users.updateMany(
+  { age: { $lt: 30 } },
+  { $set: { status: "active" } }
+)`}
+          </pre>
+        </div>
 
-          {/* Deleting Data from MongoDB Section */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Deleting Data from MongoDB</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              To delete a document, use the <code>deleteOne()</code> method:
-            </p>
-            <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-              {`db.myCollection.deleteOne({ name: "John" })`}
-            </pre>
-            <p className="mt-4 text-lg text-gray-600">
-              This will delete the first document where the <strong>name</strong> is "John".
-            </p>
-            <p className="mt-4 text-lg text-gray-600">
-              To delete multiple documents, use the <code>deleteMany()</code> method.
-            </p>
-          </div>
+        {/* DELETE */}
+        <div className="mt-6">
+          <h3 className="text-xl font-semibold text-gray-800">4. Delete</h3>
+          <p className="mt-2 text-lg text-gray-600">Single document delete karne ke liye:</p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`db.users.deleteOne({ name: "Raj" })`}
+          </pre>
+          <p className="mt-2 text-lg text-gray-600">Multiple documents delete karne ke liye:</p>
+          <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
+{`db.users.deleteMany({ age: { $gt: 30 } })`}
+          </pre>
+        </div>
 
-          {/* Conclusion Section */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Conclusion</h2>
-            <p className="mt-4 text-lg text-gray-600">
-              MongoDB is a flexible, scalable NoSQL database that supports easy creation and manipulation of data using
-              a variety of operations. This guide covered the basics of MongoDB, including connecting to MongoDB, creating
-              databases and collections, and performing basic CRUD operations. You can now use these basic operations to
-              start building applications with MongoDB.
-            </p>
-          </div>
-
-          {/* Call to Action */}
-         
+        {/* Conclusion */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">Conclusion</h2>
+          <p className="mt-4 text-lg text-gray-600">
+            MongoDB ek document-based NoSQL database hai jo JSON jaise structure mein data ko store karta hai. Aap
+            <strong> CRUD </strong> operations se data insert, read, update aur delete kar sakte ho. Collection aur document ke concept ko samajhna MongoDB ke liye sabse zaroori hota hai.
+          </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -34,7 +34,7 @@ const Sidebar = () => {
         {/* Static Links */}
         <li className="mb-4">
           <Link href="/javascript/home" className={getLinkClass("/javascript/home")}>
-            <FaHome className="inline mr-2 text-xl" /> Javascript HOME
+            <FaHome className="inline mr-2 text-xl" /> Roadmap
           </Link>
         </li>
         <li className="mb-4">

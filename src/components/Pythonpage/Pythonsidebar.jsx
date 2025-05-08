@@ -31,6 +31,11 @@ const Pythonsidebar = () => {
 
       <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
         <ul className="space-y-4 pb-24">
+        <li>
+            <Link href="/roadmapPython" className={getLinkClass("/homepythonpage")}>
+              <FaPython className="inline mr-2 text-xl" /> RoadMap
+            </Link>
+          </li>
           <li>
             <Link href="/pythonHome" className={getLinkClass("/homepythonpage")}>
               <FaPython className="inline mr-2 text-xl" /> Python HOME

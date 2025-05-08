@@ -3,39 +3,35 @@
 import useReadingTracker from "@/app/hook/useReadingTracker";
 
 export default function MySQLDelete() { 
-  useReadingTracker('mysqldelete')
+  useReadingTracker('mysqldelete');
+  
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">DELETE – Removing Data in MySQL</h1>
       <p className="text-lg text-gray-800 mb-6">
-        The `DELETE` statement removes rows from a table, such as deleting old records or cancelled orders. Like `UPDATE`, it requires caution to avoid deleting unintended data. In this section, you’ll learn how to use `DELETE`, apply `WHERE` conditions, and understand the difference between `DELETE` and `TRUNCATE`. By the end, you’ll be able to remove data safely.
+        The <code>DELETE</code> statement removes rows from a table, such as deleting old records or cancelled orders. Like <code>UPDATE</code>, it requires caution to avoid deleting unintended data. In this section, you’ll learn how to use <code>DELETE</code>, apply <code>WHERE</code> conditions, and understand the difference between <code>DELETE</code> and <code>TRUNCATE</code>. By the end, you’ll be able to remove data safely.
       </p>
 
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-cyan-400 mb-4">Using the DELETE Statement</h2>
+      <div className="bg-white p-6 rounded-xl shadow-lg max-w-8xl mx-auto">
+        <h2 className="text-2xl font-semibold text-cyan-600 mb-4">Using the DELETE Statement</h2>
 
-        <div className="text-gray-800 space-y-6 text-sm leading-relaxed">
+        <div className="text-gray-800 space-y-6 text-md leading-relaxed">
           <p>
-            The `DELETE FROM` statement removes rows based on a condition specified in the `WHERE` clause.
+            The <code>DELETE FROM</code> statement removes rows based on a condition specified in the <code>WHERE</code> clause.
           </p>
 
-          <p>
-            **Basic Syntax**
-          </p>
-
+          <p><strong>Basic Syntax</strong></p>
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-cyan-400">
+            <code className="text-cyan-600">
 {`DELETE FROM table_name WHERE condition;`}
             </code>
           </pre>
 
-          <p>
-            **Example: Deleting Data**
-            Assume we have a “tasks” table with columns `id`, `title`, and `status`:
-          </p>
+          <p><strong>Example: Deleting Data</strong></p>
+          <p>Assume we have a “tasks” table with columns <code>id</code>, <code>title</code>, and <code>status</code>:</p>
 
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-cyan-400">
+            <code className="text-cyan-600">
 {`-- Delete specific rows
 DELETE FROM tasks WHERE status = 'completed';
 
@@ -44,65 +40,60 @@ DELETE FROM tasks WHERE id = 5;`}
             </code>
           </pre>
 
-          <p>
-            **What’s Happening Here?**
-            - The first query removes all completed tasks.
-            - The second query removes the task with `id = 5`.
-          </p>
+          <p><strong>What’s Happening Here?</strong></p>
+          <ul className="list-disc list-inside">
+            <li>The first query removes all completed tasks.</li>
+            <li>The second query removes the task with <code>id = 5</code>.</li>
+          </ul>
 
-          <p>
-            **DELETE vs. TRUNCATE**
-            - `DELETE`: Removes specific rows based on a condition. Can be rolled back in transactions.
-            - `TRUNCATE`: Removes all rows and resets auto-increment counters. Faster but cannot be undone.
-          </p>
+          <p><strong>DELETE vs. TRUNCATE</strong></p>
+          <ul className="list-disc list-inside">
+            <li><code>DELETE</code>: Removes specific rows based on a condition. Can be rolled back in transactions.</li>
+            <li><code>TRUNCATE</code>: Removes all rows and resets auto-increment counters. Faster but cannot be undone.</li>
+          </ul>
 
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-cyan-400">
+            <code className="text-cyan-600">
 {`TRUNCATE TABLE tasks;`}
             </code>
           </pre>
 
-          <p>
-            **Safe Deletes**
-            Without a `WHERE` clause, `DELETE` removes all rows:
-          </p>
+          <p><strong>Safe Deletes</strong></p>
+          <p>Without a <code>WHERE</code> clause, <code>DELETE</code> removes all rows:</p>
 
-          <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-cyan-400">
+          <pre className="bg-red-100 p-4 rounded-md overflow-x-auto">
+            <code className="text-red-500">
 {`-- DANGEROUS: Deletes all rows
 DELETE FROM tasks;`}
             </code>
           </pre>
 
-          <p>
-            Use safe update mode to prevent accidental deletes:
-          </p>
-
+          <p>Use safe update mode to avoid accidental full deletes:</p>
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-cyan-400">
+            <code className="text-cyan-600">
 {`SET SQL_SAFE_UPDATES = 1;`}
             </code>
           </pre>
 
-          <p>
-            **Best Practices**
-            - Always use a `WHERE` clause unless you intend to delete all rows.
-            - Back up data before running `DELETE`.
-            - Test conditions with a `SELECT` query first to see which rows will be affected.
-          </p>
+          <p><strong>Best Practices</strong></p>
+          <ul className="list-disc list-inside">
+            <li>Always use a <code>WHERE</code> clause unless you intend to delete all rows.</li>
+            <li>Back up your data before running delete queries.</li>
+            <li>First test your <code>WHERE</code> condition using a <code>SELECT</code> query.</li>
+          </ul>
 
+          <p><strong>Practice Exercise</strong></p>
           <p>
-            **Practice Exercise**
-            Create a “users” table with `id`, `name`, and `status`. Insert five users, then:
-            1. Delete all users with status “inactive”.
-            2. Delete a user by ID.
-            3. Verify the remaining data with `SELECT`.
+            Create a “users” table with columns <code>id</code>, <code>name</code>, and <code>status</code>. Insert five users, then:
           </p>
+          <ol className="list-decimal list-inside">
+            <li>Delete all users with status “inactive”.</li>
+            <li>Delete a user by ID.</li>
+            <li>Use <code>SELECT</code> to verify the remaining data.</li>
+          </ol>
         </div>
 
-        <button className="mt-8 bg-cyan-400 text-white px-6 py-2 rounded-full hover:bg-cyan-700">
-          Learn Next Concept
-        </button>
+       
       </div>
     </div>
   );

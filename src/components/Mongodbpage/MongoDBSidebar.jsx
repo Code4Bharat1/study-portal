@@ -192,8 +192,8 @@ const MongoDBSidebar = () => {
         <ul className="space-y-4 pb-28">
           {/* Static Links */}
           {[
-           
-            { href: "/homemongodbpage", label: "MongoDB HOME", icon: FaDatabase },
+            { href: "/roadmapMongo", label: "Roadmap", icon: FaDatabase },
+            { href: "/homemongodbpage", label: "MongoDB Introduction", icon: FaDatabase },
             { href: "/apimongodb", label: "MongoDB API", icon: FaCogs },
             { href: "/installationMongo", label: "Installation", icon: FaCogs },
             { href: "/basicmongo", label: "Basics", icon: FaLayerGroup },

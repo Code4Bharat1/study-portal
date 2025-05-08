@@ -5,13 +5,13 @@ import useReadingTracker from "@/app/hook/useReadingTracker";
 export default function PhpInstallation() {
   useReadingTracker('php-installation');
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">PHP Installation</h1>
       
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
+      <div className="bg-white p-6  max-w-8xl mx-auto">
         <h2 className="text-2xl font-semibold text-[#DDA0DD] mb-4">How to Install PHP</h2>
         
-        <div className="text-gray-800 space-y-6 text-sm leading-relaxed">
+        <div className="text-gray-800 space-y-6 text-md leading-relaxed">
           <p>
             To start using PHP, you need a server environment that can process PHP files. Here are the main ways to set up PHP:
           </p>
@@ -56,9 +56,7 @@ export default function PhpInstallation() {
           <p>Access it via your web browser to see PHP configuration information.</p>
         </div>
 
-        <button className="mt-8 bg-[#DDA0DD] text-white px-6 py-2 rounded-full hover:bg-[#BA55D3]">
-          Learn Basic Syntax
-        </button>
+       
       </div>
     </div>
   );

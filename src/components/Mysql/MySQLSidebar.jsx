@@ -27,15 +27,15 @@ const MySQLSidebar = () => {
   );
 
   return (
-    <div className="w-64 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg">
+    <div className="w-74 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg ">
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 shrink-0">MySQL Tutorial</h2>
 
       <ul className="overflow-y-auto flex-1 custom-scrollbar pr-2">
 
         {/* Static Links */}
         <li className="mb-4">
-          <Link href="/myhome" className={getLinkClass("/mysql/myhome")}>
-            <FaDatabase className="inline mr-2 text-xl" /> MySQL HOME
+          <Link href="/mysql-home" className={getLinkClass("/mysql/myhome")}>
+            <FaDatabase className="inline mr-2 text-xl" /> Roadmap
           </Link>
         </li>
         <li className="mb-4">
@@ -50,7 +50,7 @@ const MySQLSidebar = () => {
         </li>
 
         {/* Dropdown Section */}
-        <li className="mb-4">
+        <li className="mb-30">
           <button 
             className="w-full text-left flex items-center justify-between text-lg font-semibold" 
             onClick={() => toggleDropdown('mysqlPath')}
@@ -66,7 +66,7 @@ const MySQLSidebar = () => {
                 { label: "Create Tables", icon: <FaTable className="inline mr-2 text-xl" />, href: "/mycreate" },
                 { label: "SELECT – Retrieving Data", icon: <FaSearch className="inline mr-2 text-xl" />, href: "/myselect" },
                 { label: "INSERT – Adding Data", icon: <FaPlusCircle className="inline mr-2 text-xl" />, href: "/myinsert" },
-                { label: "UPDATE – Modifying Data", icon: <FaEdit className="inline mr-2 text-xl" />, href: "/myupdate" },
+                { label: "UPDATE – Modifying Data", icon: <FaEdit className="inline mr-2 text-xl" />, href: "/mysqlUpdate" },
                 { label: "DELETE – Removing Data", icon: <FaTrash className="inline mr-2 text-xl" />, href: "/mydelete" },
                 { label: "WHERE Clause", icon: <FaFilter className="inline mr-2 text-xl" />, href: "/mywhere" },
                 { label: "ORDER BY", icon: <FaSortAmountDown className="inline mr-2 text-xl" />, href: "/myorder-by" },
@@ -74,11 +74,7 @@ const MySQLSidebar = () => {
                 { label: "Joins in MySQL", icon: <FaLink className="inline mr-2 text-xl" />, href: "/myjoins" },
                 { label: "GROUP BY & Aggregates", icon: <FaChartBar className="inline mr-2 text-xl" />, href: "/mygroup-by" },
                 { label: "Subqueries", icon: <FaCodeBranch className="inline mr-2 text-xl" />, href: "/mysubqueries" },
-                { label: "CASE Statements", icon: <FaFileAlt className="inline mr-2 text-xl" />, href: "/mycase" },
-                { label: "Database Management", icon: <FaDatabase className="inline mr-2 text-xl" />, href: "/mydatabase-management" },
-                { label: "User & Privileges", icon: <FaLock className="inline mr-2 text-xl" />, href: "/myusers-privileges" },
-                { label: "MySQL Server Admin", icon: <FaServer className="inline mr-2 text-xl" />, href: "/myserver-admin" },
-                { label: "MySQL Practice Projects", icon: <FaTasks className="inline mr-2 text-xl" />, href: "/myprojects" }
+             
               ].map(({ label, icon, href }) => (
                 <li key={label}>
                   <Link

@@ -27,7 +27,7 @@ const PhpSidebar = () => {
   );
 
   return (
-    <div className="w-70 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg overflow-hidden">
+    <div className="w-80 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg overflow-hidden">
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">PHP Tutorial</h2>
 
       {/* Scrollable list */}
@@ -35,7 +35,7 @@ const PhpSidebar = () => {
         <ul className="space-y-4 pb-29">
           <li>
             <Link href="/phphome" className={getLinkClass("/php-home")}>
-              <FaHome className="inline mr-2 text-xl" /> PHP HOME
+              <FaHome className="inline mr-2 text-xl" /> Roadmap
             </Link>
           </li>
           <li>
