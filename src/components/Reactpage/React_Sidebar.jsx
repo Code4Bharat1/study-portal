@@ -35,7 +35,7 @@ const ReactSidebar = () => {
         <ul className="space-y-4 pb-29">
           <li>
             <Link href="/reacthome" className={getLinkClass("/reacthome")}>
-              <FaHome className="inline mr-2 text-xl" /> React HOME
+              <FaHome className="inline mr-2 text-xl" /> React Roadmap
             </Link>
           </li>
           <li>

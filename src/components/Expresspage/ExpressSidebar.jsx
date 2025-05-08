@@ -35,7 +35,7 @@ const ExpressSidebar = () => {
         <ul className="space-y-4 pb-29">
           <li>
             <Link href="/expresshome" className={getLinkClass("/expresshome")}>
-              <FaHome className="inline mr-2 text-xl" /> Express HOME
+              <FaHome className="inline mr-2 text-xl" /> Express Roadmap
             </Link>
           </li>
           <li>

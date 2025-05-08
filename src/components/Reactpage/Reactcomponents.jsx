@@ -7,7 +7,7 @@ function Reactcomponents() {
   useReadingTracker('reactcomponents');
 
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 max-w-4xl ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">
         Understanding React Components
       </h1>

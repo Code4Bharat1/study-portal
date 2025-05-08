@@ -32,7 +32,7 @@ function React_custom_hooks() {
         Custom Hooks let you extract and reuse stateful logic between components. They start with <code>use</code> and follow the same rules as built-in hooks.
       </p>
 
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
+      <div className="bg-white p-6  max-w-5xl mx-auto">
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">Why Create Custom Hooks?</h2>
         <p className="text-gray-800 mb-4">
           When you find yourself repeating logic across multiple components (e.g., fetching data, handling window size, form validation), a custom hook helps you abstract that logic cleanly and reuse it efficiently.

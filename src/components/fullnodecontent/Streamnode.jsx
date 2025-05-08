@@ -2,8 +2,8 @@
 
 const StreamModulePage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-8  mx-auto text-black space-y-6">
+      <div className="bg-white p-8 max-w-4xl rounded-lg shadow-xl space-y-6 ml-80">
         <h1 className="text-4xl font-bold">Node.js <code>stream</code> Module</h1>
         <p className="text-lg">
           The <code>stream</code> module in Node.js is used to handle streaming data. Streams are instances of the 

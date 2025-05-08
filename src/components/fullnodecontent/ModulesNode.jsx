@@ -2,8 +2,8 @@
 
 const NodeModulesPage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-8  mx-auto text-black space-y-6">
+      <div className="bg-white p-8 max-w-4xl rounded-lg shadow-xl space-y-6 ml-80">
         <h1 className="text-4xl font-bold">Node.js Modules</h1>
         <p className="text-lg">
           In Node.js, modules are reusable blocks of code whose existence does not accidentally impact other code. They allow developers to organize their code into separate files and keep things modular, making it easier to manage and maintain larger applications.

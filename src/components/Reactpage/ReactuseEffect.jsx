@@ -3,7 +3,10 @@ import useReadingTracker from '@/app/hook/useReadingTracker';
 import React, { useEffect, useState } from 'react';
 
 function ReactuseEffect() {
+  // Track this page view for reading tracker
   useReadingTracker('reactuseeffect');
+  
+  // States to store count and text input
   const [count, setCount] = useState(0);
   const [text, setText] = useState('');
 
@@ -32,7 +35,8 @@ function ReactuseEffect() {
 {`useEffect(() => {
   // Code for side effect
 }, [dependencies]);`}
-          </code>
+// useEffect accepts a callback function and an optional array of dependencies.
+        </code>
         </pre>
 
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">Example: Updating the Document Title</h2>
@@ -44,8 +48,8 @@ function Counter() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    document.title = \`You clicked \${count} times\`;
-  }, [count]);
+    document.title = \`You clicked \${count} times\`; // Updates the document title whenever count changes
+  }, [count]); // Dependency array to run the effect when 'count' changes
 
   return (
     <button onClick={() => setCount(count + 1)}>
@@ -53,7 +57,8 @@ function Counter() {
     </button>
   );
 }`}
-          </code>
+// In this example, document title updates based on the 'count' state.
+        </code>
         </pre>
 
         <p className="text-gray-800 mb-6">
@@ -71,9 +76,10 @@ function Counter() {
     console.log('Running timer...');
   }, 1000);
 
-  return () => clearInterval(timer);
+  return () => clearInterval(timer); // Cleanup the timer when the component unmounts or effect is re-run
 }, []);`}
-          </code>
+// This example sets a timer, and the cleanup function clears the timer when the effect is cleaned up.
+        </code>
         </pre>
 
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">When Does useEffect Run?</h2>
@@ -98,7 +104,7 @@ function Counter() {
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
           <code className="text-pink-500">
 {`useEffect(() => {
-  console.log('Text changed:', text);
+  console.log('Text changed:', text); // Logs text change every time 'text' state changes
 }, [text]);`}
           </code>
         </pre>
@@ -124,7 +130,7 @@ function Counter() {
         </p>
 
         <button className="mt-8 bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Learn About useContext →
+          Learn About useContext → 
         </button>
       </div>
     </div>

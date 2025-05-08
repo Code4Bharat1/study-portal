@@ -3,30 +3,32 @@ import useReadingTracker from '@/app/hook/useReadingTracker';
 import React, { useState } from 'react';
 
 export default function Reactprops() {
+  // Custom hook used to track reading progress for the 'reactprops' page
   useReadingTracker('reactprops');
-  // Example of state usage
-  const [count, setCount] = useState(0); // Declaring state for the count
 
-  // Function to handle state change
+  // Declaring state for the count, initialized with 0
+  const [count, setCount] = useState(0); 
+
+  // Function to handle the click event, increments the count value by 1
   const handleClick = () => {
-    setCount(count + 1); // Increment the count value
+    setCount(count + 1);
   };
 
-  // Function to reset the count to 0
+  // Function to reset the count value to 0
   const handleReset = () => {
-    setCount(0); // Reset the count value to 0
+    setCount(0);
   };
 
   return (
     <div className="p-6 ml-70">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">Understanding React Props and State</h1>
       
-      {/* Displaying count (State) */}
+      {/* Displaying the current count */}
       <p className="text-lg text-gray-800 mb-6">
         Current count: {count}
       </p>
 
-      {/* Increment Button */}
+      {/* Button to increment the count */}
       <button
         className="bg-pink-500 text-white p-2 rounded-md mr-4"
         onClick={handleClick}
@@ -34,7 +36,7 @@ export default function Reactprops() {
         Increment Count
       </button>
 
-      {/* Reset Button */}
+      {/* Button to reset the count */}
       <button
         className="bg-pink-300 text-white p-2 rounded-md"
         onClick={handleReset}
@@ -42,18 +44,21 @@ export default function Reactprops() {
         Reset Count
       </button>
 
+      {/* Introduction to React props */}
       <p className="text-lg text-gray-800 mt-6">
         Props (short for "properties") are an essential part of React, enabling communication between components...
       </p>
 
+      {/* Section explaining Props */}
       <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">What are Props?</h2>
 
         <div className="text-gray-800 space-y-6 text-sm leading-relaxed">
           <p>
-            In React, props are the inputs to a component. They are passed from the parent component to the child component and are used to configure the child. Props are read-only, meaning they cannot be changed by the child component, but the child can use them to render UI or even pass them down further to other child components.
+            In React, <strong>props</strong> are the inputs to a component. They are passed from the parent component to the child component and are used to configure the child. Props are read-only, meaning they cannot be changed by the child component, but the child can use them to render UI or even pass them down further to other child components.
           </p>
 
+          {/* Explaining how props work in React */}
           <h3 className="text-xl font-semibold text-pink-300 mb-2">How Props Work</h3>
           <p>
             When you create a React component, you can define props that it can accept. These props are passed from the parent component and are available in the child component as an object. The child component can access and display or manipulate these props, but it cannot modify them.
@@ -71,11 +76,13 @@ function ChildComponent(props) {
             </code>
           </pre>
 
+          {/* Explaining how to access props in child components */}
           <h3 className="text-xl font-semibold text-pink-300 mb-2">Accessing Props in Child Components</h3>
           <p>
             Inside a child component, props are accessed through the <code>props</code> object. This object contains all the props that were passed down from the parent. You can access individual props using <code>props.propName</code>, where <code>propName</code> is the name of the prop.
           </p>
 
+          {/* Example of using state */}
           <h3 className="text-xl font-semibold text-pink-300 mb-2">State Example</h3>
           <p>
             Here's an example where we use state to store and change the value of the count when the button is clicked:
@@ -106,6 +113,7 @@ function Counter() {
             In this example, the component has state that tracks the count. The state is updated when the user clicks the button.
           </p>
 
+          {/* Destructuring props for simplicity */}
           <h3 className="text-xl font-semibold text-pink-300 mb-2">Destructuring Props for Simplicity</h3>
           <p>
             Instead of accessing props through <code>props.propName</code>, you can use JavaScript destructuring to extract individual props directly in the function parameters. This makes your code cleaner and easier to read.
@@ -128,6 +136,7 @@ function Counter() {
             In this example, instead of accessing props using <code>props.name</code> and <code>props.age</code>, we destructure the props directly in the function parameters, which simplifies the syntax.
           </p>
 
+          {/* Default Props */}
           <h3 className="text-xl font-semibold text-pink-300 mb-2">Default Props</h3>
           <p>
             Sometimes, you may want to provide default values for props if they are not passed from the parent. React allows you to define default values for props using the <code>defaultProps</code> property.
@@ -155,6 +164,7 @@ ChildComponent.defaultProps = {
             In this example, if the <code>name</code> and <code>age</code> props are not passed by the parent, the component will use the default values specified in <code>defaultProps</code>.
           </p>
 
+          {/* Prop Types */}
           <h3 className="text-xl font-semibold text-pink-300 mb-2">Prop Types: Validating Props</h3>
           <p>
             React allows you to validate the props that are passed to a component using the <code>PropTypes</code> library. This helps ensure that the correct type of data is passed, and it can be useful for debugging.
@@ -188,6 +198,7 @@ ChildComponent.propTypes = {
             In this example, we use <code>PropTypes.string</code> to validate that the <code>name</code> prop is a string and <code>PropTypes.number</code> to validate that the <code>age</code> prop is a number. The <code>isRequired</code> modifier makes the prop mandatory.
           </p>
 
+          {/* Passing functions as props */}
           <h3 className="text-xl font-semibold text-pink-300 mb-2">Passing Functions as Props</h3>
           <p>
             In React, you can also pass functions as props. This allows the parent component to pass down behavior that the child component can invoke. This is useful for handling events or modifying the parent component's state from a child.

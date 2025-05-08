@@ -2,8 +2,8 @@
 
 const FileSystemModulePage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-8 mx-auto text-black space-y-6">
+      <div className="bg-white  max-w-4xl p-8 rounded-lg shadow-xl space-y-6 ml-80">
         <h1 className="text-4xl font-bold">Node.js File System Module</h1>
         <p className="text-lg">
           The <code>fs</code> module in Node.js provides an API to interact with the file system of your operating system. It allows you to perform file operations such as reading, writing, updating, and deleting files. The <code>fs</code> module is asynchronous by default but also provides synchronous versions of these methods for blocking behavior.

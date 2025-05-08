@@ -6,7 +6,7 @@ function Reactdynamicroutes() {
   useReadingTracker('reactdynamicroutes'); // Custom hook to track user's reading progress (specific to your app setup)
 
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 max-w-4xl ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">React Dynamic Routing</h1>
       <p className="text-lg text-gray-800 mb-6">
         Dynamic Routing allows us to create routes that are flexible and can change based on the URL parameters. In React, this is typically handled using <span className="text-pink-500 font-semibold">React Router</span>. It helps in building applications where content varies based on the URL — like user profiles, blog posts, or product details.

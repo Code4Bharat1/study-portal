@@ -2,8 +2,8 @@
 
 const EventModulePage = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-8  mx-auto text-black space-y-6">
+      <div className="bg-white p-8 rounded-lg shadow-xl max-w-4xl space-y-6 ml-80">
         <h1 className="text-4xl font-bold">Node.js Event Module</h1>
         <p className="text-lg">
           The <code>events</code> module in Node.js is an essential feature for event-driven programming. It allows you to create, fire, and listen to custom events. It is a built-in module, so you don’t need to install anything separately to use it. This module helps to make Node.js applications more interactive and efficient by implementing event listeners and emitters.

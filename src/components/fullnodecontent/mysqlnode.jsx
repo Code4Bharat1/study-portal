@@ -71,8 +71,8 @@ const SQLWithNodePage = () => {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-8  mx-auto text-black space-y-6">
+      <div className="bg-white max-w-4xl p-8 rounded-lg shadow-xl space-y-6 ml-80">
         <h1 className="text-4xl font-bold">Using SQL with Node.js</h1>
         <p className="text-lg">
           Node.js can interact with SQL databases such as MySQL and PostgreSQL using third-party modules like <code>mysql2</code> or <code>pg</code>. These modules allow executing SQL queries, managing connections, and handling results.
@@ -157,30 +157,7 @@ connection.query('UPDATE users SET ? WHERE id = ?', [updatedUser, userId], (err,
           <li>Close the connection when done using <code>connection.end()</code>.</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold">Form to Insert a New User</h2>
-        <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Enter Name"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            className="w-full p-2 border rounded"
-          />
-          <input
-            type="number"
-            placeholder="Enter Age"
-            value={userAge}
-            onChange={(e) => setUserAge(e.target.value)}
-            className="w-full p-2 border rounded"
-          />
-          <button
-            onClick={insertUser}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Add User
-          </button>
-          <p>{message}</p>
-        </div>
+        
       </div>
     </div>
   );
