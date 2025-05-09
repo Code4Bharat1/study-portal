@@ -141,7 +141,7 @@ export default function ProductsPage({ products }: { products: Product[] }) {
       <ul>
         {products.map((product) => (
           <li key={product.id}>
-            {product.name} - ${product.price}
+            {product.name} - \${product.price}
           </li>
         ))}
       </ul>
@@ -174,7 +174,7 @@ export default async function ProductsPage() {
       <ul>
         {products.map((product) => (
           <li key={product.id}>
-            {product.name} - ${product.price}
+            {product.name} - \${product.price}
           </li>
         ))}
       </ul>

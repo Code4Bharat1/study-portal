@@ -1,12 +1,16 @@
-'use client';
+"use client";
 
-import useReadingTracker from "@/app/hook/useReadingTracker";
+import useReadingTracker from "@/components/useReadingTracker";
 
 export default function PhpHome() {
-  useReadingTracker('phphome');
+  useReadingTracker("phphome");
   return (
     <div className="p-6 ml-80">
-    <img src="/php.jpg" alt="MySQL" className="w-full max-w-8xl rounded-lg mb-6 mx-auto" />
+      <img
+        src="/php.jpg"
+        alt="MySQL"
+        className="w-full max-w-8xl rounded-lg mb-6 mx-auto"
+      />
     </div>
   );
 }

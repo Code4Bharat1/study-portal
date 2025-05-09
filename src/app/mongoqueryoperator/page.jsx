@@ -1,4 +1,4 @@
-import Collection from '@/components/Mongodbpage/Collection'
+
 import MongoDBSidebar from '@/components/Mongodbpage/MongoDBSidebar'
 import Queryoperator from '@/components/Mongodbpage/Queryoperator'
 import React from 'react'
