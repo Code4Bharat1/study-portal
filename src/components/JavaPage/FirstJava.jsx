@@ -117,7 +117,7 @@ export default function JavaPage() {
                   shadow: "shadow-sm hover:shadow-md"
                 },
                 { 
-                  href: "/projects?tech=java", 
+                  href: "/firstJava", 
                   text: "View Projects", 
                   bg: "bg-gray-900 hover:bg-gray-800",
                   textColor: "text-white",

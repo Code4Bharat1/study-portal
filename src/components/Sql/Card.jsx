@@ -122,7 +122,7 @@ export default function SQLPage() {
                   shadow: 'shadow-sm hover:shadow-md'
                 },
                 { 
-                  href: '/projects?tech=sql', 
+                  href: '/sql', 
                   text: 'View Projects', 
                   bg: 'bg-gray-900 hover:bg-gray-800',
                   textColor: 'text-white',
