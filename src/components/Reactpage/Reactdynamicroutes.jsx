@@ -7,20 +7,21 @@ function Reactdynamicroutes() {
 
   return (
     <div className="p-6 max-w-4xl ml-80">
-      <h1 className="text-3xl text-gray-800 font-bold mb-4">
+      
+
+      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
+        {/* Setting up Dynamic Routes */}
+        <h1 className="text-3xl text-gray-800 font-bold mb-4">
         React Dynamic Routing
       </h1>
       <p className="text-lg text-gray-800 mb-6">
         Dynamic Routing allows us to create routes that are flexible and can
         change based on the URL parameters. In React, this is typically handled
-        using <span className="text-pink-500 font-semibold">React Router</span>.
+        using <span className="text-pink-700 font-semibold">React Router</span>.
         It helps in building applications where content varies based on the URL
         — like user profiles, blog posts, or product details.
       </p>
-
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
-        {/* Setting up Dynamic Routes */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           1. Setting Up Dynamic Routes
         </h2>
         <p className="text-gray-800 mb-4">
@@ -29,7 +30,7 @@ function Reactdynamicroutes() {
           placeholder for actual values, like user IDs or product slugs.
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserProfile from './UserProfile';
 
@@ -52,7 +53,7 @@ function App() {
         </p>
 
         {/* Accessing Route Parameters */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           2. Accessing Route Parameters
         </h2>
         <p className="text-gray-800 mb-4">
@@ -61,7 +62,7 @@ function App() {
           <code>react-router-dom</code>.
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { useParams } from 'react-router-dom';
 
 function UserProfile() {
@@ -79,7 +80,7 @@ export default UserProfile;`}
         </p>
 
         {/* Nested Dynamic Routes */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           3. Nested Dynamic Routes
         </h2>
         <p className="text-gray-800 mb-4">
@@ -88,7 +89,7 @@ export default UserProfile;`}
           activity logs.
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`<Route path="/user/:id" element={<UserProfile />}>
   <Route path="settings" element={<UserSettings />} />
 </Route>`}
@@ -101,7 +102,7 @@ export default UserProfile;`}
         </p>
 
         {/* Dynamic Route Navigation */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           4. Dynamic Navigation using Link
         </h2>
         <p className="text-gray-800 mb-4">
@@ -110,7 +111,7 @@ export default UserProfile;`}
           or props.
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { Link } from 'react-router-dom';
 
 <Link to="/user/42">View User 42</Link>`}
@@ -123,7 +124,7 @@ export default UserProfile;`}
         </p>
 
         {/* Query Parameters */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           5. Handling Query Parameters
         </h2>
         <p className="text-gray-800 mb-4">
@@ -132,7 +133,7 @@ export default UserProfile;`}
           but are still useful for filtering, sorting, etc.
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { useLocation } from 'react-router-dom';
 
 function SearchPage() {
@@ -150,7 +151,7 @@ function SearchPage() {
         </p>
 
         {/* Real-World Example */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           6. Real-World Example: Blog Posts
         </h2>
         <p className="text-gray-800 mb-4">
@@ -174,12 +175,12 @@ function SearchPage() {
         </p>
 
         {/* Summary */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Summary of Dynamic Routes
         </h2>
         <ul className="list-disc list-inside text-gray-800 space-y-2 mb-6">
           <li>
-            Use <span className="text-pink-500 font-semibold">params</span> in
+            Use <span className="text-pink-700 font-semibold">params</span> in
             routes to capture dynamic values like IDs or slugs.
           </li>
           <li>
@@ -187,21 +188,19 @@ function SearchPage() {
             access to those values in the component.
           </li>
           <li>
-            <span className="text-pink-500 font-semibold">Link</span> and{" "}
-            <span className="text-pink-500 font-semibold">navigate</span> allow
+            <span className="text-pink-700 font-semibold">Link</span> and{" "}
+            <span className="text-pink-700 font-semibold">navigate</span> allow
             you to programmatically navigate with dynamic URLs.
           </li>
           <li>
-            Use <span className="text-pink-500 font-semibold">useLocation</span>{" "}
+            Use <span className="text-pink-700 font-semibold">useLocation</span>{" "}
             and{" "}
-            <span className="text-pink-500 font-semibold">URLSearchParams</span>{" "}
+            <span className="text-pink-700 font-semibold">URLSearchParams</span>{" "}
             to extract and use query parameters from the URL.
           </li>
         </ul>
 
-        <button className="mt-8 bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Next: Dynamic Routes with Data Fetching →
-        </button>
+     
       </div>
     </div>
   );

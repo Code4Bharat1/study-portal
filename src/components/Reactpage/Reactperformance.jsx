@@ -5,8 +5,12 @@ import React from "react";
 function Reactperformance() {
   useReadingTracker("reactperformance");
   return (
-    <div className="p-6 ml-70">
-      <h1 className="text-3xl text-gray-800 font-bold mb-4">
+    <div className="p-6 ml-80">
+      
+
+      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
+        {/* Memoization */}
+        <h1 className="text-3xl text-gray-800 font-bold mb-4">
         React Performance Optimization
       </h1>
       <p className="text-lg text-gray-800 mb-6">
@@ -14,10 +18,7 @@ function Reactperformance() {
         applications. This page covers best practices and tools to improve the
         speed and responsiveness of your React apps.
       </p>
-
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
-        {/* Memoization */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           1. Memoization with React.memo
         </h2>
         <p className="text-gray-800 mb-4">
@@ -25,7 +26,7 @@ function Reactperformance() {
           functional components:
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-4">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`const MyComponent = React.memo(function MyComponent(props) {
   return <div>{props.value}</div>;
 });`}
@@ -43,7 +44,7 @@ function Reactperformance() {
         </details>
 
         {/* useCallback */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           2. useCallback Hook
         </h2>
         <p className="text-gray-800 mb-4">
@@ -51,7 +52,7 @@ function Reactperformance() {
           on every render:
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-4">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`const handleClick = useCallback(() => {
   console.log("Clicked");
 }, []);`}
@@ -69,7 +70,7 @@ function Reactperformance() {
         </details>
 
         {/* useMemo */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           3. useMemo Hook
         </h2>
         <p className="text-gray-800 mb-4">
@@ -77,7 +78,7 @@ function Reactperformance() {
           expensive recalculations:
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-4">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`const expensiveValue = useMemo(() => {
   return computeExpensiveValue(input);
 }, [input]);`}
@@ -94,7 +95,7 @@ function Reactperformance() {
         </details>
 
         {/* Lazy Loading */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           4. Code Splitting & Lazy Loading
         </h2>
         <p className="text-gray-800 mb-4">
@@ -102,7 +103,7 @@ function Reactperformance() {
           <code>Suspense</code> to improve load time:
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-4">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`const LazyComponent = React.lazy(() => import('./LazyComponent'));
 
 function App() {
@@ -125,7 +126,7 @@ function App() {
         </details>
 
         {/* Windowing */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           5. Windowing/Lazy List Rendering
         </h2>
         <p className="text-gray-800 mb-4">
@@ -133,7 +134,7 @@ function App() {
           <code>react-virtualized</code> to render only visible list items:
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-4">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { FixedSizeList as List } from 'react-window';
 
 <List
@@ -157,7 +158,7 @@ function App() {
         </details>
 
         {/* Avoid Creating Functions Inside JSX */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           6. Avoid Creating Functions Inside JSX
         </h2>
         <p className="text-gray-800 mb-4">
@@ -176,7 +177,7 @@ function App() {
         </details>
 
         {/* Avoid Prop Drilling */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           7. Avoid Prop Drilling
         </h2>
         <p className="text-gray-800 mb-4">
@@ -194,7 +195,7 @@ function App() {
         </details>
 
         {/* Performance Monitoring */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           8. Monitoring Performance
         </h2>
         <p className="text-gray-800 mb-4">
@@ -212,14 +213,14 @@ function App() {
         </details>
 
         {/* Production Builds */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           9. Use Production Build
         </h2>
         <p className="text-gray-800 mb-4">
           Always build your app for production using:
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-4">
-          <code className="text-pink-500">npm run build</code>
+          <code className="text-pink-700">npm run build</code>
         </pre>
         <details className="mb-6 text-gray-700">
           <summary className="cursor-pointer font-medium">
@@ -232,7 +233,7 @@ function App() {
         </details>
 
         {/* Summary */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">Summary</h2>
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">Summary</h2>
         <ul className="list-disc list-inside text-gray-800 space-y-2 mb-6">
           <li>
             Use <code>React.memo</code>, <code>useCallback</code>, and{" "}
@@ -247,9 +248,7 @@ function App() {
           <li>Avoid unnecessary re-renders and prop drilling</li>
         </ul>
 
-        <button className="mt-8 bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Next: React DevTools →
-        </button>
+       
       </div>
     </div>
   );
