@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaClock, FaSignOutAlt, FaTrophy, FaChartLine } from 'react-icons/fa';
+import { FaClock, FaSignOutAlt, FaTrophy, FaChartLine, FaInfoCircle, FaCrown, FaStar } from 'react-icons/fa';
+import { GiTrophyCup } from 'react-icons/gi';
 import Confetti from 'react-confetti';
 
 export default function ReactQuizPage() {
@@ -20,44 +21,55 @@ export default function ReactQuizPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [difficulty, setDifficulty] = useState('basic');
+  const [streak, setStreak] = useState(0);
+  const [maxStreak, setMaxStreak] = useState(0);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const timerRef = useRef(null);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://yourwebsite.com';
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
-    const email = user.email || '';
-    if (!token || !email) {
+    if (typeof window === 'undefined') {
+      setError('Local storage is not available');
       router.push('/quizz');
       return;
     }
 
-    // Determine difficulty based on login count
+    setDimensions({ width: window.innerWidth, height: window.innerHeight });
+
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
+    const email = user.email || '';
+    if (!token || !email) {
+      setError('Authentication required');
+      router.push('/quizz');
+      return;
+    }
+
     const loginCount = parseInt(localStorage.getItem(`loginCount_${email}`) || '0', 10);
     let difficultyLevel = 'basic';
-    if (loginCount >= 6 && loginCount <= 10) {
-      difficultyLevel = 'intermediate';
-    } else if (loginCount > 10) {
-      difficultyLevel = 'hard';
-    }
+    if (loginCount >= 6 && loginCount <= 10) difficultyLevel = 'intermediate';
+    else if (loginCount > 10) difficultyLevel = 'hard';
     setDifficulty(difficultyLevel);
 
-    const fetchQuestions = async () => {
+    const fetchQuestions = async (retries = 3) => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/api/questions/${quizType}?difficulty=${difficultyLevel}`, {
-          headers: {
-            'x-auth-token': token,
-          },
+        const response = await fetch(`${API_URL}/api/questions/${quizType}?difficulty=${difficultyLevel}`, {
+          headers: { 'x-auth-token': token },
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch questions');
-        }
-
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
         const data = await response.json();
+        if (!Array.isArray(data) || !data.every(validateQuestion)) {
+          throw new Error('Invalid question data');
+        }
         setQuestions(data);
         setLoading(false);
       } catch (err) {
-        setError(err.message);
+        if (retries > 0) return fetchQuestions(retries - 1);
+        setError(err.message || 'Failed to load questions');
         setLoading(false);
       }
     };
@@ -65,96 +77,92 @@ export default function ReactQuizPage() {
     fetchQuestions();
   }, [router, quizType]);
 
+  const validateQuestion = (question) => {
+    const isValid =
+      question &&
+      typeof question.question === 'string' &&
+      Array.isArray(question.options) &&
+      question.options.length > 0 &&
+      Number.isInteger(Number(question.correctAnswer)) &&
+      Number(question.correctAnswer) >= 0 &&
+      Number(question.correctAnswer) < question.options.length;
+    return isValid;
+  };
+
   useEffect(() => {
-    if (!quizCompleted && !selectedOption && !isTimeUp && questions.length > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            setIsTimeUp(true);
+    if (quizCompleted || selectedOption || isTimeUp || questions.length === 0) return;
 
-            const correctAnswerIndex = Number(questions[currentQuestion].correctAnswer);
-            const options = questions[currentQuestion].options;
-            if (correctAnswerIndex < 0 || correctAnswerIndex >= options.length) {
-              console.error('Time-up: Correct answer index is out of bounds:', correctAnswerIndex);
-              setFeedback({ 
-                isCorrect: false, 
-                correctAnswer: 'Error: Invalid correct answer index' 
-              });
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current);
+          setIsTimeUp(true);
+          const correctAnswerIndex = Number(questions[currentQuestion].correctAnswer);
+          const options = questions[currentQuestion].options;
+          setFeedback({
+            isCorrect: false,
+            correctAnswer: options[correctAnswerIndex] || 'Unknown',
+            explanation: questions[currentQuestion].explanation,
+          });
+          playSound('/incorrect.mp3');
+          setTimeout(() => {
+            if (currentQuestion + 1 < questions.length) {
+              setCurrentQuestion(currentQuestion + 1);
+              setSelectedOption(null);
+              setFeedback(null);
+              setTimeLeft(30);
+              setIsTimeUp(false);
+              setStreak(0);
+              setShowExplanation(false);
             } else {
-              setFeedback({ 
-                isCorrect: false, 
-                correctAnswer: options[correctAnswerIndex] 
-              });
+              setQuizCompleted(true);
+              const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
+              const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+              scores[user.email] = scores[user.email] || {};
+              scores[user.email][quizType] = {
+                score,
+                difficulty,
+                completedAt: new Date().toISOString(),
+                maxStreak,
+              };
+              localStorage.setItem('quizScores', JSON.stringify(scores));
             }
+          }, 2000);
+          return 30;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
-            setTimeout(() => {
-              if (currentQuestion + 1 < questions.length) {
-                setCurrentQuestion(currentQuestion + 1);
-                setSelectedOption(null);
-                setFeedback(null);
-                setTimeLeft(30);
-                setIsTimeUp(false);
-              } else {
-                setQuizCompleted(true);
-                const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
-                const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
-                scores[user.email] = scores[user.email] || {};
-                scores[user.email][quizType] = { 
-                  score,
-                  difficulty,
-                  completedAt: new Date().toISOString()
-                };
-                localStorage.setItem('quizScores', JSON.stringify(scores));
-              }
-            }, 1500);
-            return 30;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [currentQuestion, selectedOption, quizCompleted, isTimeUp, questions, score, difficulty]);
+    return () => clearInterval(timerRef.current);
+  }, [currentQuestion, selectedOption, quizCompleted, isTimeUp, questions, score, difficulty, maxStreak]);
+
+  const playSound = (path) => {
+    const audio = new Audio(path);
+    audio.play().catch((err) => console.warn(`Audio playback failed for ${path}:`, err));
+  };
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
-    
     const selectedIndex = questions[currentQuestion].options.indexOf(option);
-    
-    if (selectedIndex === -1) {
-      console.error('Selected option not found in options array:', option);
-      setFeedback({ 
-        isCorrect: false, 
-        correctAnswer: questions[currentQuestion].options[questions[currentQuestion].correctAnswer] 
-      });
-      new Audio('/incorrect.mp3').play().catch(() => {});
-      return;
-    }
-
     const correctAnswerIndex = Number(questions[currentQuestion].correctAnswer);
-    if (correctAnswerIndex < 0 || correctAnswerIndex >= questions[currentQuestion].options.length) {
-      console.error('Correct answer index is out of bounds:', correctAnswerIndex);
-      setFeedback({ 
-        isCorrect: false, 
-        correctAnswer: 'Error: Invalid correct answer index' 
-      });
-      new Audio('/incorrect.mp3').play().catch(() => {});
-      return;
-    }
-
     const isCorrect = selectedIndex === correctAnswerIndex;
-    
-    setFeedback({ 
-      isCorrect, 
-      correctAnswer: questions[currentQuestion].options[correctAnswerIndex] 
+
+    setFeedback({
+      isCorrect,
+      correctAnswer: questions[currentQuestion].options[correctAnswerIndex] || 'Unknown',
+      explanation: questions[currentQuestion].explanation,
     });
-    
+
     if (isCorrect) {
       setScore(score + 1);
-      new Audio('/correct.mp3').play().catch(() => {});
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      if (newStreak > maxStreak) setMaxStreak(newStreak);
+      playSound('/correct.mp3');
     } else {
-      new Audio('/incorrect.mp3').play().catch(() => {});
+      setStreak(0);
+      playSound('/incorrect.mp3');
     }
 
     setTimeout(() => {
@@ -163,19 +171,21 @@ export default function ReactQuizPage() {
         setSelectedOption(null);
         setFeedback(null);
         setTimeLeft(30);
+        setShowExplanation(false);
       } else {
         setQuizCompleted(true);
         const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
         const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
         scores[user.email] = scores[user.email] || {};
-        scores[user.email][quizType] = { 
+        scores[user.email][quizType] = {
           score: score + (isCorrect ? 1 : 0),
           difficulty,
-          completedAt: new Date().toISOString()
+          completedAt: new Date().toISOString(),
+          maxStreak: Math.max(maxStreak, isCorrect ? streak + 1 : streak),
         };
         localStorage.setItem('quizScores', JSON.stringify(scores));
       }
-    }, 1500);
+    }, 2000);
   };
 
   const handleContinue = () => router.push('/quizz/quizzes');
@@ -201,74 +211,181 @@ export default function ReactQuizPage() {
 
   const getCompletionCard = () => {
     const totalQuestions = questions.length;
-    const percentage = (score / totalQuestions) * 100;
+    const percentage = Math.round((score / totalQuestions) * 100);
+    const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
+    const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+    const userScores = scores[user.email] || {};
+    const previousScore = userScores[quizType]?.score || 0;
+    const scoreImprovement = score - previousScore;
+    const starRating = Math.min(5, Math.max(1, Math.ceil(percentage / 20)));
 
-    let title, message, bgColor, textColor, iconColor;
-    if (percentage >= 80) {
-      title = 'Outstanding Performance!';
-      message = 'You aced the React quiz! Your skills are top-notch!';
-      bgColor = 'bg-gradient-to-br from-green-500 to-emerald-600';
-      textColor = 'text-white';
-      iconColor = 'text-yellow-300';
-    } else if (percentage >= 50) {
+    let title, message, badge;
+    if (percentage >= 90) {
+      title = 'React Master!';
+      message = 'You absolutely crushed it! Your React knowledge is exceptional.';
+      badge = 'Expert';
+    } else if (percentage >= 75) {
       title = 'Great Job!';
-      message = 'Solid performance! Keep practicing to reach the top!';
-      bgColor = 'bg-gradient-to-br from-blue-500 to-indigo-600';
-      textColor = 'text-white';
-      iconColor = 'text-yellow-300';
+      message = 'Solid performance! You clearly understand React well.';
+      badge = 'Proficient';
+    } else if (percentage >= 50) {
+      title = 'Good Effort!';
+      message = "You're getting there! Review the questions you missed to improve.";
+      badge = 'Intermediate';
     } else {
-      title = 'Keep Going!';
-      message = 'You’ve got this! Try again to improve your score!';
-      bgColor = 'bg-gradient-to-br from-red-500 to-pink-600';
-      textColor = 'text-white';
-      iconColor = 'text-yellow-300';
+      title = 'Keep Practicing!';
+      message = "Don't worry! React takes time to master. Try again!";
+      badge = 'Beginner';
     }
 
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className={`${bgColor} rounded-3xl shadow-2xl p-10 max-w-lg w-full text-center border border-white/20 ${textColor}`}
+        transition={{ duration: 0.5, type: 'spring' }}
+        className="bg-blue-400 rounded-2xl shadow-lg p-6 max-w-lg w-full text-center text-white relative"
       >
-        <h1 className={`text-4xl font-extrabold mb-4 drop-shadow-md flex items-center justify-center gap-2`}>
-          <FaTrophy className={iconColor} /> {title}
-        </h1>
-        <p className="text-2xl font-medium mb-2 drop-shadow-md">
-          Your Score: <motion.span
-            initial={{ scale: 1 }}
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 0.5 }}
-            className={`font-bold ${iconColor}`}
-          >{score}</motion.span> / {totalQuestions}
-        </p>
-        <p className="text-md font-medium mb-6 drop-shadow-md flex items-center justify-center gap-2">
-          <FaChartLine className={getDifficultyColor(difficulty)} />
-          <span className={`${getDifficultyColor(difficulty)} capitalize`}>
-            {difficulty} Difficulty
-          </span>
-        </p>
-        <p className="text-lg mb-6">{message}</p>
-        <div className="flex gap-4 justify-center">
+        {percentage >= 75 && (
+          <Confetti
+            width={dimensions.width}
+            height={dimensions.height}
+            recycle={false}
+            numberOfPieces={percentage >= 90 ? 600 : 300}
+            colors={['#3B82F6', '#60A5FA', '#DBEAFE', '#BFDBFE']}
+          />
+        )}
+        <div className="mb-6">
+          <motion.div
+            initial={{ scale: 0, rotate: -20 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: 0.2, type: 'spring' }}
+          >
+            <GiTrophyCup className="text-5xl text-white mx-auto" />
+          </motion.div>
+          <h1 className="text-3xl font-bold mt-4">{title}</h1>
+          <p className="text-blue-100 mt-2">{message}</p>
+          <div className="mt-3 inline-block px-3 py-1 bg-blue-300 text-white rounded-full text-sm font-semibold">
+            {badge}
+          </div>
+        </div>
+        <div className="mb-6">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: 'spring' }}
+            className="text-4xl font-bold"
+          >
+            {score}<span className="text-xl">/{totalQuestions}</span>
+          </motion.div>
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${percentage}%` }}
+            transition={{ delay: 0.4, duration: 1, ease: 'easeOut' }}
+            className="h-2 bg-white rounded-full mx-auto mt-2 max-w-xs"
+          />
+          <div className="text-xl font-semibold mt-2">{percentage}%</div>
+          <motion.div
+            className="flex justify-center gap-1 mt-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            {[...Array(5)].map((_, i) => (
+              <FaStar
+                key={i}
+                className={`text-xl ${i < starRating ? 'text-white fill-white' : 'text-blue-300/50'}`}
+              />
+            ))}
+          </motion.div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="bg-blue-300/30 p-3 rounded-lg"
+          >
+            <div className="text-sm text-blue-100">Best Streak</div>
+            <div className="text-lg font-semibold flex items-center justify-center gap-1">
+              <FaCrown className="text-white" /> {maxStreak}
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="bg-blue-300/30 p-3 rounded-lg"
+          >
+            <div className="text-sm text-blue-100">Difficulty</div>
+            <div className="text-lg font-semibold capitalize">{difficulty}</div>
+          </motion.div>
+          {previousScore > 0 && (
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+                className="bg-blue-300/30 p-3 rounded-lg"
+              >
+                <div className="text-sm text-blue-100">Previous Score</div>
+                <div className="text-lg font-semibold">{previousScore}</div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9 }}
+                className="bg-blue-300/30 p-3 rounded-lg"
+              >
+                <div className="text-sm text-blue-100">Improvement</div>
+                <div
+                  className={`text-lg font-semibold ${
+                    scoreImprovement > 0 ? 'text-green-200' : scoreImprovement < 0 ? 'text-red-200' : ''
+                  }`}
+                >
+                  {scoreImprovement > 0 ? '+' : ''}{scoreImprovement}
+                </div>
+              </motion.div>
+            </>
+          )}
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleStop}
-            className="relative overflow-hidden bg-white text-gray-800 px-8 py-3 rounded-full font-semibold shadow-lg transition-all duration-300"
+            className="bg-white text-blue-400 px-6 py-2 rounded-full font-semibold shadow-md hover:bg-blue-50 transition-colors flex-1"
+            aria-label="View quiz results"
           >
-            <span className="relative z-10">View Results</span>
-            <span className="absolute inset-0 bg-gray-200 opacity-0 hover:opacity-20 transition-opacity duration-300" />
+            <span className="flex items-center justify-center gap-2">
+              <FaChartLine /> View Results
+            </span>
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleContinue}
-            className="relative overflow-hidden bg-white text-gray-800 px-8 py-3 rounded-full font-semibold shadow-lg transition-all duration-300"
+            className="bg-white text-blue-400 px-6 py-2 rounded-full font-semibold shadow-md hover:bg-blue-50 transition-colors flex-1"
+            aria-label="Try another quiz"
           >
-            <span className="relative z-10">Try Another Quiz</span>
-            <span className="absolute inset-0 bg-gray-200 opacity-0 hover:opacity-20 transition-opacity duration-300" />
+            <span className="flex items-center justify-center gap-2">
+              <FaTrophy /> Try Another Quiz
+            </span>
           </motion.button>
         </div>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="mt-4 text-blue-100 text-sm font-medium hover:text-white transition-colors"
+          onClick={() => {
+            navigator.clipboard.writeText(
+              `I scored ${score}/${totalQuestions} (${percentage}%) on the React ${difficulty} quiz! Try it yourself at ${WEBSITE_URL}`
+            ).catch((err) => console.error('Clipboard copy failed:', err));
+            alert('Results copied to clipboard!');
+          }}
+          aria-label="Share quiz results"
+        >
+          Share your results
+        </motion.button>
       </motion.div>
     );
   };
@@ -276,7 +393,12 @@ export default function ReactQuizPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 flex items-center justify-center">
-        <div className="text-2xl font-semibold text-indigo-600">Loading questions...</div>
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+          className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full"
+          aria-label="Loading questions"
+        />
       </div>
     );
   }
@@ -284,16 +406,24 @@ export default function ReactQuizPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl shadow-lg">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full"
+        >
           <h2 className="text-2xl font-semibold text-red-600 mb-4">Error</h2>
           <p className="text-gray-700 mb-6">{error}</p>
-          <button 
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => router.push('/quizz/quizzes')}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            className="w-full px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            aria-label="Back to quizzes"
           >
             Back to Quizzes
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     );
   }
@@ -301,7 +431,6 @@ export default function ReactQuizPage() {
   if (quizCompleted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-800 flex items-center justify-center p-6 bg-[url('/pattern.svg')] bg-opacity-10">
-        <Confetti width={typeof window !== 'undefined' ? window.innerWidth : 0} height={typeof window !== 'undefined' ? window.innerHeight : 0} recycle={false} numberOfPieces={200} />
         {getCompletionCard()}
       </div>
     );
@@ -343,16 +472,35 @@ export default function ReactQuizPage() {
       >
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
           <div className="flex items-center mb-4 sm:mb-0">
-            <img src="/react.png" alt="React Logo" className="h-14 w-auto mr-4" />
+            <motion.img
+              src="/react.png"
+              alt="React Logo"
+              className="h-14 w-auto mr-4"
+              whileHover={{ rotate: [0, -10, 10, 0] }}
+              transition={{ duration: 0.5 }}
+            />
             <div>
               <h1 className="text-4xl font-extrabold text-indigo-700">React Quiz</h1>
-              <div className={`inline-flex items-center mt-1 px-3 py-1 rounded-full text-sm font-medium ${getDifficultyBg(difficulty)} ${getDifficultyColor(difficulty)}`}>
+              <div
+                className={`inline-flex items-center mt-1 px-3 py-1 rounded-full text-sm font-medium ${getDifficultyBg(
+                  difficulty
+                )} ${getDifficultyColor(difficulty)}`}
+              >
                 <FaChartLine className="mr-1" />
                 <span className="capitalize">{difficulty} Difficulty</span>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-6">
+            {streak > 1 && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="flex items-center bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium"
+              >
+                <FaCrown className="mr-1" /> Streak: {streak}
+              </motion.div>
+            )}
             <motion.div
               className="text-gray-700 font-semibold"
               initial={{ scale: 1 }}
@@ -365,17 +513,17 @@ export default function ReactQuizPage() {
               Question {currentQuestion + 1}/{questions.length}
             </span>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={handleStop}
               className="text-red-500 hover:text-red-600 transition-colors"
               title="Quit Quiz"
+              aria-label="Quit quiz"
             >
               <FaSignOutAlt className="text-xl" />
             </motion.button>
           </div>
         </div>
-
         <div className="w-full bg-gray-200/50 rounded-full h-3 mb-8">
           <motion.div
             className="bg-gradient-to-r from-indigo-500 to-indigo-700 h-3 rounded-full"
@@ -384,7 +532,6 @@ export default function ReactQuizPage() {
             transition={{ duration: 0.5 }}
           />
         </div>
-
         <div className="text-center mb-8 relative">
           <svg className="w-20 h-20 mx-auto" viewBox="0 0 36 36">
             <path
@@ -400,14 +547,15 @@ export default function ReactQuizPage() {
             />
           </svg>
           <motion.span
-            className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-semibold ${timeLeft <= 10 ? 'text-red-500' : 'text-indigo-700'}`}
-            animate={{ scale: timeLeft <= 10 ? [1, 1.1, 1] : 1 }}
+            className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-semibold ${
+              timeLeft <= 10 ? 'text-red-500' : 'text-indigo-700'
+            }`}
+            animate={{ scale: timeLeft <= 10 ? [1, 1.2, 1] : 1 }}
             transition={{ repeat: timeLeft <= 10 ? Infinity : 0, duration: 0.5 }}
           >
             {timeLeft}s
           </motion.span>
         </div>
-
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestion}
@@ -421,17 +569,16 @@ export default function ReactQuizPage() {
               <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
                 {questions[currentQuestion].category}
               </span>
-              <h2 className="text-3xl font-semibold text-gray-900">
-                {questions[currentQuestion].question}
-              </h2>
+              <h2 className="text-3xl font-semibold text-gray-900">{questions[currentQuestion].question}</h2>
             </div>
             <div className="grid gap-5">
               {questions[currentQuestion].options.map((option, i) => (
                 <motion.button
                   key={i}
-                  whileHover={{ scale: 1.02, boxShadow: "0 4px 15px rgba(0,0,0,0.1)" }}
+                  whileHover={{ scale: 1.02, boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleOptionSelect(option)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleOptionSelect(option)}
                   disabled={selectedOption !== null || isTimeUp}
                   className={`relative overflow-hidden w-full px-6 py-5 text-left rounded-2xl border-2 transition-all duration-300 text-lg font-medium ${
                     selectedOption === option
@@ -440,16 +587,65 @@ export default function ReactQuizPage() {
                         : 'bg-gradient-to-r from-red-100 to-red-200 border-red-500 text-red-800'
                       : 'bg-white/50 border-indigo-200 text-gray-800 hover:bg-indigo-100/50 hover:border-indigo-300'
                   } shadow-md backdrop-blur-sm`}
+                  aria-label={`Select option ${option}`}
+                  role="button"
+                  tabIndex={0}
                 >
-                  <span className="relative z-10">{option}</span>
+                  <span className="relative z-10 flex items-center">
+                    {selectedOption === option && (
+                      <motion.span
+                        className="mr-3"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {feedback?.isCorrect ? '✅' : '❌'}
+                      </motion.span>
+                    )}
+                    {option}
+                  </span>
                   <span className="absolute inset-0 bg-indigo-700 opacity-0 hover:opacity-20 transition-opacity duration-300" />
                 </motion.button>
               ))}
             </div>
           </motion.div>
         </AnimatePresence>
-
         <AnimatePresence>
+          {feedback && feedback.explanation && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <motion.div
+                className={`mt-4 p-4 rounded-lg ${
+                  showExplanation ? 'bg-indigo-50 border border-indigo-200' : 'bg-gray-50 border border-gray-200 cursor-pointer'
+                }`}
+                onClick={() => !showExplanation && setShowExplanation(true)}
+                onKeyDown={(e) => e.key === 'Enter' && !showExplanation && setShowExplanation(true)}
+                tabIndex={0}
+                role="button"
+                aria-label={showExplanation ? 'Explanation' : 'Show explanation'}
+              >
+                <div className="flex items-center text-indigo-700 font-medium">
+                  <FaInfoCircle className="mr-2" />
+                  {showExplanation ? 'Explanation' : 'Show Explanation'}
+                </div>
+                {showExplanation && (
+                  <motion.p
+                    className="mt-2 text-gray-700"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    {feedback.explanation}
+                  </motion.p>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
           {isTimeUp && (
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.8 }}
@@ -469,12 +665,16 @@ export default function ReactQuizPage() {
               exit={{ opacity: 0, y: -20, scale: 0.8 }}
               transition={{ duration: 0.3, type: 'spring', stiffness: 100 }}
               className={`mt-6 px-6 py-4 rounded-xl font-semibold text-center shadow-md ${
-                feedback.isCorrect
-                  ? 'bg-green-100/80 text-green-800'
-                  : 'bg-red-100/80 text-red-800'
+                feedback.isCorrect ? 'bg-green-100/80 text-green-800' : 'bg-red-100/80 text-red-800'
               } backdrop-blur-sm`}
             >
-              {feedback.isCorrect ? '✅ Correct!' : `❌ Incorrect. Correct answer: ${feedback.correctAnswer}`}
+              {feedback.isCorrect ? (
+                <div className="flex items-center justify-center gap-2">
+                  ✅ Correct! {streak > 1 && <span className="text-yellow-600">🔥 Streak: {streak}</span>}
+                </div>
+              ) : (
+                `❌ Incorrect. Correct answer: ${feedback.correctAnswer}`
+              )}
             </motion.div>
           )}
         </AnimatePresence>
