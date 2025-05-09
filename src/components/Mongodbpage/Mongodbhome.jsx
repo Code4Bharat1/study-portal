@@ -1,38 +1,47 @@
-
 "use client";
-import useReadingTracker from "@/app/hook/useReadingTracker";
+import useReadingTracker from "@/components/useReadingTracker";
 import Link from "next/link";
 
 const Mongodbhome = () => {
-  useReadingTracker('indextypemongo');
+  useReadingTracker("indextypemongo");
   return (
     <>
       <div className="p-6 ml-80">
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h1 className="text-3xl font-semibold text-gray-800">MongoDB Tutorial</h1>
+          <h1 className="text-3xl font-semibold text-gray-800">
+            MongoDB Tutorial
+          </h1>
 
           {/* Introduction Section */}
           <p className="mt-4 text-lg text-gray-600">
-            MongoDB is a document database. It stores data in a type of JSON format called BSON.
-            MongoDB provides a flexible and scalable approach to managing data.
+            MongoDB is a document database. It stores data in a type of JSON
+            format called BSON. MongoDB provides a flexible and scalable
+            approach to managing data.
           </p>
 
           <p className="mt-4 text-lg text-gray-600">
             If you are unfamiliar with JSON, check out our{" "}
-            <Link href="/json" className="text-blue-500">JSON tutorial</Link>.
+            <Link href="/json" className="text-blue-500">
+              JSON tutorial
+            </Link>
+            .
           </p>
 
           <p className="mt-4 text-lg text-gray-600">
-            A record in MongoDB is a document, which is a data structure composed of key-value pairs
-            similar to the structure of JSON objects. MongoDB stores documents in collections.
+            A record in MongoDB is a document, which is a data structure
+            composed of key-value pairs similar to the structure of JSON
+            objects. MongoDB stores documents in collections.
           </p>
 
           {/* Why MongoDB Section */}
           <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Why MongoDB?</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Why MongoDB?
+            </h2>
             <p className="mt-4 text-lg text-gray-600">
-              MongoDB is widely used due to its high scalability, flexibility, and ease of use.
-              Here are some key reasons why MongoDB is preferred by developers:
+              MongoDB is widely used due to its high scalability, flexibility,
+              and ease of use. Here are some key reasons why MongoDB is
+              preferred by developers:
             </p>
             <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
               <li>Document-based storage for unstructured data.</li>
@@ -45,7 +54,9 @@ const Mongodbhome = () => {
 
           {/* Example Document Section */}
           <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Example MongoDB Document</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Example MongoDB Document
+            </h2>
             <p className="mt-4 text-lg text-gray-600">
               Here's an example of a document in MongoDB:
             </p>
@@ -63,52 +74,104 @@ const Mongodbhome = () => {
                 `}
               </pre>
             </div>
-            <p className="mt-4 text-lg text-gray-600">
-              In this example:
-            </p>
+            <p className="mt-4 text-lg text-gray-600">In this example:</p>
             <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
-              <li><strong>title</strong> is a string.</li>
-              <li><strong>body</strong> is a string.</li>
-              <li><strong>category</strong> is a string.</li>
-              <li><strong>likes</strong> is a number.</li>
-              <li><strong>tags</strong> is an array of strings.</li>
-              <li><strong>date</strong> stores the current date and time.</li>
+              <li>
+                <strong>title</strong> is a string.
+              </li>
+              <li>
+                <strong>body</strong> is a string.
+              </li>
+              <li>
+                <strong>category</strong> is a string.
+              </li>
+              <li>
+                <strong>likes</strong> is a number.
+              </li>
+              <li>
+                <strong>tags</strong> is an array of strings.
+              </li>
+              <li>
+                <strong>date</strong> stores the current date and time.
+              </li>
             </ul>
           </div>
 
           {/* MongoDB Features Section */}
           <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Key Features of MongoDB</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Key Features of MongoDB
+            </h2>
             <p className="mt-4 text-lg text-gray-600">
-              MongoDB provides a rich set of features that makes it a powerful NoSQL database:
+              MongoDB provides a rich set of features that makes it a powerful
+              NoSQL database:
             </p>
             <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
-              <li><strong>Flexible Schema:</strong> MongoDB allows for the storage of documents with different structures in the same collection.</li>
-              <li><strong>Scalability:</strong> MongoDB supports horizontal scaling through sharding, which makes it suitable for big data applications.</li>
-              <li><strong>Aggregation Framework:</strong> MongoDB provides powerful aggregation tools to transform and combine data in different ways.</li>
-              <li><strong>High Availability:</strong> MongoDB supports replica sets, providing redundancy and high availability.</li>
-              <li><strong>Geospatial Indexing:</strong> MongoDB allows you to store and query geospatial data (e.g., location-based data).</li>
-              <li><strong>Indexing:</strong> MongoDB supports different types of indexes like single field, compound, and text indexing to optimize query performance.</li>
+              <li>
+                <strong>Flexible Schema:</strong> MongoDB allows for the storage
+                of documents with different structures in the same collection.
+              </li>
+              <li>
+                <strong>Scalability:</strong> MongoDB supports horizontal
+                scaling through sharding, which makes it suitable for big data
+                applications.
+              </li>
+              <li>
+                <strong>Aggregation Framework:</strong> MongoDB provides
+                powerful aggregation tools to transform and combine data in
+                different ways.
+              </li>
+              <li>
+                <strong>High Availability:</strong> MongoDB supports replica
+                sets, providing redundancy and high availability.
+              </li>
+              <li>
+                <strong>Geospatial Indexing:</strong> MongoDB allows you to
+                store and query geospatial data (e.g., location-based data).
+              </li>
+              <li>
+                <strong>Indexing:</strong> MongoDB supports different types of
+                indexes like single field, compound, and text indexing to
+                optimize query performance.
+              </li>
             </ul>
           </div>
 
           {/* MongoDB Use Cases Section */}
           <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800">Common Use Cases for MongoDB</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Common Use Cases for MongoDB
+            </h2>
             <p className="mt-4 text-lg text-gray-600">
-              MongoDB is used in various industries for a wide range of applications. Some common use cases include:
+              MongoDB is used in various industries for a wide range of
+              applications. Some common use cases include:
             </p>
             <ul className="mt-4 text-lg text-gray-600 list-disc pl-6">
-              <li><strong>Content Management Systems (CMS):</strong> MongoDB is used for managing dynamic content on websites.</li>
-              <li><strong>Real-time Analytics:</strong> MongoDB’s aggregation framework helps with processing large volumes of real-time data.</li>
-              <li><strong>Catalogs and Inventory Systems:</strong> MongoDB’s flexible schema allows easy management of complex and evolving catalogs.</li>
-              <li><strong>Internet of Things (IoT):</strong> MongoDB’s scalability makes it ideal for storing sensor data from IoT devices.</li>
-              <li><strong>Mobile Applications:</strong> MongoDB is commonly used to store data for mobile apps that require flexible schemas.</li>
+              <li>
+                <strong>Content Management Systems (CMS):</strong> MongoDB is
+                used for managing dynamic content on websites.
+              </li>
+              <li>
+                <strong>Real-time Analytics:</strong> MongoDB’s aggregation
+                framework helps with processing large volumes of real-time data.
+              </li>
+              <li>
+                <strong>Catalogs and Inventory Systems:</strong> MongoDB’s
+                flexible schema allows easy management of complex and evolving
+                catalogs.
+              </li>
+              <li>
+                <strong>Internet of Things (IoT):</strong> MongoDB’s scalability
+                makes it ideal for storing sensor data from IoT devices.
+              </li>
+              <li>
+                <strong>Mobile Applications:</strong> MongoDB is commonly used
+                to store data for mobile apps that require flexible schemas.
+              </li>
             </ul>
           </div>
 
           {/* Call to Action Section */}
-          
         </div>
       </div>
     </>
@@ -116,10 +179,6 @@ const Mongodbhome = () => {
 };
 
 export default Mongodbhome;
-
-
-
-
 
 // "use client";
 // import { useState } from "react";
@@ -298,4 +357,3 @@ export default Mongodbhome;
 // };
 
 // export default Mongodbhome;
-

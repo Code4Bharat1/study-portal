@@ -1,56 +1,65 @@
-'use client';
-import useReadingTracker from '@/app/hook/useReadingTracker';
-import React, { useState, useEffect } from 'react';
+"use client";
+import useReadingTracker from "@/components/useReadingTracker";
+import React, { useState, useEffect } from "react";
 
 function useWindowWidth() {
-  // Track reading activity for custom hooks
-  useReadingTracker('reacthooks');
+  useReadingTracker("reacthooks");
 
-  // State to store the current window width
-  const [width, setWidth] = useState(window.innerWidth);
+  // Initialize with a default value
+  const [width, setWidth] = useState(0);
 
-  // Effect to listen for window resize events and update width state
   useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);  // Update width on resize
-    window.addEventListener('resize', handleResize);  // Add event listener
+    const handleResize = () => setWidth(window.innerWidth);
+    setWidth(window.innerWidth); // Set initial width on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-    // Cleanup on unmount: Remove the event listener
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);  // Empty dependency array: runs only once (on mount)
-
-  return width;  // Return the current window width
+  return width;
 }
 
 function React_custom_hooks() {
-  // Use the custom hook to get the window width
   const windowWidth = useWindowWidth();
 
   return (
     <div className="p-6 ml-70">
-      <h1 className="text-3xl text-gray-800 font-bold mb-4">Understanding Custom Hooks in React</h1>
+      <h1 className="text-3xl text-gray-800 font-bold mb-4">
+        Understanding Custom Hooks in React
+      </h1>
       <p className="text-lg text-gray-800 mb-6">
-        Custom Hooks let you extract and reuse stateful logic between components. They start with <code>use</code> and follow the same rules as built-in hooks.
+        Custom Hooks let you extract and reuse stateful logic between
+        components. They start with <code>use</code> and follow the same rules
+        as built-in hooks.
       </p>
 
-      <div className="bg-white p-6  max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">Why Create Custom Hooks?</h2>
+      <div className="bg-white p-6 max-w-5xl mx-auto">
+        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+          Why Create Custom Hooks?
+        </h2>
         <p className="text-gray-800 mb-4">
-          When you find yourself repeating logic across multiple components (e.g., fetching data, handling window size, form validation), a custom hook helps you abstract that logic cleanly and reuse it efficiently.
+          When you find yourself repeating logic across multiple components
+          (e.g., fetching data, handling window size, form validation), a custom
+          hook helps you abstract that logic cleanly and reuse it efficiently.
         </p>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">Creating Your First Custom Hook</h2>
-        <p className="text-gray-800 mb-2">Here's a simple example: tracking window width.</p>
+        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+          Creating Your First Custom Hook
+        </h2>
+        <p className="text-gray-800 mb-2">
+          Here's a simple example: tracking window width.
+        </p>
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
           <code className="text-pink-500">
-{`import { useState, useEffect } from 'react';
+            {`import { useState, useEffect } from 'react';
 
 function useWindowWidth() {
-  const [width, setWidth] = useState(window.innerWidth);  // Initialize state with window width
+  const [width, setWidth] = useState(0);  // Initialize with default value
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);  // Update width on resize
-    window.addEventListener('resize', handleResize);  // Add event listener
+    setWidth(window.innerWidth);  // Set initial width on mount
+    window.addTPPListener('resize', handleResize);  // Add event listener
 
     return () => window.removeEventListener('resize', handleResize);  // Cleanup on unmount
   }, []);  // Empty dependency array: runs only once (on mount)
@@ -61,12 +70,13 @@ function useWindowWidth() {
         </pre>
 
         <p className="text-gray-800 mb-6">
-          Now, you can use <code>useWindowWidth</code> in any component to get the window width:
+          Now, you can use <code>useWindowWidth</code> in any component to get
+          the window width:
         </p>
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
           <code className="text-pink-500">
-{`const width = useWindowWidth();  // Use the custom hook to get the window width
+            {`const width = useWindowWidth();  // Use the custom hook to get the window width
 return <p>Window width: {width}px</p>;`}
           </code>
         </pre>
@@ -76,17 +86,21 @@ return <p>Window width: {width}px</p>;`}
           <p className="text-lg text-pink-700 font-bold">{windowWidth}px</p>
         </div>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">Custom Hook for Fetching Data</h2>
-        <p className="text-gray-800 mb-4">Another common use case is fetching data from an API.</p>
+        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+          Custom Hook for Fetching Data
+        </h2>
+        <p className="text-gray-800 mb-4">
+          Another common use case is fetching data from an API.
+        </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
           <code className="text-pink-500">
-{`function useFetch(url) {
+            {`function useFetch(url) {
   const [data, setData] = useState(null);  // State for storing fetched data
   const [loading, setLoading] = useState(true);  // State to track loading status
 
   useEffect(() => {
     fetch(url)  // Fetch data from the given URL
-      .then(res => res.json())  // Parse the response as JSON
+      .then(res => res.json()) 44 Parse the response as JSON
       .then(data => {
         setData(data);  // Set the fetched data to the state
         setLoading(false);  // Mark loading as false
@@ -101,31 +115,47 @@ return <p>Window width: {width}px</p>;`}
         <p className="text-gray-800 mb-4">Usage of the custom fetch hook:</p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
           <code className="text-pink-500">
-{`const { data, loading } = useFetch('https://api.example.com/posts');`}
+            {`const { data, loading } = useFetch('https://api.example.com/posts');`}
           </code>
         </pre>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">Rules of Custom Hooks</h2>
+        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+          Rules of Custom Hooks
+        </h2>
         <ul className="list-disc list-inside text-gray-800 mb-6 space-y-2">
-          <li>Always start hook names with <code>use</code></li>
-          <li>Use other hooks inside them (like <code>useState</code>, <code>useEffect</code>)</li>
+          <li>
+            Always start hook names with <code>use</code>
+          </li>
+          <li>
+            Use other hooks inside them (like <code>useState</code>,{" "}
+            <code>useEffect</code>)
+          </li>
           <li>Don't use hooks inside conditionals or loops</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">Best Practices</h2>
+        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+          Best Practices
+        </h2>
         <ul className="list-disc list-inside text-gray-800 mb-6 space-y-2">
           <li>Keep hooks focused on a single concern</li>
-          <li>Use meaningful names (e.g., <code>useAuth</code>, <code>useDarkMode</code>)</li>
+          <li>
+            Use meaningful names (e.g., <code>useAuth</code>,{" "}
+            <code>useDarkMode</code>)
+          </li>
           <li>Test hooks logic separately</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">Conclusion</h2>
+        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+          Conclusion
+        </h2>
         <p className="text-gray-800 mb-6">
-          Custom hooks help you write clean, reusable, and modular React code. They reduce duplication and make complex logic easier to manage across your app.
+          Custom hooks help you write clean, reusable, and modular React code.
+          They reduce duplication and make complex logic easier to manage across
+          your app.
         </p>
 
         <button className="mt-8 bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Learn About useReducer →  {/* Placeholder for additional learning */}
+          Learn About useReducer →
         </button>
       </div>
     </div>
