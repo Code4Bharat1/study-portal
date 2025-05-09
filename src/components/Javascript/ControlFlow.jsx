@@ -3,7 +3,7 @@
 const ControlFlow = () => {
   return (
     <div className="p-8 max-w-4xl mx-auto text-black space-y-8">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+      <div className="bg-white p-8  space-y-6 ml-10">
         <h1 className="text-4xl font-bold mb-6">🔁 Control Flow in JavaScript</h1>
         <p className="mb-4">
           Control flow refers to the order in which statements are executed in a program. In JavaScript, we use various control structures to control the flow of execution based on conditions or loops.

@@ -6,7 +6,7 @@ function Reactintroduction() {
   useReadingTracker("reactintroduction");
 
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">
         Introduction to React
       </h1>
@@ -19,11 +19,11 @@ function Reactintroduction() {
         WhatsApp Web.
       </p>
 
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
+      <div className="bg-white p-6  max-w-8xl mx-auto">
         <h2 className="text-2xl font-semibold text-pink-400 mb-4">
           What is React?
         </h2>
-        <div className="text-gray-800 space-y-6 text-sm leading-relaxed">
+        <div className="text-gray-800 space-y-6 text-md leading-relaxed">
           <p>
             React is a JavaScript library used to build the view layer of web
             applications. In a traditional website, each interaction often

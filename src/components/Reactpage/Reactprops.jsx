@@ -6,43 +6,16 @@ export default function Reactprops() {
   // Custom hook used to track reading progress for the 'reactprops' page
   useReadingTracker("reactprops");
 
-  // Declaring state for the count, initialized with 0
-  const [count, setCount] = useState(0);
-
-  // Function to handle the click event, increments the count value by 1
-  const handleClick = () => {
-    setCount(count + 1);
-  };
-
-  // Function to reset the count value to 0
-  const handleReset = () => {
-    setCount(0);
-  };
+ 
 
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">
         Understanding React Props and State
       </h1>
 
-      {/* Displaying the current count */}
-      <p className="text-lg text-gray-800 mb-6">Current count: {count}</p>
 
-      {/* Button to increment the count */}
-      <button
-        className="bg-pink-500 text-white p-2 rounded-md mr-4"
-        onClick={handleClick}
-      >
-        Increment Count
-      </button>
-
-      {/* Button to reset the count */}
-      <button
-        className="bg-pink-300 text-white p-2 rounded-md"
-        onClick={handleReset}
-      >
-        Reset Count
-      </button>
+ 
 
       {/* Introduction to React props */}
       <p className="text-lg text-gray-800 mt-6">
@@ -51,12 +24,12 @@ export default function Reactprops() {
       </p>
 
       {/* Section explaining Props */}
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+      <div className="bg-white p-6 rounded-xl shadow-lg max-w-8xl mx-auto">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           What are Props?
         </h2>
 
-        <div className="text-gray-800 space-y-6 text-sm leading-relaxed">
+        <div className="text-gray-800 space-y-6 text-md leading-relaxed">
           <p>
             In React, <strong>props</strong> are the inputs to a component. They
             are passed from the parent component to the child component and are
@@ -67,7 +40,7 @@ export default function Reactprops() {
           </p>
 
           {/* Explaining how props work in React */}
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             How Props Work
           </h3>
           <p>
@@ -79,7 +52,7 @@ export default function Reactprops() {
           </p>
 
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`function ParentComponent() {
   return <ChildComponent message="Hello from parent!" />;
 }
@@ -91,7 +64,7 @@ function ChildComponent(props) {
           </pre>
 
           {/* Explaining how to access props in child components */}
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             Accessing Props in Child Components
           </h3>
           <p>
@@ -103,7 +76,7 @@ function ChildComponent(props) {
           </p>
 
           {/* Example of using state */}
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             State Example
           </h3>
           <p>
@@ -112,7 +85,7 @@ function ChildComponent(props) {
           </p>
 
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`import React, { useState } from 'react';
 
 function Counter() {
@@ -138,7 +111,7 @@ function Counter() {
           </p>
 
           {/* Destructuring props for simplicity */}
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             Destructuring Props for Simplicity
           </h3>
           <p>
@@ -149,7 +122,7 @@ function Counter() {
           </p>
 
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`function ChildComponent({ name, age }) {
   return (
     <div>
@@ -169,7 +142,7 @@ function Counter() {
           </p>
 
           {/* Default Props */}
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             Default Props
           </h3>
           <p>
@@ -179,7 +152,7 @@ function Counter() {
           </p>
 
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`function ChildComponent({ name, age }) {
   return (
     <div>
@@ -203,7 +176,7 @@ ChildComponent.defaultProps = {
           </p>
 
           {/* Prop Types */}
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             Prop Types: Validating Props
           </h3>
           <p>
@@ -220,7 +193,7 @@ ChildComponent.defaultProps = {
           </p>
 
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`import PropTypes from 'prop-types';
 
 function ChildComponent({ name, age }) {
@@ -248,7 +221,7 @@ ChildComponent.propTypes = {
           </p>
 
           {/* Passing functions as props */}
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             Passing Functions as Props
           </h3>
           <p>
@@ -259,7 +232,7 @@ ChildComponent.propTypes = {
           </p>
 
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`function ParentComponent() {
   const handleClick = () => {
     alert('Button clicked!');

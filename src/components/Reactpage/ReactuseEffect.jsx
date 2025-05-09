@@ -11,7 +11,7 @@ function ReactuseEffect() {
   const [text, setText] = useState("");
 
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">
         Understanding useEffect in React
       </h1>
@@ -22,8 +22,8 @@ function ReactuseEffect() {
         subscriptions, and more.
       </p>
 
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+      <div className="bg-white p-6  max-w-8xl mx-auto">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           What is a Side Effect?
         </h2>
         <p className="text-gray-800 mb-6">
@@ -37,11 +37,11 @@ function ReactuseEffect() {
           <li>Logging values</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Basic Syntax
         </h2>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`useEffect(() => {
   // Code for side effect
 }, [dependencies]);`}
@@ -50,11 +50,11 @@ function ReactuseEffect() {
           </code>
         </pre>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Example: Updating the Document Title
         </h2>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import React, { useState, useEffect } from 'react';
 
 function Counter() {
@@ -81,7 +81,7 @@ function Counter() {
           ensures that the effect only runs when <code>count</code> changes.
         </p>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Cleaning Up Effects
         </h2>
         <p className="text-gray-800 mb-6">
@@ -90,7 +90,7 @@ function Counter() {
           <code>useEffect</code>.
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`useEffect(() => {
   const timer = setInterval(() => {
     console.log('Running timer...');
@@ -103,7 +103,7 @@ function Counter() {
           </code>
         </pre>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           When Does useEffect Run?
         </h2>
         <ul className="list-disc list-inside text-gray-800 mb-6 space-y-1">
@@ -114,7 +114,7 @@ function Counter() {
           <li>When specific dependencies change (if specified in the array)</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Example in Action
         </h2>
         <div className="bg-pink-50 p-4 rounded-md mb-6">
@@ -123,20 +123,20 @@ function Counter() {
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="border border-pink-300 rounded-md p-2 mb-2"
+            className="border border-pink-700 rounded-md p-2 mb-2"
             placeholder="Type something..."
           />
           <p className="text-sm">You typed: {text}</p>
         </div>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`useEffect(() => {
   console.log('Text changed:', text); // Logs text change every time 'text' state changes
 }, [text]);`}
           </code>
         </pre>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Best Practices
         </h2>
         <ul className="list-disc list-inside text-gray-800 space-y-2 mb-6">
@@ -153,7 +153,7 @@ function Counter() {
           </li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Common Mistakes
         </h2>
         <ul className="list-disc list-inside text-gray-800 space-y-2 mb-6">
@@ -165,7 +165,7 @@ function Counter() {
           </li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Conclusion
         </h2>
         <p className="text-gray-800 mb-6">
@@ -175,9 +175,7 @@ function Counter() {
           dynamic and efficient components.
         </p>
 
-        <button className="mt-8 bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Learn About useContext →
-        </button>
+     
       </div>
     </div>
   );
