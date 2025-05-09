@@ -39,7 +39,7 @@ function Reactcontextapi() {
             <h3>Welcome, {user.name}!</h3>
             <button
               onClick={logout}
-              className="mt-4 bg-pink-500 text-white px-4 py-2 rounded-lg"
+              className="mt-4 bg-pink-700 text-white px-4 py-2 rounded-lg"
             >
               Logout
             </button>
@@ -60,14 +60,15 @@ function Reactcontextapi() {
   }
 
   return (
-    <div className="p-6 max-w-4xl ml-80">
-      <h1 className="text-3xl text-gray-800 font-bold mb-6">
+    <div className="p-6">
+   
+
+      <div className="bg-white p-6  max-w-4xl ml-80 rounded-xl shadow-lg  mx-auto">
+        {/* Introduction */}
+           <h1 className="text-3xl text-gray-800 font-bold mb-6">
         React Context API
       </h1>
-
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
-        {/* Introduction */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Introduction to Context API
         </h2>
         <p className="text-gray-800 mb-6">
@@ -78,7 +79,7 @@ function Reactcontextapi() {
         </p>
 
         {/* Why Use Context API */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Why Use Context API?
         </h2>
         <ul className="list-disc list-inside text-gray-800 space-y-2 mb-6">
@@ -91,7 +92,7 @@ function Reactcontextapi() {
         </ul>
 
         {/* Basic Flow */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           How It Works
         </h2>
         <ol className="list-decimal list-inside text-gray-800 space-y-2 mb-6">
@@ -104,11 +105,11 @@ function Reactcontextapi() {
         </ol>
 
         {/* Creating Context */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Creating a Context
         </h2>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { createContext } from 'react';
 
 const MyContext = createContext();
@@ -117,7 +118,7 @@ export default MyContext;`}
         </pre>
 
         {/* Providing Context */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Providing Context
         </h2>
         <p className="text-gray-800 mb-4">
@@ -125,7 +126,7 @@ export default MyContext;`}
           value you want to share.
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import MyContext from './MyContext';
 
 function App() {
@@ -141,7 +142,7 @@ function App() {
         </pre>
 
         {/* Consuming Context */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Consuming Context with useContext Hook
         </h2>
         <p className="text-gray-800 mb-4">
@@ -149,7 +150,7 @@ function App() {
           access the context value:
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { useContext } from 'react';
 import MyContext from './MyContext';
 
@@ -162,23 +163,23 @@ function MyComponent() {
         </pre>
 
         {/* Context vs Redux */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Context API vs Redux
         </h2>
         <ul className="list-disc list-inside text-gray-800 space-y-2 mb-6">
           <li>
-            <span className="font-semibold text-pink-500">Context API</span> is
+            <span className="font-semibold text-pink-700">Context API</span> is
             best for simpler or medium-level apps needing light global state.
           </li>
           <li>
-            <span className="font-semibold text-pink-500">Redux</span> is better
+            <span className="font-semibold text-pink-700">Redux</span> is better
             for large applications with complex state management needs (like
             async operations, multiple data layers).
           </li>
         </ul>
 
         {/* Best Practices */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Best Practices
         </h2>
         <ul className="list-disc list-inside text-gray-800 space-y-2 mb-6">
@@ -195,11 +196,11 @@ function MyComponent() {
         </ul>
 
         {/* Example: Authentication Context */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Example: Authentication Context
         </h2>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { createContext, useState, useContext } from 'react';
 
 const AuthContext = createContext();
@@ -229,7 +230,7 @@ export function useAuth() {
         </p>
 
         {/* Conclusion */}
-        <h2 className="text-2xl font-semibold text-pink-500 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Conclusion
         </h2>
         <p className="text-gray-800 mb-6">
@@ -238,14 +239,9 @@ export function useAuth() {
           applications cleaner and more maintainable!
         </p>
 
-        <button className="mt-8 bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Next: Building a Theme Switcher with Context →
-        </button>
       </div>
 
-      <MyContextProvider>
-        <UserProfile />
-      </MyContextProvider>
+   
     </div>
   );
 }

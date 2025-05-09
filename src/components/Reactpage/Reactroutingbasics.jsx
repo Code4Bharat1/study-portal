@@ -7,8 +7,11 @@ function Reactroutingbasics() {
   useReadingTracker("reactrouter");
 
   return (
-    <div className="p-6 ml-70">
-      <h1 className="text-3xl text-gray-800 font-bold mb-4">
+    <div className="p-6 ml-80">
+     
+      {/* Section: Installing React Router */}
+      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
+         <h1 className="text-3xl text-gray-800 font-bold mb-4">
         React Routing Basics
       </h1>
       <p className="text-lg text-gray-800 mb-6">
@@ -17,20 +20,18 @@ function Reactroutingbasics() {
         dynamic URLs.
       </p>
 
-      {/* Section: Installing React Router */}
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Installing React Router
         </h2>
         <p className="text-gray-800 mb-2">
           To get started, install the package using:
         </p>
-        <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6 text-pink-500">
+        <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6 text-pink-700">
           <code>npm install react-router-dom</code>
         </pre>
 
         {/* Section: Basic Setup of React Router */}
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Basic Setup
         </h2>
         <p className="text-gray-800 mb-4">
@@ -39,7 +40,7 @@ function Reactroutingbasics() {
         </p>
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -58,7 +59,7 @@ function App() {
         </pre>
 
         {/* Section: Linking Between Pages */}
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Linking Between Pages
         </h2>
         <p className="text-gray-800 mb-4">
@@ -67,7 +68,7 @@ function App() {
         </p>
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { Link } from 'react-router-dom';
 
 function Navbar() {
@@ -82,7 +83,7 @@ function Navbar() {
         </pre>
 
         {/* Section: Using Route Parameters */}
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Using Route Parameters
         </h2>
         <p className="text-gray-800 mb-4">
@@ -91,14 +92,14 @@ function Navbar() {
         </p>
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`<Route path="/user/:id" element={<UserProfile />} />`}
           </code>
         </pre>
 
         <p className="text-gray-800 mb-4">In the component:</p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { useParams } from 'react-router-dom';
 
 function UserProfile() {
@@ -109,7 +110,7 @@ function UserProfile() {
         </pre>
 
         {/* Section: Navigate Programmatically */}
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Navigate Programmatically
         </h2>
         <p className="text-gray-800 mb-4">
@@ -117,7 +118,7 @@ function UserProfile() {
           (e.g., after form submission):
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -134,7 +135,7 @@ function Login() {
         </pre>
 
         {/* Section: 404 Page (Not Found) */}
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           404 Page (Not Found)
         </h2>
         <p className="text-gray-800 mb-4">
@@ -142,13 +143,13 @@ function Login() {
           URLs:
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`<Route path="*" element={<NotFound />} />`}
           </code>
         </pre>
 
         {/* Section: Summary */}
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">Summary</h2>
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">Summary</h2>
         <ul className="list-disc list-inside text-gray-800 mb-6 space-y-2">
           <li>
             Use <code>BrowserRouter</code> to enable routing
@@ -168,9 +169,7 @@ function Login() {
         </ul>
 
         {/* Next Button */}
-        <button className="mt-8 bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Next: Nested Routing →
-        </button>
+       
       </div>
     </div>
   );

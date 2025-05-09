@@ -115,7 +115,7 @@ const ReactSidebar = () => {
           </li>
 
           <li>
-            <Link href="/reactcontext" className={getLinkClass("/reactcontext")}>
+            <Link href="/reactcontextapi" className={getLinkClass("/reactcontext")}>
               <FaPlug className="inline mr-2 text-xl" /> Context API
             </Link>
           </li>
