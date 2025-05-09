@@ -2,8 +2,8 @@
 
 const CssCombinators = () => {
   return (
-    <div className="p-8 max-w-4xl mx-auto text-black space-y-6">
-      <div className="bg-white p-8 rounded-lg shadow-xl space-y-6 ml-10">
+    <div className="p-8  mx-auto text-black space-y-6">
+      <div className="bg-white max-w-4xl p-8 rounded-lg shadow-xl space-y-6 ml-80">
         <h1 className="text-4xl font-bold">CSS Combinators</h1>
         <p className="text-lg">Learn how to combine selectors to target specific elements.</p>
         <p>

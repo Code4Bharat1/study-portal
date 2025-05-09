@@ -104,7 +104,7 @@ export default function ReactPage() {
             >
               {[
                 { 
-                  href: "/reacthome", 
+                  href: "/reactintroduction", 
                   text: "Get Started", 
                   bg: "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700",
                   textColor: "text-white",

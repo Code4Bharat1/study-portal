@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  FaDatabase, FaCogs, FaLayerGroup, FaSitemap, FaLock, FaRocket,
+  FaDatabase, FaHome,FaCogs, FaLayerGroup, FaSitemap, FaLock, FaRocket,
   FaCopy, FaProjectDiagram, FaChevronDown, FaChevronUp
 } from 'react-icons/fa';
 
@@ -32,6 +32,11 @@ const SidebarJava = () => {
       {/* Scrollable list */}
       <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
         <ul className="space-y-4 pb-29">
+        <li>
+            <Link href="/roadjava" className={getLinkClass("/php-home")}>
+              <FaHome className="inline mr-2 text-xl" /> Roadmap
+            </Link>
+          </li>
           <li>
             <Link href="/javaHome" className={getLinkClass("/homejavapage")}>
               <FaDatabase className="inline mr-2 text-xl" /> Java HOME

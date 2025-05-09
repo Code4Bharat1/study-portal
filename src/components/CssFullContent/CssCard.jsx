@@ -103,7 +103,7 @@ export default function CssPage() {
             >
               {[
                 { 
-                  href: '/CssHome', 
+                  href: '/CssIntro', 
                   text: 'Learn CSS', 
                   bg: 'bg-gradient-to-r from-[#FF7F50] to-[#e66f47] hover:from-[#e66f47] hover:to-[#d65f37]',
                   textColor: 'text-white',
