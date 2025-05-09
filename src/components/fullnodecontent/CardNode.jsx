@@ -105,14 +105,14 @@ export default function NodePage() {
                 { 
                   href: "/NodeIntro", 
                   text: "Get Started", 
-                  bg: "bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 cursor-pointer",
+                  bg: "bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700",
                   textColor: "text-white",
                   shadow: "shadow-lg shadow-green-500/20"
                 },
                 { 
                   href: "https://www.youtube.com/watch?v=TlB_eWDSMt4", 
                   text: "Video Tutorial", 
-                  bg: "bg-white hover:bg-gray-50 cursor-pointer",
+                  bg: "bg-white hover:bg-gray-50",
                   textColor: "text-gray-700",
                   border: "border border-gray-200",
                   shadow: "shadow-sm hover:shadow-md"
@@ -120,11 +120,11 @@ export default function NodePage() {
                 { 
                   href: "/projects?tech=nodejs", 
                   text: "View Projects", 
-                  bg: "bg-gray-900 hover:bg-gray-800 cursor-pointer" ,
+                  bg: "bg-gray-900 hover:bg-gray-800",
                   textColor: "text-white",
                   shadow: "shadow-lg hover:shadow-xl"
                 }
-              ].map((button, index) => (+
+              ].map((button, index) => (
                 <motion.div
                    key={button.text}
                   variants={itemVariants}
