@@ -102,7 +102,7 @@ export default function NextJsPage() {
             >
               {[
                 { 
-                  href: "/nextjs/home", 
+                  href: "/nextjs/introduction", 
                   text: "Get Started", 
                   bg: "bg-gradient-to-r from-cyan-600 to-cyan-800 hover:from-cyan-700 hover:to-cyan-900",
                   textColor: "text-white",
