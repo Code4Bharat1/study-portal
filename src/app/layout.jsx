@@ -1,10 +1,10 @@
 "use client";
 import { usePathname } from 'next/navigation';
-import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer/Footer';
 import Chatbot from '@/components/Chatbot';
 import './globals.css';
 import { SessionProvider } from "next-auth/react";
+import Navbar from '@/components/Navbar';
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();

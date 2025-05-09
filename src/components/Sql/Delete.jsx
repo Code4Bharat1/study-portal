@@ -36,7 +36,7 @@ WHERE id = 3;`}</code>
         <h2 className="text-2xl font-semibold">Delete Using Multiple Conditions</h2>
         <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto">
           <code>{`DELETE FROM students
-WHERE age &lt; 18 AND grade = 'F';`}</code>
+WHERE age < 18 AND grade = 'F';`}</code>
         </pre>
         <p>This deletes students who are under 18 and have a failing grade.</p>
 
@@ -51,4 +51,8 @@ WHERE age &lt; 18 AND grade = 'F';`}</code>
           Deleting data is permanent. Use with caution.
         </p>
       </div>
-    <
+    </div>
+  );
+};
+
+export default DeletePage;
