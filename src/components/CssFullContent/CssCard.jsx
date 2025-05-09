@@ -118,7 +118,7 @@ export default function CssPage() {
                   shadow: 'shadow-sm hover:shadow-md'
                 },
                 { 
-                  href: '/css/reference', 
+                  href: '/Csscard', 
                   text: 'CSS Reference', 
                   bg: 'bg-gray-900 hover:bg-gray-800',
                   textColor: 'text-white',

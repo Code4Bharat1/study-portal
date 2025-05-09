@@ -236,13 +236,13 @@ app.listen(3000);`,
 db.users.find({});
 db.users.updateOne({ name: "Alice" }, { $set: { age: 26 } });
 db.users.deleteOne({ name: "Alice" });`,
-        projectLink: "https://github.com/example/mongodb-basic-crud",
+        projectLink: "https://github.com/bezkoder/node-express-mongodb",
       },
       {
         title: "Insert and Query",
         code: `db.products.insertOne({ name: "Laptop", price: 999 });
 db.products.find({ price: { $gt: 500 } });`,
-        projectLink: "https://github.com/example/mongodb-insert-query",
+        projectLink: "https://github.com/mongodb-js/collection-sample",
       },
     ],
     intermediate: [
@@ -251,7 +251,7 @@ db.products.find({ price: { $gt: 500 } });`,
         code: `db.users.createIndex({ email: 1 }, { unique: true });
 db.users.insertOne({ email: "user@example.com", role: "user" });
 db.users.find({ role: "user" });`,
-        projectLink: "https://github.com/example/mongodb-user-management",
+        projectLink: "https://github.com/sairam5686/User-Management-System",
       },
       {
         title: "Product Catalog",
@@ -260,7 +260,7 @@ db.users.find({ role: "user" });`,
   { name: "Shirt", category: "Clothing" }
 ]);
 db.products.find({ category: "Electronics" });`,
-        projectLink: "https://github.com/example/mongodb-product-catalog",
+        projectLink: "https://github.com/mongodb-developer/content-catalog",
       },
     ],
     professional: [
@@ -270,7 +270,7 @@ db.products.find({ category: "Electronics" });`,
   { $match: { status: "completed" } },
   { $group: { _id: "$customerId", total: { $sum: "$amount" } } }
 ]);`,
-        projectLink: "https://github.com/example/mongodb-aggregation-pipeline",
+        projectLink: "https://github.com/LinkedInLearning/master-the-mongodb-aggregation-pipeline-2505629",
       },
       {
         title: "Geospatial Queries",
@@ -279,7 +279,7 @@ db.places.insertOne({ name: "Park", location: { type: "Point", coordinates: [-73
 db.places.find({
   location: { $near: { $geometry: { type: "Point", coordinates: [-73.9, 40.7] }, $maxDistance: 1000 } }
 });`,
-        projectLink: "https://github.com/example/mongodb-geospatial-queries",
+        projectLink: "https://github.com/Masdevallia/project-mongodb-geospatial-queries",
       },
     ],
   },
@@ -292,7 +292,7 @@ http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
   res.end('Hello Node.js');
 }).listen(3000);`,
-        projectLink: "https://github.com/example/nodejs-basic-server",
+        projectLink: "https://github.com/alinebastos/simple-nodejs-server",
       },
       {
         title: "Simple API",
@@ -301,7 +301,7 @@ http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify({ message: 'Hello API' }));
 }).listen(3000);`,
-        projectLink: "https://github.com/example/nodejs-simple-api",
+        projectLink: "https://github.com/mwangiKibui/node.js-simple-api",
       },
     ],
     intermediate: [
@@ -315,7 +315,7 @@ http.createServer((req, res) => {
     res.end('Uploaded');
   }
 }).listen(3000);`,
-        projectLink: "https://github.com/example/nodejs-file-upload",
+        projectLink: "https://github.com/Majidkn/nodejs-simple-file-upload",
       },
       {
         title: "Static File Server",
@@ -327,7 +327,7 @@ http.createServer((req, res) => {
     res.end(data);
   });
 }).listen(3000);`,
-        projectLink: "https://github.com/example/nodejs-static-file-server",
+        projectLink: "https://github.com/Abdurraheem/uploadFile",
       },
     ],
     professional: [
@@ -338,7 +338,7 @@ const wss = new WebSocket.Server({ port: 3000 });
 wss.on('connection', (ws) => {
   ws.on('message', (msg) => ws.send(\`Echo: \${msg}\`));
 });`,
-        projectLink: "https://github.com/example/nodejs-websocket-server",
+        projectLink: "https://github.com/websockets/ws",
       },
       {
         title: "Task Queue System",
@@ -346,7 +346,7 @@ wss.on('connection', (ws) => {
 const task = new Worker('./task.js');
 task.on('message', (msg) => console.log('Task result:', msg));
 task.postMessage('Start task');`,
-        projectLink: "https://github.com/example/nodejs-task-queue",
+        projectLink: "https://github.com/bee-queue/bee-queue",
       },
     ],
   },

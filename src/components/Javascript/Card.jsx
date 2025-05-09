@@ -120,7 +120,7 @@ export default function JavaScriptPage() {
                   shadow: "shadow-sm hover:shadow-md"
                 },
                 { 
-                  href: "/projects?tech=javascript", 
+                  href: "/javascript", 
                   text: "View Projects", 
                   bg: "bg-gray-900 hover:bg-gray-800",
                   textColor: "text-white",

@@ -118,7 +118,7 @@ export default function LearnPythonCard() {
                   shadow: "shadow-sm hover:shadow-md"
                 },
                 { 
-                  href: "/projects?tech=python",
+                  href: "/firstPyton",
                   text: "View Projects",
                   bg: "bg-gray-900 hover:bg-gray-800",
                   textColor: "text-white",

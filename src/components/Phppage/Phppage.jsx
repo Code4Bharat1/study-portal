@@ -117,7 +117,7 @@ export default function PHPPage() {
                   shadow: "shadow-sm hover:shadow-md"
                 },
                 { 
-                  href: "/projects?tech=php", 
+                  href: "/php", 
                   text: "PHP Projects", 
                   bg: "bg-gray-900 hover:bg-gray-800",
                   textColor: "text-white",
