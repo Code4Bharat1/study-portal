@@ -1,6 +1,6 @@
 'use client';
 import { CheckCircle } from "lucide-react";
-
+import { FaNodeJs, FaDatabase, FaLock, FaBug, FaChartLine, FaNetworkWired } from "react-icons/fa";
 export default function PhpBestPractice() {
   const sections = [
     {
@@ -74,50 +74,47 @@ export default function PhpBestPractice() {
   ];
 
   return (
-    <div className="relative p-8 max-w-6xl mx-auto bg-gradient-to-br from-white to-blue-50 rounded-lg">
+    <div className="p-8 max-w-7xl mx-auto">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-10 left-10">
+          <FaNodeJs size={80} className="text-green-300 rotate-12" />
+        </div>
+        <div className="absolute bottom-1/3 right-20">
+          <FaDatabase size={70} className="text-purple-200" />
+        </div>
+        <div className="absolute top-1/2 left-1/4">
+          <FaChartLine size={80} className="text-blue-200 -rotate-6" />
+        </div>
+        <div className="absolute bottom-10 right-10">
+          <FaBug size={70} className="text-red-200 rotate-12" />
+        </div>
+        <div className="absolute top-20 right-36">
+          <FaLock size={80} className="text-yellow-200 -rotate-12" />
+        </div>
+        <div className="absolute bottom-24 left-28">
+          <FaNetworkWired size={75} className="text-teal-200 rotate-6" />
+        </div>
+      </div>
       {/* Title */}
-      <h1 className="text-3xl md:text-4xl font-bold text-center text-blue-800 mb-12 tracking-tight">
-        Best Practice For Php
+      <h1 className="text-4xl font-bold text-center text-blue-800 mb-12">
+        Best Practices for PHP
       </h1>
 
-      {/* Vertical timeline line */}
-      <div className="absolute left-1/2 top-24 w-1 bg-blue-400 h-[calc(100%-8rem)] transform -translate-x-1/2" />
-
-      {/* Top indicator dot */}
-      <div className="absolute left-1/2 top-24 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-blue-500 rounded-full z-10" />
-
-      {/* Bottom indicator dot */}
-      <div className="absolute left-1/2 bottom-8 transform -translate-x-1/2 translate-y-1/2 w-4 h-4 bg-blue-500 rounded-full z-10" />
-
-      {/* Timeline sections */}
-      <div className="space-y-16">
-        {sections.map((section, idx) => {
-          const isLeft = idx % 2 === 0;
-          return (
-            <div
-              key={section.title}
-              className={`flex flex-col md:flex-row ${isLeft ? "" : "md:flex-row-reverse"} items-start md:items-center`}
-            >
-              <div className="md:w-1/2 px-6">
-                <div className="bg-white border border-gray-200 shadow-md hover:shadow-xl transition-shadow duration-300 rounded-2xl p-6">
-                  <h3 className="text-xl font-bold text-blue-700 mb-4 tracking-tight">
-                    {section.title}
-                  </h3>
-                  <ul className="space-y-2 text-sm text-gray-800 list-disc list-inside">
-                    {section.items.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="hidden md:flex justify-center items-center w-1/2 relative">
-                <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full shadow-lg absolute top-4">
-                  <CheckCircle size={18} />
-                </div>
-              </div>
+      {/* Grid Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {sections.map((section, idx) => (
+          <div key={idx} className="bg-white border border-gray-200 rounded-xl shadow-md p-6 hover:shadow-lg transition">
+            <div className="flex items-center gap-2 mb-4">
+              <CheckCircle className="text-blue-600" size={20} />
+              <h3 className="text-lg font-semibold text-blue-700">{section.title}</h3>
             </div>
-          );
-        })}
+            <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+              {section.items.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   );

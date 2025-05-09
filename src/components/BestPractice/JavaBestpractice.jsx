@@ -1,15 +1,16 @@
 'use client';
-import { CheckCircle } from "lucide-react";
+import { FaJava } from "react-icons/fa";
+import { FileCode, Braces, Server, CheckCircle } from "lucide-react";
 
-export default function JavaBestpractice() {
-  const sections = [
+const checklist = {
+  "Java Best Practices": [
     {
       title: "Code Structure",
       items: [
         "Follow proper naming conventions (CamelCase for classes, camelCase for variables/methods)",
         "Keep classes focused on a single responsibility (SRP)",
         "Group related classes into packages"
-      ]
+      ],
     },
     {
       title: "OOP Principles",
@@ -17,7 +18,7 @@ export default function JavaBestpractice() {
         "Encapsulate fields with private access and provide getters/setters",
         "Use inheritance and interfaces appropriately",
         "Favor composition over inheritance"
-      ]
+      ],
     },
     {
       title: "Exception Handling",
@@ -26,15 +27,15 @@ export default function JavaBestpractice() {
         "Avoid swallowing exceptions silently",
         "Use custom exceptions where necessary",
         "Log exceptions meaningfully"
-      ]
+      ],
     },
     {
       title: "Memory Management",
       items: [
         "Avoid memory leaks by releasing resources (e.g., streams, connections)",
-        "Use `try-with-resources` for auto-closing",
+        "Use try-with-resources for auto-closing",
         "Monitor memory usage with profiling tools"
-      ]
+      ],
     },
     {
       title: "Code Quality",
@@ -43,7 +44,7 @@ export default function JavaBestpractice() {
         "Use static analysis tools like SonarLint",
         "Avoid code duplication",
         "Keep methods short and focused"
-      ]
+      ],
     },
     {
       title: "Performance",
@@ -51,15 +52,15 @@ export default function JavaBestpractice() {
         "Use StringBuilder for string concatenation in loops",
         "Prefer ArrayList over LinkedList for faster random access",
         "Optimize database access (use connection pools, prepared statements)"
-      ]
+      ],
     },
     {
       title: "Concurrency",
       items: [
         "Avoid shared mutable state",
         "Use synchronization or concurrent collections when needed",
-        "Prefer `ExecutorService` over manual thread management"
-      ]
+        "Prefer ExecutorService over manual thread management"
+      ],
     },
     {
       title: "Security",
@@ -68,55 +69,54 @@ export default function JavaBestpractice() {
         "Hash and salt passwords using secure algorithms",
         "Avoid exposing sensitive information in logs or error messages",
         "Keep dependencies and libraries up to date"
-      ]
+      ],
     }
-  ];
+  ],
+};
 
+export default function JavaBestPractice() {
   return (
-    <div className="relative p-8 max-w-6xl mx-auto bg-gradient-to-br from-white to-blue-50 rounded-lg">
-      {/* Title */}
-      <h1 className="text-3xl md:text-4xl font-bold text-center text-blue-800 mb-12 tracking-tight">
-        Best Practice For Java
-      </h1>
+    <div className="relative min-h-screen bg-white py-12 px-4 text-black overflow-hidden">
+      {/* Background Icons */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-24 left-10">
+          <FaJava size={70} className="text-red-300" />
+        </div>
+        <div className="absolute top-10 left-32">
+          <FileCode size={100} className="text-blue-100 rotate-12 z-34" />
+        </div>
+        <div className="absolute top-1/2 left-1/4">
+          <Braces size={100} className="text-green-200 -rotate-6 z-34" />
+        </div>
+        <div className="absolute bottom-10 right-10">
+          <Server size={100} className="text-yellow-100 rotate-6 z-34" />
+        </div>
+      </div>
 
-      {/* Vertical timeline line */}
-      <div className="absolute left-1/2 top-24 w-1 bg-blue-400 h-[calc(100%-8rem)] transform -translate-x-1/2" />
+      <div className="relative z-10 max-w-6xl mx-auto">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold inline-block border-b-4 border-blue-500 pb-1">
+            Java Best Practices
+          </h1>
+        </div>
 
-      {/* Top indicator dot */}
-      <div className="absolute left-1/2 top-24 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-blue-500 rounded-full z-10" />
-
-      {/* Bottom indicator dot */}
-      <div className="absolute left-1/2 bottom-8 transform -translate-x-1/2 translate-y-1/2 w-4 h-4 bg-blue-500 rounded-full z-10" />
-
-      {/* Timeline sections */}
-      <div className="space-y-16">
-        {sections.map((section, idx) => {
-          const isLeft = idx % 2 === 0;
-          return (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {checklist["Java Best Practices"].map((section, index) => (
             <div
-              key={section.title}
-              className={`flex flex-col md:flex-row ${isLeft ? "" : "md:flex-row-reverse"} items-start md:items-center`}
+              key={index}
+              className="cursor-pointer border border-gray-200 rounded-lg shadow-md p-5 bg-gradient-to-br from-white to-gray-50"
             >
-              <div className="md:w-1/2 px-6">
-                <div className="bg-white border border-gray-200 shadow-md hover:shadow-xl transition-shadow duration-300 rounded-2xl p-6">
-                  <h3 className="text-xl font-bold text-blue-700 mb-4 tracking-tight">
-                    {section.title}
-                  </h3>
-                  <ul className="space-y-2 text-sm text-gray-800 list-disc list-inside">
-                    {section.items.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="hidden md:flex justify-center items-center w-1/2 relative">
-                <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full shadow-lg absolute top-4">
-                  <CheckCircle size={18} />
-                </div>
-              </div>
+              <h2 className="text-lg font-semibold text-blue-600 mb-3 border-b pb-1">
+                {section.title}
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-sm">
+                {section.items.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -19,18 +19,18 @@ import {
 
 const topicRoutes = {
   Html: "/bestpracticeHtml",
-  Css: "/bestpractsecond/bestcss",
-  Javascript: "/bestpractsecond/bestjs",
+  Css: "/bestpracticeCss",
+  Javascript: "/bestpracticeJavascript",
   React: "/bestpracticeReact",
   Nodejs: "/bestpracticeNodejs",
   PHP: "/bestpracticePhp",
   Python: "/bestpracticePython",
-  Express: "/bestpractsecond/bestex",
-  MongoDB: "/bestpractsecond/bestmongodb",
+  Express: "/bestpracticeExpress",
+  MongoDB: "/bestpracticeMongo",
   Java: "/bestpracticeJava",
-  Sql: "/bestpractsecond/bestsql",
-  MySql: "/bestpractsecond/bestmysql",
-  Nextjs: "/bestpractsecond/bestnextjs",
+  Sql: "/bestpracticeSql",
+  MySql: "/bestpracticeMySql",
+  Nextjs: "/bestpracticeNextjs",
 };
 
 const topicIcons = {
