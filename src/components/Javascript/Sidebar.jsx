@@ -39,7 +39,7 @@ const Sidebar = () => {
         </li>
         <li className="mb-4">
           <Link href="/javascript/intro" className={getLinkClass("/javascript/intro")}>
-            <FaRegFileAlt className="inline mr-2 text-xl" /> Javascript Intro
+            <FaRegFileAlt className="inline mr-2 text-xl" /> Javascript Introduction
           </Link>
         </li>
         <li className="mb-4">

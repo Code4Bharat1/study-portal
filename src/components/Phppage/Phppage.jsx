@@ -102,7 +102,7 @@ export default function PHPPage() {
             >
               {[
                 { 
-                  href: "/phphome", 
+                  href: "/php-intro", 
                   text: "Learn PHP", 
                   bg: "bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700",
                   textColor: "text-white",

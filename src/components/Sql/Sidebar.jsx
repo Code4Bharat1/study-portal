@@ -35,7 +35,7 @@ const Sidebar = () => {
         {/* Static Links */}
         <li className="mb-4">
           <Link href="/sql/home" className={getLinkClass("/sql/home")}>
-            <FaDatabase className="inline mr-2 text-xl" /> SQL HOME
+            <FaDatabase className="inline mr-2 text-xl" /> SQL Roadmap
           </Link>
         </li>
         <li className="mb-4">

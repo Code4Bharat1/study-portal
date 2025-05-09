@@ -107,7 +107,7 @@ export default function SQLPage() {
             >
               {[
                 { 
-                  href: '/sql/home', 
+                  href: '/sql/intro', 
                   text: 'Learn SQL', 
                   bg: 'bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700',
                   textColor: 'text-white',

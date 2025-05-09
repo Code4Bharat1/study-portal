@@ -103,7 +103,7 @@ export default function NodePage() {
             >
               {[
                 { 
-                  href: "/NodeHome", 
+                  href: "/NodeIntro", 
                   text: "Get Started", 
                   bg: "bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700",
                   textColor: "text-white",

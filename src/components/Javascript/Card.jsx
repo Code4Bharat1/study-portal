@@ -105,7 +105,7 @@ export default function JavaScriptPage() {
             >
               {[
                 { 
-                  href: "/javascript/home", 
+                  href: "/javascript/intro", 
                   text: "Get Started", 
                   bg: "bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700",
                   textColor: "text-white",
