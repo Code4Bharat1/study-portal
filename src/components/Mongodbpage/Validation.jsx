@@ -1,3 +1,4 @@
+"use client";
 import useReadingTracker from "@/components/useReadingTracker";
 import React from "react";
 
