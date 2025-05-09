@@ -36,7 +36,7 @@ const buttonVariants = {
 const codeCardVariants = {
   hover: {
     y: -8,
-    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 就不会出轨 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
     transition: { 
       duration: 0.3,
       ease: "easeOut"
@@ -47,19 +47,17 @@ const codeCardVariants = {
 export default function MySQLPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#e0f7fa] via-[#b2ebf2] to-[#80deea] animate-gradient-shift flex items-center justify-center p-4">
-      
-  <FaDatabase className="absolute top-30 left-50 text-blue-600 text-6xl z-34 rotate-12" />
-  <FaDatabase className="absolute top-30 right-34 text-blue-600 text-6xl z-34 rotate-12" />
-  <FaDatabase className="absolute top-40 right-90 text-blue-600 text-6xl z-34 rotate-34" />
-  <FaDatabase className="absolute top-90 left-23 text-blue-600 text-6xl z-34 rotate-34" />
-
-  <FaDatabase className="absolute bottom-16 left-12 text-blue-600 text-6xl z-34" />
-  <FaDatabase className="absolute top-[30%] left-[5%] text-blue-600 text-5xl z-34" />
-  <FaDatabase className="absolute top-[40%] right-[8%] text-blue-600 text-5xl z-34" />
-  <FaDatabase className="absolute bottom-20 right-[10%] text-blue-600 text-5xl z-34" />
-  <FaDatabase className="absolute top-[6%] right-[55%] text-blue-600 text-6xl z-34" />
-  <FaDatabase className="absolute top-5 right-[40%] w-12 h-12 text-blue-600 z-34" />
-  <FaDatabase className="absolute bottom-4 right-4 w-10 h-10 text-blue-500 text-5xl z-34" />
+      <FaDatabase className="absolute top-30 left-50 text-blue-600 text-6xl z-34 rotate-12" />
+      <FaDatabase className="absolute top-30 right-34 text-blue-600 text-6xl z-34 rotate-12" />
+      <FaDatabase className="absolute top-40 right-90 text-blue-600 text-6xl z-34 rotate-34" />
+      <FaDatabase className="absolute top-90 left-23 text-blue-600 text-6xl z-34 rotate-34" />
+      <FaDatabase className="absolute bottom-16 left-12 text-blue-600 text-6xl z-34" />
+      <FaDatabase className="absolute top-[30%] left-[5%] text-blue-600 text-5xl z-34" />
+      <FaDatabase className="absolute top-[40%] right-[8%] text-blue-600 text-5xl z-34" />
+      <FaDatabase className="absolute bottom-20 right-[10%] text-blue-600 text-5xl z-34" />
+      <FaDatabase className="absolute top-[6%] right-[55%] text-blue-600 text-6xl z-34" />
+      <FaDatabase className="absolute top-5 right-[40%] w-12 h-12 text-blue-600 z-34" />
+      <FaDatabase className="absolute bottom-4 right-4 w-10 h-10 text-blue-500 text-5xl z-34" />
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
@@ -132,7 +130,7 @@ export default function MySQLPage() {
                 >
                   <Link href={button.href}>
                     <motion.button
-                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200`}
+                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200 cursor-pointer`}
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
@@ -220,7 +218,7 @@ WHERE email = 'john@example.com';
                 <p className="text-gray-600 mb-4">Try MySQL right in your browser</p>
                 <Link href="https://www.db-fiddle.com">
                   <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"

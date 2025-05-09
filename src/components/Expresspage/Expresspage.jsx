@@ -47,17 +47,17 @@ const codeCardVariants = {
 export default function ExpressPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#fff7e6] via-[#fff1cc] to-[#ffeb99] animate-gradient-shift flex items-center justify-center p-4">
-  <SiExpress className="absolute top-30 left-50 text-orange-500 text-5xl z-34 rotate-12" />
-<SiExpress className="absolute top-30 right-34 text-orange-500 text-5xl z-34 rotate-12" />
-<SiExpress className="absolute top-40 right-90 text-orange-500 text-5xl z-34 rotate-34" />
-<SiExpress className="absolute top-90 left-23 text-orange-500 text-5xl z-34 rotate-34" />
-<SiExpress className="absolute bottom-16 left-12 text-orange-500 text-5xl z-34" />
-<SiExpress className="absolute top-[30%] left-[5%] text-orange-500 text-5xl z-34" />
-<SiExpress className="absolute top-[40%] right-[8%] text-orange-500 text-5xl z-34" />
-<SiExpress className="absolute bottom-20 right-[10%] text-orange-500 text-5xl z-34" />
-<SiExpress className="absolute top-[6%] right-[55%] text-orange-500 text-5xl z-34" />
-<SiExpress className="absolute top-5 right-[40%] w-12 h-12 text-orange-500 z-34" />
-<SiExpress className="absolute bottom-4 right-4 w-10 h-10 text-orange-500 text-5xl z-34" />
+      <SiExpress className="absolute top-30 left-50 text-orange-500 text-5xl z-34 rotate-12" />
+      <SiExpress className="absolute top-30 right-34 text-orange-500 text-5xl z-34 rotate-12" />
+      <SiExpress className="absolute top-40 right-90 text-orange-500 text-5xl z-34 rotate-34" />
+      <SiExpress className="absolute top-90 left-23 text-orange-500 text-5xl z-34 rotate-34" />
+      <SiExpress className="absolute bottom-16 left-12 text-orange-500 text-5xl z-34" />
+      <SiExpress className="absolute top-[30%] left-[5%] text-orange-500 text-5xl z-34" />
+      <SiExpress className="absolute top-[40%] right-[8%] text-orange-500 text-5xl z-34" />
+      <SiExpress className="absolute bottom-20 right-[10%] text-orange-500 text-5xl z-34" />
+      <SiExpress className="absolute top-[6%] right-[55%] text-orange-500 text-5xl z-34" />
+      <SiExpress className="absolute top-5 right-[40%] w-12 h-12 text-orange-500 z-34" />
+      <SiExpress className="absolute bottom-4 right-4 w-10 h-10 text-orange-500 text-5xl z-34" />
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
@@ -112,7 +112,7 @@ export default function ExpressPage() {
                   text: "Video Tutorial", 
                   bg: "bg-white hover:bg-gray-50",
                   textColor: "text-gray-700",
-                  border: "buttborder border-gray-200",
+                  border: "border border-gray-200",
                   shadow: "shadow-sm hover:shadow-md"
                 },
                 { 
@@ -130,7 +130,7 @@ export default function ExpressPage() {
                 >
                   <Link href={button.href} rel={button.href.startsWith("http") ? "noopener noreferrer" : undefined}>
                     <motion.button
-                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200`}
+                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200 cursor-pointer`}
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
@@ -220,7 +220,7 @@ app.listen(PORT, () => {
                 <p className="text-gray-600 mb-4">Try Express right in your browser</p>
                 <Link href="https://replit.com/@replit/Nodejs" rel="noopener noreferrer">
                   <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"

@@ -47,19 +47,17 @@ const codeCardVariants = {
 export default function MongoPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#e6f7e6] via-[#ccffcc] to-[#99ff99] animate-gradient-shift flex items-center justify-center p-4">
-      <SiMongodb className="absolute top-30 left-50 text-green-500 text-6xl  z-34 rotate-12" />
-           <SiMongodb className="absolute top-30 right-34  text-green-500 text-6xl  z-34 rotate-12"  />
-           <SiMongodb className="absolute top-40 right-90  text-green-500 text-6xl  z-34 rotate-34"  />
-           <SiMongodb className="absolute top-90 left-23  text-green-500 text-6xl  z-34 rotate-34"  />
-    
-    <SiMongodb className="absolute bottom-16 left-12 text-green-500 text-6xl z-34" />
-    <SiMongodb className="absolute top-[30%] left-[5%] text-green-500 text-5xl z-34" />
-    <SiMongodb className="absolute top-[40%] right-[8%] text-green-500 text-5xl z-34" />
-    <SiMongodb className="absolute bottom-20 right-[10%] text-green-500  text-5xl z-34" />
-    <SiMongodb className="absolute top-[6%] right-[55%] text-green-500 text-6xl z-34 "/>
-    <SiMongodb className="absolute top-5 right-[40%] w-12 h-12 text-green-600 z-34 " />
-    <SiMongodb className="absolute bottom-4 right-4 w-10 h-10 text-green-400 text-5xl z-34" />
-
+      <SiMongodb className="absolute top-30 left-50 text-green-500 text-6xl z-34 rotate-12" />
+      <SiMongodb className="absolute top-30 right-34 text-green-500 text-6xl z-34 rotate-12" />
+      <SiMongodb className="absolute top-40 right-90 text-green-500 text-6xl z-34 rotate-34" />
+      <SiMongodb className="absolute top-90 left-23 text-green-500 text-6xl z-34 rotate-34" />
+      <SiMongodb className="absolute bottom-16 left-12 text-green-500 text-6xl z-34" />
+      <SiMongodb className="absolute top-[30%] left-[5%] text-green-500 text-5xl z-34" />
+      <SiMongodb className="absolute top-[40%] right-[8%] text-green-500 text-5xl z-34" />
+      <SiMongodb className="absolute bottom-20 right-[10%] text-green-500 text-5xl z-34" />
+      <SiMongodb className="absolute top-[6%] right-[55%] text-green-500 text-6xl z-34" />
+      <SiMongodb className="absolute top-5 right-[40%] w-12 h-12 text-green-600 z-34" />
+      <SiMongodb className="absolute bottom-4 right-4 w-10 h-10 text-green-400 text-5xl z-34" />
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
@@ -82,21 +80,21 @@ export default function MongoPage() {
                 NoSQL Database
               </motion.span>
             </div>
-           
+            
             <motion.h1
               className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight"
               variants={itemVariants}
             >
               Store Data with <span className="text-green-600 bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">MongoDB</span>
             </motion.h1>
-           
+            
             <motion.p
               className="text-lg md:text-xl text-gray-600 mb-8"
               variants={itemVariants}
             >
               Manage flexible, scalable data with MongoDB, the leading NoSQL database for modern applications.
             </motion.p>
-           
+            
             <motion.div
               className="flex flex-wrap gap-4 mb-8"
               variants={containerVariants}
@@ -132,7 +130,7 @@ export default function MongoPage() {
                 >
                   <Link href={button.href} rel={button.href.startsWith("http") ? "noopener noreferrer" : undefined}>
                     <motion.button
-                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200`}
+                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200 cursor-pointer`}
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
@@ -143,14 +141,14 @@ export default function MongoPage() {
                 </motion.div>
               ))}
             </motion.div>
-           
+            
             <motion.div
               className="flex flex-col sm:flex-row sm:items-center gap-4 text-gray-500"
               variants={itemVariants}
             >
               <span className="text-sm sm:text-base">Trusted by industry leaders:</span>
               <div className="flex flex-wrap gap-2">
-                {['IBM', 'Cisco', 'Bosch', 'Forbes', 'Coinbase', 'Expedia'].map((company, i) => (
+                {["IBM", "Cisco", "Bosch", "Forbes", "Coinbase", "Expedia"].map((company, i) => (
                   <motion.span
                     key={company}
                     className="px-3 py-1 bg-gray-100 rounded-full text-sm"
@@ -163,7 +161,7 @@ export default function MongoPage() {
               </div>
             </motion.div>
           </motion.div>
-         
+          
           {/* Right Content */}
           <motion.div
             className="flex-1 bg-gradient-to-br from-green-50 to-teal-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
@@ -172,7 +170,7 @@ export default function MongoPage() {
             {/* Decorative elements */}
             <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-green-200/30 blur-xl"></div>
             <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-teal-200/30 blur-xl"></div>
-           
+            
             <div className="w-full max-w-md relative z-10">
               <motion.div
                 className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
@@ -214,7 +212,7 @@ db.users.deleteOne({ name: "John Doe" });`}
                   <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
                 </div>
               </motion.div>
-             
+              
               <motion.div
                 className="mt-8 text-center"
                 initial={{ opacity: 0 }}
@@ -224,7 +222,7 @@ db.users.deleteOne({ name: "John Doe" });`}
                 <p className="text-gray-600 mb-4">Try MongoDB right in your browser</p>
                 <Link href="https://www.mongodb.com/playground" rel="noopener noreferrer">
                   <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"

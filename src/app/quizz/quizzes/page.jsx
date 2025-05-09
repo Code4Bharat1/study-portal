@@ -8,10 +8,11 @@ export default function Quizzes() {
   const router = useRouter();
   // Define available quizzes with their names, icons, and navigation paths
   const quizzes = [
-    { name: 'React', icon: <FaReact className="text-sky-600 text-6xl" />, path: '/quizz/react' },
-    { name: 'Express', icon: <FaServer className="text-gray-800 text-6xl" />, path: '/quizz/express' },
-    { name: 'MongoDB', icon: <FaDatabase className="text-green-600 text-6xl" />, path: '/quizz/mongodb' },
-    { name: 'Node.js', icon: <FaNodeJs className="text-green-500 text-6xl" />, path: '/quizz/nodejs' }
+    { name: 'React', icon: <FaReact className="text-sky-600 text-6xl shadow-none" />, path: '/quizz/react' },
+    { name: 'Express', icon: <FaServer className="text-gray-800 text-6xl shadow-none" />, path: '/quizz/express' },
+    { name: 'MongoDB', icon: <FaDatabase className="text-green-600 text-6xl shadow-none" />, path: '/quizz/mongodb' },
+    { name: 'Node.js', icon: <FaNodeJs className="text-green-500 text-6xl shadow-none" />, path: '/quizz/nodejs' }
+    
   ];
 
   // Check for authentication on mount

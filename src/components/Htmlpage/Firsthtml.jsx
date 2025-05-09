@@ -1,3 +1,4 @@
+
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -132,7 +133,7 @@ export default function HtmlPage() {
                 >
                   <Link href={button.href} rel={button.href.startsWith("http") ? "noopener noreferrer" : undefined}>
                     <motion.button
-                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200`}
+                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200 cursor-pointer`}
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
@@ -153,7 +154,7 @@ export default function HtmlPage() {
                 {['Google', 'Mozilla', 'W3C', 'GitHub', 'Adobe', 'Shopify'].map((company, i) => (
                   <motion.span 
                     key={company} 
-                    className="px-3 py-1 bg-gr  ay-100 rounded-full text-sm"
+                    className="px-3 py-1 bg-gray-100 rounded-full text-sm"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.2 }}
                   >
@@ -221,7 +222,7 @@ export default function HtmlPage() {
                 <p className="text-gray-600 mb-3 text-sm">Try HTML right in your browser</p>
                 <Link href="https://jsfiddle.net/" rel="noopener noreferrer">
                   <motion.button
-                    className="px-4 py-2 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium text-sm shadow-lg hover:shadow-xl transition-all"
+                    className="px-4 py-2 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium text-sm shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"

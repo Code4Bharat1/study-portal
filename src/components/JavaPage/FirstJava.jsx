@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaJava } from 'react-icons/fa'; // Importing FaJava from FontAwesome
+import { FaJava } from "react-icons/fa";
+
 // Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -46,11 +47,10 @@ const codeCardVariants = {
 export default function JavaPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#fff7e6] via-[#fff1cc] to-[#ffeb99] animate-gradient-shift flex items-center justify-center p-4">
-  <FaJava className="absolute top-30 left-50 text-red-600 text-6xl z-34 rotate-12" />
+      <FaJava className="absolute top-30 left-50 text-red-600 text-6xl z-34 rotate-12" />
       <FaJava className="absolute top-30 right-34 text-red-600 text-6xl z-34 rotate-12" />
       <FaJava className="absolute top-40 right-90 text-red-600 text-6xl z-34 rotate-34" />
       <FaJava className="absolute top-90 left-23 text-red-600 text-6xl z-34 rotate-34" />
-
       <FaJava className="absolute bottom-16 left-12 text-red-600 text-6xl z-34" />
       <FaJava className="absolute top-[30%] left-[5%] text-red-600 text-5xl z-34" />
       <FaJava className="absolute top-[40%] right-[8%] text-red-600 text-5xl z-34" />
@@ -58,7 +58,6 @@ export default function JavaPage() {
       <FaJava className="absolute top-[6%] right-[55%] text-red-600 text-6xl z-34" />
       <FaJava className="absolute top-5 right-[40%] w-12 h-12 text-red-700 z-34" />
       <FaJava className="absolute bottom-4 right-4 w-10 h-10 text-red-500 text-5xl z-34" />
-
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
@@ -131,7 +130,7 @@ export default function JavaPage() {
                 >
                   <Link href={button.href} rel={button.href.startsWith("http") ? "noopener noreferrer" : undefined}>
                     <motion.button
-                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200`}
+                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200 cursor-pointer`}
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
@@ -149,7 +148,7 @@ export default function JavaPage() {
             >
               <span className="text-sm sm:text-base">Trusted by industry leaders:</span>
               <div className="flex flex-wrap gap-2">
-                {['Oracle', 'IBM', 'Red Hat', 'SAP', 'Android', 'Netflix'].map((company, i) => (
+                {["Oracle", "IBM", "Red Hat", "SAP", "Android", "Netflix"].map((company, i) => (
                   <motion.span 
                     key={company} 
                     className="px-3 py-1 bg-gray-100 rounded-full text-sm"
@@ -216,7 +215,7 @@ export default function JavaPage() {
                 <p className="text-gray-600 mb-4">Try Java right in your browser</p>
                 <Link href="https://replit.com/@replit/Java" rel="noopener noreferrer">
                   <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"

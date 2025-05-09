@@ -1,4 +1,5 @@
-'use client';
+
+"use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { SiNextdotjs } from "react-icons/si";
@@ -131,7 +132,7 @@ export default function NextJsPage() {
                 >
                   <Link href={button.href} rel={button.href.startsWith("http") ? "noopener noreferrer" : undefined}>
                     <motion.button
-                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200 whitespace-nowrap`}
+                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200 whitespace-nowrap cursor-pointer`}
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
@@ -222,7 +223,7 @@ export default function HomePage() {
                 <p className="text-gray-600 mb-4">Try Next.js in your browser</p>
                 <Link href="https://codesandbox.io/s/nextjs" rel="noopener noreferrer">
                   <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"

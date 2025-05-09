@@ -47,20 +47,17 @@ const codeCardVariants = {
 export default function ReactPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#f0f4ff] via-[#e0e9ff] to-[#d0deff] animate-gradient-shift flex items-center justify-center p-4">
-        <SiReact className="absolute top-30 left-50 text-indigo-600 text-6xl z-34 rotate-12" />
-  <SiReact className="absolute top-30 right-34 text-indigo-600 text-6xl z-34 rotate-12" />
-  <SiReact className="absolute top-40 right-90 text-indigo-600 text-6xl z-34 rotate-34" />
-  <SiReact className="absolute top-90 left-23 text-indigo-600 text-6xl z-34 rotate-34" />
-
-  <SiReact className="absolute bottom-16 left-12 text-indigo-600 text-6xl z-34" />
-  <SiReact className="absolute top-[30%] left-[5%] text-indigo-600 text-5xl z-34" />
-  <SiReact className="absolute top-[40%] right-[8%] text-indigo-600 text-5xl z-34" />
-  <SiReact className="absolute bottom-20 right-[10%] text-indigo-600 text-5xl z-34" />
-  <SiReact className="absolute top-[6%] right-[55%] text-indigo-600 text-6xl z-34" />
-  <SiReact className="absolute top-5 right-[40%] w-12 h-12 text-indigo-600 z-34" />
-  <SiReact className="absolute bottom-4 right-4 w-10 h-10 text-indigo-600 text-5xl z-34" />
-
-
+      <SiReact className="absolute top-30 left-50 text-indigo-600 text-6xl z-34 rotate-12" />
+      <SiReact className="absolute top-30 right-34 text-indigo-600 text-6xl z-34 rotate-12" />
+      <SiReact className="absolute top-40 right-90 text-indigo-600 text-6xl z-34 rotate-34" />
+      <SiReact className="absolute top-90 left-23 text-indigo-600 text-6xl z-34 rotate-34" />
+      <SiReact className="absolute bottom-16 left-12 text-indigo-600 text-6xl z-34" />
+      <SiReact className="absolute top-[30%] left-[5%] text-indigo-600 text-5xl z-34" />
+      <SiReact className="absolute top-[40%] right-[8%] text-indigo-600 text-5xl z-34" />
+      <SiReact className="absolute bottom-20 right-[10%] text-indigo-600 text-5xl z-34" />
+      <SiReact className="absolute top-[6%] right-[55%] text-indigo-600 text-6xl z-34" />
+      <SiReact className="absolute top-5 right-[40%] w-12 h-12 text-indigo-600 z-34" />
+      <SiReact className="absolute bottom-4 right-4 w-10 h-10 text-indigo-600 text-5xl z-34" />
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
@@ -118,14 +115,13 @@ export default function ReactPage() {
                   border: "border border-gray-200",
                   shadow: "shadow-sm hover:shadow-md"
                 },
-                // In the buttons array, modify the View Projects button
-{
-  href: "/projects?tech=react",
-  text: "View Projects",
-  bg: "bg-gray-900 hover:bg-gray-800",
-  textColor: "text-white",
-  shadow: "shadow-lg hover:shadow-xl"
-}
+                { 
+                  href: "/projects?tech=react", 
+                  text: "View Projects", 
+                  bg: "bg-gray-900 hover:bg-gray-800",
+                  textColor: "text-white",
+                  shadow: "shadow-lg hover:shadow-xl"
+                }
               ].map((button, index) => (
                 <motion.div
                   key={button.text}
@@ -134,7 +130,7 @@ export default function ReactPage() {
                 >
                   <Link href={button.href}>
                     <motion.button
-                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200`}
+                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200 cursor-pointer`}
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
@@ -152,7 +148,7 @@ export default function ReactPage() {
             >
               <span className="text-sm sm:text-base">Trusted by industry leaders:</span>
               <div className="flex flex-wrap gap-2">
-                {['Netflix', 'Facebook', 'Airbnb', 'Uber', 'Instagram', 'Twitter'].map((company, i) => (
+                {["Netflix", "Facebook", "Airbnb", "Uber", "Instagram", "Twitter"].map((company, i) => (
                   <motion.span 
                     key={company} 
                     className="px-3 py-1 bg-gray-100 rounded-full text-sm"
@@ -192,7 +188,7 @@ export default function ReactPage() {
                 <div className="relative">
                   <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
                     <code className="block whitespace-pre">
-                    {`function Counter() {
+{`function Counter() {
   const [count, setCount] = 
     useState(0);
 
@@ -224,7 +220,7 @@ export default function ReactPage() {
                 <p className="text-gray-600 mb-4">Try React right in your browser</p>
                 <Link href="https://codesandbox.io/s/new">
                   <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
