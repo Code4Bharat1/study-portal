@@ -1,5 +1,6 @@
 
-import ExpressDeployment from "@/components/Expresspage/ExpressDeployment";
+//import ExpressDeployment from "@/components/Expresspage/ExpressDeployment";
+import NextPagesAndRoutingPage from "@/components/Nextjs/PagesRouting";
 import JSSidebar from "@/components/Nextjs/Sidebar";
 
 
@@ -8,7 +9,7 @@ export default function Page() {
     <div className="flex">
       <JSSidebar/>
       <main className="flex-1 ml-75  bg-white min-h-screen">
-      <ExpressDeployment/>
+      <NextPagesAndRoutingPage/>
       </main>
     </div>
   );

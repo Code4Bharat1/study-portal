@@ -1,7 +1,7 @@
 
-//import ExpressDeployment from "@/components/Expresspage/ExpressDeployment";
-import NextHomePage from "@/components/Nextjs/Home";
+import ApiAuthrization from "@/components/Nextjs/api-auth";
 import JSSidebar from "@/components/Nextjs/Sidebar";
+
 
 
 export default function Page() {
@@ -9,7 +9,7 @@ export default function Page() {
     <div className="flex">
       <JSSidebar/>
       <main className="flex-1 ml-75  bg-white min-h-screen">
-      <NextHomePage/>
+      <ApiAuthrization/>
       </main>
     </div>
   );

@@ -1,9 +1,10 @@
-import Nextpage from '@/components/Next.jspage/Next.jspage'
+
+import NextJsPage from '@/components/Nextjs/Nextpage'
 import React from 'react'
 
 function page() {
   return (
-   <Nextpage/>
+   <NextJsPage/>
   )
 }
 

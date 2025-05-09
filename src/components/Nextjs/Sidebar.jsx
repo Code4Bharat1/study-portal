@@ -35,7 +35,7 @@ const JSSidebar = () => {
         <ul className="space-y-4 pb-29">
           <li>
             <Link href="/nextjs/home" className={getLinkClass("/nextjs/home")}>
-              <FaHome className="inline mr-2 text-xl" /> Home
+              <FaHome className="inline mr-2 text-xl" /> Roadmap
             </Link>
           </li>
           <li>

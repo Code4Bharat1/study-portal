@@ -472,17 +472,7 @@ export default function Projects() {
                           <span className="absolute inset-0 bg-white opacity-0 hover:opacity-10 transition-opacity"></span>
                         </motion.button>
                       </Link>
-                      <Link href={project.projectLink.replace('github.com', 'github.io')} target="_blank" rel="noopener noreferrer">
-                        <motion.button
-                          className="px-4 py-2 rounded-lg font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors flex items-center"
-                          variants={buttonVariants}
-                          whileHover="hover"
-                          whileTap="tap"
-                        >
-                          <FiExternalLink className="mr-2" />
-                          Live Demo
-                        </motion.button>
-                      </Link>
+                     
                     </div>
                   </motion.div>
                 ))}

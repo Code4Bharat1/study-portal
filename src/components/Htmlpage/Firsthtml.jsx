@@ -61,7 +61,7 @@ export default function HtmlPage() {
   <SiHtml5 className="absolute bottom-4 right-4 w-10 h-10 text-orange-400 text-4xl z-34" />
 
       <motion.div
-        className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
+        className="w-full max-w-4xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -69,7 +69,7 @@ export default function HtmlPage() {
         <div className="flex flex-col lg:flex-row">
           {/* Left Content */}
           <motion.div 
-            className="flex-1 p-8 md:p-12 flex flex-col justify-center"
+            className="flex-1 p-6 md:p-8 flex flex-col justify-center"
             variants={itemVariants}
           >
             <div className="mb-2">
@@ -153,7 +153,7 @@ export default function HtmlPage() {
                 {['Google', 'Mozilla', 'W3C', 'GitHub', 'Adobe', 'Shopify'].map((company, i) => (
                   <motion.span 
                     key={company} 
-                    className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                    className="px-3 py-1 bg-gr  ay-100 rounded-full text-sm"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.2 }}
                   >
@@ -166,14 +166,14 @@ export default function HtmlPage() {
           
           {/* Right Content */}
           <motion.div 
-            className="flex-1 bg-gradient-to-br from-blue-50 to-cyan-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
+            className="flex-1 bg-gradient-to-br from-blue-50 to-cyan-50 p-6 md:p-8 flex items-center justify-center relative overflow-hidden"
             variants={itemVariants}
           >
             {/* Decorative elements */}
             <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-blue-200/30 blur-xl"></div>
             <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-cyan-200/30 blur-xl"></div>
             
-            <div className="w-full max-w-md relative z-10">
+            <div className="w-full max-w-xs relative z-10">
               <motion.div 
                 className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
                 variants={codeCardVariants}
@@ -189,7 +189,7 @@ export default function HtmlPage() {
                   <div className="ml-4 text-sm text-gray-300 font-mono">index.html</div>
                 </div>
                 <div className="relative">
-                  <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
+                  <pre className="p-4 text-xs h-[200px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
                     <code className="block whitespace-pre">
 {`<!DOCTYPE html>
 <html lang="en">
@@ -213,15 +213,15 @@ export default function HtmlPage() {
               </motion.div>
               
               <motion.div 
-                className="mt-8 text-center"
+                className="mt-6 text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                <p className="text-gray-600 mb-4">Try HTML right in your browser</p>
+                <p className="text-gray-600 mb-3 text-sm">Try HTML right in your browser</p>
                 <Link href="https://jsfiddle.net/" rel="noopener noreferrer">
                   <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="px-4 py-2 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium text-sm shadow-lg hover:shadow-xl transition-all"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
