@@ -5,7 +5,7 @@ import React, { useState } from "react";
 function Reactusestate() {
   useReadingTracker("reactusestate");
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">
         Understanding useState in React
       </h1>
@@ -17,8 +17,8 @@ function Reactusestate() {
         can effectively use it in your React applications.
       </p>
 
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+      <div className="bg-white p-6  max-w-8xl mx-auto">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           What is State?
         </h2>
         <p className="text-gray-800 mb-6">
@@ -28,11 +28,11 @@ function Reactusestate() {
           the component to reflect those changes.
         </p>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Syntax of useState
         </h2>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`const [state, setState] = useState(initialState);`}
           </code>
         </pre>
@@ -45,11 +45,11 @@ function Reactusestate() {
           assign to the state.
         </p>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Simple Example
         </h2>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import React, { useState } from 'react';
 
 function Counter() {
@@ -76,7 +76,7 @@ export default Counter;`}
           update state within a functional component.
         </p>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Multiple useState Calls
         </h2>
         <p className="text-gray-800 mb-6">
@@ -86,7 +86,7 @@ export default Counter;`}
         </p>
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`function UserProfile() {
   const [name, setName] = useState('John Doe');
   const [age, setAge] = useState(25);
@@ -110,7 +110,7 @@ export default Counter;`}
           within the same component.
         </p>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Updating State Based on Previous State
         </h2>
         <p className="text-gray-800 mb-6">
@@ -122,7 +122,7 @@ export default Counter;`}
         </p>
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`setCount(prevCount => prevCount + 1);`}
           </code>
         </pre>
@@ -135,7 +135,7 @@ export default Counter;`}
           one another.
         </p>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Best Practices
         </h2>
         <ul className="list-disc list-inside text-gray-800 space-y-2 mb-6">
@@ -160,7 +160,7 @@ export default Counter;`}
           </li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Common Mistakes
         </h2>
         <ul className="list-disc list-inside text-gray-800 space-y-2 mb-6">
@@ -180,7 +180,7 @@ export default Counter;`}
           </li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Conclusion
         </h2>
         <p className="text-gray-800 mb-6">
@@ -193,9 +193,7 @@ export default Counter;`}
           <code>useState</code> effectively.
         </p>
 
-        <button className="mt-8 bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Learn About useEffect →
-        </button>
+       
       </div>
     </div>
   );

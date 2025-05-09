@@ -20,12 +20,12 @@ function Reactcomponents() {
         how they work, and why they are so important.
       </p>
 
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+      <div className="bg-white p-6 max-w-8xl mx-auto">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Types of React Components
         </h2>
 
-        <div className="text-gray-800 space-y-6 text-sm leading-relaxed">
+        <div className="text-gray-800 space-y-6 text-md leading-relaxed">
           <p>
             React components come in two main types:{" "}
             <strong>Functional Components</strong>
@@ -35,7 +35,7 @@ function Reactcomponents() {
             especially with the introduction of hooks in React 16.8.
           </p>
 
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             1. Functional Components
           </h3>
           <p>
@@ -47,7 +47,7 @@ function Reactcomponents() {
 
           <p>Here's an example of a basic functional component:</p>
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`function WelcomeMessage() {
   return <h1>Welcome to React!</h1>;
 }`}
@@ -59,7 +59,7 @@ function Reactcomponents() {
             how the function takes no parameters and directly returns JSX.
           </p>
 
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             2. Class Components
           </h3>
           <p>
@@ -72,7 +72,7 @@ function Reactcomponents() {
 
           <p>Here's an example of a basic class component:</p>
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`class WelcomeMessage extends React.Component {
   render() {
     return <h1>Welcome to React!</h1>;
@@ -88,7 +88,7 @@ function Reactcomponents() {
             methods.
           </p>
 
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             Functional vs. Class Components
           </h3>
           <p>
@@ -100,7 +100,7 @@ function Reactcomponents() {
             making them just as powerful as class components.
           </p>
 
-          <p className="text-lg font-semibold text-pink-400 mt-6">
+          <p className="text-lg font-semibold text-pink-700 mt-6">
             When to Use Functional Components?
           </p>
           <p>You should prefer functional components when:</p>
@@ -116,7 +116,7 @@ function Reactcomponents() {
             </li>
           </ul>
 
-          <p className="text-lg font-semibold text-pink-400 mt-6">
+          <p className="text-lg font-semibold text-pink-700 mt-6">
             When to Use Class Components?
           </p>
           <p>Class components should still be used when:</p>
@@ -131,7 +131,7 @@ function Reactcomponents() {
             </li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             Components with State: Using the useState Hook
           </h3>
           <p>
@@ -150,7 +150,7 @@ function Reactcomponents() {
             hook to manage the state of a counter:
           </p>
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`import React, { useState } from 'react';
 
 function Counter() {
@@ -175,7 +175,7 @@ function Counter() {
             reflect the new count.
           </p>
 
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             Components with Props
           </h3>
           <p>
@@ -187,7 +187,7 @@ function Counter() {
 
           <p>Here's an example of passing props to a child component:</p>
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`function ParentComponent() {
   return <ChildComponent name="John" />;
 }
@@ -206,7 +206,7 @@ function ChildComponent(props) {
             cannot modify them directly.
           </p>
 
-          <h3 className="text-xl font-semibold text-pink-300 mb-2">
+          <h3 className="text-xl font-semibold text-pink-700 mb-2">
             Component Lifecycle
           </h3>
           <p>
@@ -237,7 +237,7 @@ function ChildComponent(props) {
           </p>
 
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <code className="text-pink-300">
+            <code className="text-pink-700">
               {`import React, { useEffect } from 'react';
 
 function Timer() {

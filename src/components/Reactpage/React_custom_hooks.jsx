@@ -22,7 +22,7 @@ function React_custom_hooks() {
   const windowWidth = useWindowWidth();
 
   return (
-    <div className="p-6 ml-70">
+    <div className="p-6 ml-80">
       <h1 className="text-3xl text-gray-800 font-bold mb-4">
         Understanding Custom Hooks in React
       </h1>
@@ -32,8 +32,8 @@ function React_custom_hooks() {
         as built-in hooks.
       </p>
 
-      <div className="bg-white p-6 max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+      <div className="bg-white p-6 max-w-8xl mx-auto">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Why Create Custom Hooks?
         </h2>
         <p className="text-gray-800 mb-4">
@@ -42,7 +42,7 @@ function React_custom_hooks() {
           hook helps you abstract that logic cleanly and reuse it efficiently.
         </p>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Creating Your First Custom Hook
         </h2>
         <p className="text-gray-800 mb-2">
@@ -50,7 +50,7 @@ function React_custom_hooks() {
         </p>
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`import { useState, useEffect } from 'react';
 
 function useWindowWidth() {
@@ -75,7 +75,7 @@ function useWindowWidth() {
         </p>
 
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`const width = useWindowWidth();  // Use the custom hook to get the window width
 return <p>Window width: {width}px</p>;`}
           </code>
@@ -86,14 +86,14 @@ return <p>Window width: {width}px</p>;`}
           <p className="text-lg text-pink-700 font-bold">{windowWidth}px</p>
         </div>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Custom Hook for Fetching Data
         </h2>
         <p className="text-gray-800 mb-4">
           Another common use case is fetching data from an API.
         </p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`function useFetch(url) {
   const [data, setData] = useState(null);  // State for storing fetched data
   const [loading, setLoading] = useState(true);  // State to track loading status
@@ -114,12 +114,12 @@ return <p>Window width: {width}px</p>;`}
 
         <p className="text-gray-800 mb-4">Usage of the custom fetch hook:</p>
         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto mb-6">
-          <code className="text-pink-500">
+          <code className="text-pink-700">
             {`const { data, loading } = useFetch('https://api.example.com/posts');`}
           </code>
         </pre>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Rules of Custom Hooks
         </h2>
         <ul className="list-disc list-inside text-gray-800 mb-6 space-y-2">
@@ -133,7 +133,7 @@ return <p>Window width: {width}px</p>;`}
           <li>Don't use hooks inside conditionals or loops</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Best Practices
         </h2>
         <ul className="list-disc list-inside text-gray-800 mb-6 space-y-2">
@@ -145,7 +145,7 @@ return <p>Window width: {width}px</p>;`}
           <li>Test hooks logic separately</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+        <h2 className="text-2xl font-semibold text-pink-700 mb-4">
           Conclusion
         </h2>
         <p className="text-gray-800 mb-6">
@@ -154,9 +154,7 @@ return <p>Window width: {width}px</p>;`}
           your app.
         </p>
 
-        <button className="mt-8 bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-600">
-          Learn About useReducer →
-        </button>
+    
       </div>
     </div>
   );
