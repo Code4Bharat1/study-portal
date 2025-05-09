@@ -74,7 +74,7 @@ const projectsData = {
     </div>
   );
 }`,
-        projectLink: "https://github.com/example/react-todo-list",
+        projectLink: "https://github.com/mdn/todo-react",
       },
       {
         title: "Counter App",
@@ -87,7 +87,7 @@ const projectsData = {
     </div>
   );
 }`,
-        projectLink: "https://github.com/example/react-counter-app",
+        projectLink: "https://github.com/juan18506/react-counter-app",
       },
     ],
     intermediate: [
@@ -102,8 +102,8 @@ const projectsData = {
   }, []);
   return <div>{weather ? weather.temp : 'Loading...'}</div>;
 }`,
-        projectLink: "https://github.com/example/react-weather-app",
-      },
+        projectLink:"https://github.com/codebucks27/React-Weather-app",
+      }, 
       {
         title: "E-Commerce Dashboard",
         code: `function Dashboard() {
@@ -118,7 +118,7 @@ const projectsData = {
     </div>
   );
 }`,
-        projectLink: "https://github.com/example/react-ecommerce-dashboard",
+        projectLink: "https://github.com/Hadyosman1/react-ecommerce-dashboard",
       },
     ],
     professional: [
@@ -136,7 +136,7 @@ const projectsData = {
     </div>
   );
 }`,
-        projectLink: "https://github.com/example/react-realtime-chat",
+        projectLink: "https://github.com/simpletut/react-real-time-chat-app",
       },
       {
         title: "Social Media Dashboard",
@@ -152,7 +152,7 @@ const projectsData = {
     </div>
   );
 }`,
-        projectLink: "https://github.com/example/react-social-dashboard",
+        projectLink: "https://github.com/Ashish8449/React-Social-Media-Dashboard",
       },
     ],
   },
@@ -164,7 +164,7 @@ const projectsData = {
 const app = express();
 app.get('/', (req, res) => res.send('Hello World'));
 app.listen(3000, () => console.log('Server on port 3000'));`,
-        projectLink: "https://github.com/example/express-hello-world",
+        projectLink: "https://github.com/eMahtab/node-express-hello-world",
       },
       {
         title: "Simple GET API",
@@ -172,7 +172,7 @@ app.listen(3000, () => console.log('Server on port 3000'));`,
 const app = express();
 app.get('/api', (req, res) => res.json({ message: 'Hello API' }));
 app.listen(3000, () => console.log('Server on port 3000'));`,
-        projectLink: "https://github.com/example/express-simple-get",
+        projectLink: "https://github.com/joeyklee/simple-express-api",
       },
     ],
     intermediate: [
@@ -186,7 +186,7 @@ app.get('/posts', async (req, res) => {
   res.json(posts);
 });
 app.listen(3000);`,
-        projectLink: "https://github.com/example/express-blog-api",
+        projectLink: "https://github.com/obinnafranklinduru/blogging-platform-api",
       },
       {
         title: "User Registration API",
@@ -198,7 +198,7 @@ app.post('/register', async (req, res) => {
   res.json(user);
 });
 app.listen(3000);`,
-        projectLink: "https://github.com/example/express-user-registration",
+        projectLink: "https://github.com/mohamedookiyo/user-registration-and-login-api",
       },
     ],
     professional: [
@@ -213,7 +213,7 @@ app.post('/login', (req, res) => {
   res.json({ token });
 });
 app.listen(3000);`,
-        projectLink: "https://github.com/example/express-auth-api",
+        projectLink: "https://github.com/singhpradip/JWT-Authentication-API-with-Node.js-and-Express",
       },
       {
         title: "Rate-Limited API",
@@ -224,7 +224,7 @@ const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 app.use(limiter);
 app.get('/api', (req, res) => res.json({ message: 'Rate Limited' }));
 app.listen(3000);`,
-        projectLink: "https://github.com/example/express-rate-limited-api",
+        projectLink: "https://github.com/abhisekp/rate-limiter-api",
       },
     ],
   },
