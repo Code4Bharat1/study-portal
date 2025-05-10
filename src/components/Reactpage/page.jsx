@@ -46,18 +46,18 @@ const codeCardVariants = {
 
 export default function ReactPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#f0f4ff] via-[#e0e9ff] to-[#d0deff] animate-gradient-shift flex items-center justify-center p-4">
-      <SiReact className="absolute top-30 left-50 text-indigo-600 text-6xl z-34 rotate-12" />
-      <SiReact className="absolute top-30 right-34 text-indigo-600 text-6xl z-34 rotate-12" />
-      <SiReact className="absolute top-40 right-90 text-indigo-600 text-6xl z-34 rotate-34" />
-      <SiReact className="absolute top-90 left-23 text-indigo-600 text-6xl z-34 rotate-34" />
-      <SiReact className="absolute bottom-16 left-12 text-indigo-600 text-6xl z-34" />
-      <SiReact className="absolute top-[30%] left-[5%] text-indigo-600 text-5xl z-34" />
-      <SiReact className="absolute top-[40%] right-[8%] text-indigo-600 text-5xl z-34" />
-      <SiReact className="absolute bottom-20 right-[10%] text-indigo-600 text-5xl z-34" />
-      <SiReact className="absolute top-[6%] right-[55%] text-indigo-600 text-6xl z-34" />
-      <SiReact className="absolute top-5 right-[40%] w-12 h-12 text-indigo-600 z-34" />
-      <SiReact className="absolute bottom-4 right-4 w-10 h-10 text-indigo-600 text-5xl z-34" />
+    <main className="min-h-screen bg-gradient-to-br from-pink-100 via-[#e0e9ff] to-[#d0deff] animate-gradient-shift flex items-center justify-center p-4">
+      <SiReact className="absolute top-30 left-50 text-pink-600 text-6xl z-34 rotate-12" />
+      <SiReact className="absolute top-30 right-34 text-pink-600 text-6xl z-34 rotate-12" />
+      <SiReact className="absolute top-40 right-90 text-pink-600 text-6xl z-34 rotate-34" />
+      <SiReact className="absolute top-90 left-23 text-pink-600 text-6xl z-34 rotate-34" />
+      <SiReact className="absolute bottom-16 left-12 text-pink-600 text-6xl z-34" />
+      <SiReact className="absolute top-[30%] left-[5%] text-pink-600 text-5xl z-34" />
+      <SiReact className="absolute top-[40%] right-[8%] text-pink-600 text-5xl z-34" />
+      <SiReact className="absolute bottom-20 right-[10%] text-pink-600 text-5xl z-34" />
+      <SiReact className="absolute top-[6%] right-[55%] text-pink-600 text-6xl z-34" />
+      <SiReact className="absolute top-5 right-[40%] w-12 h-12 text-pink-600 z-34" />
+      <SiReact className="absolute bottom-4 right-4 w-10 h-10 text-pink-600 text-5xl z-34" />
       <motion.div
         className="w-full max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
         variants={containerVariants}
@@ -85,7 +85,7 @@ export default function ReactPage() {
               className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight"
               variants={itemVariants}
             >
-              Build User Interfaces with <span className="text-indigo-600 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">React</span>
+              Build User Interfaces with <span className="text-pink-600 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">React</span>
             </motion.h1>
             
             <motion.p 
@@ -103,7 +103,7 @@ export default function ReactPage() {
                 { 
                   href: "/reactintroduction", 
                   text: "Get Started", 
-                  bg: "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700",
+                  bg: "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700",
                   textColor: "text-white",
                   shadow: "shadow-lg shadow-indigo-500/20"
                 },
@@ -164,7 +164,7 @@ export default function ReactPage() {
           
           {/* Right Content */}
           <motion.div 
-            className="flex-1 bg-gradient-to-br from-indigo-50 to-blue-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
+            className="flex-1 bg-gradient-to-br from-pink-50 to-blue-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
             variants={itemVariants}
           >
             {/* Decorative elements */}
@@ -226,7 +226,7 @@ export default function ReactPage() {
                     whileTap="tap"
                   >
                     <span className="relative z-10">Open Sandbox</span>
-                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 hover:opacity-100 transition-opacity"></span>
+                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 hover:opacity-100 transition-opacity"></span>
                   </motion.button>
                 </Link>
               </motion.div>

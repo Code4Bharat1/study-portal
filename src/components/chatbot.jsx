@@ -47,6 +47,7 @@ export default function GeminiChat() {
   const formatResponse = (text) => {
     if (!text) return null;
     return text.split('\n').map((line, i) => {
+      // Handle **text** for bold
       if (line.startsWith('**') && line.endsWith('**')) {
         return (
           <p key={i} className="font-bold my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
@@ -54,6 +55,15 @@ export default function GeminiChat() {
           </p>
         );
       }
+      // Handle *text* for bold
+      if (line.startsWith('*') && line.endsWith('*') && !line.startsWith('* ')) {
+        return (
+          <p key={i} className="font-bold my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+            {line.replace(/\*/g, '')}
+          </p>
+        );
+      }
+      // Handle * text for list items
       if (line.startsWith('* ')) {
         return (
           <li key={i} className="list-disc ml-5 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
@@ -61,6 +71,7 @@ export default function GeminiChat() {
           </li>
         );
       }
+      // Handle headings
       if (line.match(/^#+\s/)) {
         const level = line.match(/^#+/)[0].length;
         const HeadingTag = `h${Math.min(6, level)}`;
@@ -73,9 +84,11 @@ export default function GeminiChat() {
           </HeadingTag>
         );
       }
+      // Handle empty lines
       if (line.trim() === '') {
         return <br key={i} />;
       }
+      // Handle inline code
       if (line.includes('`')) {
         const parts = line.split('`');
         return (
@@ -94,6 +107,7 @@ export default function GeminiChat() {
           </p>
         );
       }
+      // Default paragraph
       return (
         <p key={i} className="my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
           {line}

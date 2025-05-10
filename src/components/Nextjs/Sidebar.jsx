@@ -22,8 +22,8 @@ const JSSidebar = () => {
 
   const getLinkClass = (href) => (
     `block p-2 rounded transition-all duration-200 ease-in-out
-    hover:bg-blue-100
-    ${pathname === href ? 'bg-blue-100 font-semibold text-black' : 'text-gray-700'}`
+    hover:bg-gradient-to-r from-white to-cyan-100 
+    ${pathname === href ? 'bg-gradient-to-r from-white to-cyan-100  font-semibold text-black' : 'text-gray-700'}`
   );
 
   return (
@@ -52,7 +52,7 @@ const JSSidebar = () => {
           {/* API Routing Section */}
           <li>
             <button
-              className="w-full text-left flex items-center justify-between text-lg font-semibold hover:bg-blue-100 p-2 rounded"
+              className="w-full text-left flex items-center justify-between text-lg font-semibold hover:bg-gradient-to-r from-white to-cyan-100  p-2 rounded"
               onClick={() => toggleDropdown('api-routing')}
             >
               <span>API Routes</span>
@@ -82,7 +82,7 @@ const JSSidebar = () => {
           {/* Advanced Topics */}
           <li>
             <button
-              className="w-full text-left flex items-center justify-between text-lg font-semibold hover:bg-blue-100 p-2 rounded"
+              className="w-full text-left flex items-center justify-between text-lg font-semibold hover:bg-gradient-to-r from-white to-cyan-100  p-2 rounded"
               onClick={() => toggleDropdown('advanced')}
             >
               <span>Advanced Topics</span>

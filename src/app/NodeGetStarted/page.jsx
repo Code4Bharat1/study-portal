@@ -1,26 +1,21 @@
-import React from 'react'
-import GetStartedPage from '@/components/fullnodecontent/GetStartedNode';
-import Sidebar from '@/components/fullnodecontent/nodesidebar';
+import React from "react";
+import GetStartedPage from "@/components/fullnodecontent/GetStartedNode";
+import Sidebar from "@/components/fullnodecontent/nodesidebar";
 
-import Navbar from '@/components/navbar';
+import Navbar from "@/components/Navbar";
 export default function page() {
   return (
     <div>
-        <Navbar/>
-   <div className="mt-30">
-    
-      {/* Sidebar Section */}
-    
-      <Sidebar />
+      <Navbar />
+      <div className="mt-30">
+        {/* Sidebar Section */}
 
+        <Sidebar />
 
-{/* Content Section */}
+        {/* Content Section */}
 
-  <GetStartedPage />
-
-   </div>
-
-
+        <GetStartedPage />
+      </div>
     </div>
-  )
+  );
 }

@@ -1,20 +1,19 @@
-import Sidebar from '@/components/Sql/Sidebar';
-import Intro from '@/components/Sql/Intro';
-import React from 'react';
-import Navbar from '@/components/Navbar';
+import Sidebar from "@/components/Sql/Sidebar";
+import Intro from "@/components/Sql/Intro";
+import React from "react";
+import Navbar from "@/components/Navbar";
 
 function Page() {
   return (
     <>
       <Navbar />
-        <div className="mt-25">  {/* Sidebar Section */}
-        
+      <div className="mt-25">
+        {" "}
+        {/* Sidebar Section */}
         <Sidebar />
-
-      {/* Content Section */}
-        <Intro/></div>
-       
-    
+        {/* Content Section */}
+        <Intro />
+      </div>
     </>
   );
 }

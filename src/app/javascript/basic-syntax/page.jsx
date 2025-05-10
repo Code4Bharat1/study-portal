@@ -1,7 +1,7 @@
-import React from 'react';
-import Navbar from '@/components/Navbar';
-import Sidebar from '@/components/Javascript/Sidebar';
-import ControlFlowContent from '@/components/Javascript/ControlFlow';
+import React from "react";
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Javascript/Sidebar";
+import ControlFlowContent from "@/components/Javascript/ControlFlow";
 
 export default function JavascriptControlFlowPage() {
   return (

@@ -23,8 +23,8 @@ const CssSidebar = () => {
   // Get link class with active state management
   const getLinkClass = (href) => {
     return `block p-2 rounded transition-all duration-200 ease-in-out 
-      hover:bg-[#d0f0fd] 
-      ${pathname === href ? 'bg-[#d0f0fd] font-semibold text-black' : 'text-gray-700'}`;
+      hover:bg-orange-200
+      ${pathname === href ? 'bg-orange-200 font-semibold text-black' : 'text-gray-700'}`;
   };
 
   return (

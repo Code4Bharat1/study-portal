@@ -23,9 +23,9 @@ const NodeSidebar = () => {
   // Get link class with enhanced active state management
   const getLinkClass = (href) => {
     return `block p-2 rounded transition-all duration-200 ease-in-out 
-      hover:bg-[#d0f0fd] hover:text-gray-900 
+      hover:bg-green-100 hover:text-gray-900 
       ${pathname === href 
-        ? 'bg-[#007bff] text-white font-semibold shadow-md border-l-4 border-white' 
+        ? 'bg-green-100 text-white font-semibold shadow-md border-l-4 border-white' 
         : 'text-gray-700'}`;
   };
 
