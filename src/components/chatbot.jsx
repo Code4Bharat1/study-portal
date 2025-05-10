@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { BsChatDots } from 'react-icons/bs';
-import { PiFlowerLotusDuotone } from 'react-icons/pi';
-import { motion } from 'framer-motion';
+import React, { useState, useRef, useEffect } from "react";
+import { BsChatDots } from "react-icons/bs";
+import { PiFlowerLotusDuotone } from "react-icons/pi";
+import { motion } from "framer-motion";
 
 export default function GeminiChat() {
   const [showChat, setShowChat] = useState(false);
-  const [prompt, setPrompt] = useState('');
-  const [response, setResponse] = useState('');
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -17,20 +17,20 @@ export default function GeminiChat() {
     if (!prompt.trim()) return;
 
     setLoading(true);
-    setResponse('');
+    setResponse("");
 
     try {
-      const res = await fetch('http://localhost:5000/api/ask-gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("https://sp-api.code4bharat.com/api/ask-gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
       });
 
       const data = await res.json();
-      setResponse(data.text || 'No response from SkillBridge.');
+      setResponse(data.text || "No response from SkillBridge.");
     } catch (error) {
-      console.error('Error:', error);
-      setResponse('Failed to get response from SkillBridge.');
+      console.error("Error:", error);
+      setResponse("Failed to get response from SkillBridge.");
     } finally {
       setLoading(false);
     }
@@ -39,34 +39,47 @@ export default function GeminiChat() {
   const toggleChat = () => {
     setShowChat(!showChat);
     if (!showChat) {
-      setPrompt('');
-      setResponse('');
+      setPrompt("");
+      setResponse("");
     }
   };
 
   const formatResponse = (text) => {
     if (!text) return null;
-    return text.split('\n').map((line, i) => {
+    return text.split("\n").map((line, i) => {
       // Handle **text** for bold
-      if (line.startsWith('**') && line.endsWith('**')) {
+      if (line.startsWith("**") && line.endsWith("**")) {
         return (
-          <p key={i} className="font-bold my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
-            {line.replace(/\*\*/g, '')}
+          <p
+            key={i}
+            className="font-bold my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
+          >
+            {line.replace(/\*\*/g, "")}
           </p>
         );
       }
       // Handle *text* for bold
-      if (line.startsWith('*') && line.endsWith('*') && !line.startsWith('* ')) {
+      if (
+        line.startsWith("*") &&
+        line.endsWith("*") &&
+        !line.startsWith("* ")
+      ) {
         return (
-          <p key={i} className="font-bold my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
-            {line.replace(/\*/g, '')}
+          <p
+            key={i}
+            className="font-bold my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
+          >
+            {line.replace(/\*/g, "")}
           </p>
         );
       }
       // Handle * text for list items
-      if (line.startsWith('* ')) {
+      if (line.startsWith("* ")) {
         return (
-          <li key={i} className="list-disc ml-5 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+          <li
+            key={i}
+            className="list-disc ml-5 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
+          >
             {line.substring(2)}
           </li>
         );
@@ -78,28 +91,36 @@ export default function GeminiChat() {
         return (
           <HeadingTag
             key={i}
-            className={`font-bold my-3 text-${7 - level}xl bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent`}
+            className={`font-bold my-3 text-${
+              7 - level
+            }xl bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent`}
           >
-            {line.replace(/^#+\s/, '')}
+            {line.replace(/^#+\s/, "")}
           </HeadingTag>
         );
       }
       // Handle empty lines
-      if (line.trim() === '') {
+      if (line.trim() === "") {
         return <br key={i} />;
       }
       // Handle inline code
-      if (line.includes('`')) {
-        const parts = line.split('`');
+      if (line.includes("`")) {
+        const parts = line.split("`");
         return (
           <p key={i} className="my-2">
             {parts.map((part, j) =>
               j % 2 === 1 ? (
-                <code key={j} className="bg-gray-600 px-1.5 py-0.5 rounded text-sm font-mono text-white">
+                <code
+                  key={j}
+                  className="bg-gray-600 px-1.5 py-0.5 rounded text-sm font-mono text-white"
+                >
                   {part}
                 </code>
               ) : (
-                <span key={j} className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+                <span
+                  key={j}
+                  className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
+                >
                   {part}
                 </span>
               )
@@ -109,7 +130,10 @@ export default function GeminiChat() {
       }
       // Default paragraph
       return (
-        <p key={i} className="my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+        <p
+          key={i}
+          className="my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
+        >
           {line}
         </p>
       );
@@ -117,11 +141,11 @@ export default function GeminiChat() {
   };
 
   useEffect(() => {
-    setResponse('');
+    setResponse("");
   }, [prompt]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [response]);
 
   return (
@@ -133,7 +157,7 @@ export default function GeminiChat() {
           onClick={toggleChat}
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           <BsChatDots className="text-white text-lg mr-2" />
           <span className="text-white text-sm font-medium">Ask Me</span>
@@ -147,7 +171,7 @@ export default function GeminiChat() {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0, opacity: 0 }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {/* Header */}
           <div className="p-4 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white flex justify-between items-center">
@@ -233,7 +257,9 @@ export default function GeminiChat() {
                 type="submit"
                 disabled={loading || !prompt.trim()}
                 className={`bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white p-2 rounded-lg hover:from-gray-800 hover:to-black focus:outline-none transition duration-200 ${
-                  loading || !prompt.trim() ? 'opacity-50 cursor-not-allowed' : ''
+                  loading || !prompt.trim()
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
                 }`}
               >
                 <svg

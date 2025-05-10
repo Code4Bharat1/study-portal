@@ -1,10 +1,10 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Footer from "@/components/Footer/Footer";
-import Chatbot from "@/components/Chatbot";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import Navbar from "@/components/Navbar";
+import GeminiChat from "@/components/chatbot.jsx";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
@@ -52,7 +52,7 @@ export default function RootLayout({ children }) {
           <SessionProvider>{children}</SessionProvider>
         </div>
 
-        {showChatbot && <Chatbot />}
+        {showChatbot && <GeminiChat />}
 
         <Footer />
       </body>

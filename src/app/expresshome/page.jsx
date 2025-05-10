@@ -15,7 +15,7 @@ export default function ReactPage() {
     <div className="flex">
       <ExpressSidebar />
       <main className="flex-1  bg-white min-h-screen">
-      <Expresshome/>
+        <Expresshome />
       </main>
     </div>
   );

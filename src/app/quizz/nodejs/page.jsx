@@ -1,15 +1,23 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaClock, FaSignOutAlt, FaTrophy, FaChartLine, FaInfoCircle, FaCrown, FaStar } from 'react-icons/fa';
-import { GiTrophyCup } from 'react-icons/gi';
-import Confetti from 'react-confetti';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaClock,
+  FaSignOutAlt,
+  FaTrophy,
+  FaChartLine,
+  FaInfoCircle,
+  FaCrown,
+  FaStar,
+} from "react-icons/fa";
+import { GiTrophyCup } from "react-icons/gi";
+import Confetti from "react-confetti";
 
 export default function NodeJSQuizPage() {
   const router = useRouter();
-  const quizType = 'nodejs';
+  const quizType = "nodejs";
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [score, setScore] = useState(0);
@@ -20,42 +28,50 @@ export default function NodeJSQuizPage() {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [difficulty, setDifficulty] = useState('basic');
+  const [difficulty, setDifficulty] = useState("basic");
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-  const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://yourwebsite.com';
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://sp-api.code4bharat.com";
+  const WEBSITE_URL =
+    process.env.NEXT_PUBLIC_WEBSITE_URL || "https://yourwebsite.com";
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
-    const email = user.email || '';
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("quizUser") || "{}");
+    const email = user.email || "";
     if (!token || !email) {
-      console.warn('No token or email found, redirecting to /quizz');
-      router.push('/quizz');
+      console.warn("No token or email found, redirecting to /quizz");
+      router.push("/quizz");
       return;
     }
 
     // Determine difficulty based on login count
-    const loginCount = parseInt(localStorage.getItem(`loginCount_${email}`) || '0', 10);
-    let difficultyLevel = 'basic';
+    const loginCount = parseInt(
+      localStorage.getItem(`loginCount_${email}`) || "0",
+      10
+    );
+    let difficultyLevel = "basic";
     if (loginCount >= 6 && loginCount <= 10) {
-      difficultyLevel = 'intermediate';
+      difficultyLevel = "intermediate";
     } else if (loginCount > 10) {
-      difficultyLevel = 'hard';
+      difficultyLevel = "hard";
     }
     setDifficulty(difficultyLevel);
 
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_URL}/api/questions/${quizType}?difficulty=${difficultyLevel}`, {
-          headers: {
-            'x-auth-token': token,
-          },
-        });
+        const response = await fetch(
+          `${API_URL}/api/questions/${quizType}?difficulty=${difficultyLevel}`,
+          {
+            headers: {
+              "x-auth-token": token,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`Failed to fetch questions: ${response.statusText}`);
@@ -64,13 +80,13 @@ export default function NodeJSQuizPage() {
         const data = await response.json();
         // Validate question data
         if (!Array.isArray(data) || !data.every(validateQuestion)) {
-          throw new Error('Invalid question data received from server');
+          throw new Error("Invalid question data received from server");
         }
         setQuestions(data);
         setLoading(false);
       } catch (err) {
-        console.error('Fetch error:', err);
-        setError(err.message || 'An unexpected error occurred');
+        console.error("Fetch error:", err);
+        setError(err.message || "An unexpected error occurred");
         setLoading(false);
       }
     };
@@ -82,33 +98,46 @@ export default function NodeJSQuizPage() {
   const validateQuestion = (question) => {
     const isValid =
       question &&
-      typeof question.question === 'string' &&
+      typeof question.question === "string" &&
       Array.isArray(question.options) &&
       question.options.length > 0 &&
       Number.isInteger(Number(question.correctAnswer)) &&
       Number(question.correctAnswer) >= 0 &&
       Number(question.correctAnswer) < question.options.length;
     if (!isValid) {
-      console.warn('Invalid question structure:', question);
+      console.warn("Invalid question structure:", question);
     }
     return isValid;
   };
 
   useEffect(() => {
-    if (!quizCompleted && !selectedOption && !isTimeUp && questions.length > 0) {
+    if (
+      !quizCompleted &&
+      !selectedOption &&
+      !isTimeUp &&
+      questions.length > 0
+    ) {
       const timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             clearInterval(timer);
             setIsTimeUp(true);
 
-            const correctAnswerIndex = Number(questions[currentQuestion].correctAnswer);
+            const correctAnswerIndex = Number(
+              questions[currentQuestion].correctAnswer
+            );
             const options = questions[currentQuestion].options;
-            if (correctAnswerIndex < 0 || correctAnswerIndex >= options.length) {
-              console.error('Time-up: Correct answer index out of bounds:', correctAnswerIndex);
+            if (
+              correctAnswerIndex < 0 ||
+              correctAnswerIndex >= options.length
+            ) {
+              console.error(
+                "Time-up: Correct answer index out of bounds:",
+                correctAnswerIndex
+              );
               setFeedback({
                 isCorrect: false,
-                correctAnswer: 'Error: Invalid correct answer index',
+                correctAnswer: "Error: Invalid correct answer index",
               });
             } else {
               setFeedback({
@@ -129,8 +158,12 @@ export default function NodeJSQuizPage() {
                 setShowExplanation(false);
               } else {
                 setQuizCompleted(true);
-                const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
-                const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+                const user = JSON.parse(
+                  localStorage.getItem("quizUser") || "{}"
+                );
+                const scores = JSON.parse(
+                  localStorage.getItem("quizScores") || "{}"
+                );
                 scores[user.email] = scores[user.email] || {};
                 scores[user.email][quizType] = {
                   score,
@@ -138,7 +171,7 @@ export default function NodeJSQuizPage() {
                   completedAt: new Date().toISOString(),
                   maxStreak,
                 };
-                localStorage.setItem('quizScores', JSON.stringify(scores));
+                localStorage.setItem("quizScores", JSON.stringify(scores));
               }
             }, 2000);
             return 30;
@@ -148,7 +181,16 @@ export default function NodeJSQuizPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentQuestion, selectedOption, quizCompleted, isTimeUp, questions, score, difficulty, maxStreak]);
+  }, [
+    currentQuestion,
+    selectedOption,
+    quizCompleted,
+    isTimeUp,
+    questions,
+    score,
+    difficulty,
+    maxStreak,
+  ]);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -156,25 +198,35 @@ export default function NodeJSQuizPage() {
     const selectedIndex = questions[currentQuestion].options.indexOf(option);
 
     if (selectedIndex === -1) {
-      console.error('Selected option not found in options array:', option);
+      console.error("Selected option not found in options array:", option);
       setFeedback({
         isCorrect: false,
-        correctAnswer: questions[currentQuestion].options[questions[currentQuestion].correctAnswer],
+        correctAnswer:
+          questions[currentQuestion].options[
+            questions[currentQuestion].correctAnswer
+          ],
         explanation: questions[currentQuestion].explanation,
       });
-      new Audio('/incorrect.mp3').play().catch((err) => console.error('Audio playback failed:', err));
+      new Audio("/incorrect.mp3")
+        .play()
+        .catch((err) => console.error("Audio playback failed:", err));
       return;
     }
 
     const correctAnswerIndex = Number(questions[currentQuestion].correctAnswer);
-    if (correctAnswerIndex < 0 || correctAnswerIndex >= questions[currentQuestion].options.length) {
-      console.error('Correct answer index out of bounds:', correctAnswerIndex);
+    if (
+      correctAnswerIndex < 0 ||
+      correctAnswerIndex >= questions[currentQuestion].options.length
+    ) {
+      console.error("Correct answer index out of bounds:", correctAnswerIndex);
       setFeedback({
         isCorrect: false,
-        correctAnswer: 'Error: Invalid correct answer index',
+        correctAnswer: "Error: Invalid correct answer index",
         explanation: questions[currentQuestion].explanation,
       });
-      new Audio('/incorrect.mp3').play().catch((err) => console.error('Audio playback failed:', err));
+      new Audio("/incorrect.mp3")
+        .play()
+        .catch((err) => console.error("Audio playback failed:", err));
       return;
     }
 
@@ -193,10 +245,14 @@ export default function NodeJSQuizPage() {
       if (newStreak > maxStreak) {
         setMaxStreak(newStreak);
       }
-      new Audio('/correct.mp3').play().catch((err) => console.error('Audio playback failed:', err));
+      new Audio("/correct.mp3")
+        .play()
+        .catch((err) => console.error("Audio playback failed:", err));
     } else {
       setStreak(0);
-      new Audio('/incorrect.mp3').play().catch((err) => console.error('Audio playback failed:', err));
+      new Audio("/incorrect.mp3")
+        .play()
+        .catch((err) => console.error("Audio playback failed:", err));
     }
 
     setTimeout(() => {
@@ -208,8 +264,8 @@ export default function NodeJSQuizPage() {
         setShowExplanation(false);
       } else {
         setQuizCompleted(true);
-        const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
-        const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+        const user = JSON.parse(localStorage.getItem("quizUser") || "{}");
+        const scores = JSON.parse(localStorage.getItem("quizScores") || "{}");
         scores[user.email] = scores[user.email] || {};
         scores[user.email][quizType] = {
           score: score + (isCorrect ? 1 : 0),
@@ -217,37 +273,45 @@ export default function NodeJSQuizPage() {
           completedAt: new Date().toISOString(),
           maxStreak: Math.max(maxStreak, isCorrect ? streak + 1 : streak),
         };
-        localStorage.setItem('quizScores', JSON.stringify(scores));
+        localStorage.setItem("quizScores", JSON.stringify(scores));
       }
     }, 2000);
   };
 
-  const handleContinue = () => router.push('/quizz/quizzes');
-  const handleStop = () => router.push('/quizz/results');
+  const handleContinue = () => router.push("/quizz/quizzes");
+  const handleStop = () => router.push("/quizz/results");
 
   const getDifficultyColor = (diff) => {
     switch (diff) {
-      case 'basic': return 'text-green-600';
-      case 'intermediate': return 'text-yellow-600';
-      case 'hard': return 'text-red-600';
-      default: return 'text-blue-600';
+      case "basic":
+        return "text-green-600";
+      case "intermediate":
+        return "text-yellow-600";
+      case "hard":
+        return "text-red-600";
+      default:
+        return "text-blue-600";
     }
   };
 
   const getDifficultyBg = (diff) => {
     switch (diff) {
-      case 'basic': return 'bg-green-100';
-      case 'intermediate': return 'bg-yellow-100';
-      case 'hard': return 'bg-red-100';
-      default: return 'bg-blue-100';
+      case "basic":
+        return "bg-green-100";
+      case "intermediate":
+        return "bg-yellow-100";
+      case "hard":
+        return "bg-red-100";
+      default:
+        return "bg-blue-100";
     }
   };
 
   const getCompletionCard = () => {
     const totalQuestions = questions.length;
     const percentage = Math.round((score / totalQuestions) * 100);
-    const user = JSON.parse(localStorage.getItem('quizUser') || '{}');
-    const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+    const user = JSON.parse(localStorage.getItem("quizUser") || "{}");
+    const scores = JSON.parse(localStorage.getItem("quizScores") || "{}");
     const userScores = scores[user.email] || {};
     const previousScore = userScores[quizType]?.score || 0;
     const scoreImprovement = score - previousScore;
@@ -257,38 +321,40 @@ export default function NodeJSQuizPage() {
 
     let title, message, badge;
     if (percentage >= 90) {
-      title = 'Node.js Master!';
-      message = 'You absolutely crushed it! Your Node.js knowledge is exceptional.';
-      badge = 'Expert';
+      title = "Node.js Master!";
+      message =
+        "You absolutely crushed it! Your Node.js knowledge is exceptional.";
+      badge = "Expert";
     } else if (percentage >= 75) {
-      title = 'Great Job!';
-      message = 'Solid performance! You clearly understand Node.js well.';
-      badge = 'Proficient';
+      title = "Great Job!";
+      message = "Solid performance! You clearly understand Node.js well.";
+      badge = "Proficient";
     } else if (percentage >= 50) {
-      title = 'Good Effort!';
-      message = "You're getting there! Review the questions you missed to improve.";
-      badge = 'Intermediate';
+      title = "Good Effort!";
+      message =
+        "You're getting there! Review the questions you missed to improve.";
+      badge = "Intermediate";
     } else {
-      title = 'Keep Practicing!';
+      title = "Keep Practicing!";
       message = "Don't worry! Node.js takes time to master. Try again!";
-      badge = 'Beginner';
+      badge = "Beginner";
     }
 
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, type: 'spring' }}
+        transition={{ duration: 0.5, type: "spring" }}
         className="bg-blue-400 rounded-2xl shadow-lg p-6 max-w-lg w-full text-center text-white relative"
       >
         {/* Confetti for high scores */}
         {percentage >= 75 && (
           <Confetti
-            width={typeof window !== 'undefined' ? window.innerWidth : 0}
-            height={typeof window !== 'undefined' ? window.innerHeight : 0}
+            width={typeof window !== "undefined" ? window.innerWidth : 0}
+            height={typeof window !== "undefined" ? window.innerHeight : 0}
             recycle={false}
             numberOfPieces={percentage >= 90 ? 600 : 300}
-            colors={['#3B82F6', '#60A5FA', '#DBEAFE', '#BFDBFE']}
+            colors={["#3B82F6", "#60A5FA", "#DBEAFE", "#BFDBFE"]}
           />
         )}
 
@@ -297,7 +363,7 @@ export default function NodeJSQuizPage() {
           <motion.div
             initial={{ scale: 0, rotate: -20 }}
             animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: 0.2, type: 'spring' }}
+            transition={{ delay: 0.2, type: "spring" }}
           >
             <GiTrophyCup className="text-5xl text-white mx-auto" />
           </motion.div>
@@ -313,15 +379,16 @@ export default function NodeJSQuizPage() {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: 'spring' }}
+            transition={{ delay: 0.3, type: "spring" }}
             className="text-4xl font-bold"
           >
-            {score}<span className="text-xl">/{totalQuestions}</span>
+            {score}
+            <span className="text-xl">/{totalQuestions}</span>
           </motion.div>
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${percentage}%` }}
-            transition={{ delay: 0.4, duration: 1, ease: 'easeOut' }}
+            transition={{ delay: 0.4, duration: 1, ease: "easeOut" }}
             className="h-2 bg-white rounded-full mx-auto mt-2 max-w-xs"
           />
           <div className="text-xl font-semibold mt-2">{percentage}%</div>
@@ -334,7 +401,9 @@ export default function NodeJSQuizPage() {
             {[...Array(5)].map((_, i) => (
               <FaStar
                 key={i}
-                className={`text-xl ${i < starRating ? 'text-white fill-white' : 'text-blue-300/50'}`}
+                className={`text-xl ${
+                  i < starRating ? "text-white fill-white" : "text-blue-300/50"
+                }`}
               />
             ))}
           </motion.div>
@@ -382,10 +451,15 @@ export default function NodeJSQuizPage() {
                 <div className="text-sm text-blue-100">Improvement</div>
                 <div
                   className={`text-lg font-semibold ${
-                    scoreImprovement > 0 ? 'text-green-200' : scoreImprovement < 0 ? 'text-red-200' : ''
+                    scoreImprovement > 0
+                      ? "text-green-200"
+                      : scoreImprovement < 0
+                      ? "text-red-200"
+                      : ""
                   }`}
                 >
-                  {scoreImprovement > 0 ? '+' : ''}{scoreImprovement}
+                  {scoreImprovement > 0 ? "+" : ""}
+                  {scoreImprovement}
                 </div>
               </motion.div>
             </>
@@ -424,10 +498,12 @@ export default function NodeJSQuizPage() {
           whileTap={{ scale: 0.98 }}
           className="mt-4 text-blue-100 text-sm font-medium hover:text-white transition-colors"
           onClick={() => {
-            navigator.clipboard.writeText(
-              `I scored ${score}/${totalQuestions} (${percentage}%) on the Node.js ${difficulty} quiz! Try it yourself at ${WEBSITE_URL}`
-            ).catch((err) => console.error('Clipboard copy failed:', err));
-            alert('Results copied to clipboard!');
+            navigator.clipboard
+              .writeText(
+                `I scored ${score}/${totalQuestions} (${percentage}%) on the Node.js ${difficulty} quiz! Try it yourself at ${WEBSITE_URL}`
+              )
+              .catch((err) => console.error("Clipboard copy failed:", err));
+            alert("Results copied to clipboard!");
           }}
           aria-label="Share quiz results"
         >
@@ -442,7 +518,7 @@ export default function NodeJSQuizPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full"
           aria-label="Loading questions"
         />
@@ -460,16 +536,18 @@ export default function NodeJSQuizPage() {
           className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full"
         >
           <h2 className="text-2xl font-semibold text-red-600 mb-4">Error</h2>
-          <p className="text-gray-700 mb-6">{typeof error === 'string' ? error : 'An unexpected error occurred'}</p>
+          <p className="text-gray-700 mb-6">
+            {typeof error === "string" ? error : "An unexpected error occurred"}
+          </p>
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => {
               try {
-                router.push('/quizz/quizzes');
+                router.push("/quizz/quizzes");
               } catch (err) {
-                console.error('Navigation error:', err);
-                window.location.href = '/quizz/quizzes';
+                console.error("Navigation error:", err);
+                window.location.href = "/quizz/quizzes";
               }
             }}
             className="w-full px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
@@ -493,7 +571,9 @@ export default function NodeJSQuizPage() {
   if (questions.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 flex items-center justify-center">
-        <div className="text-2xl font-semibold text-gray-600">No questions available. Please try again later.</div>
+        <div className="text-2xl font-semibold text-gray-600">
+          No questions available. Please try again later.
+        </div>
       </div>
     );
   }
@@ -506,8 +586,8 @@ export default function NodeJSQuizPage() {
         transition={{ duration: 0.6 }}
         className="max-w-4xl mx-auto backdrop-blur-xl bg-white/80 rounded-3xl shadow-xl p-8 border border-white/20 tilt-card"
         style={{
-          transformStyle: 'preserve-3d',
-          transition: 'transform 0.3s ease',
+          transformStyle: "preserve-3d",
+          transition: "transform 0.3s ease",
         }}
         onMouseMove={(e) => {
           const card = e.currentTarget;
@@ -521,7 +601,8 @@ export default function NodeJSQuizPage() {
           card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+          e.currentTarget.style.transform =
+            "perspective(1000px) rotateX(0deg) rotateY(0deg)";
         }}
       >
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
@@ -534,7 +615,9 @@ export default function NodeJSQuizPage() {
               transition={{ duration: 0.5 }}
             />
             <div>
-              <h1 className="text-4xl font-extrabold text-indigo-700">Node.js Quiz</h1>
+              <h1 className="text-4xl font-extrabold text-indigo-700">
+                Node.js Quiz
+              </h1>
               <div
                 className={`inline-flex items-center mt-1 px-3 py-1 rounded-full text-sm font-medium ${getDifficultyBg(
                   difficulty
@@ -583,7 +666,9 @@ export default function NodeJSQuizPage() {
           <motion.div
             className="bg-gradient-to-r from-indigo-500 to-indigo-700 h-3 rounded-full"
             initial={{ width: 0 }}
-            animate={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+            animate={{
+              width: `${((currentQuestion + 1) / questions.length) * 100}%`,
+            }}
             transition={{ duration: 0.5 }}
           />
         </div>
@@ -599,15 +684,18 @@ export default function NodeJSQuizPage() {
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               strokeDasharray="100"
               strokeDashoffset={100 - (timeLeft / 30) * 100}
-              transition={{ duration: 1, ease: 'linear' }}
+              transition={{ duration: 1, ease: "linear" }}
             />
           </svg>
           <motion.span
             className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-semibold ${
-              timeLeft <= 10 ? 'text-red-500' : 'text-indigo-700'
+              timeLeft <= 10 ? "text-red-500" : "text-indigo-700"
             }`}
             animate={{ scale: timeLeft <= 10 ? [1, 1.2, 1] : 1 }}
-            transition={{ repeat: timeLeft <= 10 ? Infinity : 0, duration: 0.5 }}
+            transition={{
+              repeat: timeLeft <= 10 ? Infinity : 0,
+              duration: 0.5,
+            }}
           >
             {timeLeft}s
           </motion.span>
@@ -626,23 +714,30 @@ export default function NodeJSQuizPage() {
               <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
                 {questions[currentQuestion].category}
               </span>
-              <h2 className="text-3xl font-semibold text-gray-900">{questions[currentQuestion].question}</h2>
+              <h2 className="text-3xl font-semibold text-gray-900">
+                {questions[currentQuestion].question}
+              </h2>
             </div>
             <div className="grid gap-5">
               {questions[currentQuestion].options.map((option, i) => (
                 <motion.button
                   key={i}
-                  whileHover={{ scale: 1.02, boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+                  whileHover={{
+                    scale: 1.02,
+                    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+                  }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleOptionSelect(option)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleOptionSelect(option)}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" && handleOptionSelect(option)
+                  }
                   disabled={selectedOption !== null || isTimeUp}
                   className={`relative overflow-hidden w-full px-6 py-5 text-left rounded-2xl border-2 transition-all duration-300 text-lg font-medium ${
                     selectedOption === option
                       ? feedback?.isCorrect
-                        ? 'bg-gradient-to-r from-green-100 to-green-200 border-green-500 text-green-800'
-                        : 'bg-gradient-to-r from-red-100 to-red-200 border-red-500 text-red-800'
-                      : 'bg-white/50 border-indigo-200 text-gray-800 hover:bg-indigo-100/50 hover:border-indigo-300'
+                        ? "bg-gradient-to-r from-green-100 to-green-200 border-green-500 text-green-800"
+                        : "bg-gradient-to-r from-red-100 to-red-200 border-red-500 text-red-800"
+                      : "bg-white/50 border-indigo-200 text-gray-800 hover:bg-indigo-100/50 hover:border-indigo-300"
                   } shadow-md backdrop-blur-sm`}
                   aria-label={`Select option ${option}`}
                 >
@@ -654,7 +749,7 @@ export default function NodeJSQuizPage() {
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.2 }}
                       >
-                        {feedback?.isCorrect ? '✅' : '❌'}
+                        {feedback?.isCorrect ? "✅" : "❌"}
                       </motion.span>
                     )}
                     {option}
@@ -670,24 +765,32 @@ export default function NodeJSQuizPage() {
           {feedback && feedback.explanation && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
               className="overflow-hidden"
             >
               <motion.div
                 className={`mt-4 p-4 rounded-lg ${
-                  showExplanation ? 'bg-indigo-50 border border-indigo-200' : 'bg-gray-50 border border-gray-200 cursor-pointer'
+                  showExplanation
+                    ? "bg-indigo-50 border border-indigo-200"
+                    : "bg-gray-50 border border-gray-200 cursor-pointer"
                 }`}
                 onClick={() => !showExplanation && setShowExplanation(true)}
-                onKeyDown={(e) => e.key === 'Enter' && !showExplanation && setShowExplanation(true)}
+                onKeyDown={(e) =>
+                  e.key === "Enter" &&
+                  !showExplanation &&
+                  setShowExplanation(true)
+                }
                 tabIndex={0}
                 role="button"
-                aria-label={showExplanation ? 'Explanation' : 'Show explanation'}
+                aria-label={
+                  showExplanation ? "Explanation" : "Show explanation"
+                }
               >
                 <div className="flex items-center text-indigo-700 font-medium">
                   <FaInfoCircle className="mr-2" />
-                  {showExplanation ? 'Explanation' : 'Show Explanation'}
+                  {showExplanation ? "Explanation" : "Show Explanation"}
                 </div>
                 {showExplanation && (
                   <motion.p
@@ -708,11 +811,11 @@ export default function NodeJSQuizPage() {
               initial={{ opacity: 0, y: 20, scale: 0.8 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.8 }}
-              transition={{ duration: 0.3, type: 'spring', stiffness: 100 }}
+              transition={{ duration: 0.3, type: "spring", stiffness: 100 }}
               className="mt-6 px-6 py-4 rounded-xl font-semibold text-center shadow-md bg-red-100/80 text-red-800 flex items-center justify-center gap-2 backdrop-blur-sm"
             >
               <FaClock className="text-xl" />
-              Time's Up! Correct answer: {feedback?.correctAnswer || 'Unknown'}
+              Time's Up! Correct answer: {feedback?.correctAnswer || "Unknown"}
             </motion.div>
           )}
           {!isTimeUp && feedback && (
@@ -720,14 +823,19 @@ export default function NodeJSQuizPage() {
               initial={{ opacity: 0, y: 20, scale: 0.8 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.8 }}
-              transition={{ duration: 0.3, type: 'spring', stiffness: 100 }}
+              transition={{ duration: 0.3, type: "spring", stiffness: 100 }}
               className={`mt-6 px-6 py-4 rounded-xl font-semibold text-center shadow-md ${
-                feedback.isCorrect ? 'bg-green-100/80 text-green-800' : 'bg-red-100/80 text-red-800'
+                feedback.isCorrect
+                  ? "bg-green-100/80 text-green-800"
+                  : "bg-red-100/80 text-red-800"
               } backdrop-blur-sm`}
             >
               {feedback.isCorrect ? (
                 <div className="flex items-center justify-center gap-2">
-                  ✅ Correct! {streak > 1 && <span className="text-yellow-600">🔥 Streak: {streak}</span>}
+                  ✅ Correct!{" "}
+                  {streak > 1 && (
+                    <span className="text-yellow-600">🔥 Streak: {streak}</span>
+                  )}
                 </div>
               ) : (
                 `❌ Incorrect. Correct answer: ${feedback.correctAnswer}`
