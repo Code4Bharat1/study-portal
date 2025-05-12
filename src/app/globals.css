@@ -41,3 +41,47 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+.clip-hexagon {
+  clip-path: polygon(
+    25% 5.77%,
+    75% 5.77%,
+    100% 50%,
+    75% 94.23%,
+    25% 94.23%,
+    0% 50%
+  );
+}
+.clip-hexagon {
+  clip-path: polygon(
+    25% 0%, 75% 0%, 
+    100% 50%, 75% 100%, 
+    25% 100%, 0% 50%
+  );
+}
+.clip-hexagon {
+  clip-path: polygon(
+    25% 0%, 75% 0%, 
+    100% 50%, 75% 100%, 
+    25% 100%, 0% 50%
+  );
+}
+
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 2s infinite;
+}
+
+
+
+
+
