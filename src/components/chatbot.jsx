@@ -115,14 +115,14 @@ export default function GeminiChat() {
       {/* Floating Button */}
       {!showChat && (
         <motion.div
-          className="fixed bottom-6 right-6 w-30 h-12 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:from-gray-800 hover:to-black transition-all duration-300 z-50"
+          className="fixed bottom-6 right-6 w-40 h-16 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:from-gray-800 hover:to-black transition-all duration-300 z-50"
           onClick={toggleChat}
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           <BsChatDots className="text-white text-lg mr-2" />
-          <span className="text-white text-sm font-medium">Ask Me</span>
+          <span className="text-white text-md font-medium">Ask me</span>
         </motion.div>
       )}
 
@@ -207,7 +207,7 @@ export default function GeminiChat() {
           </div>
 
           {/* Input */}
-          <div className="p-3 border-t border-gray-700 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364]">
+          <div className="p-3  border-t border-gray-700 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364]">
             <form onSubmit={handleSubmit} className="flex items-center gap-2">
               <textarea
                 value={prompt}

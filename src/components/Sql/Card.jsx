@@ -214,7 +214,7 @@ SELECT * FROM Customers;`}
                 transition={{ delay: 0.8 }}
               >
                 <p className="text-gray-600 mb-4">Try SQL right in your browser</p>
-                <Link href="https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all" target="_blank" rel="noopener">
+                <Link href="/sandbox/mySqll" target="_blank" rel="noopener">
                   <motion.button
                     className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
