@@ -1,20 +1,19 @@
-import Sidebar from '@/components/fullnodecontent/nodesidebar';
-import IntroNode from '@/components/fullnodecontent/IntroNode';
-import React from 'react';
-import Navbar from '@/components/Navbar';
+import Sidebar from "@/components/fullnodecontent/nodesidebar";
+import IntroNode from "@/components/fullnodecontent/IntroNode";
+import React from "react";
+import Navbar from "@/components/Navbar";
 
 function Page() {
   return (
     <>
       <Navbar />
-        <div className="mt-25">  {/* Sidebar Section */}
-        
+      <div className="mt-25">
+        {" "}
+        {/* Sidebar Section */}
         <Sidebar />
-
-      {/* Content Section */}
-        <IntroNode/></div>
-       
-    
+        {/* Content Section */}
+        <IntroNode />
+      </div>
     </>
   );
 }

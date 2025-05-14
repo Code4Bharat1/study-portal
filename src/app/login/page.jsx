@@ -1,29 +1,32 @@
-'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
-    email: 'Amaan',
-    password: '',
+    email: "Amaan",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://sp-api.code4bharat.com/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const text = await response.text();
       let data;
@@ -31,19 +34,19 @@ export default function LoginPage() {
       try {
         data = JSON.parse(text);
       } catch (err) {
-        console.error('Failed to parse JSON:', text);
-        throw new Error('Server returned unexpected response');
+        console.error("Failed to parse JSON:", text);
+        throw new Error("Server returned unexpected response");
       }
 
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.message || "Login failed");
       }
 
-      localStorage.setItem('token', data.token);
-      router.push('/');
+      localStorage.setItem("token", data.token);
+      router.push("/");
     } catch (err) {
       setError(err.message);
-      console.error('Login error:', err);
+      console.error("Login error:", err);
     } finally {
       setIsSubmitting(false);
     }
@@ -63,7 +66,7 @@ export default function LoginPage() {
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.5, ease: 'easeOut' }}
+          transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
           className="text-3xl font-bold mb-5 text-gray-900 text-center tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600"
         >
           Welcome Back
@@ -74,13 +77,23 @@ export default function LoginPage() {
             <motion.div
               key="error"
               initial={{ opacity: 0, height: 0, y: -10 }}
-              animate={{ opacity: 1, height: 'auto', y: 0 }}
+              animate={{ opacity: 1, height: "auto", y: 0 }}
               exit={{ opacity: 0, height: 0, y: -10 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="mb-4 p-3 bg-red-50/90 backdrop-blur-sm text-red-900 rounded-xl text-sm flex items-start gap-3 shadow-sm"
             >
-              <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-5 h-5 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               <span>{error}</span>
             </motion.div>
@@ -89,12 +102,20 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">Email Address</label>
-            <motion.div whileHover={{ scale: 1.02 }} whileFocus={{ scale: 1.02 }} className="relative group">
+            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">
+              Email Address
+            </label>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileFocus={{ scale: 1.02 }}
+              className="relative group"
+            >
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 className="w-full p-4 pl-12 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-sky-400/50 focus:border-transparent bg-gray-50/70 backdrop-blur-sm transition-all duration-300 text-gray-900 placeholder-gray-400/80 shadow-sm group-hover:shadow-md"
                 placeholder="you@example.com"
                 required
@@ -107,18 +128,31 @@ export default function LoginPage() {
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"
+                />
               </motion.svg>
             </motion.div>
           </div>
 
           <div>
-            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">Password</label>
-            <motion.div whileHover={{ scale: 1.02 }} whileFocus={{ scale: 1.02 }} className="relative group">
+            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">
+              Password
+            </label>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileFocus={{ scale: 1.02 }}
+              className="relative group"
+            >
               <input
                 type="password"
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
                 className="w-full p-4 pl-12 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-sky-400/50 focus:border-transparent bg-gray-50/70 backdrop-blur-sm transition-all duration-300 text-gray-900 placeholder-gray-400/80 shadow-sm group-hover:shadow-md"
                 placeholder="••••••••"
                 required
@@ -142,7 +176,10 @@ export default function LoginPage() {
           </div>
 
           <motion.button
-            whileHover={{ scale: 1.04, boxShadow: '0 4px 20px rgba(0, 162, 255, 0.3)' }}
+            whileHover={{
+              scale: 1.04,
+              boxShadow: "0 4px 20px rgba(0, 162, 255, 0.3)",
+            }}
             whileTap={{ scale: 0.96 }}
             disabled={isSubmitting}
             type="submit"
@@ -151,12 +188,19 @@ export default function LoginPage() {
             {isSubmitting && (
               <motion.svg
                 animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                 className="w-5 h-5"
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
                 <path
                   className="opacity-75"
                   fill="currentColor"
@@ -171,11 +215,14 @@ export default function LoginPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5, ease: 'easeOut' }}
+          transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
           className="mt-6 text-center text-sm text-gray-600 flex items-center justify-center gap-1.5"
         >
           <span>Need an account?</span>
-          <Link href="/register" className="text-sky-600 hover:text-sky-800 font-semibold transition-colors duration-300 hover:underline">
+          <Link
+            href="/register"
+            className="text-sky-600 hover:text-sky-800 font-semibold transition-colors duration-300 hover:underline"
+          >
             Register now
           </Link>
         </motion.div>

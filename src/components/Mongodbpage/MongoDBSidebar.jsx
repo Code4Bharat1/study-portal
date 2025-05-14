@@ -181,7 +181,7 @@ const MongoDBSidebar = () => {
   };
 
   const getLinkClass = (href) => {
-    return `block p-2 rounded transition-all duration-200 ease-in-out hover:bg-[#d0f0fd] ${topicColors[href] || 'text-gray-700'}`;
+    return `block p-2 rounded transition-all duration-200 ease-in-out hover:bg-green-100 ${topicColors[href] || 'text-gray-700'}`;
   };
 
   return (

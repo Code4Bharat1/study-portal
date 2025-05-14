@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BookOpen, Clock, History, Award, TrendingUp } from "react-feather";
+import { BookOpen, Clock,  Award, TrendingUp } from "react-feather";
 
 const Activity = () => {
   const [readingData, setReadingData] = useState({});
@@ -75,7 +75,7 @@ const Activity = () => {
           </div>
         ) : Object.keys(readingData).length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-8 text-center">
-            <History className="mx-auto text-gray-400" size={48} />
+            <Clock className="mx-auto text-gray-400" size={48} />
             <h3 className="text-xl font-medium text-gray-600 mt-4">
               No reading history yet
             </h3>

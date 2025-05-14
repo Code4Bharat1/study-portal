@@ -1,15 +1,15 @@
-import React from 'react';
-//import Navbar from '@/component/navbar'
-import Card from '@/components/fullnodecontent/CardNode'
-import Navbar from '@/components/navbar';
+import React from "react";
+//import Navbar from '@/component/Navbar'
+import Card from "@/components/fullnodecontent/CardNode";
+import Navbar from "@/components/Navbar";
 export default function page() {
   return (
     <div>
-        <Navbar/>
+      <Navbar />
 
-   <div className="mt-25">
-   <Card/>
-   </div>
+      <div className="mt-25">
+        <Card />
+      </div>
     </div>
-  )
+  );
 }

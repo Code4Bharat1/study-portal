@@ -1,7 +1,7 @@
-import React from 'react';
-import Navbar from '@/components/Navbar';
-import Sidebar from '@/components/Javascript/Sidebar';
-import GetStartedPage from '@/components/Javascript/GetStarted';
+import React from "react";
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Javascript/Sidebar";
+import GetStartedPage from "@/components/Javascript/GetStarted";
 
 export default function JavascriptGetStartedPage() {
   return (

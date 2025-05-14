@@ -1,6 +1,7 @@
 // app/projects/page.js
+import Projects from '@/components/projects.jsx';
 import { Suspense } from 'react';
-import Projects from '@/components/Projects';
+
 
 export default function ProjectsPage() {
   return (

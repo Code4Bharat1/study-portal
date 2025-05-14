@@ -21,8 +21,8 @@ const SidebarJava = () => {
 
   const getLinkClass = (href) => (
     `block p-2 rounded transition-all duration-200 ease-in-out
-    hover:bg-[#d0f0fd]
-    ${pathname === href ? 'bg-[#d0f0fd] font-semibold text-black' : 'text-gray-700'}`
+    hover:bg-yellow-100
+    ${pathname === href ? 'bg-yellow-100 font-semibold text-black' : 'text-gray-700'}`
   );
 
   return (

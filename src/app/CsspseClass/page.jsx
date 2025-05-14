@@ -1,13 +1,13 @@
-import React from 'react'
-import  Sidebar from '@/components/CssFullContent/cssSidebar'
-import Navbar from '@/components/navbar'
-import PseudoCl from '@/components/CssFullContent/CssPseudoCl'
+import React from "react";
+import Sidebar from "@/components/CssFullContent/cssSidebar";
+import Navbar from "@/components/Navbar";
+import PseudoCl from "@/components/CssFullContent/CssPseudoCl";
 export default function page() {
   return (
     <div>
-        <Navbar/>
-        <Sidebar/>
-      <PseudoCl/>
+      <Navbar />
+      <Sidebar />
+      <PseudoCl />
     </div>
-  )
+  );
 }
