@@ -1,7 +1,7 @@
 const sandbox = ()=>{
     return(
         <>
-            <iframe src="https://stackblitz.com/edit/code4bharat-sandbox-kbkh5fyf?embed=1&file=ReadMe.md&theme=light"  className="w-full h-screen"></iframe>
+            <iframe src="https://stackblitz.com/edit/stackblitz-starters-whqcgasw?embed=1&file=package.json&theme=light"  className="w-full h-screen"></iframe>
         </>
     )
 }
