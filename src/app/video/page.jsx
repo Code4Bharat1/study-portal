@@ -1,26 +1,24 @@
-"use client";
-import "font-awesome/css/font-awesome.min.css";
-import {
-  FaStar,
-  FaUser,
-  FaBook,
-  FaArrowLeft,
-  FaArrowRight,
-} from "react-icons/fa";
+'use client';
 import { useRef, useState, useEffect } from "react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+
+import useReadingTracker from "@/components/useReadingTracker";
 
 export default function CourseCards() {
+  useReadingTracker("video");
+
   const scrollRef = useRef();
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
-
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const videoRef = useRef();
+  const [videoTime, setVideoTime] = useState(0); // Track video time
+  
   const checkScrollPosition = () => {
     const { current } = scrollRef;
     if (current) {
       setShowLeftArrow(current.scrollLeft > 0);
-      setShowRightArrow(
-        current.scrollLeft < current.scrollWidth - current.clientWidth - 1
-      );
+      setShowRightArrow(current.scrollLeft < current.scrollWidth - current.clientWidth - 1);
     }
   };
 
@@ -34,19 +32,44 @@ export default function CourseCards() {
     }
   };
 
-  useEffect(() => {
-    const currentRef = scrollRef.current;
-    if (currentRef) {
-      currentRef.addEventListener("scroll", checkScrollPosition);
-      checkScrollPosition();
-    }
-    return () => {
-      if (currentRef) {
-        currentRef.removeEventListener("scroll", checkScrollPosition);
-      }
-    };
-  }, []);
+  const handleVideoProgress = (event) => {
+    const currentTime = event.target.getCurrentTime();
+    setVideoTime(currentTime);
+  };
 
+  const handleCardClick = (course) => {
+    const urlParams = new URL(course.youtubeLink).searchParams;
+    const listId = urlParams.get("list");
+    setSelectedVideo({
+      url: listId
+        ? `https://www.youtube.com/embed/videoseries?list=${listId}`
+        : course.youtubeLink.replace("watch?v=", "embed/"),
+      title: course.title,
+    });
+  };
+
+  const handleVideoEnd = () => {
+    // Here you could save the video time or do something when the video ends
+    console.log("Video watched for", videoTime, "seconds.");
+    // You could save the data to localStorage, a database, etc.
+  };
+
+  const handlePlayerReady = (event) => {
+    // This will ensure the player is ready to handle events
+    event.target.addEventListener('onStateChange', function (e) {
+      if (e.data === YT.PlayerState.ENDED) {
+        handleVideoEnd();
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (selectedVideo && videoRef.current) {
+      videoRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [selectedVideo]);
+
+ 
   const courseData = [
     {
       title: "Python with Beginner DSA",
@@ -204,92 +227,96 @@ export default function CourseCards() {
 
   return (
     <div className="w-full">
-      {/* Title Row */}
-      <div className="flex items-center justify-center gap-3 py-6">
-        <i className="fas fa-arrow-left text-blue-400 w-6 h-6"></i>
-        <h2 className="text-xl font-semibold text-gray-800">
-          Featured Courses
-        </h2>
-        <i className="fas fa-arrow-left text-blue-400 w-6 h-6 transform scale-x-[-1]"></i>
+      <div className="flex justify-center py-6">
+        <h2 className="text-xl font-semibold text-gray-800">Featured Courses</h2>
       </div>
 
-      {/* Scrollable Cards Section */}
-      <div className="relative py-10 px-4 cursor-pointer">
-        {/* Left Scroll Button */}
+      <div className="relative py-4 px-4 cursor-pointer">
         {showLeftArrow && (
           <button
-            className="absolute left-2 cursor-pointer top-1/2 transform -translate-y-1/2 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100 transition-opacity duration-300"
+            className="absolute top-1/2 -translate-y-1/2 left-0 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100"
             onClick={() => scroll("left")}
           >
-            <FaArrowLeft size={18} />
+            <FaArrowLeft size={20} />
           </button>
         )}
 
-        {/* Cards Container */}
         <div
           ref={scrollRef}
-          className="flex gap-6 overflow-x-auto scroll-smooth py-4 px-6 hide-scrollbar"
-          style={{ scrollbarWidth: "none" }}
+          className="overflow-x-scroll flex gap-6 scroll-smooth"
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
         >
+          <style jsx>{`
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
           {courseData.map((course, index) => (
             <div
               key={index}
-              className="min-w-[250px] max-w-xs bg-white rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transform hover:bg-gray-50 transition-all duration-300 overflow-hidden border border-gray-100 flex-shrink-0"
+              className="flex-shrink-0 w-80 bg-white border border-gray-100 shadow-md hover:shadow-xl transform transition-all duration-300 rounded-xl p-4"
             >
-              {/* Image Section */}
-              <div className="h-36 w-full relative overflow-hidden">
-                <img
-                  src={course.image}
-                  alt={course.subtitle}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-
-              {/* Subtitle */}
-              <h3 className="text-xs font-semibold mt-2 px-3 text-gray-700">
-                {course.subtitle}
-              </h3>
-
-              {/* Card Body */}
-              <div className="p-3">
-                <div className="flex items-center gap-1 text-xs text-gray-700">
-                  <FaStar className="text-yellow-400" /> {course.rating}
-                </div>
-                <h4 className="text-sm font-semibold mt-1">{course.title}</h4>
-                <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-                  {course.description}
-                </p>
-                <div className="flex items-center gap-3 text-xs text-gray-600 mt-2">
-                  <span className="flex items-center gap-1">
-                    <FaBook /> {course.courses} courses
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <FaUser /> {course.learners}
-                  </span>
-                </div>
-                <a
-                  href={course.youtubeLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 block w-full bg-blue-400 text-white text-sm py-1.5 text-center rounded hover:bg-blue-600 transition-colors duration-300"
-                >
-                  Watch on YouTube
-                </a>
-              </div>
+              <img
+                src={course.image}
+                alt={course.title}
+                className="w-full h-40 object-cover rounded-md mb-4"
+              />
+              <h3 className="text-lg font-bold">{course.title}</h3>
+              <p className="text-sm text-gray-500 mb-1">{course.subtitle}</p>
+              <p className="text-sm text-gray-700 mb-2">{course.description}</p>
+              <p className="text-sm font-semibold text-blue-600">{course.rating}</p>
+              <p className="text-xs text-gray-500">{course.learners}</p>
+              <button
+                onClick={() => handleCardClick(course)}
+                className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-600 transition"
+              >
+                Watch Course
+              </button>
             </div>
           ))}
         </div>
 
-        {/* Right Scroll Button */}
         {showRightArrow && (
           <button
-            className=" cursor-pointer absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100 transition-opacity duration-300"
+            className="absolute top-1/2 -translate-y-1/2 right-0 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100"
             onClick={() => scroll("right")}
           >
-            <FaArrowRight size={18} />
+            <FaArrowRight size={20} />
           </button>
         )}
       </div>
+
+      {selectedVideo && (
+        <div className="w-full px-15 flex justify-center items-center" ref={videoRef}>
+          <div className="relative rounded-xl overflow-hidden shadow-lg">
+            <iframe
+              className="w-[700px] h-[400px]"
+              src={selectedVideo.url}
+              title={selectedVideo.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              id="youtube-player"
+              onLoad={() => {
+                const player = new YT.Player("youtube-player", {
+                  events: {
+                    onReady: handlePlayerReady,
+                    onStateChange: handleVideoProgress,
+                  },
+                });
+              }}
+            ></iframe>
+            <button
+              onClick={() => setSelectedVideo(null)}
+              className="absolute top-2 right-2 bg-white rounded-full shadow p-1 text-sm text-gray-600 hover:bg-red-100"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
