@@ -16,34 +16,63 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut" }
-  }
-};
+// const itemVariants = {
+//   hidden: { y: 20, opacity: 0 },
+//   visible: {
+//     y: 0,
+//     opacity: 1,
+//     transition: { duration: 0.6, ease: "easeOut" }
+//   }
+// };
 
-const buttonVariants = {
-  hover: { 
-    scale: 1.05, 
-    boxShadow: "0px 5px 15px rgba(0,0,0,0.1)",
-    transition: { duration: 0.2 }
-  },
-  tap: { scale: 0.98 }
+// const buttonVariants = {
+//   hover: { 
+//     scale: 1.05, 
+//     boxShadow: "0px 5px 15px rgba(0,0,0,0.1)",
+//     transition: { duration: 0.2 }
+//   },
+//   tap: { scale: 0.98 }
+// };
+
+// const codeCardVariants = {
+//   hover: {
+//     y: -8,
+//     boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+//     transition: { 
+//       duration: 0.3,
+//       ease: "easeOut"
+//     }
+//   }
+// };
+
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
 const codeCardVariants = {
   hover: {
-    y: -8,
-    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-    transition: { 
-      duration: 0.3,
-      ease: "easeOut"
-    }
-  }
+    scale: 1.02,
+    transition: { duration: 0.3 },
+  },
 };
+
+const buttonVariants = {
+  hover: {
+    y: -4, // move up slightly
+    transition: {
+      duration: 0.3,
+      ease: 'easeInOut',
+    },
+  },
+  tap: {
+    scale: 0.95,
+  },
+};
+
+
+
 
 export default function JavaScriptPage() {
   return (
@@ -164,32 +193,34 @@ export default function JavaScriptPage() {
           </motion.div>
           
           {/* Right Content */}
-          <motion.div 
-            className="flex-1 bg-gradient-to-br from-yellow-50 to-orange-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
-            variants={itemVariants}
-          >
-            {/* Decorative elements */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-yellow-200/30 blur-xl"></div>
-            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-orange-200/30 blur-xl"></div>
-            
-            <div className="w-full max-w-md relative z-10">
-              <motion.div 
-                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
-                variants={codeCardVariants}
-                whileHover="hover"
-                aria-hidden="true"
-              >
-                <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3 flex items-center">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  </div>
-                  <div className="ml-4 text-sm text-gray-300 font-mono">script.js</div>
-                </div>
-                <div className="relative">
-                  <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
-                    <code className="block whitespace-pre">
+          <motion.div
+      className="flex-1 bg-gradient-to-br from-yellow-50 to-orange-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
+      variants={itemVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Decorative elements */}
+      <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-yellow-200/30 blur-xl"></div>
+      <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-orange-200/30 blur-xl"></div>
+
+      <div className="w-full max-w-md relative z-10">
+        <motion.div
+          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+          variants={codeCardVariants}
+          whileHover="hover"
+          aria-hidden="true"
+        >
+          <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3 flex items-center">
+            <div className="flex space-x-2">
+              <div className="w-3 h-3 rounded-full bg-red-500"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <div className="ml-4 text-sm text-gray-300 font-mono">script.js</div>
+          </div>
+          <div className="relative">
+            <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
+              <code className="block whitespace-pre">
 {`// Define a variable
 let name = 'John';
 
@@ -205,33 +236,33 @@ console.log(greet(name));
 document.querySelector('button')?.addEventListener('click', () => {
   alert('Welcome to JavaScript!');
 });`}
-                    </code>
-                  </pre>
-                  <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
-                </div>
-              </motion.div>
-              
-              <motion.div 
-                className="mt-8 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-              >
-                <p className="text-gray-600 mb-4">Try JavaScript right in your browser</p>
-                <Link href="https://jsfiddle.net/" rel="noopener noreferrer">
-                  <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
-                    variants={buttonVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                  >
-                    <span className="relative z-10">Open JSFiddle</span>
-                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-yellow-600 to-orange-600 opacity-0 hover:opacity-100 transition-opacity"></span>
-                  </motion.button>
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
+              </code>
+            </pre>
+            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="mt-8 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          <p className="text-gray-600 mb-4">Try JavaScript right in your browser</p>
+          <Link href="/sanbox/htmll" rel="noopener noreferrer">
+            <motion.button
+              className="relative px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <span className="relative z-10">Open JSFiddle</span>
+              <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-yellow-600 to-orange-600 opacity-0 hover:opacity-100 transition-opacity"></span>
+            </motion.button>
+          </Link>
+        </motion.div>
+      </div>
+    </motion.div>
         </div>
       </motion.div>
     </main>

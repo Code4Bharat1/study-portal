@@ -164,30 +164,30 @@ export default function ReactPage() {
           
           {/* Right Content */}
           <motion.div 
-            className="flex-1 bg-gradient-to-br from-pink-50 to-blue-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
-            variants={itemVariants}
-          >
-            {/* Decorative elements */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-indigo-200/30 blur-xl"></div>
-            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-blue-200/30 blur-xl"></div>
-            
-            <div className="w-full max-w-md relative z-10">
-              <motion.div 
-                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
-                variants={codeCardVariants}
-                whileHover="hover"
-              >
-                <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3 flex items-center">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  </div>
-                  <div className="ml-4 text-sm text-gray-300 font-mono">App.js</div>
-                </div>
-                <div className="relative">
-                  <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
-                    <code className="block whitespace-pre">
+  className="flex-1 bg-gradient-to-br from-indigo-50 to-blue-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
+  variants={itemVariants}
+>
+  {/* Decorative elements */}
+  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-indigo-200/30 blur-xl"></div>
+  <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-blue-200/30 blur-xl"></div>
+  
+  <div className="w-full max-w-md relative z-10">
+    <motion.div 
+      className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+      variants={codeCardVariants}
+      whileHover="hover"
+    >
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3 flex items-center">
+        <div className="flex space-x-2">
+          <div className="w-3 h-3 rounded-full bg-red-500"></div>
+          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+        </div>
+        <div className="ml-4 text-sm text-gray-300 font-mono">App.js</div>
+      </div>
+      <div className="relative">
+        <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
+          <code className="block whitespace-pre">
 {`function Counter() {
   const [count, setCount] = 
     useState(0);
@@ -205,33 +205,40 @@ export default function ReactPage() {
     </div>
   );
 }`}
-                    </code>
-                  </pre>
-                  <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
-                </div>
-              </motion.div>
-              
-              <motion.div 
-                className="mt-8 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-              >
-                <p className="text-gray-600 mb-4">Try React right in your browser</p>
-                <Link href="https://codesandbox.io/s/new">
-                  <motion.button
-                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
-                    variants={buttonVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                  >
-                    <span className="relative z-10">Open Sandbox</span>
-                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 hover:opacity-100 transition-opacity"></span>
-                  </motion.button>
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
+          </code>
+        </pre>
+        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
+      </div>
+    </motion.div>
+    
+    <motion.div 
+      className="mt-8 text-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.8 }}
+    >
+      <p className="text-gray-600 mb-4">Try React right in your browser</p>
+      <Link href="/sandbox">
+        <motion.button
+          className="relative px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <span className="relative z-10">Open Sandbox</span>
+          {/* This overlay will animate without causing flicker */}
+          <motion.span
+            className="absolute inset-0 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 z-0"
+            initial={{ opacity: 0 }}
+            whileHover={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          />
+        </motion.button>
+      </Link>
+    </motion.div>
+  </div>
+</motion.div>
+
         </div>
       </motion.div>
     </main>

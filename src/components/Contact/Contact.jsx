@@ -171,7 +171,7 @@ const Contact = () => {
             </div>
             <h4 className="text-2xl font-bold text-black mb-1 mt-6">EMAIL</h4>
             <p className="text-gray-700">
-              ourclub55@email.com <br /> support678@email.com
+              nexcorealliance@gmail.com
             </p>
           </div>
 
@@ -181,10 +181,10 @@ const Contact = () => {
               <Phone className="w-6 h-6" />
             </div>
             <h4 className="text-xl font-bold text-black mb-1 mt-6">
-              PHONE (LANDLINE)
+              PHONE 
             </h4>
             <p className="text-gray-700">
-              + 912 3 567 8987 <br /> + 912 5 252 3336
+               +91 95944 30295
             </p>
           </div>
 
@@ -197,8 +197,7 @@ const Contact = () => {
               OUR OFFICE LOCATION
             </h4>
             <p className="text-gray-700">
-              The Interior Design Studio Company <br />
-              The Courtyard, Al Quoz 1, Colorado, USA
+             Off BKC, Mumbai, India 400070
             </p>
           </div>
         </div>
