@@ -1,16 +1,10 @@
 'use client';
-'use client';
 import { useRef, useState, useEffect } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-
-import useReadingTracker from "@/components/useReadingTracker";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 import useReadingTracker from "@/components/useReadingTracker";
 
 export default function CourseCards() {
-  useReadingTracker("video");
-
   const scrollRef = useRef();
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
@@ -25,7 +19,6 @@ export default function CourseCards() {
     const { current } = scrollRef;
     if (current) {
       setShowLeftArrow(current.scrollLeft > 0);
-      setShowRightArrow(current.scrollLeft < current.scrollWidth - current.clientWidth - 1);
       setShowRightArrow(current.scrollLeft < current.scrollWidth - current.clientWidth - 1);
     }
   };
@@ -75,12 +68,7 @@ export default function CourseCards() {
   useEffect(() => {
     if (selectedVideo && videoRef.current) {
       videoRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    if (selectedVideo && videoRef.current) {
-      videoRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [selectedVideo]);
-
- 
   }, [selectedVideo]);
 
  
@@ -243,19 +231,14 @@ export default function CourseCards() {
     <div className="w-full">
       <div className="flex justify-center py-6">
         <h2 className="text-xl font-semibold text-gray-800">Featured Courses</h2>
-      <div className="flex justify-center py-6">
-        <h2 className="text-xl font-semibold text-gray-800">Featured Courses</h2>
       </div>
 
-      <div className="relative py-4 px-4 cursor-pointer">
       <div className="relative py-4 px-4 cursor-pointer">
         {showLeftArrow && (
           <button
             className="absolute top-1/2 -translate-y-1/2 left-0 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100"
-            className="absolute top-1/2 -translate-y-1/2 left-0 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100"
             onClick={() => scroll("left")}
           >
-            <FaArrowLeft size={20} />
             <FaArrowLeft size={20} />
           </button>
         )}
@@ -267,17 +250,7 @@ export default function CourseCards() {
             scrollbarWidth: "none",
             msOverflowStyle: "none",
           }}
-          className="overflow-x-scroll flex gap-6 scroll-smooth"
-          style={{
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-          }}
         >
-          <style jsx>{`
-            div::-webkit-scrollbar {
-              display: none;
-            }
-          `}</style>
           <style jsx>{`
             div::-webkit-scrollbar {
               display: none;
@@ -287,24 +260,7 @@ export default function CourseCards() {
             <div
               key={index}
               className="flex-shrink-0 w-80 bg-white border border-gray-100 shadow-md hover:shadow-xl transform transition-all duration-300 rounded-xl p-4"
-              className="flex-shrink-0 w-80 bg-white border border-gray-100 shadow-md hover:shadow-xl transform transition-all duration-300 rounded-xl p-4"
             >
-              <img
-                src={course.image}
-                alt={course.title}
-                className="w-full h-40 object-cover rounded-md mb-4"
-              />
-              <h3 className="text-lg font-bold">{course.title}</h3>
-              <p className="text-sm text-gray-500 mb-1">{course.subtitle}</p>
-              <p className="text-sm text-gray-700 mb-2">{course.description}</p>
-              <p className="text-sm font-semibold text-blue-600">{course.rating}</p>
-              <p className="text-xs text-gray-500">{course.learners}</p>
-              <button
-                onClick={() => handleCardClick(course)}
-                className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-600 transition"
-              >
-                Watch Course
-              </button>
               <img
                 src={course.image}
                 alt={course.title}
@@ -328,10 +284,8 @@ export default function CourseCards() {
         {showRightArrow && (
           <button
             className="absolute top-1/2 -translate-y-1/2 right-0 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100"
-            className="absolute top-1/2 -translate-y-1/2 right-0 bg-white text-gray-700 p-2 shadow-md rounded-full z-10 hover:bg-gray-100"
             onClick={() => scroll("right")}
           >
-            <FaArrowRight size={20} />
             <FaArrowRight size={20} />
           </button>
         )}
@@ -360,4 +314,3 @@ export default function CourseCards() {
     </div>
   );
 }
-
