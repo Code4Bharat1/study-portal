@@ -1,55 +1,58 @@
-'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
+    username: "",
+    email: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://sp-api.code4bharat.com/api/auth/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const text = await response.text();
-      console.log('Raw response:', text);
+      console.log("Raw response:", text);
 
       try {
         const data = JSON.parse(text);
 
         if (response.status === 409) {
-          sessionStorage.setItem('registeredEmail', formData.email);
-          return router.push('/login');
+          sessionStorage.setItem("registeredEmail", formData.email);
+          return router.push("/login");
         }
 
         if (!response.ok) {
-          throw new Error(data.message || 'Registration failed');
+          throw new Error(data.message || "Registration failed");
         }
 
-        localStorage.setItem('token', data.token);
-        router.push('/login');
+        localStorage.setItem("token", data.token);
+        router.push("/login");
       } catch (jsonError) {
-        console.error('JSON parse error:', text);
-        throw new Error('Server returned invalid JSON');
+        console.error("JSON parse error:", text);
+        throw new Error("Server returned invalid JSON");
       }
     } catch (err) {
       setError(err.message);
-      console.error('Registration error:', err);
+      console.error("Registration error:", err);
     } finally {
       setIsSubmitting(false);
     }
@@ -69,7 +72,7 @@ export default function RegisterPage() {
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.5, ease: 'easeOut' }}
+          transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
           className="text-4xl font-bold mb-8 text-gray-900 text-center tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600"
         >
           Create Your Account
@@ -80,13 +83,23 @@ export default function RegisterPage() {
             <motion.div
               key="error"
               initial={{ opacity: 0, height: 0, y: -10 }}
-              animate={{ opacity: 1, height: 'auto', y: 0 }}
+              animate={{ opacity: 1, height: "auto", y: 0 }}
               exit={{ opacity: 0, height: 0, y: -10 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="mb-6 p-4 bg-red-50/90 backdrop-blur-sm text-red-900 rounded-xl text-sm flex items-start gap-3 shadow-sm"
             >
-              <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-5 h-5 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               <span>{error}</span>
             </motion.div>
@@ -95,12 +108,20 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="space-y-7">
           <div>
-            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">Username</label>
-            <motion.div whileHover={{ scale: 1.02 }} whileFocus={{ scale: 1.02 }} className="relative group">
+            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">
+              Username
+            </label>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileFocus={{ scale: 1.02 }}
+              className="relative group"
+            >
               <input
                 type="text"
                 value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
                 className="w-full p-4 pl-12 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-sky-400/50 focus:border-transparent bg-gray-50/70 backdrop-blur-sm transition-all duration-300 text-gray-900 placeholder-gray-400/80 shadow-sm group-hover:shadow-md"
                 placeholder="Your username"
                 required
@@ -113,18 +134,31 @@ export default function RegisterPage() {
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
               </motion.svg>
             </motion.div>
           </div>
 
           <div>
-            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">Email Address</label>
-            <motion.div whileHover={{ scale: 1.02 }} whileFocus={{ scale: 1.02 }} className="relative group">
+            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">
+              Email Address
+            </label>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileFocus={{ scale: 1.02 }}
+              className="relative group"
+            >
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 className="w-full p-4 pl-12 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-sky-400/50 focus:border-transparent bg-gray-50/70 backdrop-blur-sm transition-all duration-300 text-gray-900 placeholder-gray-400/80 shadow-sm group-hover:shadow-md"
                 placeholder="you@example.com"
                 required
@@ -137,18 +171,31 @@ export default function RegisterPage() {
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"
+                />
               </motion.svg>
             </motion.div>
           </div>
 
           <div>
-            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">Password</label>
-            <motion.div whileHover={{ scale: 1.02 }} whileFocus={{ scale: 1.02 }} className="relative group">
+            <label className="block mb-2 text-sm font-semibold text-gray-700 tracking-wide">
+              Password
+            </label>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileFocus={{ scale: 1.02 }}
+              className="relative group"
+            >
               <input
                 type="password"
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
                 className="w-full p-4 pl-12 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-sky-400/50 focus:border-transparent bg-gray-50/70 backdrop-blur-sm transition-all duration-300 text-gray-900 placeholder-gray-400/80 shadow-sm group-hover:shadow-md"
                 placeholder="••••••••"
                 minLength="6"
@@ -173,7 +220,10 @@ export default function RegisterPage() {
           </div>
 
           <motion.button
-            whileHover={{ scale: 1.04, boxShadow: '0 4px 20px rgba(0, 162, 255, 0.3)' }}
+            whileHover={{
+              scale: 1.04,
+              boxShadow: "0 4px 20px rgba(0, 162, 255, 0.3)",
+            }}
             whileTap={{ scale: 0.96 }}
             disabled={isSubmitting}
             type="submit"
@@ -182,12 +232,19 @@ export default function RegisterPage() {
             {isSubmitting && (
               <motion.svg
                 animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                 className="w-5 h-5"
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
                 <path
                   className="opacity-75"
                   fill="currentColor"
@@ -202,11 +259,14 @@ export default function RegisterPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5, ease: 'easeOut' }}
+          transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
           className="mt-8 text-center text-sm text-gray-600 flex items-center justify-center gap-1.5"
         >
           <span>Already have an account?</span>
-          <Link href="/login" className="text-sky-600 hover:text-sky-800 font-semibold transition-colors duration-300 hover:underline">
+          <Link
+            href="/login"
+            className="text-sky-600 hover:text-sky-800 font-semibold transition-colors duration-300 hover:underline"
+          >
             Login now
           </Link>
         </motion.div>

@@ -1,28 +1,28 @@
-'use client';
-import { useState } from 'react';
+"use client";
+import { useState } from "react";
 
 const GeminiPage = () => {
-  const [prompt, setPrompt] = useState('');
-  const [response, setResponse] = useState('');
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setResponse('');
+    setResponse("");
 
     try {
-      const res = await fetch('http://localhost:5000/api/ask-gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("https://sp-api.code4bharat.com/api/ask-gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
       });
 
       const data = await res.json();
-      setResponse(data.text || 'No response from Gemini.');
+      setResponse(data.text || "No response from Gemini.");
     } catch (error) {
-      console.error('Error:', error);
-      setResponse('Failed to get response from Gemini.');
+      console.error("Error:", error);
+      setResponse("Failed to get response from Gemini.");
     } finally {
       setLoading(false);
     }
@@ -31,7 +31,9 @@ const GeminiPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-3xl">
-        <h1 className="text-3xl font-bold text-purple-700 mb-6 text-center">Ask Gemini AI</h1>
+        <h1 className="text-3xl font-bold text-purple-700 mb-6 text-center">
+          Ask Gemini AI
+        </h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <textarea
@@ -45,16 +47,18 @@ const GeminiPage = () => {
             type="submit"
             disabled={loading || !prompt.trim()}
             className={`bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200 ${
-              loading || !prompt.trim() ? 'opacity-50 cursor-not-allowed' : ''
+              loading || !prompt.trim() ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            {loading ? 'Thinking...' : 'Ask Gemini'}
+            {loading ? "Thinking..." : "Ask Gemini"}
           </button>
         </form>
 
         {response && (
           <div className="mt-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Gemini's Response:</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              Gemini's Response:
+            </h2>
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 max-h-80 overflow-y-auto whitespace-pre-wrap">
               {response}
             </div>
