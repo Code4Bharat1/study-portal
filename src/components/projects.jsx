@@ -87,7 +87,7 @@ const projectsData = {
     </div>
   );
 }`,
-        projectLink: "https://github.com/juan18506/react-counter-app",
+        projectLink: "https://github.com/Amaan00844/react-counter-app",
       },
     ],
     intermediate: [
@@ -102,7 +102,7 @@ const projectsData = {
   }, []);
   return <div>{weather ? weather.temp : 'Loading...'}</div>;
 }`,
-        projectLink:"https://github.com/codebucks27/React-Weather-app",
+        projectLink:"https://github.com/Amaan00844/React-Weather-app",
       }, 
       {
         title: "E-Commerce Dashboard",
@@ -118,7 +118,7 @@ const projectsData = {
     </div>
   );
 }`,
-        projectLink: "https://github.com/Hadyosman1/react-ecommerce-dashboard",
+        projectLink: "https://github.com/Amaan00844/react-ecommerce-dashboard",
       },
     ],
     professional: [
@@ -136,7 +136,7 @@ const projectsData = {
     </div>
   );
 }`,
-        projectLink: "https://github.com/simpletut/react-real-time-chat-app",
+        projectLink: "https://github.com/Amaan00844/react-real-time-chat-app",
       },
       {
         title: "Social Media Dashboard",
@@ -152,7 +152,7 @@ const projectsData = {
     </div>
   );
 }`,
-        projectLink: "https://github.com/Ashish8449/React-Social-Media-Dashboard",
+        projectLink: "https://github.com/Amaan00844/React-Social-Media-Dashboard",
       },
     ],
   },
@@ -164,7 +164,7 @@ const projectsData = {
 const app = express();
 app.get('/', (req, res) => res.send('Hello World'));
 app.listen(3000, () => console.log('Server on port 3000'));`,
-        projectLink: "https://github.com/eMahtab/node-express-hello-world",
+        projectLink: "https://github.com/Amaan00844/node-express-hello-world",
       },
       {
         title: "Simple GET API",
@@ -172,7 +172,7 @@ app.listen(3000, () => console.log('Server on port 3000'));`,
 const app = express();
 app.get('/api', (req, res) => res.json({ message: 'Hello API' }));
 app.listen(3000, () => console.log('Server on port 3000'));`,
-        projectLink: "https://github.com/joeyklee/simple-express-api",
+        projectLink: "https://github.com/Amaan00844/simple-express-api",
       },
     ],
     intermediate: [
@@ -186,7 +186,7 @@ app.get('/posts', async (req, res) => {
   res.json(posts);
 });
 app.listen(3000);`,
-        projectLink: "https://github.com/obinnafranklinduru/blogging-platform-api",
+        projectLink: "https://github.com/Amaan00844/blogging-platform-api",
       },
       {
         title: "User Registration API",
@@ -198,7 +198,7 @@ app.post('/register', async (req, res) => {
   res.json(user);
 });
 app.listen(3000);`,
-        projectLink: "https://github.com/mohamedookiyo/user-registration-and-login-api",
+        projectLink: "https://github.com/Amaan00844/user-registration-and-login-api",
       },
     ],
     professional: [
@@ -213,7 +213,7 @@ app.post('/login', (req, res) => {
   res.json({ token });
 });
 app.listen(3000);`,
-        projectLink: "https://github.com/singhpradip/JWT-Authentication-API-with-Node.js-and-Express",
+        projectLink: "https://github.com/Amaan00844/JWT-Authentication-API-with-Node.js-and-Express",
       },
       {
         title: "Rate-Limited API",
@@ -224,7 +224,7 @@ const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 app.use(limiter);
 app.get('/api', (req, res) => res.json({ message: 'Rate Limited' }));
 app.listen(3000);`,
-        projectLink: "https://github.com/abhisekp/rate-limiter-api",
+        projectLink: "https://github.com/Amaan00844/rate-limiter-api",
       },
     ],
   },
@@ -236,13 +236,13 @@ app.listen(3000);`,
 db.users.find({});
 db.users.updateOne({ name: "Alice" }, { $set: { age: 26 } });
 db.users.deleteOne({ name: "Alice" });`,
-        projectLink: "https://github.com/bezkoder/node-express-mongodb",
+        projectLink: "https://github.com/Amaan00844/node-express-mongodb",
       },
       {
         title: "Insert and Query",
         code: `db.products.insertOne({ name: "Laptop", price: 999 });
 db.products.find({ price: { $gt: 500 } });`,
-        projectLink: "https://github.com/mongodb-js/collection-sample",
+        projectLink: "https://github.com/Amaan00844/collection-sample",
       },
     ],
     intermediate: [
@@ -251,7 +251,7 @@ db.products.find({ price: { $gt: 500 } });`,
         code: `db.users.createIndex({ email: 1 }, { unique: true });
 db.users.insertOne({ email: "user@example.com", role: "user" });
 db.users.find({ role: "user" });`,
-        projectLink: "https://github.com/sairam5686/User-Management-System",
+        projectLink: "https://github.com/Amaan00844/User-Management-System",
       },
       {
         title: "Product Catalog",
@@ -260,7 +260,7 @@ db.users.find({ role: "user" });`,
   { name: "Shirt", category: "Clothing" }
 ]);
 db.products.find({ category: "Electronics" });`,
-        projectLink: "https://github.com/mongodb-developer/content-catalog",
+        projectLink: "https://github.com/Amaan00844/content-catalog",
       },
     ],
     professional: [
@@ -270,7 +270,7 @@ db.products.find({ category: "Electronics" });`,
   { $match: { status: "completed" } },
   { $group: { _id: "$customerId", total: { $sum: "$amount" } } }
 ]);`,
-        projectLink: "https://github.com/LinkedInLearning/master-the-mongodb-aggregation-pipeline-2505629",
+        projectLink: "https://github.com/Amaan00844/master-the-mongodb-aggregation-pipeline-2505629",
       },
       {
         title: "Geospatial Queries",
@@ -279,7 +279,7 @@ db.places.insertOne({ name: "Park", location: { type: "Point", coordinates: [-73
 db.places.find({
   location: { $near: { $geometry: { type: "Point", coordinates: [-73.9, 40.7] }, $maxDistance: 1000 } }
 });`,
-        projectLink: "https://github.com/Masdevallia/project-mongodb-geospatial-queries",
+        projectLink: "https://github.com/Amaan00844/project-mongodb-geospatial-queries",
       },
     ],
   },
@@ -292,7 +292,7 @@ http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
   res.end('Hello Node.js');
 }).listen(3000);`,
-        projectLink: "https://github.com/alinebastos/simple-nodejs-server",
+        projectLink: "https://github.com/Amaan00844/simple-nodejs-server",
       },
       {
         title: "Simple API",
@@ -301,7 +301,7 @@ http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify({ message: 'Hello API' }));
 }).listen(3000);`,
-        projectLink: "https://github.com/mwangiKibui/node.js-simple-api",
+        projectLink: "https://github.com/Amaan00844/node.js-simple-api",
       },
     ],
     intermediate: [
@@ -315,7 +315,7 @@ http.createServer((req, res) => {
     res.end('Uploaded');
   }
 }).listen(3000);`,
-        projectLink: "https://github.com/Majidkn/nodejs-simple-file-upload",
+        projectLink: "https://github.com/Amaan00844/nodejs-simple-file-upload",
       },
       {
         title: "Static File Server",
@@ -327,7 +327,7 @@ http.createServer((req, res) => {
     res.end(data);
   });
 }).listen(3000);`,
-        projectLink: "https://github.com/Abdurraheem/uploadFile",
+        projectLink: "https://github.com/Amaan00844/uploadFile",
       },
     ],
     professional: [
@@ -338,7 +338,7 @@ const wss = new WebSocket.Server({ port: 3000 });
 wss.on('connection', (ws) => {
   ws.on('message', (msg) => ws.send(\`Echo: \${msg}\`));
 });`,
-        projectLink: "https://github.com/websockets/ws",
+        projectLink: "https://github.com/Amaan00844/ws",
       },
       {
         title: "Task Queue System",
@@ -346,7 +346,7 @@ wss.on('connection', (ws) => {
 const task = new Worker('./task.js');
 task.on('message', (msg) => console.log('Task result:', msg));
 task.postMessage('Start task');`,
-        projectLink: "https://github.com/bee-queue/bee-queue",
+        projectLink: "https://github.com/Amaan00844/bee-queue",
       },
     ],
   },
