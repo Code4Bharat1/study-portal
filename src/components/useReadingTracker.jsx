@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 const useReadingTracker = (pageKey) => {
   useEffect(() => {
+    console.log(pageKey)
     const startTime = Date.now();
 
     const handleBeforeUnload = () => {
