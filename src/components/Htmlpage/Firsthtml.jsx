@@ -167,31 +167,42 @@ export default function HtmlPage() {
           
           {/* Right Content */}
           <motion.div 
-            className="flex-1 bg-gradient-to-br from-blue-50 to-cyan-50 p-6 md:p-8 flex items-center justify-center relative overflow-hidden"
-            variants={itemVariants}
-          >
-            {/* Decorative elements */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-blue-200/30 blur-xl"></div>
-            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-cyan-200/30 blur-xl"></div>
-            
-            <div className="w-full max-w-xs relative z-10">
-              <motion.div 
-                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
-                variants={codeCardVariants}
-                whileHover="hover"
-                aria-hidden="true"
-              >
-                <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3 flex items-center">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  </div>
-                  <div className="ml-4 text-sm text-gray-300 font-mono">index.html</div>
-                </div>
-                <div className="relative">
-                  <pre className="p-4 text-xs h-[200px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
-                    <code className="block whitespace-pre">
+  className="flex-1 bg-gradient-to-br from-blue-50 to-cyan-50 p-6 md:p-8 flex items-center justify-center relative overflow-hidden"
+  variants={itemVariants}
+>
+  {/* Decorative elements */}
+  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-blue-200/30 blur-xl pointer-events-none"></div>
+  <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-cyan-200/30 blur-xl pointer-events-none"></div>
+  
+  <div className="w-full max-w-xs relative z-10">
+
+    <motion.div 
+      className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+      //imp 
+      variants={{
+        hover: {
+          scale: 1.03,
+          transition: {
+            type: "spring",
+            stiffness: 300,
+            damping: 20
+          }
+        }
+      }}
+      whileHover="hover"
+      aria-hidden="true"
+    >
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3 flex items-center">
+        <div className="flex space-x-2">
+          <div className="w-3 h-3 rounded-full bg-red-500"></div>
+          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+        </div>
+        <div className="ml-4 text-sm text-gray-300 font-mono">index.html</div>
+      </div>
+      <div className="relative">
+        <pre className="p-4 text-xs h-[200px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
+          <code className="block whitespace-pre">
 {`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -207,33 +218,37 @@ export default function HtmlPage() {
     </ul>
 </body>
 </html>`}
-                    </code>
-                  </pre>
-                  <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
-                </div>
-              </motion.div>
-              
-              <motion.div 
-                className="mt-6 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-              >
-                <p className="text-gray-600 mb-3 text-sm">Try HTML right in your browser</p>
-                <Link href="https://jsfiddle.net/" rel="noopener noreferrer">
-                  <motion.button
-                    className="px-4 py-2 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium text-sm shadow-lg hover:shadow-xl transition-all cursor-pointer"
-                    variants={buttonVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                  >
-                    <span className="relative z-10">Open JSFiddle</span>
-                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 opacity-0 hover:opacity-100 transition-opacity"></span>
-                  </motion.button>
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
+          </code>
+        </pre>
+        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
+      </div>
+    </motion.div>
+    
+    <motion.div 
+      className="mt-6 text-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.8 }}
+    >
+      <p className="text-gray-600 mb-3 text-sm">Try HTML right in your browser</p>
+      <Link href="/sandbox/htmll" rel="noopener noreferrer">
+        <motion.button
+          className="relative px-4 py-2 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium text-sm shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden"
+          variants={{
+            hover: { scale: 1.05 },
+            tap: { scale: 0.95 }
+          }}
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <span className="relative z-10">Open JSFiddle</span>
+          <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 opacity-0 hover:opacity-100 transition-opacity"></span>
+        </motion.button>
+      </Link>
+    </motion.div>
+  </div>
+</motion.div>
+
         </div>
       </motion.div>
     </main>

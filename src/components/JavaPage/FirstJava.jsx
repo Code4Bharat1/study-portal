@@ -213,7 +213,7 @@ export default function JavaPage() {
                 transition={{ delay: 0.8 }}
               >
                 <p className="text-gray-600 mb-4">Try Java right in your browser</p>
-                <Link href="https://replit.com/@replit/Java" rel="noopener noreferrer">
+                <Link href="/sandbox/java" rel="noopener noreferrer">
                   <motion.button
                     className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
@@ -232,3 +232,7 @@ export default function JavaPage() {
     </main>
   );
 }
+
+
+
+

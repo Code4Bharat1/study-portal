@@ -3,7 +3,7 @@ import { FaHome, FaBook, FaQuestionCircle, FaGithub } from 'react-icons/fa';
 import { PiFlowerLotusDuotone } from 'react-icons/pi';
 import { Facebook, Twitter, Youtube, Linkedin, Instagram } from 'lucide-react';
 import Link from 'next/link';
-
+                           
 const Footer = () => {
   return (
     <footer
@@ -19,13 +19,13 @@ const Footer = () => {
             <span className="logo-shine text-blue-400">Bridge</span>
           </div>
           <p className="text-gray-300">
-            Email: nexcorealliance@gmail.com
-            <br />
-            Phone: +91 95944 30295<br />
+           Email: nexcorealliance@gmail.com
+<br/>
+           Phone: +91 95944 30295<br/>
 
-            Address: Off BKC, Mumbai, India 400070<br />
+             Address: Off BKC, Mumbai, India 400070<br/>
           </p>
-
+        
         </div>
 
         {/* Column: Main Menu */}
@@ -72,41 +72,41 @@ const Footer = () => {
 
         {/* Column: Social */}
         <div>
-          <h3 className="font-semibold mb-2 text-white">FOLLOW</h3>
-          <div className="flex space-x-4">
-            <a href="https://www.facebook.com/people/Nexcore-Alliance/61570113656994/" target="_blank" rel="noopener noreferrer">
-              <Facebook className="w-5 h-5 text-white hover:text-[#3b5998] cursor-pointer" />
-            </a>
-
-            <a href="https://www.youtube.com/channel/UCYqpIltw48XxkMRLC-HCgag" target="_blank" rel="noopener noreferrer">
-              <Youtube className="w-5 h-5 text-white hover:text-[#FF0000] cursor-pointer" />
-            </a>
-            <a href="https://www.linkedin.com/company/105730702/admin/dashboard/" target="_blank" rel="noopener noreferrer">
-              <Linkedin className="w-5 h-5 text-white hover:text-[#0077B5] cursor-pointer" />
-            </a>
-            <a href="https://www.instagram.com/nexcorealliance/" target="_blank" rel="noopener noreferrer">
-              <Instagram className="w-5 h-5 text-white hover:text-[#E1306C] cursor-pointer" />
-            </a>
-          </div>
-        </div>
+  <h3 className="font-semibold mb-2 text-white">FOLLOW</h3>
+  <div className="flex space-x-4">
+    <a href="https://www.facebook.com/people/Nexcore-Alliance/61570113656994/" target="_blank" rel="noopener noreferrer">
+      <Facebook className="w-5 h-5 text-white hover:text-[#3b5998] cursor-pointer" />
+    </a>
+   
+    <a href="https://www.youtube.com/channel/UCYqpIltw48XxkMRLC-HCgag" target="_blank" rel="noopener noreferrer">
+      <Youtube className="w-5 h-5 text-white hover:text-[#FF0000] cursor-pointer" />
+    </a>
+    <a href="https://www.linkedin.com/company/105730702/admin/dashboard/" target="_blank" rel="noopener noreferrer">
+      <Linkedin className="w-5 h-5 text-white hover:text-[#0077B5] cursor-pointer" />
+    </a>
+    <a href="https://www.instagram.com/nexcorealliance/" target="_blank" rel="noopener noreferrer">
+      <Instagram className="w-5 h-5 text-white hover:text-[#E1306C] cursor-pointer" />
+    </a>
+  </div>
+</div>
 
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-gray-700 mt-10 pt-6 text-sm flex justify-center items-center text-gray-400 text-center px-4">
-        <p className="flex flex-col items-center space-y-2">
-          <span>Built with ❤️ and passion by <strong>Code4Bharat</strong></span>
-          <span>© 2011 – 2025 <strong>NexCoreAlliance</strong>. All rights reserved.</span>
-        </p>
-      </div>
+<div className="border-t border-gray-700 mt-10 pt-6 text-sm flex justify-center items-center text-gray-400 text-center px-4">
+  <p className="flex flex-col items-center space-y-2">
+    <span>Built with ❤️ and passion by <strong>Code4Bharat</strong></span>
+    <span>© 2011 – 2025 <strong>NexCoreAlliance</strong>. All rights reserved.</span>
+  </p>
+</div>
 
-
+      
     </footer>
   );
 };
 
 export default Footer;
-{/* <div className="space-x-6 mb-2 md:mb-0">
+ {/* <div className="space-x-6 mb-2 md:mb-0">
           <a href="#" className="hover:text-white">Terms & Conditions</a>
           <a href="#" className="hover:text-white">Privacy Policy</a>
           <a href="#" className="hover:text-white">Sitemap</a>

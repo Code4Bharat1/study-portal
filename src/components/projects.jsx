@@ -383,7 +383,7 @@ export default function Projects() {
           <div className="flex items-center justify-center mb-4">
             <div className="p-3 bg-white rounded-full shadow-md mr-3">
               {techIcons[techKey] || techIcons.react}
-            </div>
+            </div>                  
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
               {techKey.charAt(0).toUpperCase() + techKey.slice(1)} Projects
             </h1>
