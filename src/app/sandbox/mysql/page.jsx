@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { motion } from "framer-motion";
-import { FaJava } from "react-icons/fa";
+import { FaDatabase } from "react-icons/fa";
 
 // Animation variants
 const containerVariants = {
@@ -38,105 +38,131 @@ const iconVariants = {
 // Challenge configurations
 const challenges = {
   basic: {
-    title: "Basic: Sum of Array",
-    description: "Write a method `sumArray` that takes an array of integers and returns their sum.",
-    initialCode: `public class Solution {
-    public static int sumArray(int[] numbers) {
-        // Your code here
-    }
-}`,
-    testCases: [
-      { input: [1, 2, 3], expected: 6 },
-      { input: [-1, 1], expected: 0 },
-      { input: [], expected: 0 },
+    title: "Basic: Select Users",
+    description: "Write a query to select all users from the users table.",
+    initialCode: `-- Write your query here
+SELECT * FROM users;`,
+    schema: `users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255))`,
+    sampleData: [
+      { id: 1, name: "John Doe", email: "john@example.com" },
+      { id: 2, name: "Jane Smith", email: "jane@example.com" },
     ],
-    sampleInput: [1, 2, 3, 4, 5],
-    sampleOutputLabel: "Sum of array",
+    testCases: [
+      {
+        expected: [
+          { id: 1, name: "John Doe", email: "john@example.com" },
+          { id: 2, name: "Jane Smith", email: "jane@example.com" },
+        ],
+      },
+    ],
+    sampleOutputLabel: "Selected users",
     timeLimit: 300,
-    fnName: "sumArray",
   },
   intermediate: {
-    title: "Intermediate: Reverse Words",
-    description: "Write a method `reverseWords` that reverses the order of words in a string.",
-    initialCode: `public class Solution {
-    public static String reverseWords(String str) {
-        // Your code here
-    }
-}`,
+    title: "Intermediate: Join Tables",
+    description: "Write a query to join users and orders tables to get user orders.",
+    initialCode: `-- Write your query here
+SELECT users.name, orders.order_id
+FROM users
+INNER JOIN orders ON users.id = orders.user_id;`,
+    schema: `users (id INT, name VARCHAR(255)), orders (order_id INT, user_id INT)`,
+    sampleData: {
+      users: [
+        { id: 1, name: "John Doe" },
+        { id: 2, name: "Jane Smith" },
+      ],
+      orders: [
+        { order_id: 101, user_id: 1 },
+        { order_id: 102, user_id: 1 },
+        { order_id: 103, user_id: 2 },
+      ],
+    },
     testCases: [
-      { input: "hello world", expected: "world hello" },
-      { input: "Java is fun", expected: "fun is Java" },
-      { input: "", expected: "" },
+      {
+        expected: [
+          { name: "John Doe", order_id: 101 },
+          { name: "John Doe", order_id: 102 },
+          { name: "Jane Smith", order_id: 103 },
+        ],
+      },
     ],
-    sampleInput: "coding is awesome",
-    sampleOutputLabel: "Reversed words",
+    sampleOutputLabel: "User orders",
     timeLimit: 600,
-    fnName: "reverseWords",
   },
   hard: {
-    title: "Hard: Longest Palindromic Substring",
-    description: "Write a method `longestPalindrome` that finds the longest palindromic substring in a string.",
-    initialCode: `public class Solution {
-    public static String longestPalindrome(String str) {
-        // Your code here
-    }
-}`,
+    title: "Hard: Group and Aggregate",
+    description: "Write a query to count orders per user, grouping by user.",
+    initialCode: `-- Write your query here
+SELECT users.name, COUNT(orders.order_id) as order_count
+FROM users
+INNER JOIN orders ON users.id = orders.user_id
+GROUP BY users.id, users.name;`,
+    schema: `users (id INT, name VARCHAR(255)), orders (order_id INT, user_id INT)`,
+    sampleData: {
+      users: [
+        { id: 1, name: "John Doe" },
+        { id: 2, name: "Jane Smith" },
+      ],
+      orders: [
+        { order_id: 101, user_id: 1 },
+        { order_id: 102, user_id: 1 },
+        { order_id: 103, user_id: 2 },
+      ],
+    },
     testCases: [
-      { input: "babad", expected: ["bab", "aba"] },
-      { input: "cbbd", expected: "bb" },
-      { input: "racecar", expected: "racecar" },
+      {
+        expected: [
+          { name: "John Doe", order_count: 2 },
+          { name: "Jane Smith", order_count: 1 },
+        ],
+      },
     ],
-    sampleInput: "racecar",
-    sampleOutputLabel: "Longest palindrome",
+    sampleOutputLabel: "Orders per user",
     timeLimit: 900,
-    fnName: "longestPalindrome",
   },
 };
 
-// Simulated Java code execution utility
-const safeExecute = (code, fnName, input) => {
+// Simulated MySQL execution utility
+const safeExecute = (code, challenge) => {
   try {
-    // Simulated execution: Extract the method body and evaluate based on known solutions
-    // In a real app, this would call a server-side API to compile and run Java code
+    // Simulated MySQL execution: Check query patterns and return predefined results
+    // In a real app, this would call a backend to execute MySQL queries against a database
     let result;
-    if (fnName === "sumArray") {
-      // Simulate sumArray execution
-      if (code.includes("int sum = 0") && code.includes("for (int num : numbers)") && code.includes("sum += num")) {
-        result = input.reduce((sum, num) => sum + num, 0);
+    if (challenge.title === "Basic: Select Users") {
+      if (code.toUpperCase().includes("SELECT * FROM USERS")) {
+        result = challenge.sampleData;
       } else {
-        throw new Error("Incorrect implementation or compilation error");
+        throw new Error("Incorrect query: Expected SELECT * FROM users");
       }
-    } else if (fnName === "reverseWords") {
-      // Simulate reverseWords execution
-      if (code.includes("split") && code.includes("reverse") && code.includes("join")) {
-        result = input ? input.split(/\s+/).reverse().join(" ") : "";
+    } else if (challenge.title === "Intermediate: Join Tables") {
+      if (
+        code.toUpperCase().includes("SELECT") &&
+        code.toUpperCase().includes("FROM USERS") &&
+        (code.toUpperCase().includes("JOIN ORDERS") || code.toUpperCase().includes("INNER JOIN ORDERS")) &&
+        code.toUpperCase().includes("ON") &&
+        code.toUpperCase().includes("USERS.ID") &&
+        code.toUpperCase().includes("ORDERS.USER_ID")
+      ) {
+        result = challenge.testCases[0].expected;
       } else {
-        throw new Error("Incorrect implementation or compilation error");
+        throw new Error("Incorrect query: Expected a JOIN between users and orders");
       }
-    } else if (fnName === "longestPalindrome") {
-      // Simulate longestPalindrome execution (simplified)
-      if (code.includes("expandAroundCenter") || (code.includes("for") && code.includes("substring"))) {
-        const longestPalindrome = (str) => {
-          if (!str) return "";
-          let longest = "";
-          for (let i = 0; i < str.length; i++) {
-            for (let j = i; j < str.length; j++) {
-              const substr = str.substring(i, j + 1);
-              if (substr === substr.split("").reverse().join("") && substr.length > longest.length) {
-                longest = substr;
-              }
-            }
-          }
-          return longest;
-        };
-        result = longestPalindrome(input);
+    } else if (challenge.title === "Hard: Group and Aggregate") {
+      if (
+        code.toUpperCase().includes("SELECT") &&
+        code.toUpperCase().includes("COUNT") &&
+        code.toUpperCase().includes("FROM USERS") &&
+        (code.toUpperCase().includes("JOIN ORDERS") || code.toUpperCase().includes("INNER JOIN ORDERS")) &&
+        code.toUpperCase().includes("GROUP BY")
+      ) {
+        result = challenge.testCases[0].expected;
       } else {
-        throw new Error("Incorrect implementation or compilation error");
+        throw new Error("Incorrect query: Expected GROUP BY with COUNT");
       }
     } else {
-      throw new Error("Unknown function");
+      throw new Error("Unknown challenge");
     }
-    return { success: true, result: result ?? null };
+    return { success: true, result };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -154,7 +180,7 @@ const calculateScore = (results, timeTaken, timeLimit, errorCount) => {
   return totalScore;
 };
 
-export default function JavaSandboxPage() {
+export default function MySQLSandboxPage() {
   const [level, setLevel] = useState("basic");
   const [code, setCode] = useState(challenges.basic.initialCode);
   const [output, setOutput] = useState("");
@@ -166,7 +192,7 @@ export default function JavaSandboxPage() {
   const [runCount, setRunCount] = useState(0);
   const [completedChallenges, setCompletedChallenges] = useState(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("completedChallengesJava");
+      const saved = localStorage.getItem("completedChallengesMySQL");
       console.log("Initial completedChallenges from localStorage:", saved);
       return saved ? JSON.parse(saved) : [];
     }
@@ -177,7 +203,7 @@ export default function JavaSandboxPage() {
   useEffect(() => {
     if (typeof window !== "undefined" && completedChallenges.length > 0) {
       console.log("Saving completedChallenges to localStorage:", completedChallenges);
-      localStorage.setItem("completedChallengesJava", JSON.stringify(completedChallenges));
+      localStorage.setItem("completedChallengesMySQL", JSON.stringify(completedChallenges));
     }
   }, [completedChallenges]);
 
@@ -216,9 +242,9 @@ export default function JavaSandboxPage() {
     setRunCount((prev) => prev + 1);
     const challenge = challenges[level];
 
-    // Execute sample input
+    // Execute sample query
     let sampleOutput = "";
-    const sampleResult = safeExecute(code, challenge.fnName, challenge.sampleInput);
+    const sampleResult = safeExecute(code, challenge);
     if (sampleResult.success) {
       sampleOutput = `${challenge.sampleOutputLabel}: ${JSON.stringify(sampleResult.result)}`;
     } else {
@@ -226,31 +252,27 @@ export default function JavaSandboxPage() {
       setErrorCount((prev) => prev + 1);
       setErrorHistory((prev) => [
         ...prev,
-        { run: runCount + 1, error: sampleResult.error, input: challenge.sampleInput },
+        { run: runCount + 1, error: sampleResult.error },
       ]);
     }
 
     // Execute test cases
     const results = challenge.testCases.map((test, i) => {
-      const execResult = safeExecute(code, challenge.fnName, test.input);
+      const execResult = safeExecute(code, challenge);
       if (!execResult.success) {
         setErrorCount((prev) => prev + 1);
         setErrorHistory((prev) => [
           ...prev,
-          { run: runCount + 1, error: execResult.error, input: test.input },
+          { run: runCount + 1, error: execResult.error },
         ]);
         console.log(`Test ${i + 1} failed with error:`, execResult.error);
-        return { passed: false, error: execResult.error, input: test.input, actual: null };
+        return { passed: false, error: execResult.error, actual: null };
       }
       const actual = execResult.result;
-      const expected = Array.isArray(test.expected) ? test.expected : [test.expected];
-      const actualValue = actual === null || actual === undefined ? (challenge.fnName === "sumArray" ? 0 : "") : actual;
-      const passed = expected.some(exp => 
-        actualValue === exp || 
-        (typeof exp === "number" && typeof actualValue === "number" && actualValue === exp)
-      );
-      console.log(`Test ${i + 1}: Input=${JSON.stringify(test.input)}, Expected=${JSON.stringify(expected)}, Got=${actual}, Passed=${passed}`);
-      return { passed, actual, expected: test.expected, input: test.input };
+      const expected = test.expected;
+      const passed = JSON.stringify(actual) === JSON.stringify(expected);
+      console.log(`Test ${i + 1}: Expected=${JSON.stringify(expected)}, Got=${JSON.stringify(actual)}, Passed=${passed}`);
+      return { passed, actual, expected };
     });
 
     const allTestsPassed = results.every((res) => res.passed);
@@ -260,15 +282,14 @@ export default function JavaSandboxPage() {
     // Format test case output
     const outputText = results
       .map((res, i) => {
-        const inputStr = JSON.stringify(res.input);
         const expectedStr = JSON.stringify(res.expected);
         const actualStr = res.actual !== null ? JSON.stringify(res.actual) : "N/A";
         if (!res.passed) {
           return res.error
-            ? `Test ${i + 1} failed (Error): ${res.error}\n   Input: ${inputStr}\n   Expected: ${expectedStr}\n   Got: N/A`
-            : `Test ${i + 1} failed: \n   Input: ${inputStr}\n   Expected: ${expectedStr}\n   Got: ${actualStr}`;
+            ? `Test ${i + 1} failed (Error): ${res.error}\n   Expected: ${expectedStr}\n   Got: N/A`
+            : `Test ${i + 1} failed: \n   Expected: ${expectedStr}\n   Got: ${actualStr}`;
         }
-        return `Test ${i + 1} passed!\n   Input: ${inputStr}\n   Expected: ${expectedStr}\n   Got: ${actualStr}`;
+        return `Test ${i + 1} passed!\n   Expected: ${expectedStr}\n   Got: ${actualStr}`;
       })
       .join("\n\n");
 
@@ -292,7 +313,7 @@ export default function JavaSandboxPage() {
       if (errorCount > 0) {
         feedback += `You had ${errorCount} error${errorCount > 1 ? "s" : ""}:\n`;
         errorHistory.forEach((err) => {
-          feedback += `- Run ${err.run}: ${err.error} (Input: ${JSON.stringify(err.input)})\n`;
+          feedback += `- Run ${err.run}: ${err.error}\n`;
         });
         feedback += score >= 80
           ? "Great job, but review your errors to improve efficiency!"
@@ -303,7 +324,7 @@ export default function JavaSandboxPage() {
         feedback += score >= 80
           ? "Perfect! No errors and great speed!"
           : score >= 50
-          ? "Well done! Try to optimize your code for a higher score."
+          ? "Well done! Try to optimize your query for a higher score."
           : "You passed, but took too long. Practice for better speed.";
       }
       if (level !== "hard") {
@@ -316,12 +337,12 @@ export default function JavaSandboxPage() {
       if (errorCount > 0) {
         feedback += `You had ${errorCount} error${errorCount > 1 ? "s" : ""} in ${runCount + 1} run${runCount > 0 ? "s" : ""}:\n`;
         errorHistory.forEach((err) => {
-          feedback += `- Run ${err.run}: ${err.error} (Input: ${JSON.stringify(err.input)})\n`;
+          feedback += `- Run ${err.run}: ${err.error}\n`;
         });
       }
       feedback += score >= 50
         ? "Not bad, but some tests failed. Review the errors and try again!"
-        : "Too many issues. Study the test cases and debug your code.";
+        : "Too many issues. Study the test cases and debug your query.";
     }
 
     setOutput(`Sample Run:\n${sampleOutput}\n\nTest Results:\n${outputText}\n\n${feedback}`);
@@ -342,7 +363,7 @@ export default function JavaSandboxPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#fff7e6] via-[#fff1cc] to-[#ffeb99] flex items-center justify-center p-4 relative overflow-hidden">
+    <main className="min-h-screen bg-gradient-to-br from-[#e0f7fa] via-[#b2ebf2] to-[#80deea] flex items-center justify-center p-4 relative overflow-hidden">
       {[
         { top: "top-30", left: "left-50" },
         { top: "top-30", right: "right-34" },
@@ -361,8 +382,8 @@ export default function JavaSandboxPage() {
           variants={iconVariants}
           whileHover="hover"
         >
-          <FaJava
-            className={`absolute text-red-600 text-5xl z-10 rotate-12 ${Object.entries(pos)
+          <FaDatabase
+            className={`absolute text-blue-600 text-5xl z-10 rotate-12 ${Object.entries(pos)
               .map(([k, v]) => `${k}-${v}`)
               .join(" ")}`}
             aria-hidden="true"
@@ -380,10 +401,12 @@ export default function JavaSandboxPage() {
           {/* Left: Editor and Controls */}
           <motion.div className="flex-1 p-8 md:p-12 flex flex-col" variants={itemVariants}>
             <motion.h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" variants={itemVariants}>
-              Java Sandbox
+              MySQL Sandbox
             </motion.h1>
             <motion.p className="text-lg text-gray-600 mb-6" variants={itemVariants}>
               {challenges[level].description}
+              <br />
+              <strong>Schema:</strong> {challenges[level].schema}
             </motion.p>
             <motion.div className="flex gap-4 mb-6" variants={containerVariants} key={completedChallenges.join()}>
               {["basic", "intermediate", "hard"].map((lvl) => (
@@ -391,7 +414,7 @@ export default function JavaSandboxPage() {
                   key={lvl}
                   className={`px-4 py-2 rounded-lg font-medium ${
                     level === lvl
-                      ? "bg-orange-500 text-white"
+                      ? "bg-cyan-500 text-white"
                       : isLevelUnlocked(lvl)
                       ? "bg-gray-200 text-gray-700"
                       : "bg-gray-400 text-gray-600 cursor-not-allowed"
@@ -414,27 +437,27 @@ export default function JavaSandboxPage() {
             </motion.div>
             <Editor
               height="400px"
-              defaultLanguage="java"
+              defaultLanguage="sql"
               value={code}
               onChange={(value) => setCode(value)}
               theme="vs-dark"
               options={{ minimap: { enabled: false }, fontSize: 14 }}
             />
             <motion.button
-              className="mt-4 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg font-medium shadow-lg"
+              className="mt-4 px-6 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-lg font-medium shadow-lg"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
               onClick={handleRunCode}
               disabled={isRunning && timeLeft <= 0}
-              aria-label="Run code"
+              aria-label="Run query"
             >
-              Run Code
+              Run Query
             </motion.button>
           </motion.div>
           {/* Right: Output and Feedback */}
           <motion.div
-            className="flex-1 bg-gradient-to-br from-orange-50 to-red-50 p-8 md:p-12 flex flex-col"
+            className="flex-1 bg-gradient-to-br from-cyan-50 to-cyan-100 p-8 md:p-12 flex flex-col"
             variants={itemVariants}
           >
             <motion.div className="flex justify-between items-center mb-4" variants={itemVariants}>
@@ -445,7 +468,7 @@ export default function JavaSandboxPage() {
               className="bg-white rounded-xl shadow-lg p-6 h-[400px] overflow-auto"
               variants={itemVariants}
             >
-              <pre className="text-sm text-gray-800">{output || "Run your code to see the output."}</pre>
+              <pre className="text-sm text-gray-800">{output || "Run your query to see the output."}</pre>
             </motion.div>
           </motion.div>
         </div>
