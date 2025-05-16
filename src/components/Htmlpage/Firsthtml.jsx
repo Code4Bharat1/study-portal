@@ -231,7 +231,7 @@ export default function HtmlPage() {
       transition={{ delay: 0.8 }}
     >
       <p className="text-gray-600 mb-3 text-sm">Try HTML right in your browser</p>
-      <Link href="/sandbox/htmll" rel="noopener noreferrer">
+      <Link href="/sandbox/html" rel="noopener noreferrer">
         <motion.button
           className="relative px-4 py-2 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium text-sm shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden"
           variants={{

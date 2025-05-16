@@ -38,23 +38,14 @@ const iconVariants = {
 // Challenge configurations
 const challenges = {
   basic: {
-    title: "Basic: Select Users",
-    description: "Write a query to select all users from the Users table.",
-    initialCode: `-- Write your query here
+    title: "Basic: Insert and Select Users",
+    description: "Insert a user into the Users table and then select all users.",
+    initialCode: `-- Insert a user
+INSERT INTO Users VALUES(1, 'Rohan', 'rohan@gmail.com');
+
+-- Select all users
 SELECT * FROM Users;`,
     schema: `Users (id INT, name VARCHAR(100), email VARCHAR(100))`,
-    sampleData: [
-      { id: 1, name: "John Doe", email: "john@example.com" },
-      { id: 2, name: "Jane Smith", email: "jane@example.com" },
-    ],
-    testCases: [
-      {
-        expected: [
-          { id: 1, name: "John Doe", email: "john@example.com" },
-          { id: 2, name: "Jane Smith", email: "jane@example.com" },
-        ],
-      },
-    ],
     sampleOutputLabel: "Selected users",
     timeLimit: 300,
   },
@@ -122,18 +113,37 @@ GROUP BY Users.id, Users.name;`,
   },
 };
 
+// Utility to parse INSERT INTO statement
+const parseInsertStatement = (code) => {
+  const insertRegex = /INSERT INTO Users\s*\(?.*\)?\s*VALUES\s*\((\d+),\s*'([^']+)',\s*'([^']+)'\);?/gi;
+  const matches = [...code.matchAll(insertRegex)];
+  return matches.map((match) => {
+    const [, id, name, email] = match;
+    return { id: parseInt(id), name, email };
+  });
+};
+
 // Simulated SQL execution utility
-const safeExecute = (code, challenge) => {
+const safeExecute = (code, challenge, usersTable) => {
   try {
-    // Simulated SQL execution: Check query patterns and return predefined results
-    // In a real app, this would call a backend to execute SQL against a database
     let result;
-    if (challenge.title === "Basic: Select Users") {
-      if (code.toUpperCase().includes("SELECT * FROM USERS")) {
-        result = challenge.sampleData;
-      } else {
+    if (challenge.title === "Basic: Insert and Select Users") {
+      // Parse all INSERT statements
+      const insertedUsers = parseInsertStatement(code);
+      if (insertedUsers.length === 0) {
+        throw new Error("No valid INSERT INTO Users statement found");
+      }
+
+      // Update the in-memory table with inserted users
+      usersTable.push(...insertedUsers);
+
+      // Check for SELECT statement
+      if (!code.toUpperCase().includes("SELECT * FROM USERS")) {
         throw new Error("Incorrect query: Expected SELECT * FROM Users");
       }
+
+      // Return the current state of the users table
+      result = usersTable;
     } else if (challenge.title === "Intermediate: Join Tables") {
       if (
         code.toUpperCase().includes("SELECT") &&
@@ -169,10 +179,8 @@ const safeExecute = (code, challenge) => {
 };
 
 // Scoring utility
-const calculateScore = (results, timeTaken, timeLimit, errorCount) => {
-  const passedTests = results.filter((r) => r.passed).length;
-  const totalTests = results.length;
-  const baseScore = (passedTests / totalTests) * 60;
+const calculateScore = (timeTaken, timeLimit, errorCount, hasOutput) => {
+  const baseScore = hasOutput ? 60 : 0;
   const timeFactor = Math.max(0, 1 - timeTaken / timeLimit);
   const timeScore = timeFactor * 20;
   const errorPenalty = Math.max(0, 20 - errorCount * 2);
@@ -190,6 +198,7 @@ export default function SQLSandboxPage() {
   const [errorCount, setErrorCount] = useState(0);
   const [errorHistory, setErrorHistory] = useState([]);
   const [runCount, setRunCount] = useState(0);
+  const [usersTable, setUsersTable] = useState([]);
   const [completedChallenges, setCompletedChallenges] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("completedChallengesSQL");
@@ -216,6 +225,7 @@ export default function SQLSandboxPage() {
     setErrorCount(0);
     setErrorHistory([]);
     setRunCount(0);
+    setUsersTable([]); // Reset the table when changing levels
     if (timerRef.current) clearInterval(timerRef.current);
   }, [level]);
 
@@ -226,7 +236,7 @@ export default function SQLSandboxPage() {
           if (prev <= 1) {
             clearInterval(timerRef.current);
             setIsRunning(false);
-            setOutput("Time's up! You need to learn more to complete this challenge.");
+            setOutput((prev) => prev + "\n\nTime's up! You need to learn more to complete this challenge.");
             setScore(0);
             return 0;
           }
@@ -242,60 +252,28 @@ export default function SQLSandboxPage() {
     setRunCount((prev) => prev + 1);
     const challenge = challenges[level];
 
-    // Execute sample query
+    // Execute the query
     let sampleOutput = "";
-    const sampleResult = safeExecute(code, challenge);
-    if (sampleResult.success) {
-      sampleOutput = `${challenge.sampleOutputLabel}: ${JSON.stringify(sampleResult.result)}`;
+    const execResult = safeExecute(code, challenge, usersTable);
+    let hasOutput = false;
+
+    if (execResult.success) {
+      sampleOutput = `${challenge.sampleOutputLabel}: ${JSON.stringify(execResult.result)}`;
+      hasOutput = execResult.result.length > 0;
     } else {
-      sampleOutput = `${challenge.sampleOutputLabel} Error: ${sampleResult.error}`;
+      sampleOutput = `${challenge.sampleOutputLabel} Error: ${execResult.error}`;
       setErrorCount((prev) => prev + 1);
       setErrorHistory((prev) => [
         ...prev,
-        { run: runCount + 1, error: sampleResult.error },
+        { run: runCount + 1, error: execResult.error },
       ]);
     }
 
-    // Execute test cases
-    const results = challenge.testCases.map((test, i) => {
-      const execResult = safeExecute(code, challenge);
-      if (!execResult.success) {
-        setErrorCount((prev) => prev + 1);
-        setErrorHistory((prev) => [
-          ...prev,
-          { run: runCount + 1, error: execResult.error },
-        ]);
-        console.log(`Test ${i + 1} failed with error:`, execResult.error);
-        return { passed: false, error: execResult.error, actual: null };
-      }
-      const actual = execResult.result;
-      const expected = test.expected;
-      const passed = JSON.stringify(actual) === JSON.stringify(expected);
-      console.log(`Test ${i + 1}: Expected=${JSON.stringify(expected)}, Got=${JSON.stringify(actual)}, Passed=${passed}`);
-      return { passed, actual, expected };
-    });
-
-    const allTestsPassed = results.every((res) => res.passed);
-    console.log("All tests passed:", allTestsPassed);
     const timeTaken = challenge.timeLimit - timeLeft;
-
-    // Format test case output
-    const outputText = results
-      .map((res, i) => {
-        const expectedStr = JSON.stringify(res.expected);
-        const actualStr = res.actual !== null ? JSON.stringify(res.actual) : "N/A";
-        if (!res.passed) {
-          return res.error
-            ? `Test ${i + 1} failed (Error): ${res.error}\n   Expected: ${expectedStr}\n   Got: N/A`
-            : `Test ${i + 1} failed: \n   Expected: ${expectedStr}\n   Got: ${actualStr}`;
-        }
-        return `Test ${i + 1} passed!\n   Expected: ${expectedStr}\n   Got: ${actualStr}`;
-      })
-      .join("\n\n");
 
     // Format feedback
     let feedback = "";
-    if (allTestsPassed) {
+    if (execResult.success && hasOutput) {
       clearInterval(timerRef.current);
       setIsRunning(false);
       setCompletedChallenges((prev) => {
@@ -306,9 +284,9 @@ export default function SQLSandboxPage() {
         console.log(`${level} already completed, no change`);
         return prev;
       });
-      const score = calculateScore(results, timeTaken, challenge.timeLimit, errorCount);
+      const score = calculateScore(timeTaken, challenge.timeLimit, errorCount, hasOutput);
       setScore(score);
-      feedback = `Congratulations, you passed all tests in ${formatTime(timeTaken)}!\n`;
+      feedback = `Congratulations, you retrieved the inserted data in ${formatTime(timeTaken)}!\n`;
       feedback += `Runs: ${runCount + 1}, Errors encountered: ${errorCount}\n`;
       if (errorCount > 0) {
         feedback += `You had ${errorCount} error${errorCount > 1 ? "s" : ""}:\n`;
@@ -331,7 +309,7 @@ export default function SQLSandboxPage() {
         feedback += `${level === "basic" ? "Intermediate" : "Hard"} is now unlocked.\n`;
       }
     } else {
-      const score = calculateScore(results, timeTaken, challenge.timeLimit, errorCount);
+      const score = calculateScore(timeTaken, challenge.timeLimit, errorCount, hasOutput);
       setScore(score);
       feedback = `Score: ${score}/100\n`;
       if (errorCount > 0) {
@@ -340,12 +318,12 @@ export default function SQLSandboxPage() {
           feedback += `- Run ${err.run}: ${err.error}\n`;
         });
       }
-      feedback += score >= 50
-        ? "Not bad, but some tests failed. Review the errors and try again!"
-        : "Too many issues. Study the test cases and debug your query.";
+      feedback += hasOutput
+        ? "Data retrieved, but review your query for better performance."
+        : "No data retrieved. Ensure you insert and select data correctly.";
     }
 
-    setOutput(`Sample Run:\n${sampleOutput}\n\nTest Results:\n${outputText}\n\n${feedback}`);
+    setOutput(`Sample Run:\n${sampleOutput}\n\n${feedback}`);
   };
 
   const isLevelUnlocked = (lvl) => {

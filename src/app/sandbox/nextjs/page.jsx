@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { motion } from "framer-motion";
-import { FaDatabase } from "react-icons/fa";
+import { SiNextdotjs } from "react-icons/si";
 
 // Animation variants
 const containerVariants = {
@@ -38,136 +38,139 @@ const iconVariants = {
 // Challenge configurations
 const challenges = {
   basic: {
-    title: "Basic: Insert and Select Users",
-    description: "Insert a user into the users table and then select all users.",
-    initialCode: `-- Insert a user
-INSERT INTO users VALUES(1, 'Rohan', 'rohan@gmail.com');
+    title: "Basic: Create a Page",
+    description: "Create a simple Next.js page with a heading and a button.",
+    initialCode: `'use client';
 
--- Select all users
-SELECT * FROM users;`,
-    schema: `users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255))`,
-    sampleOutputLabel: "Selected users",
+export default function HomePage() {
+  return (
+    <main className="min-h-screen flex flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold mb-4">
+        Welcome to Next.js
+      </h1>
+      <button className="px-4 py-2 bg-gray-900 text-white rounded">
+        Click Me
+      </button>
+    </main>
+  );
+}`,
     timeLimit: 300,
+    sampleOutputLabel: "Rendered Page",
   },
   intermediate: {
-    title: "Intermediate: Join Tables",
-    description: "Write a query to join users and orders tables to get user orders.",
-    initialCode: `-- Write your query here
-SELECT users.name, orders.order_id
-FROM users
-INNER JOIN orders ON users.id = orders.user_id;`,
-    schema: `users (id INT, name VARCHAR(255)), orders (order_id INT, user_id INT)`,
-    sampleData: {
-      users: [
-        { id: 1, name: "John Doe" },
-        { id: 2, name: "Jane Smith" },
-      ],
-      orders: [
-        { order_id: 101, user_id: 1 },
-        { order_id: 102, user_id: 1 },
-        { order_id: 103, user_id: 2 },
-      ],
-    },
-    testCases: [
-      {
-        expected: [
-          { name: "John Doe", order_id: 101 },
-          { name: "John Doe", order_id: 102 },
-          { name: "Jane Smith", order_id: 103 },
-        ],
-      },
-    ],
-    sampleOutputLabel: "User orders",
+    title: "Intermediate: Add Navigation",
+    description: "Add navigation to your Next.js page using Link to go to an About page.",
+    initialCode: `'use client';
+
+import Link from 'next/link';
+
+export default function HomePage() {
+  return (
+    <main className="min-h-screen flex flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold mb-4">
+        Welcome to Next.js
+      </h1>
+      <Link href="/about">
+        <button className="px-4 py-2 bg-gray-900 text-white rounded">
+          Go to About
+        </button>
+      </Link>
+    </main>
+  );
+}`,
     timeLimit: 600,
+    sampleOutputLabel: "Rendered Page",
   },
   hard: {
-    title: "Hard: Group and Aggregate",
-    description: "Write a query to count orders per user, grouping by user.",
-    initialCode: `-- Write your query here
-SELECT users.name, COUNT(orders.order_id) as order_count
-FROM users
-INNER JOIN orders ON users.id = orders.user_id
-GROUP BY users.id, users.name;`,
-    schema: `users (id INT, name VARCHAR(255)), orders (order_id INT, user_id INT)`,
-    sampleData: {
-      users: [
-        { id: 1, name: "John Doe" },
-        { id: 2, name: "Jane Smith" },
-      ],
-      orders: [
-        { order_id: 101, user_id: 1 },
-        { order_id: 102, user_id: 1 },
-        { order_id: 103, user_id: 2 },
-      ],
-    },
-    testCases: [
-      {
-        expected: [
-          { name: "John Doe", order_count: 2 },
-          { name: "Jane Smith", order_count: 1 },
-        ],
-      },
-    ],
-    sampleOutputLabel: "Orders per user",
+    title: "Hard: Fetch Data",
+    description: "Fetch data in a Next.js page and display it in a list.",
+    initialCode: `'use client';
+
+export default function DataPage() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('https://api.example.com/data')
+      .then(res => res.json())
+      .then(data => setData(data));
+  }, []);
+
+  return (
+    <main className="min-h-screen flex flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold mb-4">Data List</h1>
+      <ul>
+        {data.map(item => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
+    </main>
+  );
+}`,
     timeLimit: 900,
+    sampleOutputLabel: "Rendered Page",
   },
 };
 
-// Utility to parse INSERT INTO statement
-const parseInsertStatement = (code) => {
-  const insertRegex = /INSERT INTO users\s*\(?.*\)?\s*VALUES\s*\((\d+),\s*'([^']+)',\s*'([^']+)'\);?/gi;
-  const matches = [...code.matchAll(insertRegex)];
-  return matches.map((match) => {
-    const [, id, name, email] = match;
-    return { id: parseInt(id), name, email };
-  });
-};
-
-// Simulated MySQL execution utility
-const safeExecute = (code, challenge, usersTable) => {
+// Utility to parse and simulate Next.js code execution
+const safeExecute = (code, challenge) => {
   try {
     let result;
-    if (challenge.title === "Basic: Insert and Select Users") {
-      // Parse all INSERT statements
-      const insertedUsers = parseInsertStatement(code);
-      if (insertedUsers.length === 0) {
-        throw new Error("No valid INSERT INTO users statement found");
-      }
-
-      // Update the in-memory table with inserted users
-      usersTable.push(...insertedUsers);
-
-      // Check for SELECT statement
-      if (!code.toUpperCase().includes("SELECT * FROM USERS")) {
-        throw new Error("Incorrect query: Expected SELECT * FROM users");
-      }
-
-      // Return the current state of the users table
-      result = usersTable;
-    } else if (challenge.title === "Intermediate: Join Tables") {
+    if (challenge.title === "Basic: Create a Page") {
+      // Validate basic structure
       if (
-        code.toUpperCase().includes("SELECT") &&
-        code.toUpperCase().includes("FROM USERS") &&
-        (code.toUpperCase().includes("JOIN ORDERS") || code.toUpperCase().includes("INNER JOIN ORDERS")) &&
-        code.toUpperCase().includes("ON") &&
-        code.toUpperCase().includes("USERS.ID") &&
-        code.toUpperCase().includes("ORDERS.USER_ID")
+        !code.includes("'use client';") ||
+        !code.includes("export default function") ||
+        !code.includes("<main") ||
+        !code.includes("<h1") ||
+        !code.includes("<button")
       ) {
-        result = challenge.testCases[0].expected;
-      } else {
-        throw new Error("Incorrect query: Expected a JOIN between users and orders");
+        throw new Error("Incorrect code: Expected a page with 'use client', export default function, <main>, <h1>, and <button>");
       }
-    } else if (challenge.title === "Hard: Group and Aggregate") {
+
+      // Dynamically parse the heading and button text
+      const h1Match = code.match(/<h1[^>]*>(.*?)(<\/h1>|$)/);
+      const buttonMatch = code.match(/<button[^>]*>(.*?)(<\/button>|$)/);
+      
+      if (!h1Match || !buttonMatch) {
+        throw new Error("Incorrect code: Could not parse <h1> or <button> content");
+      }
+
+      const heading = h1Match[1].trim();
+      const buttonText = buttonMatch[1].trim();
+      
+      if (!heading || !buttonText) {
+        throw new Error("Incorrect code: <h1> and <button> must contain text content");
+      }
+
+      result = `Page rendered:\n- Heading: ${heading}\n- Button: ${buttonText}`;
+    } else if (challenge.title === "Intermediate: Add Navigation") {
       if (
-        code.toUpperCase().includes("SELECT") &&
-        code.toUpperCase().includes("COUNT") &&
-        code.toUpperCase().includes("FROM USERS") &&
-        (code.toUpperCase().includes("JOIN ORDERS") || code.toUpperCase().includes("INNER JOIN ORDERS")) &&
-        code.toUpperCase().includes("GROUP BY")
+        code.includes("'use client';") &&
+        code.includes("import Link from 'next/link';") &&
+        code.includes("<Link") &&
+        code.includes("href=\"/about\"") &&
+        code.includes("<button")
       ) {
-        result = challenge.testCases[0].expected;
+        const h1Match = code.match(/<h1[^>]*>(.*?)<\/h1>/);
+        const buttonMatch = code.match(/<button[^>]*>(.*?)<\/button>/);
+        const heading = h1Match ? h1Match[1].trim() : "Heading";
+        const buttonText = buttonMatch ? buttonMatch[1].trim() : "Button";
+        result = `Page rendered:\n- Heading: ${heading}\n- Navigation Button: ${buttonText} (links to /about)`;
       } else {
-        throw new Error("Incorrect query: Expected GROUP BY with COUNT");
+        throw new Error("Incorrect code: Expected a page with a Link to /about");
+      }
+    } else if (challenge.title === "Hard: Fetch Data") {
+      if (
+        code.includes("'use client';") &&
+        code.includes("useState") &&
+        code.includes("useEffect") &&
+        code.includes("fetch") &&
+        code.includes("<ul") &&
+        code.includes("{data.map")
+      ) {
+        result = `Page rendered:\n- Heading: Data List\n- List: Simulated data items (fetch successful)`;
+      } else {
+        throw new Error("Incorrect code: Expected a page with data fetching and a list");
       }
     } else {
       throw new Error("Unknown challenge");
@@ -188,7 +191,7 @@ const calculateScore = (timeTaken, timeLimit, errorCount, hasOutput) => {
   return totalScore;
 };
 
-export default function MySQLSandboxPage() {
+export default function NextJsSandboxPage() {
   const [level, setLevel] = useState("basic");
   const [code, setCode] = useState(challenges.basic.initialCode);
   const [output, setOutput] = useState("");
@@ -198,10 +201,9 @@ export default function MySQLSandboxPage() {
   const [errorCount, setErrorCount] = useState(0);
   const [errorHistory, setErrorHistory] = useState([]);
   const [runCount, setRunCount] = useState(0);
-  const [usersTable, setUsersTable] = useState([]);
   const [completedChallenges, setCompletedChallenges] = useState(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("completedChallengesMySQL");
+      const saved = localStorage.getItem("completedChallengesNextJs");
       console.log("Initial completedChallenges from localStorage:", saved);
       return saved ? JSON.parse(saved) : [];
     }
@@ -212,7 +214,7 @@ export default function MySQLSandboxPage() {
   useEffect(() => {
     if (typeof window !== "undefined" && completedChallenges.length > 0) {
       console.log("Saving completedChallenges to localStorage:", completedChallenges);
-      localStorage.setItem("completedChallengesMySQL", JSON.stringify(completedChallenges));
+      localStorage.setItem("completedChallengesNextJs", JSON.stringify(completedChallenges));
     }
   }, [completedChallenges]);
 
@@ -225,7 +227,6 @@ export default function MySQLSandboxPage() {
     setErrorCount(0);
     setErrorHistory([]);
     setRunCount(0);
-    setUsersTable([]); // Reset the table when changing levels
     if (timerRef.current) clearInterval(timerRef.current);
   }, [level]);
 
@@ -252,14 +253,14 @@ export default function MySQLSandboxPage() {
     setRunCount((prev) => prev + 1);
     const challenge = challenges[level];
 
-    // Execute the query
+    // Execute the code
     let sampleOutput = "";
-    const execResult = safeExecute(code, challenge, usersTable);
+    const execResult = safeExecute(code, challenge);
     let hasOutput = false;
 
     if (execResult.success) {
-      sampleOutput = `${challenge.sampleOutputLabel}: ${JSON.stringify(execResult.result)}`;
-      hasOutput = execResult.result.length > 0;
+      sampleOutput = `${challenge.sampleOutputLabel}:\n${execResult.result}`;
+      hasOutput = true;
     } else {
       sampleOutput = `${challenge.sampleOutputLabel} Error: ${execResult.error}`;
       setErrorCount((prev) => prev + 1);
@@ -286,7 +287,7 @@ export default function MySQLSandboxPage() {
       });
       const score = calculateScore(timeTaken, challenge.timeLimit, errorCount, hasOutput);
       setScore(score);
-      feedback = `Congratulations, you retrieved the inserted data in ${formatTime(timeTaken)}!\n`;
+      feedback = `Congratulations, you completed the challenge in ${formatTime(timeTaken)}!\n`;
       feedback += `Runs: ${runCount + 1}, Errors encountered: ${errorCount}\n`;
       if (errorCount > 0) {
         feedback += `You had ${errorCount} error${errorCount > 1 ? "s" : ""}:\n`;
@@ -302,7 +303,7 @@ export default function MySQLSandboxPage() {
         feedback += score >= 80
           ? "Perfect! No errors and great speed!"
           : score >= 50
-          ? "Well done! Try to optimize your query for a higher score."
+          ? "Well done! Try to optimize your code for a higher score."
           : "You passed, but took too long. Practice for better speed.";
       }
       if (level !== "hard") {
@@ -319,8 +320,8 @@ export default function MySQLSandboxPage() {
         });
       }
       feedback += hasOutput
-        ? "Data retrieved, but review your query for better performance."
-        : "No data retrieved. Ensure you insert and select data correctly.";
+        ? "Code executed, but review for better performance."
+        : "Code failed to execute. Check the requirements and try again.";
     }
 
     setOutput(`Sample Run:\n${sampleOutput}\n\n${feedback}`);
@@ -341,7 +342,7 @@ export default function MySQLSandboxPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#e0f7fa] via-[#b2ebf2] to-[#80deea] flex items-center justify-center p-4 relative overflow-hidden">
+    <main className="min-h-screen bg-gradient-to-br from-[#e6fffa] via-[#ccfbf1] to-[#99f6e4] flex items-center justify-center p-4 relative overflow-hidden">
       {[
         { top: "top-30", left: "left-50" },
         { top: "top-30", right: "right-34" },
@@ -360,8 +361,8 @@ export default function MySQLSandboxPage() {
           variants={iconVariants}
           whileHover="hover"
         >
-          <FaDatabase
-            className={`absolute text-blue-600 text-5xl z-10 rotate-12 ${Object.entries(pos)
+          <SiNextdotjs
+            className={`absolute text-cyan-600 text-5xl z-10 rotate-12 ${Object.entries(pos)
               .map(([k, v]) => `${k}-${v}`)
               .join(" ")}`}
             aria-hidden="true"
@@ -379,12 +380,10 @@ export default function MySQLSandboxPage() {
           {/* Left: Editor and Controls */}
           <motion.div className="flex-1 p-8 md:p-12 flex flex-col" variants={itemVariants}>
             <motion.h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" variants={itemVariants}>
-              MySQL Sandbox
+              Next.js Sandbox
             </motion.h1>
             <motion.p className="text-lg text-gray-600 mb-6" variants={itemVariants}>
               {challenges[level].description}
-              <br />
-              <strong>Schema:</strong> {challenges[level].schema}
             </motion.p>
             <motion.div className="flex gap-4 mb-6" variants={containerVariants} key={completedChallenges.join()}>
               {["basic", "intermediate", "hard"].map((lvl) => (
@@ -392,7 +391,7 @@ export default function MySQLSandboxPage() {
                   key={lvl}
                   className={`px-4 py-2 rounded-lg font-medium ${
                     level === lvl
-                      ? "bg-cyan-500 text-white"
+                      ? "bg-cyan-600 text-white"
                       : isLevelUnlocked(lvl)
                       ? "bg-gray-200 text-gray-700"
                       : "bg-gray-400 text-gray-600 cursor-not-allowed"
@@ -415,27 +414,27 @@ export default function MySQLSandboxPage() {
             </motion.div>
             <Editor
               height="400px"
-              defaultLanguage="sql"
+              defaultLanguage="jsx"
               value={code}
               onChange={(value) => setCode(value)}
               theme="vs-dark"
               options={{ minimap: { enabled: false }, fontSize: 14 }}
             />
             <motion.button
-              className="mt-4 px-6 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-lg font-medium shadow-lg"
+              className="mt-4 px-6 py-3 bg-gradient-to-r from-cyan-600 to-cyan-800 text-white rounded-lg font-medium shadow-lg"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
               onClick={handleRunCode}
               disabled={isRunning && timeLeft <= 0}
-              aria-label="Run query"
+              aria-label="Run code"
             >
-              Run Query
+              Run Code
             </motion.button>
           </motion.div>
           {/* Right: Output and Feedback */}
           <motion.div
-            className="flex-1 bg-gradient-to-br from-cyan-50 to-cyan-100 p-8 md:p-12 flex flex-col"
+            className="flex-1 bg-gradient-to-br from-gray-50 to-gray-100 p-8 md:p-12 flex flex-col"
             variants={itemVariants}
           >
             <motion.div className="flex justify-between items-center mb-4" variants={itemVariants}>
@@ -446,7 +445,7 @@ export default function MySQLSandboxPage() {
               className="bg-white rounded-xl shadow-lg p-6 h-[400px] overflow-auto"
               variants={itemVariants}
             >
-              <pre className="text-sm text-gray-800">{output || "Run your query to see the output."}</pre>
+              <pre className="text-sm text-gray-800">{output || "Run your code to see the output."}</pre>
             </motion.div>
           </motion.div>
         </div>
