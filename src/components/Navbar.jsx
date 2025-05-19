@@ -46,6 +46,8 @@ export default function Navbar() {
     { name: "Home", link: "/" },
     { name: "Contact", link: "/contact" },
     { name: "Activity", link: "/activity" },
+    { name: "Leaderboard", link: "/leaderboard" }
+
   ];
 
   const allItems = [...navbarItems, ...learningItems, ...menuItems];
