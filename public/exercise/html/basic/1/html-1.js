@@ -31,6 +31,7 @@ function writeAttempts(count) {
 }
 
 // Syntax Verification
+// Syntax Verification using HTMLHint
 function syntaxVerify() {
   const results = HTMLHint.verify(html);
 
@@ -38,7 +39,7 @@ function syntaxVerify() {
     console.log('✔ HTML syntax is valid.');
     return true;
   } else {
-    console.log('❌ HTML Syntax is not valid: ');
+    console.log('❌ HTML Syntax is not valid:');
     results.forEach((msg) => {
       console.log(`- [${msg.rule.id}] ${msg.message} (line ${msg.line})`);
     });
@@ -46,10 +47,19 @@ function syntaxVerify() {
   }
 }
 
-// Code Structure Verification
+// Code Structure Verification for Basic HTML
 function codeVerify($) {
   let allPassed = true;
 
+  // Check for DOCTYPE manually from raw HTML
+  if (!/^<!DOCTYPE html>/i.test(html.trim())) {
+    console.log('✘ <!DOCTYPE html> declaration is missing or incorrect');
+    allPassed = false;
+  } else {
+    console.log('✔ <!DOCTYPE html> is present');
+  }
+
+  // Structural tag checks
   function check(tag, description) {
     if ($(tag).length > 0) {
       console.log(`✔ ${description} exists`);
@@ -59,18 +69,38 @@ function codeVerify($) {
     }
   }
 
+  check('html', '<html>');
+  check('head', '<head>');
   check('title', '<title>');
+  check('body', '<body>');
   check('h1', '<h1> heading');
-  check('p', '<p> paragraph');
+
+  // Specific title text check
+  const titleText = $('title').text().trim();
+  if (titleText === 'My First Page') {
+    console.log('✔ <title> is correctly set to "My First Page"');
+  } else {
+    console.log(`✘ <title> should be "My First Page" but found "${titleText}"`);
+    allPassed = false;
+  }
+
+  const headingText = $('h1').text().trim();
+  if (headingText === 'Welcome to My Website') {
+    console.log('✔ <h1> is correctly set to "Welcome to My Website"');
+  } else {
+    console.log(`✘ <h1> should be "Welcome to My Website" but found "${headingText}"`);
+    allPassed = false;
+  }
 
   if (allPassed) {
-    console.log('\n🎉 Success! All elements are present.');
+    console.log('\n🎉 Success! All basic HTML structure elements are correct.');
   } else {
-    console.log('\n❗ One or more elements are missing. Please try again.');
+    console.log('\n❗ Basic structure check failed. Please review your HTML.');
   }
 
   return allPassed;
 }
+
 
 // Start execution timer
 const startTime = process.hrtime();

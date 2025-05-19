@@ -1,13 +1,8 @@
 "use client"
 import HtmlSidebar from "@/components/HtmlExerciseSandbox/Sidebar"
 import HtmlSandbox from "./sandbox";
-import {useState} from "react"
 
 export default function HtmlExerciseSandbox() {
-    const [exerciseData, setExerciseData] = useState({
-  tests: "",
-  instructions: "",
-});
     return (
         <div>
             <div className="flex justify-between items-center pt-5 p-5">
@@ -56,9 +51,9 @@ export default function HtmlExerciseSandbox() {
             </div>
 
             <div className="flex flex-row grow-1">
-                <HtmlSidebar setFunc={setExerciseData}></HtmlSidebar>
-                <HtmlSandbox data={exerciseData}></HtmlSandbox>
+                <HtmlSidebar ></HtmlSidebar>
+                <HtmlSandbox></HtmlSandbox>
             </div>
         </div>
     )
-}
+};
