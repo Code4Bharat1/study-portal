@@ -12,6 +12,7 @@
     "@google/generative-ai": "^0.24.1",
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.7.0",
+    "@stackblitz/sdk": "^1.11.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "emailjs-com": "^3.2.0",
