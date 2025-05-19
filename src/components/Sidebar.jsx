@@ -13,7 +13,7 @@ const Sidebar = ({ menuItems }) => {
       firstInputRef.current = null
     }
   });
-  
+
   return (
     <div className="bg-white text-black p-5 h-[calc(100vh-5.8rem)] sticky top-25 flex flex-col ">
       <ul className="flex flex-col overflow-y-auto pr-2 space-y-2">
@@ -35,7 +35,6 @@ const Sidebar = ({ menuItems }) => {
                 checked={isSelected}
                 ref={label.toLowerCase() === "introduction" ? firstInputRef : null}
                 onChange={() => {
-                  console.log("world")
                   setSelected(label);
                   onClick();
                 }}
