@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { motion } from "framer-motion";
-import { FaJava } from "react-icons/fa";
+import { SiPython } from "react-icons/si";
 
 // Animation variants
 const containerVariants = {
@@ -39,12 +39,10 @@ const iconVariants = {
 const challenges = {
   basic: {
     title: "Basic: Sum of Array",
-    description: "Write a method `sumArray` that takes an array of integers and returns their sum.",
-    initialCode: `public class Solution {
-    public static int sumArray(int[] numbers) {
-        // Your code here
-    }
-}`,
+    description: "Write a function `sum_array` that takes a list of integers and returns their sum.",
+    initialCode: `def sum_array(numbers):
+    # Your code here
+    pass`,
     testCases: [
       { input: [1, 2, 3], expected: 6 },
       { input: [-1, 1], expected: 0 },
@@ -53,34 +51,30 @@ const challenges = {
     sampleInput: [1, 2, 3, 4, 5],
     sampleOutputLabel: "Sum of array",
     timeLimit: 300,
-    fnName: "sumArray",
+    fnName: "sum_array",
   },
   intermediate: {
     title: "Intermediate: Reverse Words",
-    description: "Write a method `reverseWords` that reverses the order of words in a string.",
-    initialCode: `public class Solution {
-    public static String reverseWords(String str) {
-        // Your code here
-    }
-}`,
+    description: "Write a function `reverse_words` that reverses the order of words in a string.",
+    initialCode: `def reverse_words(s):
+    # Your code here
+    pass`,
     testCases: [
       { input: "hello world", expected: "world hello" },
-      { input: "Java is fun", expected: "fun is Java" },
+      { input: "Python is fun", expected: "fun is Python" },
       { input: "", expected: "" },
     ],
     sampleInput: "coding is awesome",
     sampleOutputLabel: "Reversed words",
     timeLimit: 600,
-    fnName: "reverseWords",
+    fnName: "reverse_words",
   },
   hard: {
     title: "Hard: Longest Palindromic Substring",
-    description: "Write a method `longestPalindrome` that finds the longest palindromic substring in a string.",
-    initialCode: `public class Solution {
-    public static String longestPalindrome(String str) {
-        // Your code here
-    }
-}`,
+    description: "Write a function `longest_palindrome` that finds the longest palindromic substring in a string.",
+    initialCode: `def longest_palindrome(s):
+    # Your code here
+    pass`,
     testCases: [
       { input: "babad", expected: ["bab", "aba"] },
       { input: "cbbd", expected: "bb" },
@@ -89,33 +83,33 @@ const challenges = {
     sampleInput: "racecar",
     sampleOutputLabel: "Longest palindrome",
     timeLimit: 900,
-    fnName: "longestPalindrome",
+    fnName: "longest_palindrome",
   },
 };
 
-// Simulated Java code execution utility
+// Simulated Python code execution utility
 const safeExecute = (code, fnName, input) => {
   try {
-    // Simulated execution: Extract the method body and evaluate based on known solutions
-    // In a real app, this would call a server-side API to compile and run Java code
+    // Simulated execution: Extract the function body and evaluate based on known solutions
+    // In a real app, this would use Pyodide or a server-side API to execute Python code
     let result;
-    if (fnName === "sumArray") {
-      // Simulate sumArray execution
-      if (code.includes("int sum = 0") && code.includes("for (int num : numbers)") && code.includes("sum += num")) {
+    if (fnName === "sum_array") {
+      // Simulate sum_array execution
+      if (code.includes("sum = 0") && code.includes("for num in numbers") && code.includes("sum += num")) {
         result = input.reduce((sum, num) => sum + num, 0);
       } else {
-        throw new Error("Incorrect implementation or compilation error");
+        throw new Error("Incorrect implementation or syntax error");
       }
-    } else if (fnName === "reverseWords") {
-      // Simulate reverseWords execution
+    } else if (fnName === "reverse_words") {
+      // Simulate reverse_words execution
       if (code.includes("split") && code.includes("reverse") && code.includes("join")) {
         result = input ? input.split(/\s+/).reverse().join(" ") : "";
       } else {
-        throw new Error("Incorrect implementation or compilation error");
+        throw new Error("Incorrect implementation or syntax error");
       }
-    } else if (fnName === "longestPalindrome") {
-      // Simulate longestPalindrome execution (simplified)
-      if (code.includes("expandAroundCenter") || (code.includes("for") && code.includes("substring"))) {
+    } else if (fnName === "longest_palindrome") {
+      // Simulate longest_palindrome execution (simplified)
+      if (code.includes("for") && code.includes("range")) {
         const longestPalindrome = (str) => {
           if (!str) return "";
           let longest = "";
@@ -131,7 +125,7 @@ const safeExecute = (code, fnName, input) => {
         };
         result = longestPalindrome(input);
       } else {
-        throw new Error("Incorrect implementation or compilation error");
+        throw new Error("Incorrect implementation or syntax error");
       }
     } else {
       throw new Error("Unknown function");
@@ -154,7 +148,7 @@ const calculateScore = (results, timeTaken, timeLimit, errorCount) => {
   return totalScore;
 };
 
-export default function JavaSandboxPage() {
+export default function PythonSandboxPage() {
   const [level, setLevel] = useState("basic");
   const [code, setCode] = useState(challenges.basic.initialCode);
   const [output, setOutput] = useState("");
@@ -166,7 +160,7 @@ export default function JavaSandboxPage() {
   const [runCount, setRunCount] = useState(0);
   const [completedChallenges, setCompletedChallenges] = useState(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("completedChallengesJava");
+      const saved = localStorage.getItem("completedChallengesPython");
       console.log("Initial completedChallenges from localStorage:", saved);
       return saved ? JSON.parse(saved) : [];
     }
@@ -177,7 +171,7 @@ export default function JavaSandboxPage() {
   useEffect(() => {
     if (typeof window !== "undefined" && completedChallenges.length > 0) {
       console.log("Saving completedChallenges to localStorage:", completedChallenges);
-      localStorage.setItem("completedChallengesJava", JSON.stringify(completedChallenges));
+      localStorage.setItem("completedChallengesPython", JSON.stringify(completedChallenges));
     }
   }, [completedChallenges]);
 
@@ -244,7 +238,7 @@ export default function JavaSandboxPage() {
       }
       const actual = execResult.result;
       const expected = Array.isArray(test.expected) ? test.expected : [test.expected];
-      const actualValue = actual === null || actual === undefined ? (challenge.fnName === "sumArray" ? 0 : "") : actual;
+      const actualValue = actual === null || actual === undefined ? (challenge.fnName === "sum_array" ? 0 : "") : actual;
       const passed = expected.some(exp => 
         actualValue === exp || 
         (typeof exp === "number" && typeof actualValue === "number" && actualValue === exp)
@@ -342,27 +336,22 @@ export default function JavaSandboxPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#fff7e6] via-[#fff1cc] to-[#ffeb99] flex items-center justify-center p-4 relative overflow-hidden">
+    <main className="min-h-screen bg-gradient-to-br from-[#f0f4ff] via-[#e0e9ff] to-[#d0deff] flex items-center justify-center p-4 relative overflow-hidden">
       {[
-        { top: "top-30", left: "left-50" },
-        { top: "top-30", right: "right-34" },
-        { top: "top-40", right: "right-90" },
-        { top: "top-90", left: "left-23" },
-        { bottom: "bottom-16", left: "left-12" },
-        { top: "top-[30%]", left: "left-[5%]" },
-        { top: "top-[40%]", right: "right-[8%]" },
-        { bottom: "bottom-20", right: "right-[10%]" },
-        { top: "top-[6%]", right: "right-[55%]" },
-        { top: "top-5", right: "right-[40%]" },
-        { bottom: "bottom-4", right: "right-4" },
+        { top: "30%", left: "5%" },
+        { top: "40%", right: "8%" },
+        { bottom: "20%", right: "10%" },
+        { top: "6%", right: "55%" },
+        { top: "5%", right: "40%" },
+        { bottom: "4%", right: "4%" },
       ].map((pos, i) => (
         <motion.div
           key={i}
           variants={iconVariants}
           whileHover="hover"
         >
-          <FaJava
-            className={`absolute text-red-600 text-5xl z-10 rotate-12 ${Object.entries(pos)
+          <SiPython
+            className={`absolute text-yellow-400 text-4xl md:text-5xl z-10 ${Object.entries(pos)
               .map(([k, v]) => `${k}-${v}`)
               .join(" ")}`}
             aria-hidden="true"
@@ -380,7 +369,7 @@ export default function JavaSandboxPage() {
           {/* Left: Editor and Controls */}
           <motion.div className="flex-1 p-8 md:p-12 flex flex-col" variants={itemVariants}>
             <motion.h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" variants={itemVariants}>
-              Java Sandbox
+              Python Sandbox
             </motion.h1>
             <motion.p className="text-lg text-gray-600 mb-6" variants={itemVariants}>
               {challenges[level].description}
@@ -391,7 +380,7 @@ export default function JavaSandboxPage() {
                   key={lvl}
                   className={`px-4 py-2 rounded-lg font-medium ${
                     level === lvl
-                      ? "bg-orange-500 text-white"
+                      ? "bg-indigo-500 text-white"
                       : isLevelUnlocked(lvl)
                       ? "bg-gray-200 text-gray-700"
                       : "bg-gray-400 text-gray-600 cursor-not-allowed"
@@ -414,14 +403,14 @@ export default function JavaSandboxPage() {
             </motion.div>
             <Editor
               height="400px"
-              defaultLanguage="java"
+              defaultLanguage="python"
               value={code}
               onChange={(value) => setCode(value)}
               theme="vs-dark"
               options={{ minimap: { enabled: false }, fontSize: 14 }}
             />
             <motion.button
-              className="mt-4 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg font-medium shadow-lg"
+              className="mt-4 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg font-medium shadow-lg"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
@@ -434,7 +423,7 @@ export default function JavaSandboxPage() {
           </motion.div>
           {/* Right: Output and Feedback */}
           <motion.div
-            className="flex-1 bg-gradient-to-br from-orange-50 to-red-50 p-8 md:p-12 flex flex-col"
+            className="flex-1 bg-gradient-to-br from-indigo-50 to-blue-50 p-8 md:p-12 flex flex-col"
             variants={itemVariants}
           >
             <motion.div className="flex justify-between items-center mb-4" variants={itemVariants}>

@@ -221,7 +221,7 @@ export default function HomePage() {
                 transition={{ delay: 0.8 }}
               >
                 <p className="text-gray-600 mb-4">Try Next.js in your browser</p>
-                <Link href="/sandbox" rel="noopener noreferrer">
+                <Link href="/sandbox/nextjs" rel="noopener noreferrer">
                   <motion.button
                     className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
