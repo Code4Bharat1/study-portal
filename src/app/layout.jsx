@@ -1,60 +1,20 @@
-"use client";
-import { usePathname } from "next/navigation";
-import Footer from "@/components/Footer/Footer";
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
-import Navbar from "@/components/Navbar";
-import GeminiChat from "@/components/chatbot.jsx";
+import ClientLayout from "@/components/ClientLayout"; // this is fine if ClientLayout.jsx is in same folder
+
+export const metadata = {
+  title: "Study-portal",
+  description: "hi",
+  icons: [
+     { url: '/icon.ico', sizes: '128x128', type: 'image/x-icon' }
+  ]
+  
+};
 
 export default function RootLayout({ children }) {
-  const pathname = usePathname();
-
-  // List of routes where Chatbot should NOT appear
-  const hiddenChatbotRoutes = [
-    "/",
-    "/quizz/results",
-    "/quizz/express",
-    "/quizz/mongodb",
-    "/quizz/nodejs",
-    "/quizz/react",
-    "/quizz/quizzes",
-    "/firstmongo",
-    "/firstpython",
-    "/firstjava",
-    "/firsthtml",
-    "/sql",
-    "/mysql",
-    "/reactpage",
-    "/expresspage",
-    "/phppage",
-    "/CardNode",
-    "/nextjs",
-    "/Csscard",
-    "/quizz",
-    "/contact",
-    "/activity",
-    "/tutorial",
-    "/exercises",
-    "/questionmongodb",
-    "/questionexpress",
-    "/questionreact",
-    "/questionnodejs", // fixed typo from 'excerercises'
-    "/testimonials",
-  ];
-
-  const showChatbot = !hiddenChatbotRoutes.includes(pathname);
-
   return (
     <html lang="en">
       <body className="bg-white">
-        <Navbar />
-        <div className="mt-25">
-          <SessionProvider>{children}</SessionProvider>
-        </div>
-
-        {showChatbot && <GeminiChat />}
-
-        <Footer />
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
