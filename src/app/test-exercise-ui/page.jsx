@@ -1,5 +1,5 @@
-import HtmlExerciseSandbox from "@/components/HtmlExerciseSandbox/ContentDisplay";
+import HtmlExercisePlatform from "@/components/Exercise/Html";
 
 export default function ContentDisplay(){
-    return (<HtmlExerciseSandbox></HtmlExerciseSandbox>)
+    return (<HtmlExercisePlatform></HtmlExercisePlatform>)
 }
