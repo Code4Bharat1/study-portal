@@ -12,28 +12,33 @@ import QuestionPlatform from "@/components/Exercise/Platform";
 
 const handleOnChange = async (level) => {
     let vm;
-    try {
-        vm = await sdk.connect(document.getElementById("stackblitz-container"));
-    } catch(error){
-        console.log(error);
-        handleOnChange(level);
-        return
+
+    // Retry until the StackBlitz VM is available
+    while (true) {
+        try {
+            vm = await sdk.connect(document.getElementById("stackblitz-container"));
+            if (vm) break;
+        } catch (error) {
+            console.warn("StackBlitz connection failed, retrying...");
+            await new Promise((res) => setTimeout(res, 500)); // wait before retry
+        }
     }
+
     try {
-        let content = {};
-        let response = await fetch(`/exercise/html/${level}/tests.js`);
-        content.tests = await response.text();
+        const response = await fetch(`/exercise/html/${level}/tests.js`);
+        const tests = await response.text();
+
         await vm.applyFsDiff({
             destroy: ['tests.js'],
-            create: {
-                'tests.js': `${content.tests}`
-            }
+            create: { 'tests.js': tests }
         });
+
         await vm.getFsSnapshot();
     } catch (err) {
-        console.log(err)
+        console.error("Failed to update sandbox files:", err);
     }
 };
+
 
 const basicMenu = [
     { label: "1. Create Basic Page", icon: <FaRegFileAlt className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/1"), task: `Task: Create a basic HTML page with a title "My First Page" and a visible heading that says "Welcome to My Website"`},
