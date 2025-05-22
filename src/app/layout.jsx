@@ -2,7 +2,7 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout"; // this is fine if ClientLayout.jsx is in same folder
 
 export const metadata = {
-  title: "Study-portal",
+  title: "Skill-Bridge",
   description: "hi",
   icons: [
      { url: '/icon.ico', sizes: '128x128', type: 'image/x-icon' }
