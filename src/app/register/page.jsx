@@ -21,7 +21,7 @@ export default function RegisterPage() {
 
     try {
       const response = await fetch(
-        "https://sp-api.code4bharat.com/api/auth/register",
+        "http://localhost:3902/api/auth/register",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -274,3 +274,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-
 export default function ExpressProjects() {
   const [projects, setProjects] = useState({
     basic: [],
@@ -29,9 +28,8 @@ app.listen(PORT, () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Please log in to et in this page")
+      alert("Please log in to et in this page");
       router.push("/login");
-
     } else {
       setIsAuthenticated(true);
       fetchProjects();
@@ -43,7 +41,7 @@ app.listen(PORT, () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "https://sp-api.code4bharat.com/api/projects?category=express",
+        "http://localhost:3902/api/projects?category=express",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -75,7 +73,7 @@ app.listen(PORT, () => {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `https://sp-api.code4bharat.com/api/scores?userId=${userId}`,
+        `http://localhost:3902/api/scores?userId=${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -105,17 +103,14 @@ app.listen(PORT, () => {
   const runCode = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://sp-api.code4bharat.com/api/execute",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ code, category: "express" }),
-        }
-      );
+      const response = await fetch("http://localhost:3902/api/execute", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ code, category: "express" }),
+      });
       if (!response.ok) {
         if (response.status === 403) {
           localStorage.removeItem("token");
@@ -139,22 +134,19 @@ app.listen(PORT, () => {
     try {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://sp-api.code4bharat.com/api/scores",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            userId,
-            category: "express",
-            projectId: "mock-project-id",
-            score,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:3902/api/scores", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userId,
+          category: "express",
+          projectId: "mock-project-id",
+          score,
+        }),
+      });
       if (!response.ok) {
         if (response.status === 403) {
           localStorage.removeItem("token");
