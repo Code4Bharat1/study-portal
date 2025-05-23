@@ -11,37 +11,36 @@ import sdk from "@stackblitz/sdk"
 import QuestionPlatform from "@/components/Exercise/Platform";
 
 const handleOnChange = async (level) => {
-    let vm;
-
-    // Retry until the StackBlitz VM is available
-    while (true) {
-        try {
-            vm = await sdk.connect(document.getElementById("stackblitz-container"));
-            if (vm) break;
-        } catch (error) {
-            console.warn("StackBlitz connection failed, retrying...");
-            await new Promise((res) => setTimeout(res, 500)); // wait before retry
-        }
-    }
-
     try {
+        const container = document.getElementById("stackblitz-container");
+        if (!container) throw new Error("Container element not found");
+
+        const vm = await sdk.connect(container);
+        console.log("Connected VM:", vm);
+
         const response = await fetch(`/exercise/html/${level}/tests.js`);
-        const tests = await response.text();
+        if (!response.ok) throw new Error("Failed to fetch test file");
+
+        const testContent = await response.text();
 
         await vm.applyFsDiff({
-            destroy: ['tests.js'],
-            create: { 'tests.js': tests }
+            destroy: ['tests.test'],
+            create: {
+                'tests.test': testContent,
+            },
         });
 
-        await vm.getFsSnapshot();
-    } catch (err) {
-        console.error("Failed to update sandbox files:", err);
+        const snapshot = await vm.getFsSnapshot();
+        console.log("FS Snapshot:", snapshot);
+
+    } catch (error) {
+        console.error("Error during StackBlitz VM setup:", error);
     }
+
 };
 
-
 const basicMenu = [
-    { label: "1. Create Basic Page", icon: <FaRegFileAlt className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/1"), task: `Task: Create a basic HTML page with a title "My First Page" and a visible heading that says "Welcome to My Website"`},
+    { label: "1. Create Basic Page", icon: <FaRegFileAlt className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/1"), task: `Task: Create a basic HTML page with a title "My First Page" and a visible heading that says "Welcome to My Website"` },
     { label: "2. Add Headings", icon: <FaHeading className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/2") },
     { label: "3. Add Paragraphs", icon: <FaParagraph className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/3") },
     { label: "4. Create a Link", icon: <FaLink className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/4") },
@@ -71,7 +70,7 @@ const intermediateMenu = [
     },
     {
         label: "4. Create a Navigation Menu",
-        icon: <FaBars className="inline mr-2 text-xl"/>,
+        icon: <FaBars className="inline mr-2 text-xl" />,
         onClick: (e) => handleOnChange("intermediate/4"),
     },
     {
@@ -159,12 +158,19 @@ const hardMenu = [
     },
 ];
 
+
 const sandboxFiles = {
-    'index.html': '', 'tests.js': '', 'package.json': `{
+    'index.html': '', 'tests.test': `
+const fs = require('fs');
+const path = require('path');
+const testsFile = path.join(__dirname, 'web-c.done');
+fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
+    'package.json': `{
   "name": "code4bharat-trybox",
   "scripts": {
-    "test": "node tests.js",
-    "start": "servor --reload"
+    "test": "node tests.test",
+    "start": "node tests.test && servor",
+    "output": "servor"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
@@ -200,7 +206,6 @@ export default function HtmlExercisePlatform() {
             files={sandboxFiles}
             filesOpened={sandboxFilesOpened}
             setSidebarContent={setSidebarContent}
-            task={task}
         />
     );
 }

@@ -6,7 +6,6 @@ const Sidebar = ({ menuItems }) => {
   const [selected, setSelected] = useState(menuItems[0]?.label || "");
 
   useEffect(() => {
-    console.log(menuItems)
     if (menuItems.length > 0 && menuItems[0].onClick) {
       setSelected(menuItems[0].label)
       menuItems[0].onClick();
