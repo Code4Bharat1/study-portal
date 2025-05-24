@@ -13,10 +13,6 @@ export default function ReactPage() {
        <ReactHome />
   
   <Sidebar />
-  
-
-  {/* Footer at the bottom */}
-
 </div>
 
 
