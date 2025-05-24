@@ -158,7 +158,12 @@ async function functionalVerify() {
 // Main execution
 (async () => {
   const startTime = performance.now();
-  const syntaxPassed = await syntaxVerify();
+const syntaxPassed = await syntaxVerify();
+if (!syntaxPassed) {
+  console.log('\n❌ Syntax errors prevent further checks.');
+  process.exit(1);
+}
+
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();
   const allPassed = syntaxPassed && structurePassed && functionalPassed;

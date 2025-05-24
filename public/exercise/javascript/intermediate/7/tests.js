@@ -36,7 +36,7 @@ function writeAttempts(count) {
 
 // Syntax Verification using ESLint
 async function syntaxVerify() {
-  const eslint = new ESLint({ useEslintrc: false, overrideConfig: { env: { browser: true, es2021: true }, parserOptions: { sourceType: 'module' } } });
+  const eslint = new ESLint();
   const results = await eslint.lintText(js);
   if (results[0].errorCount === 0) {
     console.log('✔ JavaScript syntax is valid.');
@@ -86,7 +86,12 @@ function codeVerify() {
 // Main execution
 (async () => {
   const startTime = process.hrtime();
-  const syntaxPassed = await syntaxVerify();
+const syntaxPassed = await syntaxVerify();
+if (!syntaxPassed) {
+  console.log('\n❌ Syntax errors prevent further checks.');
+  process.exit(1);
+}
+
   const structurePassed = codeVerify();
   const allPassed = syntaxPassed && structurePassed;
 

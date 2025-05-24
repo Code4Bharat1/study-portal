@@ -11,7 +11,7 @@ import {
   FaShieldAlt,
 } from "react-icons/fa";
 
-const jsPracticeMenu = [
+const basicMenu = [
   {
     label: "1. Variables and Data Types",
     icon: <FaCode className="inline mr-2 text-xl" />,
