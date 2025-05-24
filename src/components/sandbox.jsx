@@ -30,14 +30,18 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
           if (files.includes('web-c.done')) {
             clearInterval(intervalId);
             onLoad();
-            vm.applyFsDiff({ destroy: ['web-c.done'], create: {} })
+
+            // Save start timestamp in localStorage (always overwrite)
+            localStorage.setItem('startTimestamp', Date.now().toString());
+
+            vm.applyFsDiff({ destroy: ['web-c.done'], create: {} });
           }
-        }, 2000); // check every second
+        }, 3000);
       })
       .catch((err) => {
         console.error('Failed to embed StackBlitz project:', err);
-        const container = document.getElementById("stackblitz-container");
-        if (!container) throw new Error("Container element not found");
+        const container = document.getElementById(containerId);
+        if (!container) throw new Error('Container element not found');
 
         sdk.connect(container).then((vm) => {
           const intervalId = setInterval(async () => {
@@ -46,10 +50,14 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
             if (files.includes('web-c.done')) {
               clearInterval(intervalId);
               onLoad();
-              vm.applyFsDiff({ destroy: ['web-c.done'], create: {} })
+
+              // Save start timestamp in localStorage (always overwrite)
+              localStorage.setItem('startTimestamp', Date.now().toString());
+
+              vm.applyFsDiff({ destroy: ['web-c.done'], create: {} });
             }
-          }, 2000); // check every second
-        })
+          }, 3000);
+        });
       });
   }, [filesObj, fileToOpen, onLoad]);
 

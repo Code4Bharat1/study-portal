@@ -13,7 +13,7 @@ const Sidebar = ({ menuItems }) => {
   }, [menuItems]);
 
   return (
-    <div className="bg-white text-black p-5 h-[calc(100vh-5.8rem)] sticky top-25 flex flex-col ">
+    <div className="bg-white text-black px-2 h-[calc(100vh-5.8rem)] sticky top-25 flex flex-col ">
       <ul className="flex flex-col overflow-y-auto pr-2 space-y-2">
         {menuItems.map(({ label, icon, href, onClick }, index) => {
           const isSelected = selected === label;

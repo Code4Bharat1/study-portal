@@ -92,7 +92,7 @@ export default function QuestionPlatform({ setSidebarContent, menuItems, files, 
             </div>
 
             {/* Top Bar */}
-            <div className="flex justify-between items-center pt-5 p-5 relative z-10">
+            <div className="flex justify-between items-center p-5 relative z-10">
                 <div className="flex space-x-4" role="radiogroup" aria-label="Select Difficulty">
                     {["Basic", "intermediate", "hard"].map((level) => {
                         const isSelected = selectedLevel === level;
