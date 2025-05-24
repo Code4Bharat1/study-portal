@@ -61,5 +61,5 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
       });
   }, [filesObj, fileToOpen, onLoad]);
 
-  return <div id={containerId} className="w-screen h-[calc(100vh-5rem)]" />;
+  return <div id={containerId} className="w-screen h-[calc(100vh-11rem)]" />;
 }

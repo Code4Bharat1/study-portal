@@ -10,7 +10,7 @@ const attemptsFile = path.join(__dirname, 'attempts.json');
 const resultFile = path.join(__dirname, 'result.txt');
 
 // Read JavaScript
-const js = fs.readFileSync('script.js', 'utf8');
+const js = fs.readFileSync('index.js', 'utf8');
 
 // Helper: Read Attempts (default to 1)
 function readAttempts() {

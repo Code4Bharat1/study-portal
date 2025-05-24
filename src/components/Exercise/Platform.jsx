@@ -152,7 +152,7 @@ export default function QuestionPlatform({ setSidebarContent, menuItems, files, 
             </div>
 
             {/* Main Content: Sidebar only shows if sandboxLoaded is true */}
-            <div className="flex flex-row grow-1 relative z-10">
+            <div className="flex flex-row relative z-10 pr-2">
                 <div className="order-2 grow">{sandboxElement}</div>
 
                 {sandboxLoaded && (

@@ -11,7 +11,7 @@ const attemptsFile = path.join(__dirname, 'attempts.json');
 const resultFile = path.join(__dirname, 'result.txt');
 
 // Read JavaScript
-const js = fs.readFileSync('script.js', 'utf8');
+const js = fs.readFileSync('index.js', 'utf8');
 
 // Helper: Read Attempts (default to 1)
 function readAttempts() {
@@ -39,7 +39,7 @@ function writeAttempts(count) {
 
 // Syntax Verification using ESLint
 async function syntaxVerify() {
-  const eslint = new ESLint({ useEslintrc: false, overrideConfig: { env: { node: true, es2021: true }, parserOptions: { sourceType: 'module' } } });
+  const eslint = new ESLint();
   const results = await eslint.lintText(js);
   if (results[0].errorCount === 0) {
     console.log('✔ JavaScript syntax is valid.');
