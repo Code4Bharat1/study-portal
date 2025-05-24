@@ -1,4 +1,6 @@
 // Page 5 
+console.clear();
+console.clear();
 const fs = require('fs');
 const { ESLint } = require('eslint');
 const parser = require('@babel/parser');

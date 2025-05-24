@@ -1,5 +1,7 @@
  const { HTMLHint } = require('htmlhint');
 const cheerio = require('cheerio');
+console.clear();
+console.clear();
 const fs = require('fs');
 const path = require('path');
 

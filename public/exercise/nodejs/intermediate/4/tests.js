@@ -1,6 +1,8 @@
 // Page 4 
 const { ESLint } = require('eslint');
 const esprima = require('esprima');
+console.clear();
+console.clear();
 const fs = require('fs');
 const path = require('path');
 

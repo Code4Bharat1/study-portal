@@ -1,4 +1,6 @@
 // Page 5 
+console.clear();
+console.clear();
 const fs = require('fs');
 const stylelint = require('stylelint');
 const { JSDOM } = require('jsdom');

@@ -226,7 +226,7 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
   "scripts": {
     "test": "node tests.test",
     "start": "node tests.test && servor",
-    "output": "servor"
+    "output": "node -e \\"console.clear(); console.log('To see output of Javascript: 👉  Open your browsers Developer Tools (F12 or Ctrl+Shift+I) and check the Console tab.')\\" servor"
   },
   "dependencies": {
     "eslint": "^9.27.0",
@@ -235,6 +235,7 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
     "servor": "^4.0.2"
   }
 }
+
 `}
 const sandboxFilesOpened = "index.html"
 
