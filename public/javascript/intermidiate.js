@@ -11,7 +11,7 @@ import {
   FaShieldAlt,
 } from "react-icons/fa";
 
-const jsPracticeMenu = [
+const intermediateMenu = [
   {
     label: "1. Closures and Scope",
     icon: <FaCode className="inline mr-2 text-xl" />,

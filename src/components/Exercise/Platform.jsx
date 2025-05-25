@@ -3,7 +3,7 @@ import { useState, useRef, useMemo } from "react";
 import Sidebar from "@/components/Sidebar";
 import Sandbox from "@/components/Sandbox";
 
-export default function QuestionPlatform({ setSidebarContent, menuItems, files, filesOpened, task, onLoad }) {
+export default function QuestionPlatform({ setSidebarContent, menuItems, files, filesOpened, task }) {
     const [sandboxLoaded, setSandboxLoaded] = useState(false);
     const [selectedLevel, setSelectedLevel] = useState("Basic");
     const instructionRef = useRef(null);
@@ -92,8 +92,8 @@ export default function QuestionPlatform({ setSidebarContent, menuItems, files, 
             </div>
 
             {/* Top Bar */}
-            <div className="flex justify-between items-center p-5 relative z-10">
-                <div className="flex space-x-4" role="radiogroup" aria-label="Select Difficulty">
+            <div className="flex justify-between items-center py-5 pl-3 pr-1 relative z-10">
+                <div className="flex space-x-3" role="radiogroup" aria-label="Select Difficulty">
                     {["Basic", "intermediate", "hard"].map((level) => {
                         const isSelected = selectedLevel === level;
                         const baseColor =
@@ -128,19 +128,12 @@ export default function QuestionPlatform({ setSidebarContent, menuItems, files, 
                 </div>
 
 
-                <div className="flex space-x-3">
+                <div className="flex space-x-2">
                     <button
                         onClick={showInstructions}
                         className="px-3 py-1 text-sm bg-indigo-500 text-white rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300"
                     >
                         Instructions
-                    </button>
-
-                    <button
-                        className="px-3 py-1 text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-                        onClick={() => location.reload()}
-                    >
-                        Reset
                     </button>
 
                     <button
@@ -152,7 +145,7 @@ export default function QuestionPlatform({ setSidebarContent, menuItems, files, 
             </div>
 
             {/* Main Content: Sidebar only shows if sandboxLoaded is true */}
-            <div className="flex flex-row grow-1 relative z-10">
+            <div className="flex flex-row relative z-10 pr-2">
                 <div className="order-2 grow">{sandboxElement}</div>
 
                 {sandboxLoaded && (

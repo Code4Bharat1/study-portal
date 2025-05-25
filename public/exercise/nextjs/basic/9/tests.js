@@ -1,4 +1,6 @@
 // Page 9 
+console.clear();
+console.clear();
 const fs = require('fs');
 const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
@@ -125,7 +127,12 @@ async function functionalVerify() {
 
 (async () => {
   const startTime = performance.now();
-  const syntaxPassed = await syntaxVerify();
+const syntaxPassed = await syntaxVerify();
+if (!syntaxPassed) {
+  console.log('\n❌ Syntax errors prevent further checks.');
+  process.exit(1);
+}
+
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();
   const allPassed = syntaxPassed && structurePassed && functionalPassed;
