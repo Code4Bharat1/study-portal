@@ -79,7 +79,7 @@ export default function LearnPythonCard() {
             variants={itemVariants}
           >
             <motion.span
-              className="inline-block px-3 py-1 text-sm font-semibold text-indigo-600 bg-indigo-100 rounded-full mb-2"
+              className="inline-block px-2 py-1 text-sm font-semibold text-indigo-600 bg-indigo-100 rounded-full mb-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
