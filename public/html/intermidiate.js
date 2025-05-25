@@ -13,53 +13,55 @@ import {
 
 const htmlPracticeMenu = [
   {
-    label: "1. Use Semantic HTML",
+    label: "1. Semantic HTML",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/1/html-semantics"),
+    onClick: (e) => handleOnChange("intermediate/1"),
   },
   {
-    label: "2. Advanced Form Inputs",
+    label: "2. Form Inputs",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/2/advanced-form-inputs"),
+    onClick: (e) => handleOnChange("intermediate/2"),
   },
   {
-    label: "3. Embed Multimedia",
+    label: "3. Multimedia",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/3/embed-multimedia"),
+    onClick: (e) => handleOnChange("intermediate/3"),
   },
   {
-    label: "4. Create a Navigation Menu",
+    label: "4. Navigation Menu",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/4/navigation-menu"),
+    onClick: (e) => handleOnChange("intermediate/4"),
   },
   {
-    label: "5. Use Metadata",
+    label: "5. Metadata",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/5/html-metadata"),
+    onClick: (e) => handleOnChange("intermediate/5"),
   },
   {
-    label: "6. Implement Accessibility (ARIA)",
+    label: "6. ARIA Access",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/6/html-aria"),
+    onClick: (e) => handleOnChange("intermediate/6"),
   },
   {
-    label: "7. Use Inline Frames (iframe)",
+    label: "7. Iframes",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/7/html-iframe"),
+    onClick: (e) => handleOnChange("intermediate/7"),
   },
   {
-    label: "8. Create Data Lists",
+    label: "8. Datalists",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/8/html-datalist"),
+    onClick: (e) => handleOnChange("intermediate/8"),
   },
   {
-    label: "9. Use Figure and Caption",
+    label: "9. Figure & Caption",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/9/html-figure"),
+    onClick: (e) => handleOnChange("intermediate/9"),
   },
   {
-    label: "10. Build a Form with Validation",
+    label: "10. Form Validation",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/10/form-validation"),
+    onClick: (e) => handleOnChange("intermediate/10"),
   },
 ];
+
+export default htmlPracticeMenu;

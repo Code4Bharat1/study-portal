@@ -13,53 +13,55 @@ import {
 
 const htmlPracticeMenu = [
   {
-    label: "1. Microdata and Schema.org",
+    label: "1. Microdata",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/1/microdata-schema"),
+    onClick: (e) => handleOnChange("hard/1"),
   },
   {
-    label: "2. Custom Form Validation",
+    label: "2. Form Validation",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/2/custom-form-validation"),
+    onClick: (e) => handleOnChange("hard/2"),
   },
   {
-    label: "3. Advanced Multimedia with Tracks",
+    label: "3. Multimedia Tracks",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/3/multimedia-tracks"),
+    onClick: (e) => handleOnChange("hard/3"),
   },
   {
-    label: "4. Responsive Navigation with Off-Canvas",
+    label: "4. Off-Canvas Nav",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/4/off-canvas-navigation"),
+    onClick: (e) => handleOnChange("hard/4"),
   },
   {
-    label: "5. Advanced Metadata for SEO",
+    label: "5. SEO Metadata",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/5/advanced-seo-metadata"),
+    onClick: (e) => handleOnChange("hard/5"),
   },
   {
-    label: "6. Advanced ARIA for Dynamic Content",
+    label: "6. ARIA Advanced",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/6/advanced-aria"),
+    onClick: (e) => handleOnChange("hard/6"),
   },
   {
-    label: "7. Secure Iframes with Sandbox",
+    label: "7. Secure Iframes",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/7/secure-iframe-sandbox"),
+    onClick: (e) => handleOnChange("hard/7"),
   },
   {
-    label: "8. Dynamic Data Lists with Autocomplete",
+    label: "8. Datalist Auto",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/8/dynamic-datalist"),
+    onClick: (e) => handleOnChange("hard/8"),
   },
   {
-    label: "9. Responsive Figures with Picture Element",
+    label: "9. Picture Element",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/9/picture-element"),
+    onClick: (e) => handleOnChange("hard/9"),
   },
   {
-    label: "10. Form Validation with Constraint API",
+    label: "10. Constraint API",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/10/constraint-validation-api"),
+    onClick: (e) => handleOnChange("hard/10"),
   },
 ];
+
+export default htmlPracticeMenu;

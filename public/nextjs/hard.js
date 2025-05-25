@@ -13,54 +13,54 @@ import {
 
 const nextjsPracticeMenu = [
   {
-    label: "1. App Router and Server Components",
+    label: "1. App Router & Server Components",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/1/app-router"),
+    onClick: (e) => handleOnChange("advanced/1"),
   },
   {
-    label: "2. Advanced Authentication Patterns",
+    label: "2. Advanced Auth Patterns",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/2/advanced-auth"),
+    onClick: (e) => handleOnChange("advanced/2"),
   },
   {
     label: "3. WebSocket Integration",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/3/websockets"),
+    onClick: (e) => handleOnChange("advanced/3"),
   },
   {
     label: "4. Serverless Deployment",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/4/serverless"),
+    onClick: (e) => handleOnChange("advanced/4"),
   },
   {
-    label: "5. Advanced Caching Strategies",
+    label: "5. Caching Strategies",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/5/caching"),
+    onClick: (e) => handleOnChange("advanced/5"),
   },
   {
-    label: "6. Micro-Frontends with Module Federation",
+    label: "6. Micro-Frontends",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/6/micro-frontends"),
+    onClick: (e) => handleOnChange("advanced/6"),
   },
   {
-    label: "7. Advanced Error Handling",
+    label: "7. Error Handling",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/7/error-handling"),
+    onClick: (e) => handleOnChange("advanced/7"),
   },
   {
-    label: "8. Progressive Web Apps (PWA)",
+    label: "8. Progressive Web Apps",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/8/pwa"),
+    onClick: (e) => handleOnChange("advanced/8"),
   },
   {
-    label: "9. GraphQL with Next.js",
+    label: "9. GraphQL",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/9/graphql"),
+    onClick: (e) => handleOnChange("advanced/9"),
   },
   {
-    label: "10. Advanced Testing with Playwright",
+    label: "10. Testing with Playwright",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-advanced/10/playwright"),
+    onClick: (e) => handleOnChange("advanced/10"),
   },
 ];
 

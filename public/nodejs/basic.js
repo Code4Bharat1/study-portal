@@ -63,3 +63,5 @@ const jsPracticeMenu = [
     onClick: (e) => handleOnChange("node-basic/10/npm"),
   },
 ];
+
+export default jsPracticeMenu;

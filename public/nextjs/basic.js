@@ -13,54 +13,54 @@ import {
 
 const nextjsPracticeMenu = [
   {
-    label: "1. Introduction to Next.js",
+    label: "1. Intro",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/1/introduction"),
+    onClick: (e) => handleOnChange("basic/1"),
   },
   {
-    label: "2. Pages and Routing",
+    label: "2. Pages & Routing",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/2/pages-routing"),
+    onClick: (e) => handleOnChange("basic/2"),
   },
   {
     label: "3. Static Generation",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/3/static-generation"),
+    onClick: (e) => handleOnChange("basic/3"),
   },
   {
-    label: "4. Server-Side Rendering",
+    label: "4. Server Rendering",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/4/server-side-rendering"),
+    onClick: (e) => handleOnChange("basic/4"),
   },
   {
     label: "5. API Routes",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/5/api-routes"),
+    onClick: (e) => handleOnChange("basic/5"),
   },
   {
     label: "6. Dynamic Routes",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/6/dynamic-routes"),
+    onClick: (e) => handleOnChange("basic/6"),
   },
   {
-    label: "7. CSS in Next.js",
+    label: "7. CSS",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/7/css"),
+    onClick: (e) => handleOnChange("basic/7"),
   },
   {
-    label: "8. Image Optimization",
+    label: "8. Image Opt.",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/8/image-optimization"),
+    onClick: (e) => handleOnChange("basic/8"),
   },
   {
-    label: "9. Environment Variables",
+    label: "9. Env Variables",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/9/environment-variables"),
+    onClick: (e) => handleOnChange("basic/9"),
   },
   {
-    label: "10. Deploying Next.js",
+    label: "10. Deployment",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("nextjs-basic/10/deployment"),
+    onClick: (e) => handleOnChange("basic/10"),
   },
 ];
 

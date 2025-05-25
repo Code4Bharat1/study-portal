@@ -13,53 +13,55 @@ import {
 
 const intermediateMenu = [
   {
-    label: "1. Closures and Scope",
+    label: "1. Closures & Scope",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/1/closures-scope"),
+    onClick: (e) => handleOnChange("intermediate/1"),
   },
   {
-    label: "2. Higher-Order Functions",
+    label: "2. Higher-Order Funcs",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/2/higher-order-functions"),
+    onClick: (e) => handleOnChange("intermediate/2"),
   },
   {
-    label: "3. Array Methods (Map, Filter, Reduce)",
+    label: "3. Array Methods",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/3/array-methods"),
+    onClick: (e) => handleOnChange("intermediate/3"),
   },
   {
-    label: "4. Promises and Async/Await",
+    label: "4. Promises & Async",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/4/promises-async-await"),
+    onClick: (e) => handleOnChange("intermediate/4"),
   },
   {
-    label: "5. Object-Oriented Programming",
+    label: "5. OOP Basics",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/5/object-oriented-programming"),
+    onClick: (e) => handleOnChange("intermediate/5"),
   },
   {
     label: "6. Event Delegation",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/6/event-delegation"),
+    onClick: (e) => handleOnChange("intermediate/6"),
   },
   {
-    label: "7. Modules and Imports",
+    label: "7. Modules & Imports",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/7/modules-imports"),
+    onClick: (e) => handleOnChange("intermediate/7"),
   },
   {
     label: "8. Regular Expressions",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/8/regular-expressions"),
+    onClick: (e) => handleOnChange("intermediate/8"),
   },
   {
-    label: "9. Error Handling with Custom Errors",
+    label: "9. Custom Error Handling",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/9/custom-error-handling"),
+    onClick: (e) => handleOnChange("intermediate/9"),
   },
   {
-    label: "10. DOM Manipulation with Datasets",
+    label: "10. DOM Datasets",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/10/dom-datasets"),
+    onClick: (e) => handleOnChange("intermediate/10"),
   },
 ];
+
+export default intermediateMenu;

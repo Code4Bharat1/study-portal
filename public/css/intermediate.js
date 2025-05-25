@@ -15,52 +15,52 @@ const cssPracticeMenu = [
   {
     label: "1. Advanced CSS Grid",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/1/advanced-grid"),
+    onClick: (e) => handleOnChange("css-advanced/1"),
   },
   {
     label: "2. Complex Animations",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/2/complex-animations"),
+    onClick: (e) => handleOnChange("css-advanced/2"),
   },
   {
     label: "3. SASS Advanced",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/3/advanced-sass"),
+    onClick: (e) => handleOnChange("css-advanced/3"),
   },
   {
     label: "4. CSS Houdini",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/4/houdini"),
+    onClick: (e) => handleOnChange("css-advanced/4"),
   },
   {
     label: "5. Responsive Typography",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/5/responsive-typography"),
+    onClick: (e) => handleOnChange("css-advanced/5"),
   },
   {
     label: "6. Advanced Pseudo-Elements",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/6/advanced-pseudo"),
+    onClick: (e) => handleOnChange("css-advanced/6"),
   },
   {
     label: "7. CSS Scroll Snap",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/7/scroll-snap"),
+    onClick: (e) => handleOnChange("css-advanced/7"),
   },
   {
     label: "8. Performance Optimization",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/8/performance"),
+    onClick: (e) => handleOnChange("css-advanced/8"),
   },
   {
     label: "9. CSS Container Queries",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/9/container-queries"),
+    onClick: (e) => handleOnChange("css-advanced/9"),
   },
   {
     label: "10. Accessibility in CSS",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-advanced/10/accessibility"),
+    onClick: (e) => handleOnChange("css-advanced/10"),
   },
 ];
 

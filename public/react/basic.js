@@ -13,53 +13,53 @@ import {
 
 const reactPracticeMenu = [
   {
-    label: "1. Introduction to JSX",
+    label: "JSX Intro",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/1/jsx-introduction"),
+    onClick: () => handleOnChange("basic/1"),
   },
   {
-    label: "2. Creating Components",
+    label: "Components",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/2/components"),
+    onClick: () => handleOnChange("basic/2"),
   },
   {
-    label: "3. Props and PropTypes",
+    label: "Props & PropTypes",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/3/props-proptypes"),
+    onClick: () => handleOnChange("basic/3"),
   },
   {
-    label: "4. State with useState",
+    label: "useState",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/4/usestate"),
+    onClick: () => handleOnChange("basic/4"),
   },
   {
-    label: "5. Handling Events",
+    label: "Events",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/5/events"),
+    onClick: () => handleOnChange("basic/5"),
   },
   {
-    label: "6. Conditional Rendering",
+    label: "Conditional Rendering",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/6/conditional-rendering"),
+    onClick: () => handleOnChange("basic/6"),
   },
   {
-    label: "7. Lists and Keys",
+    label: "Lists & Keys",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/7/lists-keys"),
+    onClick: () => handleOnChange("basic/7"),
   },
   {
-    label: "8. Basic Styling in React",
+    label: "Styling",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/8/styling"),
+    onClick: () => handleOnChange("basic/8"),
   },
   {
-    label: "9. Forms in React",
+    label: "Forms",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/9/forms"),
+    onClick: () => handleOnChange("basic/9"),
   },
   {
-    label: "10. Component Lifecycle (useEffect)",
+    label: "useEffect",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-basic/10/useeffect"),
+    onClick: () => handleOnChange("basic/10"),
   },
 ];

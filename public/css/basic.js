@@ -15,52 +15,52 @@ const cssPracticeMenu = [
   {
     label: "1. CSS Selectors",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/1/selectors"),
+    onClick: (e) => handleOnChange("css-basic/1"),
   },
   {
     label: "2. Box Model",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/2/box-model"),
+    onClick: (e) => handleOnChange("css-basic/2"),
   },
   {
     label: "3. Colors and Backgrounds",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/3/colors-backgrounds"),
+    onClick: (e) => handleOnChange("css-basic/3"),
   },
   {
     label: "4. Typography",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/4/typography"),
+    onClick: (e) => handleOnChange("css-basic/4"),
   },
   {
     label: "5. Flexbox",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/5/flexbox"),
+    onClick: (e) => handleOnChange("css-basic/5"),
   },
   {
     label: "6. CSS Positioning",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/6/positioning"),
+    onClick: (e) => handleOnChange("css-basic/6"),
   },
   {
     label: "7. Pseudo-Classes and Elements",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/7/pseudo-classes"),
+    onClick: (e) => handleOnChange("css-basic/7"),
   },
   {
     label: "8. CSS Transitions",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/8/transitions"),
+    onClick: (e) => handleOnChange("css-basic/8"),
   },
   {
     label: "9. Responsive Design",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/9/responsive-design"),
+    onClick: (e) => handleOnChange("css-basic/9"),
   },
   {
     label: "10. CSS Variables",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("css-basic/10/variables"),
+    onClick: (e) => handleOnChange("css-basic/10"),
   },
 ];
 

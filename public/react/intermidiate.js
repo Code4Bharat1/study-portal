@@ -13,54 +13,54 @@ import {
 
 const reactPracticeMenu = [
   {
-    label: "1. useEffect for Side Effects",
+    label: "useEffect",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/1/useeffect-side-effects"),
+    onClick: () => handleOnChange("intermediate/1"),
   },
   {
-    label: "2. Context API",
+    label: "Context API",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/2/context-api"),
+    onClick: () => handleOnChange("intermediate/2"),
   },
   {
-    label: "3. useReducer Hook",
+    label: "useReducer",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/3/usereducer"),
+    onClick: () => handleOnChange("intermediate/3"),
   },
   {
-    label: "4. Custom Hooks",
+    label: "Custom Hooks",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/4/custom-hooks"),
+    onClick: () => handleOnChange("intermediate/4"),
   },
   {
-    label: "5. React Router Basics",
+    label: "React Router",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/5/react-router"),
+    onClick: () => handleOnChange("intermediate/5"),
   },
   {
-    label: "6. Error Boundaries",
+    label: "Error Boundaries",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/6/error-boundaries"),
+    onClick: () => handleOnChange("intermediate/6"),
   },
   {
-    label: "7. Performance Optimization",
+    label: "Performance",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/7/performance-optimization"),
+    onClick: () => handleOnChange("intermediate/7"),
   },
   {
-    label: "8. Portals",
+    label: "Portals",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/8/portals"),
+    onClick: () => handleOnChange("intermediate/8"),
   },
   {
-    label: "9. Refs and useRef",
+    label: "Refs",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/9/useref"),
+    onClick: () => handleOnChange("intermediate/9"),
   },
   {
-    label: "10. Testing React Components",
+    label: "Testing",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-intermediate/10/testing-components"),
+    onClick: () => handleOnChange("intermediate/10"),
   },
 ];
 

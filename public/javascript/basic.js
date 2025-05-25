@@ -13,53 +13,55 @@ import {
 
 const basicMenu = [
   {
-    label: "1. Variables and Data Types",
+    label: "1. Variables",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/1/variables-data-types"),
+    onClick: (e) => handleOnChange("basic/1"),
   },
   {
-    label: "2. Basic Arithmetic Operations",
+    label: "2. Arithmetic",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/2/arithmetic-operations"),
+    onClick: (e) => handleOnChange("basic/2"),
   },
   {
-    label: "3. Functions and Parameters",
+    label: "3. Functions",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/3/functions-parameters"),
+    onClick: (e) => handleOnChange("basic/3"),
   },
   {
-    label: "4. Conditional Statements",
+    label: "4. Conditionals",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/4/conditional-statements"),
+    onClick: (e) => handleOnChange("basic/4"),
   },
   {
-    label: "5. Loops and Iteration",
+    label: "5. Loops",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/5/loops-iteration"),
+    onClick: (e) => handleOnChange("basic/5"),
   },
   {
-    label: "6. Arrays and Basic Methods",
+    label: "6. Arrays",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/6/arrays-methods"),
+    onClick: (e) => handleOnChange("basic/6"),
   },
   {
-    label: "7. DOM Manipulation Basics",
+    label: "7. DOM",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/7/dom-manipulation"),
+    onClick: (e) => handleOnChange("basic/7"),
   },
   {
-    label: "8. Event Listeners",
+    label: "8. Events",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/8/event-listeners"),
+    onClick: (e) => handleOnChange("basic/8"),
   },
   {
-    label: "9. String Methods",
+    label: "9. Strings",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/9/string-methods"),
+    onClick: (e) => handleOnChange("basic/9"),
   },
   {
-    label: "10. Basic Error Handling",
+    label: "10. Errors",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/10/error-handling"),
+    onClick: (e) => handleOnChange("basic/10"),
   },
 ];
+
+export default basicMenu;

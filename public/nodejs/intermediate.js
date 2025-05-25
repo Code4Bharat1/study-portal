@@ -13,53 +13,53 @@ import {
 
 const jsPracticeMenu = [
   {
-    label: "1. Asynchronous File Operations",
+    label: "Async Files",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/1/async-file-operations"),
+    onClick: () => handleOnChange("intermediate/1"),
   },
   {
-    label: "2. ES Modules in Node.js",
+    label: "ES Modules",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/2/es-modules"),
+    onClick: () => handleOnChange("intermediate/2"),
   },
   {
-    label: "3. REST API with Express",
+    label: "REST API",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/3/rest-api-express"),
+    onClick: () => handleOnChange("intermediate/3"),
   },
   {
-    label: "4. Middleware in Express",
+    label: "Middleware",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/4/express-middleware"),
+    onClick: () => handleOnChange("intermediate/4"),
   },
   {
-    label: "5. Basic Database Integration",
+    label: "DB Integration",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/5/database-integration"),
+    onClick: () => handleOnChange("intermediate/5"),
   },
   {
-    label: "6. Authentication Basics",
+    label: "Auth Basics",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/6/authentication"),
+    onClick: () => handleOnChange("intermediate/6"),
   },
   {
-    label: "7. Advanced Event Emitters",
+    label: "Event Emitters",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/7/advanced-event-emitters"),
+    onClick: () => handleOnChange("intermediate/7"),
   },
   {
-    label: "8. Error Handling Middleware",
+    label: "Error Handling",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/8/error-handling-middleware"),
+    onClick: () => handleOnChange("intermediate/8"),
   },
   {
-    label: "9. Streams for Large Data",
+    label: "Streams",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/9/streams-large-data"),
+    onClick: () => handleOnChange("intermediate/9"),
   },
   {
-    label: "10. Unit Testing with Jest",
+    label: "Unit Testing",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("node-intermediate/10/unit-testing-jest"),
+    onClick: () => handleOnChange("intermediate/10"),
   },
 ];

@@ -13,54 +13,54 @@ import {
 
 const reactPracticeMenu = [
   {
-    label: "1. Redux Toolkit",
+    label: "Redux Toolkit",
     icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/1/redux-toolkit"),
+    onClick: () => handleOnChange("advanced/1"),
   },
   {
-    label: "2. React Suspense",
+    label: "Suspense",
     icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/2/react-suspense"),
+    onClick: () => handleOnChange("advanced/2"),
   },
   {
-    label: "3. Concurrent Rendering",
+    label: "Concurrent Rendering",
     icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/3/concurrent-rendering"),
+    onClick: () => handleOnChange("advanced/3"),
   },
   {
-    label: "4. Advanced Custom Hooks",
+    label: "Custom Hooks",
     icon: <FaBars className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/4/advanced-custom-hooks"),
+    onClick: () => handleOnChange("advanced/4"),
   },
   {
-    label: "5. React Query",
+    label: "React Query",
     icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/5/react-query"),
+    onClick: () => handleOnChange("advanced/5"),
   },
   {
-    label: "6. Server-Side Rendering",
+    label: "SSR",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/6/server-side-rendering"),
+    onClick: () => handleOnChange("advanced/6"),
   },
   {
-    label: "7. React Fiber Architecture",
+    label: "Fiber Architecture",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/7/react-fiber"),
+    onClick: () => handleOnChange("advanced/7"),
   },
   {
-    label: "8. Advanced Error Handling",
+    label: "Error Handling",
     icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/8/advanced-error-handling"),
+    onClick: () => handleOnChange("advanced/8"),
   },
   {
-    label: "9. React Hooks Patterns",
+    label: "Hooks Patterns",
     icon: <FaImage className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/9/hooks-patterns"),
+    onClick: () => handleOnChange("advanced/9"),
   },
   {
-    label: "10. Unit Testing with Mocks",
+    label: "Unit Testing",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("react-advanced/10/unit-testing-mocks"),
+    onClick: () => handleOnChange("advanced/10"),
   },
 ];
 
