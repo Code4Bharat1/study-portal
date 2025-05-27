@@ -1,4 +1,3 @@
-// Page 9 
 console.clear();
 console.clear();
 const fs = require('fs');
@@ -6,7 +5,6 @@ const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const { render, screen, fireEvent } = require('@testing-library/react');
-require('@testing-library/jest-dom');
 
 // File paths
 const ATTEMPTS_FILE = 'attempts.json';
@@ -101,7 +99,7 @@ function codeVerify() {
   }
 }
 
-// Functional verification for useRef
+// Functional verification for useRef without jest-dom
 async function functionalVerify() {
   let allPassed = true;
   try {
@@ -112,14 +110,17 @@ async function functionalVerify() {
     const input = screen.getByTestId('input');
     const focusButton = screen.getByTestId('focus');
 
+    // Check if input is focused initially
     if (document.activeElement !== input) {
       console.log('✘ Input is not focused initially');
       allPassed = false;
     } else {
-      console.log('✔ Input is not focused initially');
+      console.log('✔ Input is focused initially');
     }
 
     fireEvent.click(focusButton);
+
+    // Check if input is focused after button click
     if (document.activeElement !== input) {
       console.log('✘ Input did not focus after button click');
       allPassed = false;
@@ -142,11 +143,11 @@ async function functionalVerify() {
 // Main execution
 (async () => {
   const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax errors prevent further checks.');
+    process.exit(1);
+  }
 
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();

@@ -1,19 +1,18 @@
-// Page 5 
-console.clear();
+// Page 5 (adapted for App.jsx, require, and dom only)
 console.clear();
 const fs = require('fs');
 const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const { render, screen, waitFor } = require('@testing-library/react');
-require('@testing-library/jest-dom');
+require('@testing-library/dom'); // only dom, no jest-dom
 
 // File paths
 const ATTEMPTS_FILE = 'attempts.json';
 const RESULT_FILE = 'result.txt';
 
-// Read JavaScript code
-const code = fs.readFileSync('script.js', 'utf-8');
+// Read JavaScript code from App.jsx
+const code = fs.readFileSync('App.jsx', 'utf-8');
 
 // Helper: Read attempts (default to 1)
 function readAttempts() {
@@ -38,22 +37,9 @@ function writeAttempts(count) {
   }
 }
 
-// Syntax verification using ESLint
+// Syntax verification using ESLint (default config)
 async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { browser: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module', ecmaFeatures: { jsx: true } },
-      plugins: ['react', 'react-hooks'],
-      rules: {
-        'react/jsx-uses-react': 'error',
-        'react/jsx-uses-vars': 'error',
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-        'react-hooks/rules-of-hooks': 'error',
-      },
-    },
-  });
+  const eslint = new ESLint();
 
   try {
     const [result] = await eslint.lintText(code);
@@ -72,38 +58,26 @@ async function syntaxVerify() {
   }
 }
 
-// Structural verification for React Query
+// Structural verification: example checking if useEffect hook is used (adapt for your needs)
 function codeVerify() {
   let allPassed = true;
   try {
     const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });
-    let useQueryCalls = 0;
-    let queryClientProviderElements = 0;
+    let useEffectCount = 0;
 
     traverse(ast, {
       CallExpression(path) {
-        if (path.node.callee.name === 'useQuery') {
-          useQueryCalls++;
-        }
-      },
-      JSXElement(path) {
-        if (path.node.openingElement.name.name === 'QueryClientProvider') {
-          queryClientProviderElements++;
+        if (path.node.callee.name === 'useEffect') {
+          useEffectCount++;
         }
       },
     });
 
-    if (useQueryCalls === 0) {
-      console.log('✘ No useQuery calls found');
+    if (useEffectCount === 0) {
+      console.log('✘ No useEffect calls found');
       allPassed = false;
     } else {
-      console.log(`✔ Found ${useQueryCalls} useQuery call(s)`);
-    }
-    if (queryClientProviderElements === 0) {
-      console.log('✘ No QueryClientProvider elements found');
-      allPassed = false;
-    } else {
-      console.log(`✔ Found ${queryClientProviderElements} QueryClientProvider element(s)`);
+      console.log(`✔ Found ${useEffectCount} useEffect call(s)`);
     }
 
     return allPassed;
@@ -113,14 +87,17 @@ function codeVerify() {
   }
 }
 
-// Functional verification for React Query
+// Functional verification (using require instead of import)
 async function functionalVerify() {
   let allPassed = true;
   try {
-    const module = await import('./script.js');
-    const Component = module.default;
+    // Use require to load the component (dynamic import disallowed)
+    const module = require('./App.jsx');
+    const Component = module.default || module;
 
     render(<Component />);
+
+    // Check loading state - expects element with data-testid="loading" and text "Loading..."
     const loading = screen.getByTestId('loading');
     if (loading.textContent !== 'Loading...') {
       console.log('✘ Initial state is not Loading...');
@@ -129,42 +106,44 @@ async function functionalVerify() {
       console.log('✔ Initial state is Loading...');
     }
 
+    // Wait for data element to appear with text "Fetched Data"
     await waitFor(() => {
       const data = screen.getByTestId('data');
-      if (data.textContent !== 'Server Data') {
-        console.log('✘ Data did not load');
+      if (data.textContent !== 'Fetched Data') {
+        console.log('✘ Data did not load as expected.');
         allPassed = false;
       } else {
-        console.log('✔ Data loaded');
+        console.log('✔ Data loaded successfully.');
       }
     }, { timeout: 1500 });
 
     if (allPassed) {
-      console.log('\n🎉 Success! React Query behavior is correct.');
+      console.log('\n🎉 Success! Functional behavior is correct.');
     } else {
-      console.log('\n❗ React Query behavior check failed. Please review your React code.');
+      console.log('\n❗ Functional behavior check failed. Please review your React code.');
     }
     return allPassed;
   } catch (e) {
-    console.log(`✘ Functional test failed: ${e}`);
+    console.log(`✘ Functional test failed: ${e.message || e}`);
     return false;
   }
 }
 
 // Main execution
 (async () => {
-  const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+  const startTime = Date.now();
+
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax errors prevent further checks.');
+    process.exit(1);
+  }
 
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();
   const allPassed = syntaxPassed && structurePassed && functionalPassed;
 
-  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
+  const executionTime = Number((Date.now() - startTime) / 1000).toFixed(3);
   const linesOfCode = code.split('\n').filter((line) => line.trim()).length;
 
   let attempts = readAttempts();

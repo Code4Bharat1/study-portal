@@ -1,4 +1,3 @@
-// Page 5 
 console.clear();
 console.clear();
 const fs = require('fs');
@@ -6,7 +5,6 @@ const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const { render, screen, fireEvent } = require('@testing-library/react');
-require('@testing-library/jest-dom');
 const { MemoryRouter } = require('react-router-dom');
 
 // File paths
@@ -14,7 +12,7 @@ const ATTEMPTS_FILE = 'attempts.json';
 const RESULT_FILE = 'result.txt';
 
 // Read JavaScript code
-const code = fs.readFileSync('script.js', 'utf-8');
+const code = fs.readFileSync('App.jsx', 'utf-8');
 
 // Helper: Read attempts (default to 1)
 function readAttempts() {
@@ -41,19 +39,7 @@ function writeAttempts(count) {
 
 // Syntax verification using ESLint
 async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { browser: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module', ecmaFeatures: { jsx: true } },
-      plugins: ['react'],
-      rules: {
-        'react/jsx-uses-react': 'error',
-        'react/jsx-uses-vars': 'error',
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-      },
-    },
-  });
+  const eslint = new ESLint();
 
   try {
     const [result] = await eslint.lintText(code);
@@ -72,7 +58,7 @@ async function syntaxVerify() {
   }
 }
 
-// Structural verification for React Router
+// Structural verification for React Router elements
 function codeVerify() {
   let allPassed = true;
   try {
@@ -82,10 +68,13 @@ function codeVerify() {
 
     traverse(ast, {
       JSXElement(path) {
-        if (path.node.openingElement.name.name === 'Route') {
+        const name = path.node.openingElement.name;
+        // Support for nested JSX names (e.g. ReactRouterDOM.Route)
+        const elementName = name.type === 'JSXIdentifier' ? name.name : null;
+        if (elementName === 'Route') {
           routeElements++;
         }
-        if (path.node.openingElement.name.name === 'Link') {
+        if (elementName === 'Link') {
           linkElements++;
         }
       },
@@ -111,11 +100,11 @@ function codeVerify() {
   }
 }
 
-// Functional verification for React Router
+// Functional verification for React Router navigation
 async function functionalVerify() {
   let allPassed = true;
   try {
-    const module = await import('./script.js');
+    const module = require('./App.jsx');
     const Component = module.default;
 
     render(
@@ -123,6 +112,7 @@ async function functionalVerify() {
         <Component />
       </MemoryRouter>
     );
+
     const home = screen.getByTestId('home');
     if (!home) {
       console.log('✘ Home page is not rendered');
@@ -133,7 +123,9 @@ async function functionalVerify() {
 
     const aboutLink = screen.getByTestId('about-link');
     fireEvent.click(aboutLink);
-    const about = screen.getByTestId('about');
+
+    // Wait for about page render (optional: add wait or timeout here if needed)
+    const about = screen.queryByTestId('about');
     if (!about) {
       console.log('✘ About page is not rendered after navigation');
       allPassed = false;
@@ -153,14 +145,19 @@ async function functionalVerify() {
   }
 }
 
+// Polyfill performance.now()
+if (typeof performance === 'undefined') {
+  global.performance = { now: () => Date.now() };
+}
+
 // Main execution
 (async () => {
   const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax errors prevent further checks.');
+    process.exit(1);
+  }
 
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();

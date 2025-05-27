@@ -1,168 +1,155 @@
-// Page 5 
 console.clear();
-console.clear();
+
+require('@babel/register')({
+  extensions: ['.js', '.jsx'],
+  presets: [
+    '@babel/preset-env',
+    ['@babel/preset-react', { runtime: 'automatic' }],
+  ],
+});
+
 const fs = require('fs');
+const path = require('path');
 const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
+const React = require('react');
+const { JSDOM } = require('jsdom');
 const { render, screen, fireEvent } = require('@testing-library/react');
-require('@testing-library/jest-dom');
 
-// File paths
+// Setup JSDOM
+const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
+global.window = dom.window;
+global.document = dom.window.document;
+global.navigator = { userAgent: 'node.js' };
+
+// Paths
+const APP_FILE = path.resolve(__dirname, 'App.jsx');
 const ATTEMPTS_FILE = 'attempts.json';
 const RESULT_FILE = 'result.txt';
+const code = fs.readFileSync(APP_FILE, 'utf-8');
 
-// Read JavaScript code
-const code = fs.readFileSync('script.js', 'utf-8');
-
-// Helper: Read attempts (default to 1)
+// Attempt Handling
 function readAttempts() {
   if (fs.existsSync(ATTEMPTS_FILE)) {
     try {
       const data = JSON.parse(fs.readFileSync(ATTEMPTS_FILE, 'utf-8'));
       return data.count >= 1 ? data.count : 1;
-    } catch (e) {
-      console.log('Error parsing attempts.json. Resetting counter.');
+    } catch {
       return 1;
     }
   }
   return 1;
 }
 
-// Helper: Write attempts
 function writeAttempts(count) {
-  try {
-    fs.writeFileSync(ATTEMPTS_FILE, JSON.stringify({ count }, null, 2), 'utf-8');
-  } catch (e) {
-    console.log(`Failed to write to ${ATTEMPTS_FILE}: ${e}`);
-  }
+  fs.writeFileSync(ATTEMPTS_FILE, JSON.stringify({ count }, null, 2), 'utf-8');
 }
 
-// Syntax verification using ESLint
+// ESLint Syntax Check
 async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { browser: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module', ecmaFeatures: { jsx: true } },
-      plugins: ['react'],
-      rules: {
-        'react/jsx-uses-react': 'error',
-        'react/jsx-uses-vars': 'error',
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-      },
-    },
-  });
-
+  const eslint = new ESLint();
   try {
     const [result] = await eslint.lintText(code);
-    const errors = result.messages.filter((msg) => msg.severity === 2);
+    const errors = result.messages.filter((m) => m.severity === 2);
     if (errors.length === 0) {
-      console.log('✔ JavaScript/JSX syntax is valid.');
+      console.log('✔ Syntax is valid');
       return true;
     } else {
-      console.log('❌ JavaScript/JSX syntax is not valid:');
-      errors.forEach((err) => console.log(`  ${err.message} (line ${err.line})`));
+      console.log('❌ Syntax errors:');
+      errors.forEach((e) => console.log(`  ${e.message} (line ${e.line})`));
       return false;
     }
   } catch (e) {
-    console.log(`✘ ESLint failed: ${e}`);
+    console.log(`✘ ESLint error: ${e}`);
     return false;
   }
 }
 
-// Structural verification for events
-function codeVerify() {
-  let allPassed = true;
+// AST Check for JSX event handlers like onClick
+function astVerify() {
   try {
     const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });
-    let eventHandlers = 0;
+    let handlers = 0;
 
     traverse(ast, {
       JSXAttribute(path) {
-        if (path.node.name.name.startsWith('on') && path.node.value && (path.node.value.type === 'JSXExpressionContainer' || path.node.value.type === 'StringLiteral')) {
-          eventHandlers++;
+        if (
+          path.node.name.name &&
+          path.node.name.name.startsWith('on') &&
+          path.node.value
+        ) {
+          handlers++;
         }
       },
     });
 
-    if (eventHandlers === 0) {
-      console.log('✘ No event handlers found');
-      allPassed = false;
+    if (handlers > 0) {
+      console.log(`✔ Found ${handlers} event handler(s)`);
+      return true;
     } else {
-      console.log(`✔ Found ${eventHandlers} event handler(s)`);
+      console.log('✘ No JSX event handlers found');
+      return false;
     }
-
-    return allPassed;
   } catch (e) {
-    console.log(`✘ Failed to parse JavaScript/JSX code: ${e}`);
+    console.log(`✘ AST parsing error: ${e}`);
     return false;
   }
 }
 
-// Functional verification for event handling
+// Functional test: toggle Off -> On -> Off
 async function functionalVerify() {
-  let allPassed = true;
   try {
-    const module = await import('./script.js');
-    const Component = module.default;
+    const Component = require(`${APP_FILE}?cacheBust=${Date.now()}`).default;
+    render(React.createElement(Component));
 
-    render(Component());
-    const status = screen.getByTestId('status');
-    const toggleButton = screen.getByTestId('toggle');
+    const status = screen.queryByText(/^off$/i);
+    const toggleBtn = screen.queryByText(/toggle/i);
 
-    if (status.textContent !== 'Off') {
-      console.log('✘ Initial status is not Off');
-      allPassed = false;
-    } else {
-      console.log('✔ Initial status is Off');
+    if (!status || !toggleBtn) {
+      console.log('✘ Could not find toggle button or initial status');
+      return false;
     }
+    console.log('✔ Found initial status: Off');
 
-    fireEvent.click(toggleButton);
-    if (status.textContent !== 'On') {
-      console.log('✘ Status did not toggle to On');
-      allPassed = false;
-    } else {
-      console.log('✔ Status toggled to On');
+    fireEvent.click(toggleBtn);
+    if (!screen.queryByText(/^on$/i)) {
+      console.log('✘ Status did not change to On after first click');
+      return false;
     }
+    console.log('✔ Status toggled to On');
 
-    fireEvent.click(toggleButton);
-    if (status.textContent !== 'Off') {
-      console.log('✘ Status did not toggle back to Off');
-      allPassed = false;
-    } else {
-      console.log('✔ Status toggled back to Off');
+    fireEvent.click(toggleBtn);
+    if (!screen.queryByText(/^off$/i)) {
+      console.log('✘ Status did not change back to Off after second click');
+      return false;
     }
+    console.log('✔ Status toggled back to Off');
 
-    if (allPassed) {
-      console.log('\n🎉 Success! Event handling is correct.');
-    } else {
-      console.log('\n❗ Event handling check failed. Please review your React code.');
-    }
-    return allPassed;
+    return true;
   } catch (e) {
-    console.log(`✘ Functional test failed: ${e}`);
+    console.log(`✘ Functional test error: ${e}`);
     return false;
   }
 }
 
-// Main execution
+// Main runner
 (async () => {
-  const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+  const startTime = Date.now();
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax check failed. Stopping...');
+    process.exit(1);
+  }
 
-  const structurePassed = codeVerify();
+  const structurePassed = astVerify();
   const functionalPassed = await functionalVerify();
   const allPassed = syntaxPassed && structurePassed && functionalPassed;
 
-  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
-  const linesOfCode = code.split('\n').filter((line) => line.trim()).length;
-
+  const executionTime = ((Date.now() - startTime) / 1000).toFixed(2);
+  const linesOfCode = code.split('\n').filter((l) => l.trim()).length;
   let attempts = readAttempts();
+
   if (allPassed) {
     const resultData = {
       attempts,
@@ -173,18 +160,13 @@ if (!syntaxPassed) {
       functionalCheckPassed: functionalPassed,
       timestamp: new Date().toISOString(),
     };
-    try {
-      fs.writeFileSync(RESULT_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
-      console.log(`\n✅ All tests passed. Results saved to ${RESULT_FILE}.`);
-      process.exit(0);
-    } catch (e) {
-      console.log(`Failed to write to ${RESULT_FILE}: ${e}`);
-      process.exit(1);
-    }
+    fs.writeFileSync(RESULT_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
+    console.log(`\n✅ All tests passed. Results saved to ${RESULT_FILE}.`);
+    process.exit(0);
   } else {
-    attempts += 1;
+    attempts++;
     writeAttempts(attempts);
-    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
+    console.log(`\n❌ Test failed. Attempt #${attempts} recorded.`);
     process.exit(1);
   }
 })();

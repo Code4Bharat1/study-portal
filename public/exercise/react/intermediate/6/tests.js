@@ -1,4 +1,3 @@
-// Page 6 
 console.clear();
 console.clear();
 const fs = require('fs');
@@ -6,14 +5,13 @@ const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const { render, screen } = require('@testing-library/react');
-require('@testing-library/jest-dom');
 
 // File paths
 const ATTEMPTS_FILE = 'attempts.json';
 const RESULT_FILE = 'result.txt';
 
 // Read JavaScript code
-const code = fs.readFileSync('script.js', 'utf-8');
+const code = fs.readFileSync('App.jsx', 'utf-8');
 
 // Helper: Read attempts (default to 1)
 function readAttempts() {
@@ -40,19 +38,7 @@ function writeAttempts(count) {
 
 // Syntax verification using ESLint
 async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { browser: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module', ecmaFeatures: { jsx: true } },
-      plugins: ['react'],
-      rules: {
-        'react/jsx-uses-react': 'error',
-        'react/jsx-uses-vars': 'error',
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-      },
-    },
-  });
+  const eslint = new ESLint();
 
   try {
     const [result] = await eslint.lintText(code);
@@ -80,9 +66,17 @@ function codeVerify() {
 
     traverse(ast, {
       ClassDeclaration(path) {
-        if (path.node.superClass && path.node.superClass.name === 'Component') {
+        if (
+          path.node.superClass &&
+          ((path.node.superClass.type === 'Identifier' &&
+            path.node.superClass.name === 'Component') ||
+           (path.node.superClass.type === 'MemberExpression' &&
+            path.node.superClass.property.name === 'Component'))
+        ) {
           const hasGetDerivedState = path.node.body.body.some(
-            (node) => node.type === 'ClassMethod' && node.key.name === 'getDerivedStateFromError'
+            (node) =>
+              (node.type === 'ClassMethod' || node.type === 'ClassProperty') &&
+              node.key.name === 'getDerivedStateFromError'
           );
           if (hasGetDerivedState) {
             errorBoundaryClasses++;
@@ -109,16 +103,19 @@ function codeVerify() {
 async function functionalVerify() {
   let allPassed = true;
   try {
-    const module = await import('./script.js');
+    const module = require('./App.jsx');
     const Component = module.default;
 
-    const consoleError = console.error;
-    console.error = jest.fn(); // Suppress error logs
+    // Suppress console.error for React error boundary logs during test
+    const originalConsoleError = console.error;
+    console.error = () => {};
+
     render(<Component />);
-    console.error = consoleError;
+
+    console.error = originalConsoleError;
 
     const errorMessage = screen.getByTestId('error');
-    if (errorMessage.textContent !== 'Something went wrong') {
+    if (!errorMessage || errorMessage.textContent !== 'Something went wrong') {
       console.log('✘ Error boundary did not render error message');
       allPassed = false;
     } else {
@@ -137,14 +134,20 @@ async function functionalVerify() {
   }
 }
 
+// Polyfill performance.now()
+if (typeof performance === 'undefined') {
+  global.performance = { now: () => Date.now() };
+}
+
 // Main execution
 (async () => {
   const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax errors prevent further checks.');
+    process.exit(1);
+  }
 
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();

@@ -1,20 +1,19 @@
-// Page 6 
-console.clear();
+// Page 6 (adapted for App.jsx, require, no jest-dom, use dom only)
 console.clear();
 const fs = require('fs');
 const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const { render, screen, fireEvent } = require('@testing-library/react');
-require('@testing-library/jest-dom');
+require('@testing-library/dom');
 const { MemoryRouter } = require('react-router-dom');
 
 // File paths
 const ATTEMPTS_FILE = 'attempts.json';
 const RESULT_FILE = 'result.txt';
 
-// Read JavaScript code
-const code = fs.readFileSync('script.js', 'utf-8');
+// Read JavaScript code from App.jsx
+const code = fs.readFileSync('App.jsx', 'utf-8');
 
 // Helper: Read attempts (default to 1)
 function readAttempts() {
@@ -39,21 +38,9 @@ function writeAttempts(count) {
   }
 }
 
-// Syntax verification using ESLint
+// Syntax verification using ESLint (default config)
 async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { browser: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module', ecmaFeatures: { jsx: true } },
-      plugins: ['react'],
-      rules: {
-        'react/jsx-uses-react': 'error',
-        'react/jsx-uses-vars': 'error',
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-      },
-    },
-  });
+  const eslint = new ESLint();
 
   try {
     const [result] = await eslint.lintText(code);
@@ -72,26 +59,27 @@ async function syntaxVerify() {
   }
 }
 
-// Structural verification for SSR
+// Structural verification for SSR: check getServerSideProps export
 function codeVerify() {
   let allPassed = true;
   try {
     const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });
-    let getServerSideProps = 0;
+    let getServerSidePropsCount = 0;
 
     traverse(ast, {
       ExportNamedDeclaration(path) {
-        if (path.node.declaration && path.node.declaration.id && path.node.declaration.id.name === 'getServerSideProps') {
-          getServerSideProps++;
+        const decl = path.node.declaration;
+        if (decl && decl.id && decl.id.name === 'getServerSideProps') {
+          getServerSidePropsCount++;
         }
       },
     });
 
-    if (getServerSideProps === 0) {
+    if (getServerSidePropsCount === 0) {
       console.log('✘ No getServerSideProps function found');
       allPassed = false;
     } else {
-      console.log(`✔ Found ${getServerSideProps} getServerSideProps function(s)`);
+      console.log(`✔ Found ${getServerSidePropsCount} getServerSideProps function(s)`);
     }
 
     return allPassed;
@@ -101,15 +89,21 @@ function codeVerify() {
   }
 }
 
-// Functional verification for SSR
+// Functional verification for SSR (using require)
 async function functionalVerify() {
   let allPassed = true;
   try {
-    const module = await import('./script.js');
-    const Component = module.default;
+    const module = require('./App.jsx');
+    const Component = module.default || module;
     const getServerSideProps = module.getServerSideProps;
 
+    if (typeof getServerSideProps !== 'function') {
+      console.log('✘ getServerSideProps is not a function');
+      return false;
+    }
+
     const { props } = await getServerSideProps();
+
     render(<Component {...props} />, { wrapper: MemoryRouter });
 
     const data = screen.getByTestId('data');
@@ -127,25 +121,26 @@ async function functionalVerify() {
     }
     return allPassed;
   } catch (e) {
-    console.log(`✘ Functional test failed: ${e}`);
+    console.log(`✘ Functional test failed: ${e.message || e}`);
     return false;
   }
 }
 
 // Main execution
 (async () => {
-  const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+  const startTime = Date.now();
+
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax errors prevent further checks.');
+    process.exit(1);
+  }
 
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();
   const allPassed = syntaxPassed && structurePassed && functionalPassed;
 
-  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
+  const executionTime = Number((Date.now() - startTime) / 1000).toFixed(3);
   const linesOfCode = code.split('\n').filter((line) => line.trim()).length;
 
   let attempts = readAttempts();

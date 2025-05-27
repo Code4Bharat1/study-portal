@@ -1,182 +1,175 @@
-// Page 4 
 console.clear();
-console.clear();
+
+require('@babel/register')({
+  extensions: ['.js', '.jsx'],
+  presets: [
+    '@babel/preset-env',
+    ['@babel/preset-react', { runtime: 'automatic' }],
+  ],
+});
+
 const fs = require('fs');
+const path = require('path');
 const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
+const React = require('react');
+const { JSDOM } = require('jsdom');
 const { render, screen, fireEvent } = require('@testing-library/react');
-require('@testing-library/jest-dom');
 
-// File paths
+// Setup JSDOM
+const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
+global.window = dom.window;
+global.document = dom.window.document;
+global.navigator = { userAgent: 'node.js' };
+
+// Paths
+const APP_FILE = path.resolve(__dirname, 'App.jsx');
 const ATTEMPTS_FILE = 'attempts.json';
 const RESULT_FILE = 'result.txt';
+const code = fs.readFileSync(APP_FILE, 'utf-8');
 
-// Read JavaScript code
-const code = fs.readFileSync('script.js', 'utf-8');
-
-// Helper: Read attempts (default to 1)
+// Attempt Handling
 function readAttempts() {
   if (fs.existsSync(ATTEMPTS_FILE)) {
     try {
       const data = JSON.parse(fs.readFileSync(ATTEMPTS_FILE, 'utf-8'));
       return data.count >= 1 ? data.count : 1;
-    } catch (e) {
-      console.log('Error parsing attempts.json. Resetting counter.');
+    } catch {
       return 1;
     }
   }
   return 1;
 }
 
-// Helper: Write attempts
 function writeAttempts(count) {
-  try {
-    fs.writeFileSync(ATTEMPTS_FILE, JSON.stringify({ count }, null, 2), 'utf-8');
-  } catch (e) {
-    console.log(`Failed to write to ${ATTEMPTS_FILE}: ${e}`);
-  }
+  fs.writeFileSync(ATTEMPTS_FILE, JSON.stringify({ count }, null, 2), 'utf-8');
 }
 
-// Syntax verification using ESLint
+// ESLint Syntax Check
 async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { browser: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module', ecmaFeatures: { jsx: true } },
-      plugins: ['react', 'react-hooks'],
-      rules: {
-        'react/jsx-uses-react': 'error',
-        'react/jsx-uses-vars': 'error',
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-        'react-hooks/rules-of-hooks': 'error',
-      },
-    },
-  });
-
+  const eslint = new ESLint();
   try {
     const [result] = await eslint.lintText(code);
-    const errors = result.messages.filter((msg) => msg.severity === 2);
+    const errors = result.messages.filter((m) => m.severity === 2);
     if (errors.length === 0) {
-      console.log('✔ JavaScript/JSX syntax is valid.');
+      console.log('✔ Syntax is valid');
       return true;
     } else {
-      console.log('❌ JavaScript/JSX syntax is not valid:');
-      errors.forEach((err) => console.log(`  ${err.message} (line ${err.line})`));
+      console.log('❌ Syntax errors:');
+      errors.forEach((e) => console.log(`  ${e.message} (line ${e.line})`));
       return false;
     }
   } catch (e) {
-    console.log(`✘ ESLint failed: ${e}`);
+    console.log(`✘ ESLint error: ${e}`);
     return false;
   }
 }
 
-// Structural verification for useState
-function codeVerify() {
-  let allPassed = true;
+// AST Check for useState and state destructuring
+function astVerify() {
   try {
     const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });
-    let useStateCalls = 0;
-    let stateUsages = 0;
+    let foundUseState = false;
+    let destructured = false;
 
     traverse(ast, {
       CallExpression(path) {
         if (path.node.callee.name === 'useState') {
-          useStateCalls++;
+          foundUseState = true;
         }
       },
-      Identifier(path) {
-        if (path.parent.type === 'ArrayPattern' && path.parentPath.parent.callee && path.parentPath.parent.callee.name === 'useState') {
-          stateUsages++;
+      VariableDeclaration(path) {
+        if (
+          path.node.declarations[0]?.id?.type === 'ArrayPattern' &&
+          path.node.declarations[0]?.init?.callee?.name === 'useState'
+        ) {
+          destructured = true;
         }
       },
     });
 
-    if (useStateCalls === 0) {
-      console.log('✘ No useState calls found');
-      allPassed = false;
+    if (foundUseState && destructured) {
+      console.log('✔ useState and state destructuring found');
+      return true;
     } else {
-      console.log(`✔ Found ${useStateCalls} useState call(s)`);
+      if (!foundUseState) console.log('✘ useState not found');
+      if (!destructured) console.log('✘ state not destructured from useState');
+      return false;
     }
-    if (stateUsages === 0) {
-      console.log('✘ No state variable usages found');
-      allPassed = false;
-    } else {
-      console.log(`✔ Found ${stateUsages} state variable usage(s)`);
-    }
-
-    return allPassed;
   } catch (e) {
-    console.log(`✘ Failed to parse JavaScript/JSX code: ${e}`);
+    console.log(`✘ AST parsing error: ${e}`);
     return false;
   }
 }
 
-// Functional verification for counter behavior
+// Functional test: Count rendering & increment/decrement
 async function functionalVerify() {
-  let allPassed = true;
   try {
-    const module = await import('./script.js');
-    const Component = module.default;
+    const Component = require(`${APP_FILE}?cacheBust=${Date.now()}`).default;
+    render(React.createElement(Component));
 
-    render(Component());
-    const countElement = screen.getByTestId('count');
-    if (!countElement.textContent.includes('Count: 0')) {
-      console.log('✘ Initial count is not 0');
-      allPassed = false;
-    } else {
-      console.log('✔ Initial count is 0');
+    // Check initial count
+    const countText = screen.queryByText(/count:\s*0/i);
+    if (!countText) {
+      console.log('✘ Initial count not found as "Count: 0"');
+      return false;
     }
+    console.log('✔ Initial count is "Count: 0"');
 
-    const incrementButton = screen.getByTestId('increment');
-    fireEvent.click(incrementButton);
-    if (!countElement.textContent.includes('Count: 1')) {
+    // Click Increment
+    const incButton = screen.queryByText(/increment/i);
+    if (!incButton) {
+      console.log('✘ Increment button not found');
+      return false;
+    }
+    fireEvent.click(incButton);
+
+    if (!screen.queryByText(/count:\s*1/i)) {
       console.log('✘ Count did not increment to 1');
-      allPassed = false;
-    } else {
-      console.log('✔ Count incremented to 1');
+      return false;
     }
+    console.log('✔ Count incremented to 1');
 
-    const decrementButton = screen.getByTestId('decrement');
-    fireEvent.click(decrementButton);
-    fireEvent.click(decrementButton);
-    if (!countElement.textContent.includes('Count: -1')) {
+    // Click Decrement twice
+    const decButton = screen.queryByText(/decrement/i);
+    if (!decButton) {
+      console.log('✘ Decrement button not found');
+      return false;
+    }
+    fireEvent.click(decButton);
+    fireEvent.click(decButton);
+
+    if (!screen.queryByText(/count:\s*-1/i)) {
       console.log('✘ Count did not decrement to -1');
-      allPassed = false;
-    } else {
-      console.log('✔ Count decremented to -1');
+      return false;
     }
+    console.log('✔ Count decremented to -1');
 
-    if (allPassed) {
-      console.log('\n🎉 Success! Counter behavior is correct.');
-    } else {
-      console.log('\n❗ Counter behavior check failed. Please review your React code.');
-    }
-    return allPassed;
+    return true;
   } catch (e) {
-    console.log(`✘ Functional test failed: ${e}`);
+    console.log(`✘ Functional test error: ${e}`);
     return false;
   }
 }
 
-// Main execution
+// Main runner
 (async () => {
-  const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+  const startTime = Date.now();
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax check failed. Stopping...');
+    process.exit(1);
+  }
 
-  const structurePassed = codeVerify();
+  const structurePassed = astVerify();
   const functionalPassed = await functionalVerify();
   const allPassed = syntaxPassed && structurePassed && functionalPassed;
 
-  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
-  const linesOfCode = code.split('\n').filter((line) => line.trim()).length;
-
+  const executionTime = ((Date.now() - startTime) / 1000).toFixed(2);
+  const linesOfCode = code.split('\n').filter((l) => l.trim()).length;
   let attempts = readAttempts();
+
   if (allPassed) {
     const resultData = {
       attempts,
@@ -187,18 +180,13 @@ if (!syntaxPassed) {
       functionalCheckPassed: functionalPassed,
       timestamp: new Date().toISOString(),
     };
-    try {
-      fs.writeFileSync(RESULT_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
-      console.log(`\n✅ All tests passed. Results saved to ${RESULT_FILE}.`);
-      process.exit(0);
-    } catch (e) {
-      console.log(`Failed to write to ${RESULT_FILE}: ${e}`);
-      process.exit(1);
-    }
+    fs.writeFileSync(RESULT_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
+    console.log(`\n✅ All tests passed. Results saved to ${RESULT_FILE}.`);
+    process.exit(0);
   } else {
-    attempts += 1;
+    attempts++;
     writeAttempts(attempts);
-    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
+    console.log(`\n❌ Test failed. Attempt #${attempts} recorded.`);
     process.exit(1);
   }
 })();

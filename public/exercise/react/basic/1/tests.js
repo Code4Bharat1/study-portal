@@ -1,77 +1,90 @@
-// Page 1 
+require('@babel/register')({
+  extensions: ['.js', '.jsx'],
+  presets: [
+    '@babel/preset-env',
+    ['@babel/preset-react', { runtime: 'automatic' }],
+  ],
+});
+
 console.clear();
-console.clear();
+
+const { JSDOM } = require('jsdom');
+
+// Setup DOM environment
+const dom = new JSDOM('<!doctype html><html><body></body></html>');
+global.window = dom.window;
+global.document = dom.window.document;
+global.navigator = { userAgent: 'node.js' };
+
 const fs = require('fs');
 const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const { render, screen } = require('@testing-library/react');
-require('@testing-library/jest-dom');
+require('@testing-library/dom');
 
-// File paths
+// Files
 const ATTEMPTS_FILE = 'attempts.json';
 const RESULT_FILE = 'result.txt';
+const code = fs.readFileSync('App.jsx', 'utf-8');
 
-// Read JavaScript code
-const code = fs.readFileSync('script.js', 'utf-8');
-
-// Helper: Read attempts (default to 1)
+// Helpers for attempts tracking
 function readAttempts() {
   if (fs.existsSync(ATTEMPTS_FILE)) {
     try {
       const data = JSON.parse(fs.readFileSync(ATTEMPTS_FILE, 'utf-8'));
       return data.count >= 1 ? data.count : 1;
-    } catch (e) {
-      console.log('Error parsing attempts.json. Resetting counter.');
+    } catch {
+      console.log('Warning: Failed to parse attempts.json. Resetting to 1.');
       return 1;
     }
   }
   return 1;
 }
 
-// Helper: Write attempts
 function writeAttempts(count) {
   try {
-    fs.writeFileSync(ATTEMPTS_FILE, JSON.stringify({ count }, null, 2), 'utf-8');
+    fs.writeFileSync(
+      ATTEMPTS_FILE,
+      JSON.stringify({ count }, null, 2),
+      'utf-8'
+    );
   } catch (e) {
-    console.log(`Failed to write to ${ATTEMPTS_FILE}: ${e}`);
+    console.log(`Error: Could not save attempts: ${e.message}`);
   }
 }
 
 // Syntax verification using ESLint
 async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { browser: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module', ecmaFeatures: { jsx: true } },
-      plugins: ['react'],
-      rules: {
-        'react/jsx-uses-react': 'error',
-        'react/jsx-uses-vars': 'error',
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-      },
-    },
-  });
-
+  const eslint = new ESLint();
   try {
     const [result] = await eslint.lintText(code);
     const errors = result.messages.filter((msg) => msg.severity === 2);
+
     if (errors.length === 0) {
-      console.log('✔ JavaScript/JSX syntax is valid.');
+      console.log('Syntax Check Passed: No errors found.');
       return true;
     } else {
-      console.log('❌ JavaScript/JSX syntax is not valid:');
-      errors.forEach((err) => console.log(`  ${err.message} (line ${err.line})`));
+      console.log('Syntax Error: Your code has the following issue(s):');
+      errors.forEach((err) =>
+        console.log(
+          `  Line ${err.line}, Column ${err.column}: ${err.message} [Rule: ${
+            err.ruleId || 'unknown'
+          }]`
+        )
+      );
+      console.log(
+        '\nTip: Check for missing brackets, semicolons, or typos in your JSX or JavaScript.'
+      );
       return false;
     }
   } catch (e) {
-    console.log(`✘ ESLint failed: ${e}`);
+    console.log(`ESLint failed to run:\nReason: ${e.message}`);
     return false;
   }
 }
 
-// Structural verification for JSX
+// Structural verification
 function codeVerify() {
   let allPassed = true;
   try {
@@ -89,67 +102,83 @@ function codeVerify() {
     });
 
     if (jsxElements === 0) {
-      console.log('✘ No JSX elements found');
+      console.log('Structure Error: No JSX elements found.');
+      console.log(
+        'Tip: Make sure your component returns JSX like <h1>Hello</h1>.'
+      );
       allPassed = false;
     } else {
-      console.log(`✔ Found ${jsxElements} JSX element(s)`);
+      console.log(
+        `Structure Check Passed: Found ${jsxElements} JSX element(s).`
+      );
     }
+
     if (jsxExpressions === 0) {
-      console.log('✘ No JSX expressions found');
+      console.log('Structure Error: No JSX expressions found.');
+      console.log(
+        'Tip: Include dynamic expressions inside JSX using curly braces, e.g., <p>{username}</p>.'
+      );
       allPassed = false;
     } else {
-      console.log(`✔ Found ${jsxExpressions} JSX expression(s)`);
+      console.log(
+        `Structure Check Passed: Found ${jsxExpressions} JSX expression(s).`
+      );
     }
 
     return allPassed;
   } catch (e) {
-    console.log(`✘ Failed to parse JavaScript/JSX code: ${e}`);
+    console.log(`JSX Parsing Failed:\nReason: ${e.message}`);
+    console.log(
+      'Tip: Ensure your return statement includes valid and properly closed JSX tags.'
+    );
     return false;
   }
 }
 
-// Functional verification for JSX rendering
+// Functional verification using visible text
 async function functionalVerify() {
   let allPassed = true;
   try {
-    const module = await import('./script.js');
-    const Component = module.default;
-
+    const Component = require('./App.jsx').default;
     render(Component());
-    const greeting = screen.getByTestId('greeting');
-    if (!greeting.textContent.includes('Hello, User!')) {
-      console.log('✘ Greeting does not contain expected text');
+    const greeting = screen.queryByRole('heading', { name: /Hello,\s*User!/i });
+
+    if (!greeting) {
+      console.log(`Functional Error: Could not find "Hello, User!" on screen.`);
+      console.log(
+        'Tip: Ensure your component renders text exactly as "Hello, User!".'
+      );
       allPassed = false;
     } else {
-      console.log('✔ Greeting contains expected text');
+      console.log(
+        'Functional Check Passed: Greeting contains the expected text.'
+      );
     }
 
-    if (allPassed) {
-      console.log('\n🎉 Success! JSX rendering is correct.');
-    } else {
-      console.log('\n❗ JSX rendering check failed. Please review your React code.');
-    }
     return allPassed;
   } catch (e) {
-    console.log(`✘ Functional test failed: ${e}`);
+    console.log(`Functional Test Failed:\nReason: ${e.message}`);
+    console.log(
+      'Tip: Ensure your component exports a valid default function and renders the expected greeting text.'
+    );
     return false;
   }
 }
 
-// Main execution
+// Main test runner
 (async () => {
-  const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+  const startTime = Date.now();
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\nAborting: Fix syntax errors before continuing.');
+    process.exit(1);
+  }
 
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();
   const allPassed = syntaxPassed && structurePassed && functionalPassed;
 
-  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
+  const executionTime = Number((Date.now() - startTime) / 1000).toFixed(3);
   const linesOfCode = code.split('\n').filter((line) => line.trim()).length;
 
   let attempts = readAttempts();
@@ -164,17 +193,23 @@ if (!syntaxPassed) {
       timestamp: new Date().toISOString(),
     };
     try {
-      fs.writeFileSync(RESULT_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
-      console.log(`\n✅ All tests passed. Results saved to ${RESULT_FILE}.`);
+      fs.writeFileSync(
+        RESULT_FILE,
+        JSON.stringify(resultData, null, 2),
+        'utf-8'
+      );
+      console.log(`\nAll checks passed. Result saved to ${RESULT_FILE}.`);
       process.exit(0);
     } catch (e) {
-      console.log(`Failed to write to ${RESULT_FILE}: ${e}`);
+      console.log(`Error writing result: ${e.message}`);
       process.exit(1);
     }
   } else {
     attempts += 1;
     writeAttempts(attempts);
-    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
+    console.log(
+      `\nOne or more checks failed. This was attempt #${attempts -1}. Please review the messages and try again.`
+    );
     process.exit(1);
   }
 })();

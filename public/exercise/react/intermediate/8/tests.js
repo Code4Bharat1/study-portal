@@ -1,4 +1,3 @@
-// Page 8 
 console.clear();
 console.clear();
 const fs = require('fs');
@@ -6,7 +5,6 @@ const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const { render, screen } = require('@testing-library/react');
-require('@testing-library/jest-dom');
 
 // File paths
 const ATTEMPTS_FILE = 'attempts.json';
@@ -100,7 +98,7 @@ function codeVerify() {
   }
 }
 
-// Functional verification for portals
+// Functional verification for portals without jest-dom
 async function functionalVerify() {
   let allPassed = true;
   try {
@@ -114,12 +112,16 @@ async function functionalVerify() {
 
     render(<Component />);
     const modal = screen.getByTestId('modal');
+
+    // Check if modal is inside modalRoot
     if (!modalRoot.contains(modal)) {
       console.log('✘ Modal is not rendered in modal-root');
       allPassed = false;
     } else {
       console.log('✔ Modal is rendered in modal-root');
     }
+
+    // Check modal text content
     if (modal.textContent !== 'Modal Content') {
       console.log('✘ Modal does not contain expected content');
       allPassed = false;
@@ -145,11 +147,11 @@ async function functionalVerify() {
 // Main execution
 (async () => {
   const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax errors prevent further checks.');
+    process.exit(1);
+  }
 
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();

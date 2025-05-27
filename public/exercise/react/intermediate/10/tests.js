@@ -1,4 +1,3 @@
-// Page 10 
 console.clear();
 console.clear();
 const fs = require('fs');
@@ -6,7 +5,6 @@ const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const { render, screen } = require('@testing-library/react');
-require('@testing-library/jest-dom');
 
 // File paths
 const ATTEMPTS_FILE = 'attempts.json';
@@ -105,7 +103,7 @@ function codeVerify() {
   }
 }
 
-// Functional verification for testing
+// Functional verification for testing without jest-dom
 async function functionalVerify() {
   let allPassed = true;
   try {
@@ -115,6 +113,7 @@ async function functionalVerify() {
 
     render(<Component name="Alice" />);
     const greeting = screen.getByTestId('greeting');
+
     if (greeting.textContent !== 'Hello, Alice!') {
       console.log('✘ Greeting does not render correctly');
       allPassed = false;
@@ -145,11 +144,11 @@ async function functionalVerify() {
 // Main execution
 (async () => {
   const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax errors prevent further checks.');
+    process.exit(1);
+  }
 
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();

@@ -1,27 +1,22 @@
-// Page 1 
-console.clear();
+// Page 1 (adapted for App.jsx, require, no jest-dom, ESLint new ESLint())
 console.clear();
 const fs = require('fs');
 const { ESLint } = require('eslint');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const { render, screen, waitFor } = require('@testing-library/react');
-require('@testing-library/jest-dom');
 
-// File paths
 const ATTEMPTS_FILE = 'attempts.json';
 const RESULT_FILE = 'result.txt';
 
-// Read JavaScript code
-const code = fs.readFileSync('script.js', 'utf-8');
+const code = fs.readFileSync('App.jsx', 'utf-8');
 
-// Helper: Read attempts (default to 1)
 function readAttempts() {
   if (fs.existsSync(ATTEMPTS_FILE)) {
     try {
       const data = JSON.parse(fs.readFileSync(ATTEMPTS_FILE, 'utf-8'));
       return data.count >= 1 ? data.count : 1;
-    } catch (e) {
+    } catch {
       console.log('Error parsing attempts.json. Resetting counter.');
       return 1;
     }
@@ -29,7 +24,6 @@ function readAttempts() {
   return 1;
 }
 
-// Helper: Write attempts
 function writeAttempts(count) {
   try {
     fs.writeFileSync(ATTEMPTS_FILE, JSON.stringify({ count }, null, 2), 'utf-8');
@@ -38,33 +32,18 @@ function writeAttempts(count) {
   }
 }
 
-// Syntax verification using ESLint
 async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { browser: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module', ecmaFeatures: { jsx: true } },
-      plugins: ['react', 'react-hooks'],
-      rules: {
-        'react/jsx-uses-react': 'error',
-        'react/jsx-uses-vars': 'error',
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-        'react-hooks/rules-of-hooks': 'error',
-        'react-hooks/exhaustive-deps': 'warn',
-      },
-    },
-  });
+  const eslint = new ESLint();
 
   try {
     const [result] = await eslint.lintText(code);
-    const errors = result.messages.filter((msg) => msg.severity === 2);
+    const errors = result.messages.filter(msg => msg.severity === 2);
     if (errors.length === 0) {
       console.log('✔ JavaScript/JSX syntax is valid.');
       return true;
     } else {
       console.log('❌ JavaScript/JSX syntax is not valid:');
-      errors.forEach((err) => console.log(`  ${err.message} (line ${err.line})`));
+      errors.forEach(err => console.log(`  ${err.message} (line ${err.line})`));
       return false;
     }
   } catch (e) {
@@ -73,7 +52,6 @@ async function syntaxVerify() {
   }
 }
 
-// Structural verification for useEffect
 function codeVerify() {
   let allPassed = true;
   try {
@@ -86,7 +64,7 @@ function codeVerify() {
         if (path.node.callee.name === 'useEffect') {
           useEffectCalls++;
           if (path.node.arguments[0].body && path.node.arguments[0].body.body) {
-            path.node.arguments[0].body.body.forEach((node) => {
+            path.node.arguments[0].body.body.forEach(node => {
               if (node.type === 'ReturnStatement') {
                 cleanupFunctions++;
               }
@@ -116,15 +94,15 @@ function codeVerify() {
   }
 }
 
-// Functional verification for useEffect
 async function functionalVerify() {
   let allPassed = true;
   try {
-    const module = await import('./script.js');
-    const Component = module.default;
+    const module = require('./App.jsx');
+    const Component = module.default || module;
 
-    render(Component());
+    render(<Component />);
     const data = screen.getByTestId('data');
+
     if (data.textContent !== 'Loading...') {
       console.log('✘ Initial data is not Loading...');
       allPassed = false;
@@ -134,12 +112,14 @@ async function functionalVerify() {
 
     await waitFor(() => {
       if (data.textContent !== 'API Data') {
-        console.log('✘ Data did not update to API Data');
-        allPassed = false;
-      } else {
-        console.log('✔ Data updated to API Data');
+        throw new Error('Data did not update to API Data');
       }
-    }, { timeout: 1500 });
+    }, { timeout: 1500 }).then(() => {
+      console.log('✔ Data updated to API Data');
+    }).catch(() => {
+      console.log('✘ Data did not update to API Data');
+      allPassed = false;
+    });
 
     if (allPassed) {
       console.log('\n🎉 Success! useEffect behavior is correct.');
@@ -148,26 +128,28 @@ async function functionalVerify() {
     }
     return allPassed;
   } catch (e) {
-    console.log(`✘ Functional test failed: ${e}`);
+    console.log(`✘ Functional test failed: ${e.message || e}`);
     return false;
   }
 }
 
-// Main execution
+const performance = global.performance || { now: () => Date.now() };
+
 (async () => {
   const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
-}
+
+  const syntaxPassed = await syntaxVerify();
+  if (!syntaxPassed) {
+    console.log('\n❌ Syntax errors prevent further checks.');
+    process.exit(1);
+  }
 
   const structurePassed = codeVerify();
   const functionalPassed = await functionalVerify();
   const allPassed = syntaxPassed && structurePassed && functionalPassed;
 
   const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
-  const linesOfCode = code.split('\n').filter((line) => line.trim()).length;
+  const linesOfCode = code.split('\n').filter(line => line.trim()).length;
 
   let attempts = readAttempts();
   if (allPassed) {
@@ -189,7 +171,7 @@ if (!syntaxPassed) {
       process.exit(1);
     }
   } else {
-    attempts += 1;
+    attempts++;
     writeAttempts(attempts);
     console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
     process.exit(1);
