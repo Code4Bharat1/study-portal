@@ -26,8 +26,9 @@ import {
 import { useState } from "react";
 
 import sdk from "@stackblitz/sdk"
+import QuestionPlatform from "./Platform";
 
-import QuestionPlatform from "@/components/Exercise/Platform";
+//import QuestionPlatform from "@/components/Exercise/Platform";
 
 const handleOnChange = async (level) => {
     try {
