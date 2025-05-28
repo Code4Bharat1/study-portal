@@ -34,7 +34,7 @@ export default function NodeJSQuizPage() {
   const [showExplanation, setShowExplanation] = useState(false);
 
   const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://sp-api.code4bharat.com/";
+    process.env.NEXT_PUBLIC_API_URL || "https://sp-api.code4bharat.com";
   const WEBSITE_URL =
     process.env.NEXT_PUBLIC_WEBSITE_URL ||
     "https://skill2future.code4bharat.com";

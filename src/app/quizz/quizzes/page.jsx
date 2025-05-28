@@ -10,10 +10,9 @@ import {
   FaUser,
   FaHistory,
 } from "react-icons/fa";
-import { SiExpress, SiTypescript } from "react-icons/si";
+import { SiExpress } from "react-icons/si";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { PiFlowerLotusDuotone } from "react-icons/pi";
 import { ArrowRight } from "lucide-react";
 
@@ -30,8 +29,7 @@ const quizData = [
   },
   {
     title: "Express Quiz",
-    description:
-      "Challenge yourself with questions on Express.js and backend development.",
+    description: "Challenge yourself with questions on Express.js and backend development.",
     icon: <SiExpress className="w-12 h-12" />,
     path: "/quizz/express",
     bgColor: "bg-gray-100/80",
@@ -51,8 +49,7 @@ const quizData = [
   },
   {
     title: "Node.js Quiz",
-    description:
-      "Explore your expertise in Node.js and server-side JavaScript.",
+    description: "Explore your expertise in Node.js and server-side JavaScript.",
     icon: <FaNodeJs className="w-12 h-12" />,
     path: "/quizz/nodejs",
     bgColor: "bg-green-100/80",
@@ -64,29 +61,30 @@ const quizData = [
 
 const Quizzes = () => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const [user, setUser] = useState(null);
   const [userScores, setUserScores] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const scores = JSON.parse(localStorage.getItem("quizScores") || "{}");
-      setUserScores(scores);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser);
+
+    const scores = JSON.parse(localStorage.getItem("quizScores") || "{}");
+    setUserScores(scores);
+
+    setTimeout(() => {
       setIsLoading(false);
     }, 800);
-
-    return () => clearTimeout(timer);
   }, []);
 
   const getUserBestScore = (quizPath) => {
-    if (!session?.user?.email) return null;
+    if (!user?.email) return null;
     const quizType = quizPath.split("/").pop();
-    return userScores[session.user.email]?.[quizType] || null;
+    return userScores[user.email]?.[quizType] || null;
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 flex flex-col items-center py-12 px-4 relative overflow-hidden">
-      {/* Animated background elements */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         initial={{ opacity: 0 }}
@@ -97,14 +95,12 @@ const Quizzes = () => {
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
       </motion.div>
 
-      {/* Main content */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full max-w-7xl relative z-10"
       >
-        {/* Header with user info */}
         <motion.div
           className="w-full flex justify-between items-center mb-8"
           initial={{ opacity: 0, y: -20 }}
@@ -138,7 +134,7 @@ const Quizzes = () => {
             </motion.p>
           </div>
 
-          {session && (
+          {user && (
             <motion.div
               className="flex items-center gap-3 bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-sm border border-gray-100/50"
               whileHover={{
@@ -151,14 +147,13 @@ const Quizzes = () => {
                 <FaUser className="text-blue-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-800">{session.user.name}</p>
+                <p className="font-medium text-gray-800">{user.name}</p>
                 <p className="text-xs text-gray-500">Ready to learn!</p>
               </div>
             </motion.div>
           )}
         </motion.div>
 
-        {/* Stats bar */}
         <motion.div
           className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12"
           initial={{ opacity: 0 }}
@@ -179,8 +174,7 @@ const Quizzes = () => {
                 <p className="text-xl font-bold text-gray-800">
                   {isLoading
                     ? "..."
-                    : Object.keys(userScores[session?.user?.email] || {})
-                        .length}
+                    : Object.keys(userScores[user?.email] || {}).length}
                 </p>
               </div>
             </div>
@@ -200,8 +194,8 @@ const Quizzes = () => {
                 <p className="text-xl font-bold text-gray-800">
                   {isLoading
                     ? "..."
-                    : session?.user?.email && userScores[session.user.email]
-                    ? Object.keys(userScores[session.user.email])[0] || "None"
+                    : user?.email && userScores[user.email]
+                    ? Object.keys(userScores[user.email])[0] || "None"
                     : "None"}
                 </p>
               </div>
@@ -222,10 +216,8 @@ const Quizzes = () => {
                 <p className="text-xl font-bold text-gray-800">
                   {isLoading
                     ? "..."
-                    : session?.user?.email && userScores[session.user.email]
-                    ? Math.max(
-                        ...Object.values(userScores[session.user.email])
-                      ) + "%"
+                    : user?.email && userScores[user.email]
+                    ? Math.max(...Object.values(userScores[user.email])) + "%"
                     : "0%"}
                 </p>
               </div>
@@ -233,7 +225,7 @@ const Quizzes = () => {
           </motion.div>
         </motion.div>
 
-        {/* Quiz cards */}
+        {/* Quiz Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
           {quizData.map((quiz, index) => {
             const bestScore = getUserBestScore(quiz.path);
@@ -252,25 +244,18 @@ const Quizzes = () => {
                 className={`${quiz.bgColor} backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-gray-100/50 transition-all duration-300`}
               >
                 <div className="p-6 flex flex-col items-center text-center h-full">
-                  <motion.div
-                    className={`mb-4 ${quiz.iconColor}`}
-                    whileHover={{ scale: 1.1 }}
-                  >
+                  <motion.div className={`mb-4 ${quiz.iconColor}`}>
                     {quiz.icon}
                   </motion.div>
                   <h2 className="text-xl font-semibold text-gray-800 mb-2">
                     {quiz.title}
                   </h2>
-                  <p className="text-gray-600 mb-4 flex-grow">
-                    {quiz.description}
-                  </p>
+                  <p className="text-gray-600 mb-4 flex-grow">{quiz.description}</p>
 
                   {bestScore !== null && (
                     <div className="w-full bg-white bg-opacity-70 rounded-full mb-4">
                       <div
-                        className={`h-2 rounded-full ${
-                          quiz.btnColor.split(" ")[0]
-                        }`}
+                        className={`h-2 rounded-full ${quiz.btnColor.split(" ")[0]}`}
                         style={{ width: `${bestScore}%` }}
                       ></div>
                       <p className="text-xs mt-1 text-gray-600">
@@ -297,7 +282,6 @@ const Quizzes = () => {
           })}
         </div>
 
-        {/* Footer */}
         <motion.footer
           className="mt-16 text-center w-full"
           initial={{ opacity: 0 }}
