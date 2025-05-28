@@ -33,7 +33,7 @@ export default function ExpressQuizPage() {
   const [maxStreak, setMaxStreak] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3902/";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://sp-api.code4bharat.com";
   const WEBSITE_URL =
     process.env.NEXT_PUBLIC_WEBSITE_URL ||
     "https://skill2future.code4bharat.com";

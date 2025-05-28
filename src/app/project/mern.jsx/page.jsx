@@ -1,6 +1,8 @@
 "use client";
 import ProjectPlatform from "@/components/Project/Platform";
 import mernBasicProjects from "@/components/Project/mern-basic";
+import mernIntermediateProjects from "@/components/Project/mern-intermediate";
+import mernAdvancedProjects from "@/components/Project/mern-advanced";
 import { useState } from "react";
 
 export default function MernProjectPlatform() {
@@ -15,10 +17,10 @@ export default function MernProjectPlatform() {
         newMenu = mernBasicProjects;
         break;
       case "intermediate":
-        newMenu = mernBasicProjects; // Replace with mernIntermediateProjects when available
+        newMenu = mernIntermediateProjects;
         break;
       case "hard":
-        newMenu = mernBasicProjects; // Replace with mernAdvancedProjects when available
+        newMenu = mernAdvancedProjects;
         break;
       default:
         newMenu = mernBasicProjects;

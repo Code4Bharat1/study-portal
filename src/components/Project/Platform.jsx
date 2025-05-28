@@ -1,7 +1,11 @@
 "use client";
 import { useState, useRef, useMemo, useEffect } from "react";
+<<<<<<< HEAD
 import Sidebar from "@/components/Sidebar";
 import Sandbox from "@/components/Sandbox";
+=======
+import Sandbox from "@/components/sandbox";
+>>>>>>> 40f1e5ff9805172d07fb818c34e39192c9d61b98
 import ReactMarkdown from "react-markdown";
 
 export default function ProjectPlatform({
@@ -9,9 +13,11 @@ export default function ProjectPlatform({
   menuItems,
   projectType,
   task,
+  onMenuItemClick,
 }) {
   const [sandboxLoaded, setSandboxLoaded] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState("Basic");
+  const [selectedProject, setSelectedProject] = useState(menuItems[0]?.label || "");
   const [attempts, setAttempts] = useState(0);
   const [result, setResult] = useState(null);
   const [startTime, setStartTime] = useState(null);
@@ -19,38 +25,92 @@ export default function ProjectPlatform({
   const instructionRef = useRef(null);
   const overlayRef = useRef(null);
 
-  const files = {
-    "index.html": "<!DOCTYPE html><html><head><title>Project</title><link rel='stylesheet' href='styles.css'></head><body><script src='script.js'></script></body></html>",
-    "styles.css": "",
-    "script.js": "",
-    "tests.test": `
+  // Define files dynamically based on projectType
+  const getFilesForProjectType = (type) => {
+    switch (type) {
+      case "html-css-js":
+        return {
+          "index.html": "<!DOCTYPE html><html><head><title>Project</title><link rel='stylesheet' href='styles.css'></head><body><script src='script.js'></script></body></html>",
+          "styles.css": "",
+          "script.js": "",
+          "tests.test": `
 const fs = require('fs');
 const path = require('path');
 const testsFile = path.join(__dirname, 'web-c.done');
 fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
-    "package.json": `{
-      "name": "project-sandbox",
-      "scripts": {
-        "test": "node tests.test",
-        "start": "node tests.test && servor",
-        "output": "servor"
-      },
-      "dependencies": {
-        "cheerio": "^1.0.0",
-        "htmlhint": "^1.1.4",
-        "servor": "^4.0.2",
-        "express": "^4.18.2"
-      }
-    }`,
+          "package.json": `{
+            "name": "project-sandbox",
+            "scripts": {
+              "test": "node tests.test",
+              "start": "node tests.test && servor",
+              "output": "servor"
+            },
+            "dependencies": {
+              "cheerio": "^1.0.0",
+              "htmlhint": "^1.1.4",
+              "servor": "^4.0.2",
+              "express": "^4.18.2"
+            }
+          }`,
+        };
+      case "mern":
+        return {
+          "server.js": "const express = require('express');\nconst app = express();\napp.listen(3000, () => console.log('Server running'));",
+          "client/index.html": "<!DOCTYPE html><html><head><title>MERN Project</title></head><body><div id='root'></div><script src='index.js'></script></body></html>",
+          "client/index.js": "import React from 'react';\nimport ReactDOM from 'react-dom';\nReactDOM.render(<h1>Hello, MERN!</h1>, document.getElementById('root'));",
+          "package.json": `{
+            "name": "mern-sandbox",
+            "scripts": {
+              "start": "node server.js",
+              "test": "echo 'Tests for MERN project'",
+              "output": "servor client --reload"
+            },
+            "dependencies": {
+              "express": "^4.18.2",
+              "react": "^18.2.0",
+              "react-dom": "^18.2.0",
+              "servor": "^4.0.2"
+            }
+          }`,
+        };
+      case "nextjs":
+        return {
+          "pages/index.js": "export default function Home() { return <div>Welcome to Next.js</div>; }",
+          "package.json": `{
+            "name": "nextjs-sandbox",
+            "scripts": {
+              "dev": "next dev",
+              "build": "next build",
+              "start": "next start",
+              "test": "echo 'Tests for Next.js project'"
+            },
+            "dependencies": {
+              "next": "^14.0.0",
+              "react": "^18.2.0",
+              "react-dom": "^18.2.0"
+            }
+          }`,
+        };
+      case "python":
+        return {
+          "main.py": "print('Hello, Python Project!')",
+          "requirements.txt": "",
+          "tests.py": "print('Tests for Python project')",
+        };
+      default:
+        return {};
+    }
   };
-  const filesOpened = "index.html";
+
+  const files = getFilesForProjectType(projectType);
+  const filesOpened = projectType === "mern" ? "server.js" : projectType === "nextjs" ? "pages/index.js" : projectType === "python" ? "main.py" : "index.html";
 
   useEffect(() => {
     setStartTime(Date.now());
-    const storedAttempts = localStorage.getItem(`attempts-${menuItems[0]?.label}`);
+    const storedAttempts = localStorage.getItem(`attempts-${selectedProject}`);
     if (storedAttempts) setAttempts(parseInt(storedAttempts));
     fetchLeaderboard();
-  }, [menuItems]);
+  }, [selectedProject]);
 
   const fetchLeaderboard = async () => {
     const response = await fetch(`/api/leaderboard/${projectType}`);
@@ -76,11 +136,22 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
     const level = event.target.value;
     setSelectedLevel(level);
     setSidebarContent(event);
+    setSelectedProject(menuItems[0]?.label || "");
+    onMenuItemClick(menuItems[0]?.task || "");
+  };
+
+  const handleProjectChange = (event) => {
+    const projectLabel = event.target.value;
+    setSelectedProject(projectLabel);
+    const selectedItem = menuItems.find(item => item.label === projectLabel);
+    if (selectedItem) {
+      onMenuItemClick(selectedItem.task);
+    }
   };
 
   const handleSubmit = async () => {
     setAttempts(attempts + 1);
-    localStorage.setItem(`attempts-${menuItems[0]?.label}`, attempts + 1);
+    localStorage.setItem(`attempts-${selectedProject}`, attempts + 1);
 
     const endTime = Date.now();
     const executionTime = (endTime - startTime) / 1000;
@@ -97,7 +168,7 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        project: menuItems[0]?.label,
+        project: selectedProject,
         finalPoint,
         attempts,
         executionTime,
@@ -152,7 +223,7 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
           <li>
             Run:
             <pre className="bg-gray-100 p-2 mt-1 rounded text-xs">
-              <code>npm run test</code>
+              <code>{projectType === "python" ? "python tests.py" : "npm run test"}</code>
             </pre>
           </li>
           <li>You must pass the tests before submitting.</li>
@@ -164,11 +235,11 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
 
         <h3 className="font-semibold text-sm mt-3 mb-1">🛠 Having Trouble?</h3>
         <pre className="bg-gray-100 p-2 rounded text-xs mb-3">
-          <code>npm run start</code>
+          <code>{projectType === "python" ? "python main.py" : "npm run start"}</code>
         </pre>
 
         <p className="text-sm mb-1">
-          Only edit <code>index.html</code>.
+          Only edit <code>{filesOpened}</code>.
         </p>
         <p className="text-sm mb-4">
           Close this box after reading the instructions.
@@ -184,42 +255,58 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
 
       {/* Top Bar */}
       <div className="flex justify-between items-center py-5 pl-3 pr-1 relative z-10">
-        <div
-          className="flex space-x-3"
-          role="radiogroup"
-          aria-label="Select Difficulty"
-        >
-          {["Basic", "intermediate", "hard"].map((level) => {
-            const isSelected = selectedLevel === level;
-            const baseColor =
-              level === "Basic"
-                ? "bg-blue-500 hover:bg-blue-600 ring-blue-300"
-                : level === "intermediate"
-                ? "bg-green-500 hover:bg-green-600 ring-green-300"
-                : "bg-red-500 hover:bg-red-600 ring-red-300";
+        <div className="flex space-x-3 items-center">
+          {/* Difficulty Selector */}
+          <div
+            className="flex space-x-3"
+            role="radiogroup"
+            aria-label="Select Difficulty"
+          >
+            {["Basic", "intermediate", "hard"].map((level) => {
+              const isSelected = selectedLevel === level;
+              const baseColor =
+                level === "Basic"
+                  ? "bg-blue-500 hover:bg-blue-600 ring-blue-300"
+                  : level === "intermediate"
+                  ? "bg-green-500 hover:bg-green-600 ring-green-300"
+                  : "bg-red-500 hover:bg-red-600 ring-red-300";
 
-            return (
-              <label key={level}>
-                <input
-                  type="radio"
-                  name="level"
-                  value={level}
-                  className="sr-only peer"
-                  onChange={handleLevelChange}
-                  checked={isSelected}
-                />
-                <div
-                  className={`
-                    flex items-center justify-center px-4 py-2 rounded text-white cursor-pointer transition-all
-                    ${baseColor}
-                    ${isSelected ? "ring-4 scale-105 shadow-md" : ""}
-                  `}
-                >
-                  <span className="capitalize">{level}</span>
-                </div>
-              </label>
-            );
-          })}
+              return (
+                <label key={level}>
+                  <input
+                    type="radio"
+                    name="level"
+                    value={level}
+                    className="sr-only peer"
+                    onChange={handleLevelChange}
+                    checked={isSelected}
+                  />
+                  <div
+                    className={`
+                      flex items-center justify-center px-4 py-2 rounded text-white cursor-pointer transition-all
+                      ${baseColor}
+                      ${isSelected ? "ring-4 scale-105 shadow-md" : ""}
+                    `}
+                  >
+                    <span className="capitalize">{level}</span>
+                  </div>
+                </label>
+              );
+            })}
+          </div>
+
+          {/* Project Selector Dropdown */}
+          <select
+            value={selectedProject}
+            onChange={handleProjectChange}
+            className="px-4 py-2 rounded text-black bg-gray-200 hover:bg-gray-300"
+          >
+            {menuItems.map((item) => (
+              <option key={item.label} value={item.label}>
+                {item.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex space-x-2">
@@ -239,18 +326,12 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
         </div>
       </div>
 
-      {/* Main Content: Sidebar only shows if sandboxLoaded is true */}
-      <div className="flex flex-row relative z-10 pr-2">
-        <div className="order-2 grow">
+      {/* Main Content: No Sidebar */}
+      <div className="relative z-10 pr-2">
+        <div className="w-full">
+          <h1 className="text-xl font-bold mb-4 pl-3">{projectType.toUpperCase()} Project Sandbox</h1>
           <div className="h-[400px]">{sandboxElement}</div> {/* Reduced height */}
         </div>
-
-        {sandboxLoaded && (
-          <div className="order-1 w-64 break-words">
-            <h1 className="text-xl font-bold mb-4">{projectType.toUpperCase()} Project Sandbox</h1>
-            <Sidebar menuItems={menuItems} />
-          </div>
-        )}
       </div>
 
       {/* Leaderboard */}

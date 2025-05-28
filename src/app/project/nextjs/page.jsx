@@ -1,6 +1,8 @@
 "use client";
 import ProjectPlatform from "@/components/Project/Platform";
 import nextJsBasicProjects from "@/components/Project/nextjs-basic";
+import nextJsIntermediateProjects from "@/components/Project/nextjs-intermediate";
+import nextJsAdvancedProjects from "@/components/Project/nextjs-advanced";
 import { useState } from "react";
 
 export default function NextJsProjectPlatform() {
@@ -15,10 +17,10 @@ export default function NextJsProjectPlatform() {
         newMenu = nextJsBasicProjects;
         break;
       case "intermediate":
-        newMenu = nextJsBasicProjects; // Replace with nextJsIntermediateProjects when available
+        newMenu = nextJsIntermediateProjects;
         break;
       case "hard":
-        newMenu = nextJsBasicProjects; // Replace with nextJsAdvancedProjects when available
+        newMenu = nextJsAdvancedProjects;
         break;
       default:
         newMenu = nextJsBasicProjects;

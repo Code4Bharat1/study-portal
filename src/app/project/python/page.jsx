@@ -1,6 +1,8 @@
 "use client";
 import ProjectPlatform from "@/components/Project/Platform";
 import pythonBasicProjects from "@/components/Project/python-basic";
+import pythonIntermediateProjects from "@/components/Project/python-intermediate";
+import pythonAdvancedProjects from "@/components/Project/python-advanced";
 import { useState } from "react";
 
 export default function PythonProjectPlatform() {
@@ -15,10 +17,10 @@ export default function PythonProjectPlatform() {
         newMenu = pythonBasicProjects;
         break;
       case "intermediate":
-        newMenu = pythonBasicProjects; // Replace with pythonIntermediateProjects when available
+        newMenu = pythonIntermediateProjects;
         break;
       case "hard":
-        newMenu = pythonBasicProjects; // Replace with pythonAdvancedProjects when available
+        newMenu = pythonAdvancedProjects;
         break;
       default:
         newMenu = pythonBasicProjects;
