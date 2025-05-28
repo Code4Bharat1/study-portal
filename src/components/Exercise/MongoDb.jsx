@@ -1,40 +1,33 @@
 "use client"
 
+import { useState } from 'react';
+import QuestionPlatform from '@/components/Exercise/Platform';
+
+import sdk from "@stackblitz/sdk";
+
 import {
-  FaDatabase,
   FaPlug,
   FaPlusSquare,
+  FaList,
   FaSearch,
+  FaFilter,
   FaEdit,
   FaTrash,
-  FaFilter,
-  FaCodeBranch,
   FaSave,
-  FaList,
-  FaCogs,
-  FaLayerGroup,
-  FaRocket,
-  FaBalanceScale,
-  FaProjectDiagram,
-  FaBrain,
-  FaChartBar,
-  FaLock,
-  FaCompress,
+  FaCodeBranch,
   FaSync,
+  FaLayerGroup,
   FaCompressArrowsAlt,
   FaStream,
   FaRegCalendarAlt,
+  FaCogs,
   FaCode,
-  FaWrench,
-  FaUserFriends,
+  FaSort,
   FaBolt,
-} from "react-icons/fa";
+  FaBalanceScale,
+  FaChartBar,
+} from 'react-icons/fa';
 
-import { useState } from "react";
-
-import sdk from "@stackblitz/sdk"
-
-import QuestionPlatform from "@/components/Exercise/Platform";
 
 const handleOnChange = async (level) => {
     try {
@@ -66,197 +59,97 @@ const handleOnChange = async (level) => {
 };
 
 const basicMenu = [
-  {
-    label: "1. Connect with Mongoose",
-    icon: <FaPlug className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/1"),
-  },
-  {
-    label: "2. Create User Model",
-    icon: <FaDatabase className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/2"),
-  },
-  {
-    label: "3. Insert One User",
-    icon: <FaPlusSquare className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/3"),
-  },
-  {
-    label: "4. Insert Many Users",
-    icon: <FaList className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/4"),
-  },
-  {
-    label: "5. Query Age > 30",
-    icon: <FaSearch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/5"),
-  },
-  {
-    label: "6. Update Name by ID",
-    icon: <FaEdit className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/6"),
-  },
-  {
-    label: "7. Delete Inactive Users",
-    icon: <FaTrash className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/7"),
-  },
-  {
-    label: "8. Find Users in Cities",
-    icon: <FaFilter className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/8"),
-  },
-  {
-    label: "9. Array Field Document",
-    icon: <FaSave className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/9"),
-  },
-  {
-    label: "10. Embedded Comments",
-    icon: <FaCodeBranch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("basic/10"),
-  },
+  { label: "1. Init DB & Collection", icon: <FaPlug className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/1") },
+  { label: "2. Insert One", icon: <FaPlusSquare className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/2") },
+  { label: "3. Insert Many", icon: <FaList className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/3") },
+  { label: "4. Find All", icon: <FaSearch className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/4") },
+  { label: "5. Find Age > 30", icon: <FaFilter className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/5") },
+  { label: "6. Update by Field", icon: <FaEdit className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/6") },
+  { label: "7. Delete Inactive", icon: <FaTrash className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/7") },
+  { label: "8. Find with $in", icon: <FaFilter className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/8") },
+  { label: "9. Insert Array Field", icon: <FaSave className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/9") },
+  { label: "10. Insert Nested Obj", icon: <FaCodeBranch className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("basic/10") },
 ];
+
 
 const intermediateMenu = [
-  {
-    label: "1. Update Multiple Users",
-    icon: <FaSync className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/1"),
-  },
-  {
-    label: "2. Model with Subdocument Arrays",
-    icon: <FaProjectDiagram className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/2"),
-  },
-  {
-    label: "3. Query Using $or",
-    icon: <FaLayerGroup className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/3"),
-  },
-  {
-    label: "4. Add Item to Array ($push)",
-    icon: <FaCompressArrowsAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/4"),
-  },
-  {
-    label: "5. Remove Item from Array ($pull)",
-    icon: <FaStream className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/5"),
-  },
-  {
-    label: "6. Query by Date Range",
-    icon: <FaRegCalendarAlt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/6"),
-  },
-  {
-    label: "7. Custom Static Method",
-    icon: <FaCode className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/7"),
-  },
-  {
-    label: "8. Middleware: Hash Password",
-    icon: <FaWrench className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/8"),
-  },
-  {
-    label: "9. One-to-Many Relationship",
-    icon: <FaUserFriends className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/9"),
-  },
-  {
-    label: "10. Use populate()",
-    icon: <FaBolt className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("intermediate/10"),
-  },
+  { label: "1. Update Many", icon: <FaSync className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/1") },
+  { label: "2. Query with $or", icon: <FaLayerGroup className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/2") },
+  { label: "3. Push to Array", icon: <FaCompressArrowsAlt className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/3") },
+  { label: "4. Pull from Array", icon: <FaStream className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/4") },
+  { label: "5. Query Date Range", icon: <FaRegCalendarAlt className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/5") },
+  { label: "6. Use Index", icon: <FaCogs className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/6") },
+  { label: "7. Count Docs", icon: <FaCode className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/7") },
+  { label: "8. Sort Results", icon: <FaSort className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/8") },
+  { label: "9. Limit & Skip", icon: <FaFilter className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/9") },
+  { label: "10. Find Distinct", icon: <FaBolt className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("intermediate/10") },
 ];
+
 
 const hardMenu = [
-  {
-    label: "1. Multi-Collection Txns",
-    icon: <FaBalanceScale className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/1"),
-  },
-  {
-    label: "2. Compound Indexes",
-    icon: <FaCogs className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/2"),
-  },
-  {
-    label: "3. Geo $near Query",
-    icon: <FaRocket className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/3"),
-  },
-  {
-    label: "4. Polymorphic Discriminators",
-    icon: <FaLayerGroup className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/4"),
-  },
-  {
-    label: "5. Refs & Embedded Docs",
-    icon: <FaProjectDiagram className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/5"),
-  },
-  {
-    label: "6. Aggregate Comments & Ratings",
-    icon: <FaChartBar className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/6"),
-  },
-  {
-    label: "7. $lookup Latest Orders",
-    icon: <FaCodeBranch className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/7"),
-  },
-  {
-    label: "8. Field-Level Encryption",
-    icon: <FaLock className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/8"),
-  },
-  {
-    label: "9. Change Streams",
-    icon: <FaBrain className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/9"),
-  },
-  {
-    label: "10. Schema Optimization",
-    icon: <FaCompress className="inline mr-2 text-xl" />,
-    onClick: (e) => handleOnChange("hard/10"),
-  },
+  { label: "1. Filter Nested Fields", icon: <FaLayerGroup className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/1") },
+  { label: "2. Update Nested Fields", icon: <FaEdit className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/2") },
+  { label: "3. Use Compound Filters", icon: <FaFilter className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/3") },
+  { label: "4. Complex $and/$or", icon: <FaBalanceScale className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/4") },
+  { label: "5. Soft Delete", icon: <FaTrash className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/5") },
+  { label: "6. User Logs Pattern", icon: <FaChartBar className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/6") },
+  { label: "7. Search in Arrays", icon: <FaSearch className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/7") },
+  { label: "8. Regex Search", icon: <FaCode className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/8") },
+  { label: "9. Bulk Write (Loop)", icon: <FaList className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/9") },
+  { label: "10. Backup & Restore", icon: <FaSave className="inline mr-2 text-xl" />, onClick: (e) => handleOnChange("hard/10") },
 ];
 
 
-const sandboxFiles = {
-    'script.js': '', 'eslint.config.mjs': `import globals from "globals";
-import { defineConfig } from "eslint/config";
-
-
-export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs}"], languageOptions: { globals: globals.browser } },
-]);
-`, 'tests.test': `
+const testContent = `
 const fs = require('fs');
 const path = require('path');
 const testsFile = path.join(__dirname, 'web-c.done');
-fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
-    'package.json': `{
-  "name": "code4bharat-trybox",
+fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`
+
+const packageJson = `{
+  "name": "mongodb-exercise",
+  "stackblitz": {
+    "startCommand": "npm run test"
+  },
   "scripts": {
-    "test": "node tests.test",
-    "start": "node tests.test && servor",
-    "output": "node -e \\"console.clear(); console.log('To see output of Javascript: 👉  Open your browsers Developer Tools (F12 or Ctrl+Shift+I) and check the Console tab.')\\" servor"
+    "execute": "node driver.js",
+    "test": "node tests.test"
   },
   "dependencies": {
-    "eslint": "^9.27.0",
-    "globals": "^16.1.0",
-    "esprima": "^4.0.1",
-    "servor": "^4.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "eslint": "^9.25.0",
+    "globals": "^16.0.0"
   }
+}`
+
+const driverJS = `// driver.js
+
+const fs = require('fs');
+const path = require('path');
+const { Db } = require('tingodb')();
+
+// Setup TingoDB
+const dbPath = path.join(__dirname, 'data');
+const db = new Db(dbPath, {});
+
+const code = fs.readFileSync('./script.js', 'utf8');
+
+const run = new Function('db', code);
+run(db);
+
+`
+const sandboxFiles = {
+    'script.js': '',
+    'tests.test': testContent,
+    'driver.js': driverJS,
+    'package.json': packageJson,
+    'data/creatFolder.txt': 'Folder Created'
 }
+const sandboxFilesOpened = "script.js"
 
-`}
-const sandboxFilesOpened = "index.html"
-
-export default function MongoDBExercisePlatform() {
+export default function MongodDBExercisePlatform() {
     const [menu, setMenu] = useState(basicMenu);
     const [task, setTask] = useState(menu[0].task)
 
