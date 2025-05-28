@@ -40,7 +40,7 @@ server.listen(3000, () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "http://localhost:3902/api/projects?category=node",
+        "https://sp-api.code4bharat.com/api/projects?category=node",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -72,7 +72,7 @@ server.listen(3000, () => {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3902/api/scores?userId=${userId}`,
+        `https://sp-api.code4bharat.com/api/scores?userId=${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -102,14 +102,17 @@ server.listen(3000, () => {
   const runCode = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3902/api/execute", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ code, category: "node" }),
-      });
+      const response = await fetch(
+        "https://sp-api.code4bharat.com/api/execute",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ code, category: "node" }),
+        }
+      );
       if (!response.ok) {
         if (response.status === 403) {
           localStorage.removeItem("token");
@@ -133,19 +136,22 @@ server.listen(3000, () => {
     try {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3902/api/scores", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          userId,
-          category: "node",
-          projectId: "mock-project-id",
-          score,
-        }),
-      });
+      const response = await fetch(
+        "https://sp-api.code4bharat.com/api/scores",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            userId,
+            category: "node",
+            projectId: "mock-project-id",
+            score,
+          }),
+        }
+      );
       if (!response.ok) {
         if (response.status === 403) {
           localStorage.removeItem("token");

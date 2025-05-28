@@ -35,7 +35,8 @@ export default function ReactQuizPage() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const timerRef = useRef(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3902";
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://sp-api.code4bharat.com";
   const WEBSITE_URL =
     process.env.NEXT_PUBLIC_WEBSITE_URL ||
     "https://skill2future.code4bharat.com";
