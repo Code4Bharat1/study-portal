@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useMemo, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
-import Sandbox from "@/components/sandbox";
+import Sandbox from "@/components/Sandbox";
 import ReactMarkdown from "react-markdown";
 
 export default function ProjectPlatform({
