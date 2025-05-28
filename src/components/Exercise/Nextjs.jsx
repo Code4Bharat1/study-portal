@@ -233,7 +233,7 @@ const packageJson = `{
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run test && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -252,7 +252,8 @@ const packageJson = `{
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0"
   }
-}`;
+}
+`;
 
 const homePage = `export default function Home() {
   return (
