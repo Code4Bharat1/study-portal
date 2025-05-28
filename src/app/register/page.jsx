@@ -20,14 +20,11 @@ export default function RegisterPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(
-        "http://localhost:3902/api/auth/register",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("http://localhost:3902/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
       const text = await response.text();
       console.log("Raw response:", text);
@@ -274,4 +271,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

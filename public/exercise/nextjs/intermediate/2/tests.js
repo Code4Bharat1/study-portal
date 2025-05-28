@@ -94,11 +94,11 @@ async function functionalVerify() {
 
     const requestWithHeader = {
       headers: new Map([['x-test', 'true']]),
-      url: 'http://localhost:3000',
+      url: 'https://skill2future.code4bharat.com',
     };
     const responseWithHeader = await middleware(requestWithHeader);
 
-    if (!responseWithHeader.redirected || responseWithHeader.url !== 'http://localhost:3000/dashboard') {
+    if (!responseWithHeader.redirected || responseWithHeader.url !== 'https://skill2future.code4bharat.com/dashboard') {
       console.log('✘ Middleware did not redirect correctly');
       allPassed = false;
     } else {
@@ -107,7 +107,7 @@ async function functionalVerify() {
 
     const requestWithoutHeader = {
       headers: new Map(),
-      url: 'http://localhost:3000',
+      url: 'https://skill2future.code4bharat.com',
     };
     const responseWithoutHeader = await middleware(requestWithoutHeader);
 

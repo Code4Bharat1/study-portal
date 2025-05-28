@@ -84,8 +84,8 @@ app.listen(3000, () => {
         </pre>
 
         <p className="text-gray-800">
-          Visit <code>http://localhost:3000</code> in your browser to see your
-          Express server in action!
+          Visit <code>https://skill2future.code4bharat.com</code> in your
+          browser to see your Express server in action!
         </p>
 
         <h2 className="text-2xl font-semibold text-yellow-500 mb-4">

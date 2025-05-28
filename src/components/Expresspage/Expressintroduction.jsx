@@ -94,7 +94,7 @@ app.listen(3000, () => {
           <p>
             This will start a local server on port 3000 and respond with
             "Welcome to Express!" when you visit{" "}
-            <code>http://localhost:3000</code>.
+            <code>https://skill2future.code4bharat.com</code>.
           </p>
 
           <h3 className="text-xl font-semibold text-yellow-500">

@@ -107,7 +107,8 @@ npm -v`}
           </ol>
           <p>
             Your browser will open automatically at{" "}
-            <code>http://localhost:3000</code> displaying a basic React app.
+            <code>https://skill2future.code4bharat.com</code> displaying a basic
+            React app.
           </p>
         </div>
 
@@ -175,7 +176,6 @@ npm -v`}
         </div>
 
         {/* CTA Button */}
-      
       </div>
     </div>
   );

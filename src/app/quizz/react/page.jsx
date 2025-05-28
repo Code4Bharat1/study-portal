@@ -37,7 +37,8 @@ export default function ReactQuizPage() {
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3902";
   const WEBSITE_URL =
-    process.env.NEXT_PUBLIC_WEBSITE_URL || "https://yourwebsite.com";
+    process.env.NEXT_PUBLIC_WEBSITE_URL ||
+    "https://skill2future.code4bharat.com";
 
   useEffect(() => {
     if (typeof window === "undefined") {

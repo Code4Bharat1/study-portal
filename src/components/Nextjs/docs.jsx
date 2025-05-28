@@ -24,7 +24,7 @@ function Nextdocs() {
           <h2 className="text-3xl font-semibold text-gray-800 mb-4">2. Pre-Made Pages (Static Generation)</h2>
           <p className="mb-4 text-gray-600">
             <span className="font-semibold">For Non-Coders:</span> Think of a bakery that bakes cakes before the shop opens. When you visit, the cake is ready to grab, so you get it super fast! Static Generation prepares website pages ahead of time.  
-            <span className="font-semibold">For Coders:</span> Static Generation (SSG) fetches data at build time, creating pre-rendered HTML for fast delivery and SEO benefits. Use <code>getStaticProps</code> in the Pages Router or server components with <code>cache: 'force-cache'</code> in the App Router. Incremental Static Regeneration (ISR) allows periodic updates.
+            <span className="font-semibold ">For Coders:</span> Static Generation (SSG) fetches data at build time, creating pre-rendered HTML for fast delivery and SEO benefits. Use <code>getStaticProps</code> in the Pages Router or server components with <code>cache: 'force-cache'</code> in the App Router. Incremental Static Regeneration (ISR) allows periodic updates.
           </p>
 
           <pre className="bg-gray-50 p-4 rounded-lg text-sm overflow-x-auto mb-4">
