@@ -1,7 +1,8 @@
 "use client";
 import { useState, useRef, useMemo, useEffect } from "react";
-import Sandbox from "@/components/Sandbox";
+// import Sandbox from "@/components/Sandbox";
 import ReactMarkdown from "react-markdown";
+import Sandbox from "../sandbox";
 
 export default function ProjectPlatform({
   setSidebarContent,
@@ -198,13 +199,13 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
       {/* Overlay */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 bg-opacity-70 backdrop-blur-sm z-40 hidden"
+        className="fixed inset-0 bg-opacity-70 backdrop-blur-sm hidden"
       />
 
       {/* Instructions */}
       <div
         ref={instructionRef}
-        className="fixed top-35 left-1/2 transform -translate-x-1/2 w-[90%] max-w-2xl bg-white shadow-lg rounded-lg z-50 p-6 border hidden"
+        className="fixed top-35 left-1/2 transform -translate-x-1/2 w-auto max-w-2xl bg-white shadow-lg rounded-lg  p-6 border hidden"
       >
         <h1 className="text-xl font-bold text-blue-600 mb-4 whitespace-pre-wrap">
           <ReactMarkdown>{task}</ReactMarkdown>
