@@ -294,7 +294,7 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
           <select
             value={selectedProject}
             onChange={handleProjectChange}
-            className="px-4 py-2 rounded text-black bg-gray-200 hover:bg-gray-300"
+            className="px-2 py-2 rounded text-black bg-gray-200 hover:bg-gray-300"
           >
             {menuItems.map((item) => (
               <option key={item.label} value={item.label}>

@@ -14,7 +14,7 @@ const handleOnChange = async (level) => {
         const vm = await sdk.connect(container);
         console.log("Connected VM:", vm);
 
-        const response = await fetch(`/exercise/mysql/${level}/tests.js`);
+        const response = await fetch(`/exercise/sql/${level}/tests.js`);
         if (!response.ok) throw new Error("Failed to fetch test file");
 
         const testContent = await response.text();
@@ -283,7 +283,7 @@ const sandboxFiles = {
 }
 const sandboxFilesOpened = "script.js"
 
-export default function MysqlExercisePlatform() {
+export default function SqlExercisePlatform() {
     const [menu, setMenu] = useState(basicMenu);
     const [task, setTask] = useState(menu[0].task)
 

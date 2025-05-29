@@ -20,31 +20,31 @@ import sdk from "@stackblitz/sdk"
 import QuestionPlatform from "@/components/Exercise/Platform";
 
 const handleOnChange = async (level) => {
-    try {
-        const container = document.getElementById("stackblitz-container");
-        if (!container) throw new Error("Container element not found");
+  try {
+    const container = document.getElementById("stackblitz-container");
+    if (!container) throw new Error("Container element not found");
 
-        const vm = await sdk.connect(container);
-        console.log("Connected VM:", vm);
+    const vm = await sdk.connect(container);
+    console.log("Connected VM:", vm);
 
-        const response = await fetch(`/exercise/react/${level}/tests.js`);
-        if (!response.ok) throw new Error("Failed to fetch test file");
+    const response = await fetch(`/exercise/react/${level}/tests.js`);
+    if (!response.ok) throw new Error("Failed to fetch test file");
 
-        const testContent = await response.text();
+    const testContent = await response.text();
 
-        await vm.applyFsDiff({
-            destroy: ['tests.test'],
-            create: {
-                'tests.test': testContent,
-            },
-        });
+    await vm.applyFsDiff({
+      destroy: ['tests.test'],
+      create: {
+        'tests.test': testContent,
+      },
+    });
 
-        const snapshot = await vm.getFsSnapshot();
-        console.log("FS Snapshot:", snapshot);
+    const snapshot = await vm.getFsSnapshot();
+    console.log("FS Snapshot:", snapshot);
 
-    } catch (error) {
-        console.error("Error during StackBlitz VM setup:", error);
-    }
+  } catch (error) {
+    console.error("Error during StackBlitz VM setup:", error);
+  }
 
 };
 
@@ -78,7 +78,7 @@ const basicMenu = [
     label: "Conditional Rendering",
     icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
     onClick: () => handleOnChange("basic/6"),
-  },  
+  },
   {
     label: "Lists & Keys",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
@@ -244,7 +244,7 @@ const indexHtml = `<!DOCTYPE html>
 const packageJson = `{
   "name": "react-exercise",
   "stackblitz": {
-    "startCommand": "npm start"
+    "startCommand": "npm run test"
   },
   "scripts": {
     "start": "node tests.test && npm run dev",
@@ -255,10 +255,17 @@ const packageJson = `{
     "test": "node tests.test"
   },
   "dependencies": {
+    "eslint-plugin-react": "^7.37.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/parser": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-react": "^7.24.0",
+    "@babel/register": "^7.24.0",
+    "@babel/traverse": "^7.24.0",
     "@eslint/js": "^9.25.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -275,7 +282,8 @@ const packageJson = `{
     "vite": "^6.3.5",
     "vitest": "^3.1.3"
   }
-}`
+}
+`
 
 const mainJsx = `import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -287,43 +295,94 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 `
+
+const eslintConfig = `import js from '@eslint/js';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import globals from 'globals';
+
+export default [
+  js.configs.recommended,
+  {
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+    rules: {
+      // React/JSX rules
+      'react/jsx-uses-react': 'off', // Not needed with React 17+ (automatic runtime)
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+
+      // General code quality rules
+      'no-unused-vars': 'warn',
+      'no-undef': 'error',
+      'no-console': 'off',
+      semi: ['error', 'always'],
+      quotes: ['error', 'single'],
+    },
+  },
+];`
+
+
 const sandboxFiles = {
-    'App.jsx': '',
-    'tests.test': testContent,
-    'vite.config.js': viteConfig,
-    'Main.jsx': mainJsx,
-    'package.json': packageJson,
-    'index.html': indexHtml
+  'App.jsx': '',
+  'tests.test': testContent,
+  'vite.config.js': viteConfig,
+  'Main.jsx': mainJsx,
+  'package.json': packageJson,
+  'index.html': indexHtml,
+  'eslint.config.mjs': eslintConfig
 }
 const sandboxFilesOpened = "App.jsx"
 
 export default function ReactExercisePlatform() {
-    const [menu, setMenu] = useState(basicMenu);
-    const [task, setTask] = useState(menu[0].task)
+  const [menu, setMenu] = useState(basicMenu);
+  const [task, setTask] = useState(menu[0].task)
 
-    const setSidebarContent = (event) => {
-        const value = event.target.value.toLowerCase();
-        switch (value) {
-            case 'basic':
-                setMenu(basicMenu);
-                break;
-            case 'intermediate':
-                setMenu(intermediateMenu);
-                break;
-            case 'hard':
-                setMenu(hardMenu);
-                break;
-        }
-    };
+  const setSidebarContent = (event) => {
+    const value = event.target.value.toLowerCase();
+    switch (value) {
+      case 'basic':
+        setMenu(basicMenu);
+        break;
+      case 'intermediate':
+        setMenu(intermediateMenu);
+        break;
+      case 'hard':
+        setMenu(hardMenu);
+        break;
+    }
+  };
 
 
-    return (
-        <QuestionPlatform
-            menuItems={menu}
-            files={sandboxFiles}
-            filesOpened={sandboxFilesOpened}
-            setSidebarContent={setSidebarContent}
-        />
-    );
+  return (
+    <QuestionPlatform
+      menuItems={menu}
+      files={sandboxFiles}
+      filesOpened={sandboxFilesOpened}
+      setSidebarContent={setSidebarContent}
+    />
+  );
 }
 
