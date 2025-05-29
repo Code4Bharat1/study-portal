@@ -4,7 +4,7 @@ const RoadmapHtml = () => {
   return (
    <>
      <div className="p-6 ml-80">
-    <img src="/html.jpg" alt="MySQL" className="w-full max-w-8xl rounded-lg mb-6 mx-auto" />
+    <img src="/roadmaps/html.jpg" alt="HTML Roadmap" className="w-full max-w-8xl rounded-lg mb-6 mx-auto" />
     </div>
    </>
   )

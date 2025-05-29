@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Hero from "@/components/hero";
 import Service from "@/components/Servics/Service";
 import Contact from "@/components/Contact/Contact";
@@ -9,7 +8,6 @@ export default function Home() {
   <div className="mt-20"><Hero/></div>
   <ExerciseFirst/>
   <Service/>
-  
   <Contact/>
   </>
   );

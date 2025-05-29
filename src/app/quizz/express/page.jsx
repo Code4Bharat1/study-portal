@@ -203,7 +203,7 @@ export default function ExpressQuizPage() {
           ],
         explanation: questions[currentQuestion].explanation,
       });
-      new Audio("/incorrect.mp3")
+      new Audio("/audio/incorrect.mp3")
         .play()
         .catch((err) => console.error("Audio playback failed:", err));
       return;
@@ -220,7 +220,7 @@ export default function ExpressQuizPage() {
         correctAnswer: "Error: Invalid correct answer index",
         explanation: questions[currentQuestion].explanation,
       });
-      new Audio("/incorrect.mp3")
+      new Audio("/audio/incorrect.mp3")
         .play()
         .catch((err) => console.error("Audio playback failed:", err));
       return;
@@ -241,12 +241,12 @@ export default function ExpressQuizPage() {
       if (newStreak > maxStreak) {
         setMaxStreak(newStreak);
       }
-      new Audio("/correct.mp3")
+      new Audio("/audio/correct.mp3")
         .play()
         .catch((err) => console.error("Audio playback failed:", err));
     } else {
       setStreak(0);
-      new Audio("/incorrect.mp3")
+      new Audio("/audio/incorrect.mp3")
         .play()
         .catch((err) => console.error("Audio playback failed:", err));
     }
