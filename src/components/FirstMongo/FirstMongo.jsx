@@ -10,9 +10,9 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.2,
-      delayChildren: 0.3
-    }
-  }
+      delayChildren: 0.3,
+    },
+  },
 };
 
 // Example variants (you can define or import your own)
@@ -73,21 +73,25 @@ export default function MongoPage() {
                 NoSQL Database
               </motion.span>
             </div>
-            
+
             <motion.h1
               className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight"
               variants={itemVariants}
             >
-              Store Data with <span className="text-green-600 bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">MongoDB</span>
+              Store Data with{" "}
+              <span className="text-green-600 bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
+                MongoDB
+              </span>
             </motion.h1>
-            
+
             <motion.p
               className="text-lg md:text-xl text-gray-600 mb-8"
               variants={itemVariants}
             >
-              Manage flexible, scalable data with MongoDB, the leading NoSQL database for modern applications.
+              Manage flexible, scalable data with MongoDB, the leading NoSQL
+              database for modern applications.
             </motion.p>
-            
+
             <motion.div
               className="flex flex-wrap gap-4 mb-8"
               variants={containerVariants}
@@ -98,7 +102,7 @@ export default function MongoPage() {
                   text: "Get Started",
                   bg: "bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700",
                   textColor: "text-white",
-                  shadow: "shadow-lg shadow-green-500/20"
+                  shadow: "shadow-lg shadow-green-500/20",
                 },
                 {
                   href: "https://www.youtube.com/watch?v=J6mDkcqU_ZE",
@@ -106,24 +110,35 @@ export default function MongoPage() {
                   bg: "bg-white hover:bg-gray-50",
                   textColor: "text-gray-700",
                   border: "border border-gray-200",
-                  shadow: "shadow-sm hover:shadow-md"
+                  shadow: "shadow-sm hover:shadow-md",
                 },
                 {
                   href: "/projects?tech=mongodb",
                   text: "View Projects",
                   bg: "bg-gray-900 hover:bg-gray-800",
                   textColor: "text-white",
-                  shadow: "shadow-lg hover:shadow-xl"
-                }
+                  shadow: "shadow-lg hover:shadow-xl",
+                },
               ].map((button, index) => (
                 <motion.div
                   key={button.text}
                   variants={itemVariants}
                   custom={index}
                 >
-                  <Link href={button.href} rel={button.href.startsWith("http") ? "noopener noreferrer" : undefined}>
+                  <Link
+                    href={button.href}
+                    rel={
+                      button.href.startsWith("http")
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                  >
                     <motion.button
-                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ''} ${button.shadow || ''} transition-all duration-200 cursor-pointer`}
+                      className={`px-6 py-3 rounded-lg font-medium ${
+                        button.bg
+                      } ${button.textColor} ${button.border || ""} ${
+                        button.shadow || ""
+                      } transition-all duration-200 cursor-pointer`}
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
@@ -134,60 +149,66 @@ export default function MongoPage() {
                 </motion.div>
               ))}
             </motion.div>
-            
+
             <motion.div
               className="flex flex-col sm:flex-row sm:items-center gap-4 text-gray-500"
               variants={itemVariants}
             >
-              <span className="text-sm sm:text-base">Trusted by industry leaders:</span>
+              <span className="text-sm sm:text-base">
+                Trusted by industry leaders:
+              </span>
               <div className="flex flex-wrap gap-2">
-                {["IBM", "Cisco", "Bosch", "Forbes", "Coinbase", "Expedia"].map((company, i) => (
-                  <motion.span
-                    key={company}
-                    className="px-3 py-1 bg-gray-100 rounded-full text-sm"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {company}
-                  </motion.span>
-                ))}
+                {["IBM", "Cisco", "Bosch", "Forbes", "Coinbase", "Expedia"].map(
+                  (company, i) => (
+                    <motion.span
+                      key={company}
+                      className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {company}
+                    </motion.span>
+                  )
+                )}
               </div>
             </motion.div>
           </motion.div>
-          
+
           {/* Right Content */}
           <motion.div
-      className="flex-1 bg-gradient-to-br from-green-50 to-teal-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
-      variants={itemVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      {/* Decorative blur circles */}
-      <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-green-200/30 blur-xl"></div>
-      <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-teal-200/30 blur-xl"></div>
+            className="flex-1 bg-gradient-to-br from-green-50 to-teal-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {/* Decorative blur circles */}
+            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-green-200/30 blur-xl"></div>
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-teal-200/30 blur-xl"></div>
 
-      <div className="w-full max-w-md relative z-10">
-        <motion.div
-          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
-          variants={codeCardVariants}
-          whileHover="hover"
-          aria-hidden="true"
-        >
-          {/* Header */}
-          <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3 flex items-center">
-            <div className="flex space-x-2">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-            </div>
-            <div className="ml-4 text-sm text-gray-300 font-mono">mongo-shell.js</div>
-          </div>
+            <div className="w-full max-w-md relative z-10">
+              <motion.div
+                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+                variants={codeCardVariants}
+                whileHover="hover"
+                aria-hidden="true"
+              >
+                {/* Header */}
+                <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3 flex items-center">
+                  <div className="flex space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="ml-4 text-sm text-gray-300 font-mono">
+                    mongo-shell.js
+                  </div>
+                </div>
 
-          {/* Code content */}
-          <div className="relative">
-            <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
-              <code className="block whitespace-pre">
-{`// Insert document
+                {/* Code content */}
+                <div className="relative">
+                  <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
+                    <code className="block whitespace-pre">
+                      {`// Insert document
 db.users.insertOne({
   name: "John Doe",
   email: "john@example.com",
@@ -205,34 +226,36 @@ db.users.updateOne(
 
 // Delete document
 db.users.deleteOne({ name: "John Doe" });`}
-              </code>
-            </pre>
-            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
-          </div>
-        </motion.div>
+                    </code>
+                  </pre>
+                  <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/70 to-transparent"></div>
+                </div>
+              </motion.div>
 
-        {/* Button section */}
-        <motion.div
-          className="mt-8 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-        >
-          <p className="text-gray-600 mb-4">Try MongoDB right in your browser</p>
-          <Link href="/sandbox" rel="noopener noreferrer">
-            <motion.button
-              className="relative px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all overflow-hidden"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              <span className="relative z-10">Open MongoDB Playground</span>
-              <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-green-600 to-teal-600 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
-            </motion.button>
-          </Link>
-        </motion.div>
-      </div>
-    </motion.div>
+              {/* Button section */}
+              <motion.div
+                className="mt-8 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                <p className="text-gray-600 mb-4">
+                  Try MongoDB right in your browser
+                </p>
+                <Link href="/exercises/mongodb" rel="noopener noreferrer">
+                  <motion.button
+                    className="relative px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all overflow-hidden"
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    <span className="relative z-10">Perform Exercise</span>
+                    <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-green-600 to-teal-600 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
+                  </motion.button>
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </motion.div>
     </main>

@@ -1,9 +1,10 @@
 "use client";
 import { useState, useRef, useMemo } from "react";
 import Sidebar from "@/components/Sidebar";
+import Sandbox from "../sandbox";
 // import Sandbox from "../sandbox";
 //import Sandbox from "@/components/Sandbox";
-import Sandbox from "@/components/Sandbox"; // Adjust the import path as necessary
+//import Sandbox from "@/components/Sandbox"; // Adjust the import path as necessary
 
 export default function QuestionPlatform({
   setSidebarContent,

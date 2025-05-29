@@ -15,7 +15,7 @@ const ExerciseFirst = () => {
     const router = useRouter();
 
     const handleStartPractice = () => {
-      router.push('/exercises'); // This should match your actual route
+      router.push('/exerciseFirst'); // This should match your actual route
     };
   return (
     <section className="py-16 bg-white">

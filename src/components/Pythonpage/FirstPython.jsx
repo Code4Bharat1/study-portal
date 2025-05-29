@@ -1,6 +1,3 @@
-
-
-
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -136,11 +133,19 @@ export default function LearnPythonCard() {
                 <motion.div key={button.text} variants={itemVariants}>
                   <Link
                     href={button.href}
-                    target={button.href.startsWith("http") ? "_blank" : undefined}
-                    rel={button.href.startsWith("http") ? "noopener" : undefined}
+                    target={
+                      button.href.startsWith("http") ? "_blank" : undefined
+                    }
+                    rel={
+                      button.href.startsWith("http") ? "noopener" : undefined
+                    }
                   >
                     <motion.button
-                      className={`px-6 py-3 rounded-lg font-medium ${button.bg} ${button.textColor} ${button.border || ""} ${button.shadow || ""} transition-all duration-200 cursor-pointer`}
+                      className={`px-6 py-3 rounded-lg font-medium ${
+                        button.bg
+                      } ${button.textColor} ${button.border || ""} ${
+                        button.shadow || ""
+                      } transition-all duration-200 cursor-pointer`}
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
@@ -160,18 +165,23 @@ export default function LearnPythonCard() {
                 Trusted by industry leaders:
               </span>
               <div className="flex flex-wrap gap-2">
-                {["Google", "Microsoft", "Dropbox", "Uber", "Slack", "NASA"].map(
-                  (company) => (
-                    <motion.span
-                      key={company}
-                      className="px-3 py-1 bg-gray-100 rounded-full text-sm"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {company}
-                    </motion.span>
-                  )
-                )}
+                {[
+                  "Google",
+                  "Microsoft",
+                  "Dropbox",
+                  "Uber",
+                  "Slack",
+                  "NASA",
+                ].map((company) => (
+                  <motion.span
+                    key={company}
+                    className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {company}
+                  </motion.span>
+                ))}
               </div>
             </motion.div>
           </motion.div>
@@ -203,8 +213,8 @@ export default function LearnPythonCard() {
                 </div>
                 <div className="relative">
                   <pre className="p-6 text-sm md:text-base h-[240px] text-gray-800 overflow-x-auto font-mono bg-gray-50">
-<code className="block whitespace-pre">
-{`name = "Jaya"
+                    <code className="block whitespace-pre">
+                      {`name = "Jaya"
 age = 19
 
 print("Hello, Python!")
@@ -213,7 +223,7 @@ if age >= 18:
     print(f"{name} is an adult.")
 else:
     print(f"{name} is not an adult.")`}
-</code>
+                    </code>
                   </pre>
                 </div>
               </motion.div>
@@ -227,14 +237,14 @@ else:
                 <p className="text-gray-600 mb-4">
                   Try Python right in your browser
                 </p>
-                <Link href="/sandbox/python" target="_blank" rel="noopener">
+                <Link href="#" target="_blank" rel="noopener">
                   <motion.button
                     className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
                   >
-                    Open Replit
+                    Perform Exercise
                   </motion.button>
                 </Link>
               </motion.div>
