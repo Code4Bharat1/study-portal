@@ -209,7 +209,7 @@ document.querySelector('button')?.addEventListener('click', () => {
                 <p className="text-gray-600 mb-4">
                   Try JavaScript right in your browser
                 </p>
-                <Link href="sandbox/javascript">
+                <Link href="/exercises/javascript">
                   <motion.button
                     className="relative px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden"
                     variants={buttonVariants}
