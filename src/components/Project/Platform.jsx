@@ -2,7 +2,7 @@
 import { useState, useRef, useMemo, useEffect } from "react";
 // import Sandbox from "@/components/Sandbox";
 import ReactMarkdown from "react-markdown";
-import Sandbox from "../sandbox";
+import Sandbox from "@/components/Sandbox";
 
 export default function ProjectPlatform({
   setSidebarContent,
