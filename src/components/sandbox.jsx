@@ -58,6 +58,8 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
               localStorage.setItem('startTimestamp', Date.now().toString());
 
               vm.applyFsDiff({ destroy: ['web-c.done'], create: {} });
+
+              setLoading(false)
             }
           }, 3000);
         });
@@ -69,7 +71,7 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
   <div id={containerId} className="w-screen h-[calc(100vh-11rem)]" />;
   {loading && (
         <div
-    className="absolute inset-0 bg-white/10 backdrop-blur-sm flex items-center justify-center z-50"
+    className="absolute inset-0 bg-white/10 backdrop-blur-[2px] flex items-center justify-center z-50"
     tabIndex={0}
     onKeyDown={(e) => e.preventDefault()}
     onKeyUp={(e) => e.preventDefault()}
