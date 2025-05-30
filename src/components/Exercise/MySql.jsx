@@ -1,18 +1,5 @@
 "use client"
 
-import {
-    FaCode,
-    FaCheckSquare,
-    FaVolumeUp,
-    FaBars,
-    FaSearch,
-    FaUniversalAccess,
-    FaWindowMaximize,
-    FaList,
-    FaImage,
-    FaShieldAlt,
-} from "react-icons/fa";
-
 import { useState } from "react";
 
 import sdk from "@stackblitz/sdk"
@@ -27,7 +14,7 @@ const handleOnChange = async (level) => {
         const vm = await sdk.connect(container);
         console.log("Connected VM:", vm);
 
-        const response = await fetch(`/exercise/javascript/${level}/tests.js`);
+        const response = await fetch(`/exercise/mysql/${level}/tests.js`);
         if (!response.ok) throw new Error("Failed to fetch test file");
 
         const testContent = await response.text();
@@ -48,198 +35,255 @@ const handleOnChange = async (level) => {
 
 };
 
+import {
+  FaTable,
+  FaPlusCircle,
+  FaSearch,
+  FaEdit,
+  FaTrash,
+  FaSortAmountDown,
+  FaFilter,
+  FaDatabase,
+  FaLink,
+  FaColumns,
+  FaTools,
+  FaProjectDiagram,
+  FaChartLine,
+  FaCogs,
+  FaSyncAlt,
+  FaLock,
+  FaRocket,
+  FaFingerprint,
+  FaCloud,
+  FaSortAmountUp,
+  FaExchangeAlt,
+  FaUserCog,
+  FaChartBar,
+  FaLayerGroup,
+  FaUserFriends,
+} from "react-icons/fa";
+
 const basicMenu = [
-    {
-        label: "1. Variables and Data Types",
-        icon: <FaCode className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/1"),
-    },
-    {
-        label: "2. Basic Arithmetic Operations",
-        icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/2"),
-    },
-    {
-        label: "3. Functions and Parameters",
-        icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/3"),
-    },
-    {
-        label: "4. Conditional Statements",
-        icon: <FaBars className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/4"),
-    },
-    {
-        label: "5. Loops and Iteration",
-        icon: <FaSearch className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/5"),
-    },
-    {
-        label: "6. Arrays and Basic Methods",
-        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/6"),
-    },
-    {
-        label: "7. DOM Manipulation Basics",
-        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/7"),
-    },
-    {
-        label: "8. Event Listeners",
-        icon: <FaList className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/8"),
-    },
-    {
-        label: "9. String Methods",
-        icon: <FaImage className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/9"),
-    },
-    {
-        label: "10. Basic Error Handling",
-        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("basic/10"),
-    },
+  {
+    label: "Create table",
+    icon: <FaTable className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/1"),
+  },
+  {
+    label: "Insert data",
+    icon: <FaPlusCircle className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/2"),
+  },
+  {
+    label: "Select all",
+    icon: <FaSearch className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/3"),
+  },
+  {
+    label: "Filter data",
+    icon: <FaFilter className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/4"),
+  },
+  {
+    label: "Update record",
+    icon: <FaEdit className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/5"),
+  },
+  {
+    label: "Delete record",
+    icon: <FaTrash className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/6"),
+  },
+  {
+    label: "Sort data",
+    icon: <FaSortAmountDown className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/7"),
+  },
+  {
+    label: "Limit results",
+    icon: <FaDatabase className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/8"),
+  },
+  {
+    label: "Select columns",
+    icon: <FaColumns className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/9"),
+  },
+  {
+    label: "Join tables",
+    icon: <FaLink className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("basic/10"),
+  },
 ];
 
 const intermediateMenu = [
-    {
-        label: "1. Closures and Scope",
-        icon: <FaCode className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/1"),
-    },
-    {
-        label: "2. Higher-Order Functions",
-        icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/2"),
-    },
-    {
-        label: "3. Array Methods (Map, Filter, Reduce)",
-        icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/3"),
-    },
-    {
-        label: "4. Promises and Async",
-        icon: <FaBars className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/4"),
-    },
-    {
-        label: "5. Object-Oriented Programming",
-        icon: <FaSearch className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/5"),
-    },
-    {
-        label: "6. Event Delegation",
-        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/6"),
-    },
-    {
-        label: "7. Modules and Imports",
-        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/7"),
-    },
-    {
-        label: "8. Regular Expressions",
-        icon: <FaList className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/8"),
-    },
-    {
-        label: "9. Error Handling with Custom Errors",
-        icon: <FaImage className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/9"),
-    },
-    {
-        label: "10. DOM Manipulation with Datasets",
-        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("intermediate/10"),
-    },
+  {
+    label: "1. Group By",
+    icon: <FaProjectDiagram className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/1"),
+  },
+  {
+    label: "2. HAVING Filter",
+    icon: <FaFilter className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/2"),
+  },
+  {
+    label: "3. Views",
+    icon: <FaTable className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/3"),
+  },
+  {
+    label: "4. Order By Multiple",
+    icon: <FaSortAmountUp className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/4"),
+  },
+  {
+    label: "5. Subqueries",
+    icon: <FaExchangeAlt className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/5"),
+  },
+  {
+    label: "6. Roles & Permissions",
+    icon: <FaUserCog className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/6"),
+  },
+  {
+    label: "7. Transactions",
+    icon: <FaDatabase className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/7"),
+  },
+  {
+    label: "8. Aggregate Reports",
+    icon: <FaChartBar className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/8"),
+  },
+  {
+    label: "9. Complex JOINs",
+    icon: <FaLayerGroup className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/9"),
+  },
+  {
+    label: "10. SELF JOIN",
+    icon: <FaUserFriends className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("intermediate/10"),
+  },
 ];
 
 const hardMenu = [
-    {
-        label: "1. Advanced Closures and IIFEs",
-        icon: <FaCode className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/1"),
-    },
-    {
-        label: "2. Functional Programming Patterns",
-        icon: <FaCheckSquare className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/2"),
-    },
-    {
-        label: "3. Advanced Array Manipulation",
-        icon: <FaVolumeUp className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/3"),
-    },
-    {
-        label: "4. Async Patterns and Concurrency",
-        icon: <FaBars className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/4"),
-    },
-    {
-        label: "5. Design Patterns in JavaScript",
-        icon: <FaSearch className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/5"),
-    },
-    {
-        label: "6. Advanced Event Handling",
-        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/6"),
-    },
-    {
-        label: "7. Module Bundling and Lazy Loading",
-        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/7"),
-    },
-    {
-        label: "8. Advanced Regular Expressions",
-        icon: <FaList className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/8"),
-    },
-    {
-        label: "9. Error Handling and Debugging",
-        icon: <FaImage className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/9"),
-    },
-    {
-        label: "10. Web APIs and Performance",
-        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
-        onClick: (e) => handleOnChange("hard/10"),
-    },
+  {
+    label: "1. Query Optimization",
+    icon: <FaTools className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/1"),
+  },
+  {
+    label: "2. Recursive CTEs",
+    icon: <FaProjectDiagram className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/2"),
+  },
+  {
+    label: "3. Table Partitioning",
+    icon: <FaDatabase className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/3"),
+  },
+  {
+    label: "4. Full-Text Search",
+    icon: <FaChartLine className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/4"),
+  },
+  {
+    label: "5. Stored Procedures",
+    icon: <FaCogs className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/5"),
+  },
+  {
+    label: "6. Window Functions",
+    icon: <FaSyncAlt className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/6"),
+  },
+  {
+    label: "7. Data Encryption",
+    icon: <FaLock className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/7"),
+  },
+  {
+    label: "8. Backup & Recovery",
+    icon: <FaRocket className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/8"),
+  },
+  {
+    label: "9. Audit Logging",
+    icon: <FaFingerprint className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/9"),
+  },
+  {
+    label: "10. Cloud Databases",
+    icon: <FaCloud className="inline mr-2 text-xl" />,
+    onClick: (e) => handleOnChange("advanced/10"),
+  },
 ];
 
 
-const sandboxFiles = {
-    'script.js': '', 'eslint.config.mjs': `import globals from "globals";
-import { defineConfig } from "eslint/config";
-
-
-export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs}"], languageOptions: { globals: globals.browser } },
-]);
-`, 'tests.test': `
+const testContent = `
 const fs = require('fs');
 const path = require('path');
 const testsFile = path.join(__dirname, 'web-c.done');
-fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`,
-    'package.json': `{
-  "name": "code4bharat-trybox",
+fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);`
+
+const packageJson = `{
+  "name": "sqlite-exercise",
+  "stackblitz": {
+    "startCommand": "npm run test"
+  },
   "scripts": {
-    "test": "node tests.test",
-    "start": "node tests.test && servor",
-    "output": "node -e \\"console.clear(); console.log('To see output of Javascript: 👉  Open your browsers Developer Tools (F12 or Ctrl+Shift+I) and check the Console tab.')\\" servor"
+    "execute": "node driver.js",
+    "test": "node tests.test"
   },
   "dependencies": {
-    "eslint": "^9.27.0",
-    "globals": "^16.1.0",
-    "esprima": "^4.0.1",
-    "servor": "^4.0.2"
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "eslint": "^9.25.0",
+    "globals": "^16.0.0"
   }
 }
+`
 
-`}
-const sandboxFilesOpened = "index.html"
+const driverJS = `const fs = require("fs");
+const path = require("path");
+const sqlite3 = require("sqlite3").verbose();
 
-export default function JsExercisePlatform() {
+const dbPath = path.join(__dirname, "data", "database.sqlite");
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error("Failed to connect to SQLite DB", err);
+    process.exit(1);
+  }
+});
+
+const code = fs.readFileSync("./script.js", "utf8");
+
+(async () => {
+  try {
+    const run = new Function("db", "require", code);
+    run(db, require);
+  } catch (error) {
+    console.error("Error executing script.js:", error);
+  } finally {
+    db.close();
+  }
+})();`
+
+const sandboxFiles = {
+    'script.js': '',
+    'tests.test': testContent,
+    'driver.js': driverJS,
+    'package.json': packageJson,
+    "data/database.sqlite": ""
+}
+const sandboxFilesOpened = "script.js"
+
+export default function MysqlExercisePlatform() {
     const [menu, setMenu] = useState(basicMenu);
     const [task, setTask] = useState(menu[0].task)
 

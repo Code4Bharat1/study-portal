@@ -81,7 +81,7 @@ export default function CourseCards() {
       rating: "4.6 (103.4k+)",
       courses: 6,
       learners: "451k+ learners",
-      image: "/py.png",
+      image: "/video-imgs/python.png",
       youtubeLink: "https://www.youtube.com/watch?v=t2_Q2BRzeEE&list=PLGjplNEQ1it8-0CmoljS5yeV-GlKSUEt0",
     },
     {
@@ -92,7 +92,7 @@ export default function CourseCards() {
       rating: "4.6 (72.9k+)",
       courses: 23,
       learners: "125k+ learners",
-      image: "/htmlyoutube.png",
+      image: "/video-imgs/html.png",
       youtubeLink: "https://www.youtube.com/watch?v=HcOc7P5BMi4",
     },
     {
@@ -103,7 +103,7 @@ export default function CourseCards() {
       rating: "4.7 (94k+)",
       courses: 4,
       learners: "178k+ learners",
-      image: "/cssyoutube.png",
+      image: "/video-imgs/css.png",
       youtubeLink: "https://www.youtube.com/watch?v=ESnrn1kAD4E",
     },
     {
@@ -114,7 +114,7 @@ export default function CourseCards() {
       rating: "4.5 (40k+)",
       courses: 5,
       learners: "85k+ learners",
-      image: "/mongo.png",
+      image: "/video-imgs/mongo.png",
       youtubeLink: "https://www.youtube.com/watch?v=J6mDkcqU_ZE",
     },
     {
@@ -125,7 +125,7 @@ export default function CourseCards() {
       rating: "4.4 (32k+)",
       courses: 3,
       learners: "68k+ learners",
-      image: "/expres.png",
+      image: "/video-imgs/express.png",
       youtubeLink: "https://www.youtube.com/watch?v=7H_QH9nipNs",
     },
     {
@@ -136,7 +136,7 @@ export default function CourseCards() {
       rating: "4.6 (52k+)",
       courses: 6,
       learners: "105k+ learners",
-      image: "/node.png",
+      image: "/video-imgs/node.png",
       youtubeLink: "https://www.youtube.com/watch?v=AZzV3wZCvI4&list=PL78RhpUUKSwfeSOOwfE9x6l5jTjn5LbY3",
     },
     
@@ -150,7 +150,7 @@ export default function CourseCards() {
       rating: "4.6 (52k+)",
       courses: 6,
       learners: "105k+ learners",
-      image: "/js.png",
+      image: "/video-imgs/js.png",
       youtubeLink: "https://www.youtube.com/watch?v=ajdRvxDWH4w&list=PLGjplNEQ1it_oTvuLRNqXfz_v_0pq6unW",
     },
     ,
@@ -162,7 +162,7 @@ export default function CourseCards() {
       rating: "4.6 (52k+)",
       courses: 6,
       learners: "105k+ learners",
-      image: "/react1.png",
+      image: "/video-imgs/react.png",
       youtubeLink: "https://www.youtube.com/watch?v=4z9bvgTlxKw&list=PLwGdqUZWnOp1Rab71vx2zMF6qpwGDB2Z1",
     },
     ,
@@ -174,7 +174,7 @@ export default function CourseCards() {
       rating: "4.6 (52k+)",
       courses: 6,
       learners: "105k+ learners",
-      image: "/php.png",
+      image: "/video-imgs/php.png",
       youtubeLink: "https://www.youtube.com/watch?v=D4DXbRsQAOA&list=PL8p2I9GklV44cSOlKzB_0TrzxEgwfvicK",
     },
 
@@ -187,7 +187,7 @@ export default function CourseCards() {
       rating: "4.6 (52k+)",
       courses: 6,
       learners: "105k+ learners",
-      image: "/java.png",
+      image: "/video-imgs/java.png",
       youtubeLink: "https://www.youtube.com/watch?v=yRpLlJmRo2w&list=PLfqMhTWNBTe3LtFWcvwpqTkUSlB32kJop",
     },
 
@@ -199,7 +199,7 @@ export default function CourseCards() {
       rating: "4.6 (52k+)",
       courses: 6,
       learners: "105k+ learners",
-      image: "/sql1.png",
+      image: "/video-imgs/sql.png",
       youtubeLink: "https://www.youtube.com/watch?v=323H_mOOWQ4&list=PLxCzCOWd7aiFbom4rYyl5qROgqYuCuAPD",
     },
     {
@@ -210,7 +210,7 @@ export default function CourseCards() {
       rating: "4.6 (52k+)",
       courses: 6,
       learners: "105k+ learners",
-      image: "/mysql.png",
+      image: "/video-imgs/mysql.png",
       youtubeLink: "https://www.youtube.com/watch?v=KKgN_w71x3E&list=PLjVLYmrlmjGeyCPgdHL2vWmEGKxcpsC0E",
     },
     {
@@ -221,7 +221,7 @@ export default function CourseCards() {
       rating: "4.6 (52k+)",
       courses: 6,
       learners: "105k+ learners",
-      image: "/nextjs.png",
+      image: "/video-imgs/nextjs.png",
       youtubeLink: "https://www.youtube.com/watch?v=eaQc7vbV4po",
     },
 
