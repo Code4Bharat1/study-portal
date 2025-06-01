@@ -27,7 +27,6 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
       .then((vm) => {
         const intervalId = setInterval(async () => {
           const files = Object.keys(await vm.getFsSnapshot());
-          console.log(files);
           if (files.includes('web-c.done')) {
             clearInterval(intervalId);
             onLoad();
@@ -35,7 +34,8 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
             // Save start timestamp in localStorage (always overwrite)
             localStorage.setItem('startTimestamp', Date.now().toString());
 
-            vm.applyFsDiff({ destroy: ['web-c.done'], create: {} });
+            vm.applyFsDiff({ destroy: ['web-c.done'], create: {'result.tests':"", 'attempts.tests':""} });
+            vm.applyFsDiff({ destroy: ['result.tests', 'attempts.tests'], create: {} });
 
             setLoading(false)
           }

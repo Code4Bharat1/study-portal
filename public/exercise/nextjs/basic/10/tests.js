@@ -143,11 +143,11 @@ if (!syntaxPassed) {
       timestamp: new Date().toISOString(),
     };
     try {
-      fs.writeFileSync('result.txt', JSON.stringify(resultData, null, 2), 'utf-8');
-      console.log('\n✅ All tests passed. Results saved to result.txt.');
+      fs.writeFileSync('results.tests', JSON.stringify(resultData, null, 2), 'utf-8');
+      console.log('\n✅ All tests passed. Results saved to results.tests.');
       process.exit(0);
     } catch (e) {
-      console.log(`Failed to write to result.txt: ${e}`);
+      console.log(`Failed to write to results.tests: ${e}`);
       process.exit(1);
     }
   } else {

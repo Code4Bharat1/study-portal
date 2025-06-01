@@ -67,7 +67,7 @@ export default function handler(req, res) {
 }`}</code>
           </pre>
           <p className="mb-4">
-            <span className="font-semibold">For Coders:</span> This route responds to GET with a message and to POST by echoing the request body. In App Router, use <code>export async function POST(req)</code> for method-specific handlers.
+            <span className="font-semibold">For Coders:</span> This route responds to GET with a message and to POST by /bin/echoing the request body. In App Router, use <code>export async function POST(req)</code> for method-specific handlers.
           </p>
         </section>
 

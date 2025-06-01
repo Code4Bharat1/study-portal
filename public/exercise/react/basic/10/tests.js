@@ -9,7 +9,7 @@ const { render, screen } = require('@testing-library/react');
 require('@testing-library/jest-dom');
 
 const ATTEMPTS_FILE = 'attempts.json';
-const RESULT_FILE = 'result.txt';
+const RESULT_FILE = 'results.tests';
 const code = fs.readFileSync('script.js', 'utf-8');
 
 function readAttempts() {

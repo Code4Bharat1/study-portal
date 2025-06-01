@@ -49,9 +49,9 @@ export default function PhpAuthentication() {
   // Login process
   $input_password = "mypassword"; // from login form
   if (password_verify($input_password, $hashed_password)) {
-    echo "Login successful!";
+    /bin/echo "Login successful!";
   } else {
-    echo "Invalid password!";
+    /bin/echo "Invalid password!";
   }
 ?>`}
             </code>
@@ -75,7 +75,7 @@ export default function PhpAuthentication() {
 
   // Check login
   if (isset($_SESSION["user_id"])) {
-    echo "Welcome, " . $_SESSION["username"];
+    /bin/echo "Welcome, " . $_SESSION["username"];
   }
 
   // Logout
@@ -108,9 +108,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   if ($email === $stored_email && password_verify($password, $stored_hashed_password)) {
     $_SESSION["email"] = $email;
-    echo "Login successful! Welcome " . $email;
+    /bin/echo "Login successful! Welcome " . $email;
   } else {
-    echo "Invalid credentials!";
+    /bin/echo "Invalid credentials!";
   }
 }
 ?>

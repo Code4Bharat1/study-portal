@@ -65,10 +65,10 @@ $result = $conn->query($sql);
 // Output data
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
-    echo "ID: " . $row["id"]. " - Name: " . $row["name"]. "<br>";
+    /bin/echo "ID: " . $row["id"]. " - Name: " . $row["name"]. "<br>";
   }
 } else {
-  echo "0 results";
+  /bin/echo "0 results";
 }
 
 $conn->close();
@@ -93,10 +93,10 @@ $result = mysqli_query($conn, $sql);
 
 if (mysqli_num_rows($result) > 0) {
   while($row = mysqli_fetch_assoc($result)) {
-    echo "ID: " . $row["id"]. " - Name: " . $row["name"]. "<br>";
+    /bin/echo "ID: " . $row["id"]. " - Name: " . $row["name"]. "<br>";
   }
 } else {
-  echo "0 results";
+  /bin/echo "0 results";
 }
 
 mysqli_close($conn);
@@ -117,11 +117,11 @@ try {
   $stmt = $pdo->query("SELECT id, name FROM users");
 
   while ($row = $stmt->fetch()) {
-    echo "ID: " . $row["id"] . " - Name: " . $row["name"] . "<br>";
+    /bin/echo "ID: " . $row["id"] . " - Name: " . $row["name"] . "<br>";
   }
 
 } catch(PDOException $e) {
-  echo "Connection failed: " . $e->getMessage();
+  /bin/echo "Connection failed: " . $e->getMessage();
 }
 ?>`}
           </code>
@@ -156,9 +156,9 @@ $conn = new mysqli("localhost", "root", "", "testdb");
 $sql = "INSERT INTO users (name, email) VALUES ('John Doe', 'john@example.com')";
 
 if ($conn->query($sql) === TRUE) {
-  echo "New record created successfully";
+  /bin/echo "New record created successfully";
 } else {
-  echo "Error: " . $sql . "<br>" . $conn->error;
+  /bin/echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
 $conn->close();
@@ -196,7 +196,7 @@ $name = "Jane Doe";
 $email = "jane@example.com";
 $stmt->execute();
 
-echo "Record inserted successfully";
+/bin/echo "Record inserted successfully";
 
 $stmt->close();
 $conn->close();

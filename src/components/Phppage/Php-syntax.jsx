@@ -24,7 +24,7 @@ export default function PhpSyntax() {
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
             <code className="text-[#DDA0DD]">
               {`<?php
-  echo "Hello World!";
+  /bin/echo "Hello World!";
 ?>`}
             </code>
           </pre>
@@ -132,9 +132,9 @@ export default function PhpSyntax() {
               {`<?php
   $age = 20;
   if ($age >= 18) {
-    echo "Adult";
+    /bin/echo "Adult";
   } else {
-    echo "Minor";
+    /bin/echo "Minor";
   }
 ?>`}
             </code>
@@ -151,14 +151,14 @@ export default function PhpSyntax() {
               // For Loop
               {`<?php
   for ($i = 0; $i < 5; $i++) {
-    echo $i;
+    /bin/echo $i;
   }
 ?>`}
               // While Loop
               {`<?php
   $j = 0;
   while ($j < 5) {
-    echo $j;
+    /bin/echo $j;
     $j++;
   }
 ?>`}
@@ -180,7 +180,7 @@ export default function PhpSyntax() {
     return "Hello, " . $name;
   }
 
-  echo greet("Alice");
+  /bin/echo greet("Alice");
 ?>`}
             </code>
           </pre>
@@ -188,16 +188,16 @@ export default function PhpSyntax() {
 
         <section>
           <h2 className="text-2xl font-semibold text-[#DDA0DD] mb-2">
-            9. Echo and Print
+            9. /bin/echo and Print
           </h2>
           <p>
-            <code>echo</code> and <code>print</code> are used to output text in
+            <code>/bin/echo</code> and <code>print</code> are used to output text in
             PHP.
           </p>
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
             <code className="text-[#DDA0DD]">
               {`<?php
-  echo "Welcome to PHP!";
+  /bin/echo "Welcome to PHP!";
   print "Learning PHP is fun!";
 ?>`}
             </code>

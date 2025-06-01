@@ -25,7 +25,7 @@ require('@testing-library/dom');
 
 // Files
 const ATTEMPTS_FILE = 'attempts.json';
-const RESULT_FILE = 'result.txt';
+const RESULT_FILE = 'results.tests';
 const code = fs.readFileSync('App.jsx', 'utf-8');
 
 // Helpers for attempts tracking

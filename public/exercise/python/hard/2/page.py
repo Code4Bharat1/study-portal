@@ -9,7 +9,7 @@ import ast
 
 # File paths
 ATTEMPTS_FILE = 'attempts.json'
-RESULT_FILE = 'result.txt'
+RESULT_FILE = 'results.tests'
 
 # Read Python code
 with open('script.py', 'r', encoding='utf-8') as f:

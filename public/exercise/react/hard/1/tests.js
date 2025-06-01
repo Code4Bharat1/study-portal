@@ -7,7 +7,7 @@ const { render, screen, fireEvent } = require('@testing-library/react');
 require('@testing-library/dom');
 
 const ATTEMPTS_FILE = 'attempts.json';
-const RESULT_FILE = 'result.txt';
+const RESULT_FILE = 'results.tests';
 const FILE_PATH = 'App.jsx';
 
 const code = fs.readFileSync(FILE_PATH, 'utf-8');

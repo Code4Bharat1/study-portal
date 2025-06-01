@@ -190,7 +190,7 @@
 //                     <code className="block whitespace-pre">
 // {`<?php
 // // Output text
-// echo "Hello, PHP!\\n";
+// /bin/echo "Hello, PHP!\\n";
 
 // // Variables
 // $name = "Amaan";
@@ -198,9 +198,9 @@
 
 // // Conditional
 // if ($age >= 18) {
-//     echo "$name is an adult.\\n";
+//     /bin/echo "$name is an adult.\\n";
 // } else {
-//     echo "$name is not an adult.\\n";
+//     /bin/echo "$name is not an adult.\\n";
 // }
 // ?>
 // `}
@@ -460,7 +460,7 @@ export default function PHPPage() {
                   <code>
                     {`<?php
 // Output text
-echo "Hello, PHP!\\n";
+/bin/echo "Hello, PHP!\\n";
 
 // Variables
 $name = "Jaya";
@@ -468,9 +468,9 @@ $age = 19;
 
 // Conditional
 if ($age >= 18) {
-    echo "$name is an adult.\\n";
+    /bin/echo "$name is an adult.\\n";
 } else {
-    echo "$name is not an adult.\\n";
+    /bin/echo "$name is not an adult.\\n";
 }
 ?>`}
                   </code>

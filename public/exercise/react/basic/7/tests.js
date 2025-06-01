@@ -26,7 +26,7 @@ const APP_FILE = path.resolve(__dirname, 'App.jsx');
 const code = fs.readFileSync(APP_FILE, 'utf-8');
 
 const ATTEMPTS_FILE = 'attempts.json';
-const RESULT_FILE = 'result.txt';
+const RESULT_FILE = 'results.tests';
 
 function readAttempts() {
   if (fs.existsSync(ATTEMPTS_FILE)) {

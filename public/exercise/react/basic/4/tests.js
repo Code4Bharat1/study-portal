@@ -26,7 +26,7 @@ global.navigator = { userAgent: 'node.js' };
 // Paths
 const APP_FILE = path.resolve(__dirname, 'App.jsx');
 const ATTEMPTS_FILE = 'attempts.json';
-const RESULT_FILE = 'result.txt';
+const RESULT_FILE = 'results.tests';
 const code = fs.readFileSync(APP_FILE, 'utf-8');
 
 // Attempt Handling

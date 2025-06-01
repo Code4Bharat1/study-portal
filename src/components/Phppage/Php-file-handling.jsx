@@ -62,7 +62,7 @@ export default function PhpFileHandling() {
   fclose($file);
   
   // Read file
-  echo file_get_contents("test.txt");
+  /bin/echo file_get_contents("test.txt");
   
   // File upload
   $target_dir = "uploads/";
@@ -110,8 +110,8 @@ export default function PhpFileHandling() {
   file_put_contents("test2.txt", "Hello PHP!");
   
   // Get file size and last modified time
-  echo filesize("test.txt"); // Outputs the size of the file in bytes
-  echo filemtime("test.txt"); // Outputs the last modified timestamp
+  /bin/echo filesize("test.txt"); // Outputs the size of the file in bytes
+  /bin/echo filemtime("test.txt"); // Outputs the last modified timestamp
   
   // Creating and removing directories
   mkdir("new_folder");
@@ -217,16 +217,16 @@ export default function PhpFileHandling() {
               {`<?php
   // Checking if file exists
   if (file_exists("test.txt")) {
-    echo "File exists!";
+    /bin/echo "File exists!";
   } else {
-    echo "File not found.";
+    /bin/echo "File not found.";
   }
   
   // Error handling with try-catch (PHP 7+)
   try {
     $file = fopen("test.txt", "r");
   } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    /bin/echo "Error: " . $e->getMessage();
   }
 ?>`}
             </code>

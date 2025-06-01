@@ -104,11 +104,11 @@ if (!syntaxPassed) {
   if (allPassed) {
     const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, functionalCheckPassed: functionalPassed, timestamp: new Date().toISOString() };
     try {
-      fs.writeFileSync('result.txt', JSON.stringify(resultData, null, 2));
-      console.log(`\n✅ All tests passed. Results saved to result.txt.`);
+      fs.writeFileSync('results.tests', JSON.stringify(resultData, null, 2));
+      
       process.exit(0);
     } catch (e) {
-      console.log(`Failed to write result.txt: ${e}`);
+      
       process.exit(1);
     }
   } else {

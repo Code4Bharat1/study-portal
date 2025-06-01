@@ -8,7 +8,7 @@ const { render, screen } = require('@testing-library/react');
 
 // File paths
 const ATTEMPTS_FILE = 'attempts.json';
-const RESULT_FILE = 'result.txt';
+const RESULT_FILE = 'results.tests';
 
 // Read JavaScript code
 const code = fs.readFileSync('script.js', 'utf-8');

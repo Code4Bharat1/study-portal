@@ -16,7 +16,7 @@ const { render, screen, waitFor } = require('@testing-library/react');
 require('@testing-library/dom'); // no jest-dom here
 
 const ATTEMPTS_FILE = 'attempts.json';
-const RESULT_FILE = 'result.txt';
+const RESULT_FILE = 'results.tests';
 const code = fs.readFileSync('App.jsx', 'utf-8');
 
 function readAttempts() {

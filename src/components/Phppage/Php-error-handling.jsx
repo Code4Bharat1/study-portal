@@ -63,12 +63,12 @@ export default function PhpErrorHandling() {
               {`<?php
   // Define a custom error handler function
   function customError($errno, $errstr) {
-    echo "<b>Error:</b> [$errno] $errstr"; // Display the error number and message
+    /bin/echo "<b>Error:</b> [$errno] $errstr"; // Display the error number and message
   }
   set_error_handler("customError"); // Set the custom error handler
 
   // Trigger an error
-  echo($test); // Undefined variable triggers an error
+  /bin/echo($test); // Undefined variable triggers an error
 ?>`}
             </code>
           </pre>
@@ -77,7 +77,7 @@ export default function PhpErrorHandling() {
             errors. It takes two parameters: the error number (`$errno`) and the
             error message (`$errstr`). The `set_error_handler()` function tells
             PHP to use `customError()` whenever an error occurs. When the
-            undefined variable `$test` is echoed, it triggers an error, and the
+            undefined variable `$test` is /bin/echoed, it triggers an error, and the
             custom handler is used to display the error.
           </p>
 
@@ -125,7 +125,7 @@ export default function PhpErrorHandling() {
     }
   } catch (Exception $e) {
     // Catch the exception and display the message
-    echo 'Caught exception: ' . $e->getMessage(); // Output: "Caught exception: Value must be 5 or below"
+    /bin/echo 'Caught exception: ' . $e->getMessage(); // Output: "Caught exception: Value must be 5 or below"
   }
 ?>`}
             </code>
@@ -159,7 +159,7 @@ export default function PhpErrorHandling() {
   try {
     throw new CustomException("Something went wrong");
   } catch (CustomException $e) {
-    echo $e->errorMessage(); // Output: Custom error occurred: Something went wrong
+    /bin/echo $e->errorMessage(); // Output: Custom error occurred: Something went wrong
   }
 ?>`}
             </code>

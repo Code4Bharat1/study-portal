@@ -22,7 +22,7 @@ const { render, screen, waitFor } = require('@testing-library/react');
 require('@testing-library/dom');
 
 const ATTEMPTS_FILE = 'attempts.json';
-const RESULT_FILE = 'result.txt';
+const RESULT_FILE = 'results.tests';
 const code = fs.readFileSync('script.js', 'utf-8');
 
 // Track attempts

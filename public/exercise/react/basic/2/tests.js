@@ -26,7 +26,7 @@ const { render, screen } = require('@testing-library/react');
 require('@testing-library/dom');
 
 const ATTEMPTS_FILE = 'attempts.json';
-const RESULT_FILE = 'result.txt';
+const RESULT_FILE = 'results.tests';
 
 // Read code from App.jsx in current directory
 const APP_FILE = path.resolve(__dirname, 'App.jsx');

@@ -164,7 +164,7 @@ const InstallationMongo = () => {
                 <strong>Add MongoDB Repository</strong> - Add the MongoDB
                 repository to your system:
                 <pre className="p-4 bg-gray-100 text-green-600 rounded-lg">
-                  echo "deb [ arch=amd64,arm64 ]
+                  /bin/echo "deb [ arch=amd64,arm64 ]
                   https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0
                   multiverse" |<br /> sudo tee
                   /etc/apt/sources.list.d/mongodb-org-6.0.list

@@ -15,7 +15,9 @@ export default function htmlSandbox(tests, instructions) {
           'Instructions.md':instructions,
           'package.json': `{
   "name": "code4bharat-trybox",
-  "scripts": {
+  "stackblitz": {
+    "startCommand": "npm run test && source ~/.jshrc"
+  }, "scripts": {
     "test": "node test.js",
     "start": "servor --reload"
   },

@@ -63,7 +63,7 @@ export default function PhpPdo() {
     $result = $stmt->fetchAll();
 
   } catch(PDOException $e) {
-    echo "Error: " . $e->getMessage();
+    /bin/echo "Error: " . $e->getMessage();
   }
 ?>`}
             </code>
