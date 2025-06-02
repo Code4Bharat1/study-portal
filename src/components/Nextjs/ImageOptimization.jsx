@@ -36,7 +36,7 @@ const NextImageOptimizationPage = () => {
           </p>
 
           <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
-            <code>{`// app/components/MyComponent.js
+            <code>{`// app/@/components/MyComponent.js
 import Image from 'next/image';
 
 export default function MyComponent() {

@@ -8,7 +8,7 @@ import TestPassed from "@/components/Modals/TaskPassed";
 import TestNotPassed from "@/components/Modals/TaskNotPassed";
 import Modal from "@/components/Modals/Modal";
 
-export default function QuestionPlatform({
+export default function ProjectPlatform({
   setSidebarContent,
   menuItems,
   files,

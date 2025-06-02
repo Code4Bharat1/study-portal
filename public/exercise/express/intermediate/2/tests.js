@@ -106,6 +106,6 @@ async function checkLoggerMiddleware() {
   } else {
     writeAttempts(attempts + 1);
     console.log(`\n❌ One or more checks failed for "Custom Logger". Attempt #${attempts + 1} saved.`);
-    process.exit(1);
+    ;
   }
 })();

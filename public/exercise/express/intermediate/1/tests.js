@@ -105,6 +105,6 @@ async function checkRouterUsage() {
   } else {
     writeAttempts(attempts + 1);
     console.log(`\n❌ One or more checks failed for "Use Router". Attempt #${attempts + 1} saved.`);
-    process.exit(1);
+    ;
   }
 })();

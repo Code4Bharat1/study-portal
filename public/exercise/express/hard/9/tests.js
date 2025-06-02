@@ -107,6 +107,6 @@ async function sentryVerify() {
   } else {
     writeAttempts(attempts + 1);
     console.log(`\n❌ One or more checks failed. Attempt #${attempts + 1} saved.`);
-    process.exit(1);
+    ;
   }
 })();

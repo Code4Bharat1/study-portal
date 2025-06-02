@@ -88,7 +88,7 @@ async function checkServer() {
   const syntaxOk = await checkSyntax();
   if (!syntaxOk) {
     console.log('\n❌ Syntax errors prevent further checks.');
-    process.exit(1);
+    ;
   }
 
   const structureOk = checkStructure();
@@ -108,12 +108,12 @@ async function checkServer() {
       process.exit(0);
     } catch (e) {
       console.log(`Failed to write results.tests: ${e}`);
-      process.exit(1);
+      ;
     }
   } else {
     attempts += 1;
     writeAttempts(attempts);
     console.log(`\n❌ Tests failed. Attempt #${attempts} recorded.`);
-    process.exit(1);
+    ;
   }
 })();

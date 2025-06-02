@@ -649,17 +649,13 @@ const indexHtml = `<!DOCTYPE html>
 const packageJson = `{
   "name": "react-exercise",
   "stackblitz": {
-    "startCommand": "npm run test"
-  },
-  "stackblitz": {
-    "startCommand": "npm run test && source ~/.jshrc"
+    "startCommand": "node tests.test && source ~/.jshrc",
+"installDependencies": false
   }, "scripts": {
-    "start": "node tests.test && npm run dev",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "node tests.test"
   },
   "dependencies": {
     "eslint-plugin-react": "^7.37.5",
@@ -789,6 +785,8 @@ export default function ReactExercisePlatform() {
       files={sandboxFiles}
       filesOpened={sandboxFilesOpened}
       setSidebarContent={setSidebarContent}
+      title={"React"}
+
     />
   );
 }

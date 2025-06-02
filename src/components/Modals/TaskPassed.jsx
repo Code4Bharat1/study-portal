@@ -1,8 +1,8 @@
-// components/TestPassed.jsx
+// @/components/TestPassed.jsx
 import { useEffect, useState } from "react";
 import { LEVEL_SCORE_MAP, calculateScore } from "./utils";
 
-export default function TestPassed({ result, level, onClose }) {
+export default function TestPassed({ result, level, onClose, url}) {
   const [score, setScore] = useState(0);
   const [timeTaken, setTimeTaken] = useState(0);
   const [breakdown, setBreakdown] = useState({ passScore: 0, attemptScore: 0, timeScore: 0 });
@@ -16,8 +16,6 @@ export default function TestPassed({ result, level, onClose }) {
     const end = endTime.getTime()
     const start = startTime.getTime();
     const duration = (end - start) / 1000;
-
-    console.log(end, start, duration)
 
     setTimeTaken(duration);
 
@@ -35,7 +33,7 @@ export default function TestPassed({ result, level, onClose }) {
         "Content-Type": "application/json",
         Authorization: localStorage.getItem("token"),
       },
-      body: JSON.stringify({ score }),
+      body: JSON.stringify({ score, url }),
     })
       .then((res) => res.json())
       .then((data) => console.log("Score submitted:", data))

@@ -123,7 +123,7 @@ function codeVerify() {
 const syntaxPassed = await syntaxVerify();
 if (!syntaxPassed) {
   console.log('\n❌ Syntax errors prevent further checks.');
-  process.exit(1);
+  ;
 }
 
   const structurePassed = codeVerify();
@@ -147,6 +147,6 @@ if (!syntaxPassed) {
     attempts += 1;
     writeAttempts(attempts);
     console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
-    process.exit(1);
+    ;
   }
 })();

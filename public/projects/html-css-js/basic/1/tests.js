@@ -126,7 +126,7 @@ async function main() {
     attempts++;
     saveAttempts(attempts);
     console.log(`Attempts so far: ${attempts}`);
-    process.exit(1);
+    ;
   }
 
   if (!structure.indexHtmlExists) {

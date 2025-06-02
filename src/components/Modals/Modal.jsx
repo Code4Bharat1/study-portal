@@ -1,4 +1,4 @@
-// components/Modal.js
+// @/components/Modals.js
 export default function Modal({ children, onClose, ariaLabel }) {
   return (
     <>
