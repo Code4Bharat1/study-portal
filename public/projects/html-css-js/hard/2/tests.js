@@ -109,7 +109,7 @@ async function runTests() {
   // All tests passed
   fs.writeFileSync(resultFile, JSON.stringify({
     project: "hard/1 Single Page Application",
-    passed: true,
+    
     timestamp: new Date().toISOString()
   }, null, 2));
 

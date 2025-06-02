@@ -4,7 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 const DB_PATH = path.join(__dirname, 'data', 'test.db');
 const USER_SCRIPT_PATH = path.join(__dirname, 'script.js');
-const ATTEMPT_FILE = path.join(__dirname, 'attempt_intermediate_7.json');
+const ATTEMPT_FILE = path.join(__dirname'attempts.tests';
 const PASS_FILE = path.join(__dirname, 'passed_intermediate_7.txt');
 
 function loadAttempts() {

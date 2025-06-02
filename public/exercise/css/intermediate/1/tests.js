@@ -10,7 +10,7 @@ const css = fs.readFileSync('style.css', 'utf-8');
 
 function readAttempts() {
   try {
-    return fs.existsSync('attempts.json') ? JSON.parse(fs.readFileSync('attempts.json')).count || 1 : 1;
+    return fs.existsSync('attempts.tests') ? JSON.parse(fs.readFileSync('attempts.tests')).count || 1 : 1;
   } catch {
     return 1;
   }
@@ -18,9 +18,9 @@ function readAttempts() {
 
 function writeAttempts(count) {
   try {
-    fs.writeFileSync('attempts.json', JSON.stringify({ count }, null, 2));
+    fs.writeFileSync('attempts.tests', JSON.stringify({ count }, null, 2));
   } catch (e) {
-    console.log(`Failed to write attempts.json: ${e}`);
+    console.log(`Failed to write attempts.tests: ${e}`);
   }
 }
 
@@ -106,7 +106,7 @@ if (!syntaxPassed) {
 
   let attempts = readAttempts();
   if (allPassed) {
-    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, functionalCheckPassed: functionalPassed, timestamp: new Date().toISOString() };
+    const resultData = { attempts, linesOfCode, executionTime,  timestamp: new Date().toISOString() };
     try {
       fs.writeFileSync('results.tests', JSON.stringify(resultData, null, 2));
       

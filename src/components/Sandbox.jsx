@@ -8,6 +8,12 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
   const [loading, setLoading] = useState(true); // <-- loading state
 
   useEffect(() => {
+    const handleKeyDown = (event) => {
+      console.log(`Key pressed: ${event.key}, Code: ${event.code}`);
+    };
+
+    // Clean up the event listener when the component unmounts
+
     sdk
       .embedProject(
         containerId,
@@ -19,9 +25,9 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
         },
         {
           openFile: fileToOpen,
-          view: 'console',
-          hideDevTools: false,
+          hideDevTools: true,
           theme: 'light',
+          // hideExplorer: true
         }
       )
       .then((vm) => {
@@ -30,12 +36,12 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
           if (files.includes('web-c.done')) {
             clearInterval(intervalId);
             onLoad();
+            console.log("window:", window)
 
             // Save start timestamp in localStorage (always overwrite)
             localStorage.setItem('startTimestamp', Date.now().toString());
 
-            vm.applyFsDiff({ destroy: ['web-c.done'], create: {'result.tests':"", 'attempts.tests':""} });
-            vm.applyFsDiff({ destroy: ['result.tests', 'attempts.tests'], create: {} });
+            vm.applyFsDiff({ destroy: ['web-c.done'], create: {} });
 
             setLoading(false)
           }
@@ -49,7 +55,7 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
         sdk.connect(container).then((vm) => {
           const intervalId = setInterval(async () => {
             const files = Object.keys(await vm.getFsSnapshot());
-            console.log(files);
+
             if (files.includes('web-c.done')) {
               clearInterval(intervalId);
               onLoad();
@@ -67,19 +73,19 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
   }, [filesObj, fileToOpen, onLoad]);
 
   return (
-  <>
-  <div id={containerId} className="w-screen h-[calc(100vh-11rem)]" />;
-  {loading && (
+    <>
+      <div id={containerId} className="w-screen h-[calc(100vh-11rem)]" />;
+      {loading && (
         <div
-    className="absolute inset-0 bg-white/10 backdrop-blur-[2px] flex items-center justify-center z-50"
-    tabIndex={0}
-    onKeyDown={(e) => e.preventDefault()}
-    onKeyUp={(e) => e.preventDefault()}
-  >
+          className="absolute inset-0 bg-white/10 backdrop-blur-[2px] flex items-center justify-center z-50"
+          tabIndex={0}
+          onKeyDown={(e) => e.preventDefault()}
+          onKeyUp={(e) => e.preventDefault()}
+        >
           <span className="text-lg font-semibold text-gray-700">Loading Sidebar, Sandbox & Installing Dependencies</span>
         </div>
       )}
-  </>
+    </>
 
   )
 }

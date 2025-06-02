@@ -7,7 +7,7 @@ from io import StringIO
 import ast
 
 # File paths
-ATTEMPTS_FILE = 'attempts.json'
+ATTEMPTS_FILE = 'attempts.tests'
 RESULT_FILE = 'results.tests'
 
 # Read Python code
@@ -22,7 +22,7 @@ def read_attempts():
                 data = json.load(f)
                 return data.get('count', 1) if data.get('count', 0) >= 1 else 1
         except (json.JSONDecodeError, KeyError):
-            print('Error parsing attempts.json. Resetting counter.')
+            print('Error parsing attempts.tests. Resetting counter.')
             return 1
     return 1
 

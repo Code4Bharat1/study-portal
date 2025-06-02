@@ -1,8 +1,11 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import Sandbox from "@/components/Sandbox";
 import ReactMarkdown from "react-markdown";
+import sdk from '@stackblitz/sdk';
+// import axios from 'axios';
+
 
 // Template Markdown content
 const markdownContent = `
@@ -91,7 +94,7 @@ function Instructions({ task, onClose }) {
   );
 }
 
-const TestPassed = ({ result, level }) => {
+const TestPassed = ({ result, level, onClose }) => {
   const [score, setScore] = useState(0);
   const [timeTaken, setTimeTaken] = useState(0);
   const [breakdown, setBreakdown] = useState({
@@ -99,10 +102,10 @@ const TestPassed = ({ result, level }) => {
     attemptScore: 0,
     timeScore: 0,
   });
-  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const startTime = localStorage.getItem("startTime");
+    console.log(result)
+    const startTime = localStorage.getItem('startTimestamp');
     if (!startTime) {
       console.error("Start time not found in local storage.");
       return;
@@ -113,7 +116,7 @@ const TestPassed = ({ result, level }) => {
     const durationInSeconds = (endTime - start) / 1000;
     setTimeTaken(durationInSeconds);
 
-    const passed = result.syntaxCheckPassed && result.structureCheckPassed;
+    const passed = 1;
 
     let max_score = 0;
     if (level == "Hard") {
@@ -126,15 +129,14 @@ const TestPassed = ({ result, level }) => {
 
     const passScore = passed ? 0.6 * max_score : 0;
 
-    const attemptScore =
-      result.attempts < 10
-        ? ((10 - result.attempts) / 10) * (0.2 * max_score)
-        : 0;
+    const attemptScore = result.attempts < 10
+      ? ((10 - result.attempts) / 10) * (0.2 * max_score)
+      : 0;
 
-    const timeScore =
-      durationInSeconds < 120
-        ? ((120 - durationInSeconds) / 120) * (0.2 * max_score)
-        : 0;
+    const timeScore = durationInSeconds < 120
+      ? ((120 - durationInSeconds) / 120) * (0.2 * max_score)
+      : 0;
+
 
     const totalScore = passScore + attemptScore + timeScore;
 
@@ -147,12 +149,24 @@ const TestPassed = ({ result, level }) => {
   }, [result]);
 
   const handleClose = () => {
-    setVisible(false);
+    onClose()
 
-    axios
-      .post("http://localhost:3902/submit/exercise", loginData)
-      .then((response) => {
-        console.log("Success:", response.data);
+    fetch('http://localhost:3902/submit/exercise', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+      },
+      body: JSON.stringify(score)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Success:', data);
         // handle success
       })
       .catch((error) => {
@@ -160,8 +174,6 @@ const TestPassed = ({ result, level }) => {
         // handle error
       });
   };
-
-  if (!visible) return null;
 
   return (
     <div className="max-w-xl mx-auto mt-12 p-6 bg-green-50 border border-green-200 rounded-lg shadow relative">
@@ -224,7 +236,7 @@ function TestNotPassed({ onClose }) {
     <>
       {/* Background Overlay */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-opacity-50 backdrop-blur-sm z-40"
         onClick={onClose}
       />
 
@@ -284,8 +296,9 @@ export default function QuestionPlatform({
       const vm = await sdk.connect(container);
 
       const fsSnap = await vm.getFsSnapshot();
-      if (Object.keys(fsSnap).includes("result.tests")) {
-        setResult(fsSnap["result.tests"]);
+      if ((Object.keys(fsSnap)).includes('results.tests')) {
+        console.log(fsSnap["results.tests"])
+        setResult(fsSnap["results.tests"]);
         setResultPage(true);
         return;
       } else {
@@ -331,9 +344,9 @@ export default function QuestionPlatform({
         </div>
       )}
 
-      {showAlert && <TestNotPassed onClose={() => setShowModal(false)} />}
+      {showAlert && <TestNotPassed onClose={() => setAlert(false)} />}
 
-      {showResult && <TestPassed result={result} />}
+      {showResult && <TestPassed result={result} onClose={() => setResultPage(false)} />}
 
       {/* Top Bar */}
       <div className="flex justify-between items-center py-5 pl-3 pr-1 relative z-10">

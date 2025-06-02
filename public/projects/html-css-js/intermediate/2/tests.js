@@ -119,7 +119,7 @@ async function runTests() {
     resultFile,
     JSON.stringify({
       project: "intermediate/2 Interactive Photo Gallery",
-      passed: true,
+      
       attempts: fs.existsSync(attemptsFile) ? parseInt(fs.readFileSync(attemptsFile, "utf8"), 10) : 0,
       timestamp: new Date().toISOString(),
     })

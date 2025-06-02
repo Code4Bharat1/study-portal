@@ -3,8 +3,25 @@ const supertest = require('supertest');
 const fs = require('fs');
 const path = require('path');
 
+const attemptsFile = path.join(__dirname, 'attempts.tests');
+const resultFile = path.join(__dirname, 'results.tests');
 const jsFile = path.join(process.cwd(), 'index.js'); // Adjust if needed
 const js = fs.readFileSync(jsFile, 'utf8');
+
+function readAttempts() {
+  if (fs.existsSync(attemptsFile)) {
+    try {
+      return Math.max(1, JSON.parse(fs.readFileSync(attemptsFile)).count);
+    } catch {
+      return 1;
+    }
+  }
+  return 1;
+}
+
+function writeAttempts(count) {
+  fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+}
 
 async function checkSyntax() {
   const eslint = new ESLint();
@@ -46,10 +63,6 @@ async function checkPatchUser() {
 
     const request = supertest(app);
 
-    // The test assumes PATCH /user/:id endpoint that patches user fields
-    // We send patch data and expect the updated user object in response
-
-    // For testing, assume id=1 or id=some fixed value
     const userId = '1';
 
     const patchData = {
@@ -72,7 +85,6 @@ async function checkPatchUser() {
       return false;
     }
 
-    // Check if response contains updated fields
     const updatedUsername = res.body.username;
     const updatedEmail = res.body.email;
 
@@ -96,15 +108,30 @@ async function checkPatchUser() {
 }
 
 (async () => {
+  const start = process.hrtime();
   const syntaxOk = await checkSyntax();
   const exportOk = checkExport();
   const patchOk = await checkPatchUser();
+  const allPassed = syntaxOk && exportOk && patchOk;
 
-  if (syntaxOk && exportOk && patchOk) {
-    console.log('\n✅ All checks passed for "Patch User".');
+  const [sec, nano] = process.hrtime(start);
+  const executionTime = +(sec + nano / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(Boolean).length;
+  const attempts = readAttempts();
+
+  if (allPassed) {
+    fs.writeFileSync(resultFile, JSON.stringify({
+      task: 'Patch User',
+      attempts,
+      linesOfCode,
+      executionTime,
+      timestamp: new Date().toISOString()
+    }, null, 2));
+    console.log('\n✅ All checks passed. Result saved.');
     process.exit(0);
   } else {
-    console.log('\n❌ One or more checks failed for "Patch User".');
+    writeAttempts(attempts + 1);
+    console.log(`\n❌ One or more checks failed. Attempt #${attempts + 1} saved.`);
     process.exit(1);
   }
 })();

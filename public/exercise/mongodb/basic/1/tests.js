@@ -6,7 +6,7 @@ const { Db } = require('tingodb')();
 
 const DB_PATH = path.join(__dirname, 'data');
 const USER_SCRIPT_PATH = path.join(__dirname, 'script.js');
-const ATTEMPT_FILE = path.join(__dirname, 'attempt_basic_1.json');
+const ATTEMPT_FILE = path.join(__dirname, 'attempts.tests');
 const PASS_FILE = path.join(__dirname, 'passed_basic_1.txt');
 const USERS_COLLECTION_FILE = path.join(DB_PATH, 'users');
 

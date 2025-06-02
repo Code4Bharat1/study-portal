@@ -21,7 +21,7 @@ const traverse = require('@babel/traverse').default;
 const { render, screen, waitFor } = require('@testing-library/react');
 require('@testing-library/dom');
 
-const ATTEMPTS_FILE = 'attempts.json';
+const ATTEMPTS_FILE = 'attempts.tests';
 const RESULT_FILE = 'results.tests';
 const code = fs.readFileSync('script.js', 'utf-8');
 
@@ -32,7 +32,7 @@ function readAttempts() {
       const data = JSON.parse(fs.readFileSync(ATTEMPTS_FILE, 'utf-8'));
       return data.count >= 1 ? data.count : 1;
     } catch {
-      console.log('Warning: Failed to parse attempts.json. Resetting to 1.');
+      console.log('Warning: Failed to parse attempts.tests. Resetting to 1.');
       return 1;
     }
   }

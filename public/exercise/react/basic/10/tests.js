@@ -8,7 +8,7 @@ const traverse = require('@babel/traverse').default;
 const { render, screen } = require('@testing-library/react');
 require('@testing-library/jest-dom');
 
-const ATTEMPTS_FILE = 'attempts.json';
+const ATTEMPTS_FILE = 'attempts.tests';
 const RESULT_FILE = 'results.tests';
 const code = fs.readFileSync('script.js', 'utf-8');
 
@@ -18,7 +18,7 @@ function readAttempts() {
       const data = JSON.parse(fs.readFileSync(ATTEMPTS_FILE, 'utf-8'));
       return data.count >= 1 ? data.count : 1;
     } catch {
-      console.log('Error parsing attempts.json. Resetting counter.');
+      console.log('Error parsing attempts.tests. Resetting counter.');
       return 1;
     }
   }

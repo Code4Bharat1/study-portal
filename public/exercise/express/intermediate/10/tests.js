@@ -6,6 +6,29 @@ const path = require('path');
 const jsFile = path.join(process.cwd(), 'index.js'); // Adjust if needed
 const js = fs.readFileSync(jsFile, 'utf8');
 
+const attemptsFile = path.join(process.cwd(), 'attempts.tests');
+const resultsFile = path.join(process.cwd(), 'results.tests');
+
+function readAttempts() {
+  try {
+    return parseInt(fs.readFileSync(attemptsFile, 'utf8'), 10) || 0;
+  } catch {
+    return 0;
+  }
+}
+
+function writeAttempts(n) {
+  fs.writeFileSync(attemptsFile, String(n));
+}
+
+function writeResults(result) {
+  const results = {
+    status: result ? 'pass' : 'fail',
+    timestamp: new Date().toISOString(),
+  };
+  fs.writeFileSync(resultsFile, JSON.stringify(results, null, 2));
+}
+
 async function checkSyntax() {
   const eslint = new ESLint();
   const results = await eslint.lintText(js);
@@ -36,6 +59,7 @@ function checkExport() {
 
 async function checkSendEmail() {
   try {
+    delete require.cache[require.resolve(jsFile)];
     const mod = require(jsFile);
     const app = mod.app || mod.default || mod;
 
@@ -45,8 +69,6 @@ async function checkSendEmail() {
     }
 
     const request = supertest(app);
-
-    // Assumes route POST /send-email that accepts JSON { to, subject, body }
 
     const res = await request
       .post('/send-email')
@@ -78,7 +100,6 @@ async function checkSendEmail() {
     }
 
     console.log('✔ Send Email endpoint works correctly.');
-
     return true;
   } catch (err) {
     console.log('✘ Error during supertest request:', err.message);
@@ -87,15 +108,22 @@ async function checkSendEmail() {
 }
 
 (async () => {
+  const attempts = readAttempts() + 1;
+  writeAttempts(attempts);
+
   const syntaxOk = await checkSyntax();
   const exportOk = checkExport();
   const sendEmailOk = await checkSendEmail();
 
-  if (syntaxOk && exportOk && sendEmailOk) {
-    console.log('\n✅ All checks passed for "Send Email".');
+  const allOk = syntaxOk && exportOk && sendEmailOk;
+
+  writeResults(allOk);
+
+  if (allOk) {
+    console.log(`\n✅ All checks passed. Attempts: ${attempts}`);
     process.exit(0);
   } else {
-    console.log('\n❌ One or more checks failed for "Send Email".');
+    console.log(`\n❌ One or more checks failed. Attempts: ${attempts}`);
     process.exit(1);
   }
 })();

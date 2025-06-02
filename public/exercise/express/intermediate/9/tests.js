@@ -6,6 +6,29 @@ const path = require('path');
 const jsFile = path.join(process.cwd(), 'index.js'); // Adjust if needed
 const js = fs.readFileSync(jsFile, 'utf8');
 
+const attemptsFile = path.join(process.cwd(), 'attempts.txt');
+const resultsFile = path.join(process.cwd(), 'results.json');
+
+function saveAttempt(result) {
+  const line = `${new Date().toISOString()} - ${result ? 'PASS' : 'FAIL'}\n`;
+  fs.appendFileSync(attemptsFile, line);
+}
+
+function saveResult(result) {
+  const data = { timestamp: new Date().toISOString(), passed: result, test: 'Use req.user' };
+  let arr = [];
+  if (fs.existsSync(resultsFile)) {
+    try {
+      arr = JSON.parse(fs.readFileSync(resultsFile, 'utf8'));
+      if (!Array.isArray(arr)) arr = [];
+    } catch {
+      arr = [];
+    }
+  }
+  arr.push(data);
+  fs.writeFileSync(resultsFile, JSON.stringify(arr, null, 2));
+}
+
 async function checkSyntax() {
   const eslint = new ESLint();
   const results = await eslint.lintText(js);
@@ -36,6 +59,7 @@ function checkExport() {
 
 async function checkReqUser() {
   try {
+    delete require.cache[require.resolve(jsFile)];
     const mod = require(jsFile);
     const app = mod.app || mod.default || mod;
 
@@ -45,8 +69,6 @@ async function checkReqUser() {
     }
 
     const request = supertest(app);
-
-    // Assumes route GET /profile which uses req.user and returns user info
 
     const res = await request
       .get('/profile')
@@ -62,14 +84,12 @@ async function checkReqUser() {
       return false;
     }
 
-    // Check if response has user object or properties coming from req.user
     if (!res.body.username && !res.body.email && !res.body.id) {
       console.log('✘ Response does not contain expected user properties.');
       return false;
     }
 
     console.log('✔ `req.user` usage endpoint is working correctly.');
-
     return true;
   } catch (err) {
     console.log('✘ Error during supertest request:', err.message);
@@ -82,11 +102,16 @@ async function checkReqUser() {
   const exportOk = checkExport();
   const reqUserOk = await checkReqUser();
 
-  if (syntaxOk && exportOk && reqUserOk) {
+  const allOk = syntaxOk && exportOk && reqUserOk;
+
+  if (allOk) {
     console.log('\n✅ All checks passed for "Use req.user".');
-    process.exit(0);
   } else {
     console.log('\n❌ One or more checks failed for "Use req.user".');
-    process.exit(1);
   }
+
+  saveAttempt(allOk);
+  saveResult(allOk);
+
+  process.exit(allOk ? 0 : 1);
 })();

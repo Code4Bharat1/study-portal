@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const { ESLint } = require('eslint');
-const esprima = require('esprima');
 const supertest = require('supertest');
 const assert = require('assert');
 
@@ -9,6 +8,24 @@ console.clear();
 
 const filePath = path.join(__dirname, 'index.js');
 const js = fs.readFileSync(filePath, 'utf8');
+
+function readAttempts() {
+  try {
+    return fs.existsSync('attempts.tests')
+      ? JSON.parse(fs.readFileSync('attempts.tests')).count || 1
+      : 1;
+  } catch {
+    return 1;
+  }
+}
+
+function writeAttempts(count) {
+  try {
+    fs.writeFileSync('attempts.tests', JSON.stringify({ count }, null, 2));
+  } catch (e) {
+    console.log(`Failed to write attempts.tests: ${e}`);
+  }
+}
 
 async function checkSyntax() {
   const eslint = new ESLint();
@@ -66,15 +83,37 @@ async function checkServer() {
 }
 
 (async () => {
+  const startTime = performance.now();
+
   const syntaxOk = await checkSyntax();
+  if (!syntaxOk) {
+    console.log('\n❌ Syntax errors prevent further checks.');
+    process.exit(1);
+  }
+
   const structureOk = checkStructure();
   const serverOk = await checkServer();
 
-  if (syntaxOk && structureOk && serverOk) {
-    console.log('\n✅ All tests passed for Question 1: Setup Server');
-    process.exit(0);
+  const allPassed = syntaxOk && structureOk && serverOk;
+
+  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
+  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
+
+  let attempts = readAttempts();
+
+  if (allPassed) {
+    const resultData = { attempts, linesOfCode, executionTime, timestamp: new Date().toISOString() };
+    try {
+      fs.writeFileSync('results.tests', JSON.stringify(resultData, null, 2));
+      process.exit(0);
+    } catch (e) {
+      console.log(`Failed to write results.tests: ${e}`);
+      process.exit(1);
+    }
   } else {
-    console.log('\n❌ Test failed for Question 1');
+    attempts += 1;
+    writeAttempts(attempts);
+    console.log(`\n❌ Tests failed. Attempt #${attempts} recorded.`);
     process.exit(1);
   }
 })();

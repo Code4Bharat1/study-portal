@@ -4,8 +4,25 @@ const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 
+const attemptsFile = path.join(__dirname, 'attempts.tests');
+const resultFile = path.join(__dirname, 'results.tests');
 const jsFile = path.join(process.cwd(), 'index.js'); // Adjust if needed
 const js = fs.readFileSync(jsFile, 'utf8');
+
+function readAttempts() {
+  if (fs.existsSync(attemptsFile)) {
+    try {
+      return Math.max(1, JSON.parse(fs.readFileSync(attemptsFile)).count);
+    } catch {
+      return 1;
+    }
+  }
+  return 1;
+}
+
+function writeAttempts(count) {
+  fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+}
 
 async function checkSyntax() {
   const eslint = new ESLint();
@@ -37,7 +54,7 @@ function checkExport() {
 
 async function checkMongoConnection() {
   try {
-    // Check if mongoose is connected (readyState 1 means connected)
+    // 1 means connected
     if (!mongoose.connection || mongoose.connection.readyState !== 1) {
       console.log('✘ Mongoose is not connected.');
       return false;
@@ -61,15 +78,9 @@ async function checkRoute() {
     }
 
     const request = supertest(app);
-
-    // Check if there is a GET route /mongodb or /mongo-test or similar for testing
-    // This is user-dependent, so adjust route if needed.
-    // We try /mongodb here.
-
     const res = await request.get('/mongodb');
 
     if (res.status === 200 && res.body) {
-      // Expect some confirmation that mongo is working, e.g., a JSON object
       console.log('✔ MongoDB route returned 200 OK.');
       return true;
     }
@@ -83,16 +94,31 @@ async function checkRoute() {
 }
 
 (async () => {
+  const start = process.hrtime();
   const syntaxOk = await checkSyntax();
   const exportOk = checkExport();
   const mongoOk = await checkMongoConnection();
   const routeOk = await checkRoute();
+  const allPassed = syntaxOk && exportOk && mongoOk && routeOk;
 
-  if (syntaxOk && exportOk && mongoOk && routeOk) {
-    console.log('\n✅ All checks passed for "MongoDB Setup".');
+  const [sec, nano] = process.hrtime(start);
+  const executionTime = +(sec + nano / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(Boolean).length;
+  const attempts = readAttempts();
+
+  if (allPassed) {
+    fs.writeFileSync(resultFile, JSON.stringify({
+      task: 'MongoDB Setup',
+      attempts,
+      linesOfCode,
+      executionTime,
+      timestamp: new Date().toISOString()
+    }, null, 2));
+    console.log('\n✅ All checks passed. Result saved.');
     process.exit(0);
   } else {
-    console.log('\n❌ One or more checks failed for "MongoDB Setup".');
+    writeAttempts(attempts + 1);
+    console.log(`\n❌ One or more checks failed. Attempt #${attempts + 1} saved.`);
     process.exit(1);
   }
 })();

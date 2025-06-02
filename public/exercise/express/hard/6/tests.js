@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 console.clear();
 
-const attemptsFile = path.join(__dirname, 'attempts.json');
+const attemptsFile = path.join(__dirname, 'attempts.tests');
 const resultFile = path.join(__dirname, 'results.tests');
 const js = fs.readFileSync('index.js', 'utf8');
 
