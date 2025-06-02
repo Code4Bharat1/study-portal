@@ -24,7 +24,7 @@ global.getComputedStyle = window.getComputedStyle;
 
 const APP_FILE = path.resolve(__dirname, 'App.jsx');
 const code = fs.readFileSync(APP_FILE, 'utf-8');
-const ATTEMPTS_FILE = 'attempts.json';
+const ATTEMPTS_FILE = 'attempts.tests';
 const RESULT_FILE = 'results.tests';
 
 function readAttempts() {

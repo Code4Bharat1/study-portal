@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 // File paths
-const attemptsFile = path.join(__dirname, 'attempts.json');
+const attemptsFile = path.join(__dirname, 'attempts.tests');
 const resultFile = path.join(__dirname, 'results.tests');
 
 // Read JavaScript
@@ -21,7 +21,7 @@ function readAttempts() {
       const parsed = JSON.parse(data);
       return parsed.count >= 1 ? parsed.count : 1;
     } catch (err) {
-      console.error('Error parsing attempts.json. Resetting counter.');
+      console.error('Error parsing attempts.tests. Resetting counter.');
       return 1;
     }
   }

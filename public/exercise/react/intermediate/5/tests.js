@@ -8,7 +8,7 @@ const { render, screen, fireEvent } = require('@testing-library/react');
 const { MemoryRouter } = require('react-router-dom');
 
 // File paths
-const ATTEMPTS_FILE = 'attempts.json';
+const ATTEMPTS_FILE = 'attempts.tests';
 const RESULT_FILE = 'results.tests';
 
 // Read JavaScript code
@@ -21,7 +21,7 @@ function readAttempts() {
       const data = JSON.parse(fs.readFileSync(ATTEMPTS_FILE, 'utf-8'));
       return data.count >= 1 ? data.count : 1;
     } catch (e) {
-      console.log('Error parsing attempts.json. Resetting counter.');
+      console.log('Error parsing attempts.tests. Resetting counter.');
       return 1;
     }
   }

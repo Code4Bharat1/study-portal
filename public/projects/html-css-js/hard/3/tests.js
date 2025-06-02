@@ -103,7 +103,7 @@ async function runTests() {
   // All tests passed
   fs.writeFileSync(resultPath, JSON.stringify({
     project: "hard/3 Custom Dashboard",
-    passed: true,
+    
     timestamp: new Date().toISOString()
   }, null, 2));
   if (fs.existsSync(attemptsPath)) fs.unlinkSync(attemptsPath);

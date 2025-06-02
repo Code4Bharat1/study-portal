@@ -108,7 +108,7 @@ async function runTests() {
   // All tests passed
   fs.writeFileSync(resultFile, JSON.stringify({
     project: "intermediate/3 Dynamic Data Table",
-    passed: true,
+    
     timestamp: new Date().toISOString()
   }, null, 2));
 

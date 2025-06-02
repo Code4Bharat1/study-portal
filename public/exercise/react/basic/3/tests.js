@@ -26,7 +26,7 @@ global.requestAnimationFrame = (cb) => setTimeout(cb, 0);
 global.cancelAnimationFrame = (id) => clearTimeout(id);
 
 // File paths
-const ATTEMPTS_FILE = 'attempts.json';
+const ATTEMPTS_FILE = 'attempts.tests';
 const RESULT_FILE = 'results.tests';
 const APP_FILE = path.resolve(__dirname, 'App.jsx');
 const code = fs.readFileSync(APP_FILE, 'utf-8');
@@ -38,7 +38,7 @@ function readAttempts() {
       const data = JSON.parse(fs.readFileSync(ATTEMPTS_FILE, 'utf-8'));
       return data.count >= 1 ? data.count : 1;
     } catch {
-      console.log('Error parsing attempts.json. Resetting counter.');
+      console.log('Error parsing attempts.tests. Resetting counter.');
       return 1;
     }
   }

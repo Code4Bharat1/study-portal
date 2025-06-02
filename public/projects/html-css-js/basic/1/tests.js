@@ -220,10 +220,8 @@ async function main() {
     JSON.stringify(
       {
         attempts,
-        lastRun: new Date().toISOString(),
-        passed: true,
-        linkedCssFiles: structure.linkedCssFiles,
-        linkedJsFiles: structure.linkedJsFiles,
+        timestamp: new Date().toISOString(),
+        
       },
       null,
       2

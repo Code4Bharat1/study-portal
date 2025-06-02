@@ -221,7 +221,7 @@ async function main() {
       {
         attempts,
         lastRun: new Date().toISOString(),
-        passed: true,
+        
         linkedCssFiles: structure.linkedCssFiles,
         linkedJsFiles: structure.linkedJsFiles,
       },

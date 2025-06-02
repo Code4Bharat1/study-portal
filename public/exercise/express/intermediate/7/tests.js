@@ -4,8 +4,25 @@ const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcrypt');
 
+const attemptsFile = path.join(__dirname, 'attempts.tests');
+const resultFile = path.join(__dirname, 'results.tests');
 const jsFile = path.join(process.cwd(), 'index.js'); // Adjust if needed
 const js = fs.readFileSync(jsFile, 'utf8');
+
+function readAttempts() {
+  if (fs.existsSync(attemptsFile)) {
+    try {
+      return Math.max(1, JSON.parse(fs.readFileSync(attemptsFile)).count);
+    } catch {
+      return 1;
+    }
+  }
+  return 1;
+}
+
+function writeAttempts(count) {
+  fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+}
 
 async function checkSyntax() {
   const eslint = new ESLint();
@@ -47,18 +64,16 @@ async function checkPasswordHashing() {
 
     const request = supertest(app);
 
-    // We expect a POST /register or /signup endpoint that accepts user data with password
-    // and stores hashed password internally.
     const registerPaths = ['/register', '/signup'];
 
-    let passwordHashed = false;
-
-    // We send a test user with known password
     const testUser = {
       username: 'testuser',
       password: 'plaintextpassword123',
       email: 'test@example.com',
     };
+
+    let passwordHashed = false;
+    let returnedHash = null;
 
     for (const route of registerPaths) {
       try {
@@ -68,21 +83,18 @@ async function checkPasswordHashing() {
           .set('Accept', 'application/json');
 
         if (res.status === 200 || res.status === 201) {
-          // Assuming the response includes user object but NOT plaintext password
           if (res.body.password) {
-            // If password is returned as plaintext, fail test
             if (res.body.password === testUser.password) {
               console.log('✘ Password returned as plaintext in response.');
               return false;
             }
-
-            // If bcrypt hash format matches $2[aby]$...
             if (/^\$2[aby]\$/.test(res.body.password)) {
               passwordHashed = true;
+              returnedHash = res.body.password;
               break;
             }
           } else {
-            // If no password returned, assume stored hashed internally - good
+            // No password in response, assume hashed internally
             passwordHashed = true;
             break;
           }
@@ -95,9 +107,8 @@ async function checkPasswordHashing() {
       return false;
     }
 
-    // Additionally, check if bcrypt.compare can verify the hash returned (if any)
-    if (passwordHashed && res?.body?.password) {
-      const match = await bcrypt.compare(testUser.password, res.body.password);
+    if (passwordHashed && returnedHash) {
+      const match = await bcrypt.compare(testUser.password, returnedHash);
       if (match) {
         console.log('✔ Password is hashed and verified using bcrypt.');
       } else {
@@ -116,15 +127,30 @@ async function checkPasswordHashing() {
 }
 
 (async () => {
+  const start = process.hrtime();
   const syntaxOk = await checkSyntax();
   const exportOk = checkExport();
   const hashOk = await checkPasswordHashing();
+  const allPassed = syntaxOk && exportOk && hashOk;
 
-  if (syntaxOk && exportOk && hashOk) {
-    console.log('\n✅ All checks passed for "Hash Passwords".');
+  const [sec, nano] = process.hrtime(start);
+  const executionTime = +(sec + nano / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(Boolean).length;
+  const attempts = readAttempts();
+
+  if (allPassed) {
+    fs.writeFileSync(resultFile, JSON.stringify({
+      task: 'Hash Passwords',
+      attempts,
+      linesOfCode,
+      executionTime,
+      timestamp: new Date().toISOString()
+    }, null, 2));
+    console.log('\n✅ All checks passed. Result saved.');
     process.exit(0);
   } else {
-    console.log('\n❌ One or more checks failed for "Hash Passwords".');
+    writeAttempts(attempts + 1);
+    console.log(`\n❌ One or more checks failed. Attempt #${attempts + 1} saved.`);
     process.exit(1);
   }
 })();

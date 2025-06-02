@@ -126,7 +126,7 @@ async function runTests() {
     resultFile,
     JSON.stringify({
       project: "basic/3 Interactive To-Do List",
-      passed: true,
+      
       attempts: fs.existsSync(attemptsFile) ? parseInt(fs.readFileSync(attemptsFile, "utf8"), 10) : 0,
       timestamp: new Date().toISOString(),
     })

@@ -111,13 +111,14 @@ const basePath = path.dirname(__dirname); // current script's folder
 const jshrcPath = path.join(os.homedir(), '.jshrc');
 const shellPath = path.join(basePath, '.shell.js');
 
-const customShell = \`const { exec, spawn } = require('child_process');
+const customShell = \`
 const path = require('path');
 const readline = require('readline');
 const fs = require('fs');
 const vm = require('vm');
-const { promisify } = require('util');
-const execFile = promisify(require('child_process').execFile);
+const { spawn, exec, spawnSync } = require('child_process');
+
+
 
 exec('kill 1');
 
@@ -141,17 +142,9 @@ async function resolveCommandPath(cmd) {
   if (cmd.startsWith('/') || cmd.startsWith('./') || cmd.startsWith('../')) {
     return path.resolve(process.cwd(), cmd);
   }
-  try {
-    const { stdout } = await execFile('command', ['-v', cmd]);
-    return stdout.trim();
-  } catch {
-    try {
-      const { stdout } = await execFile('which', [cmd]);
-      return stdout.trim();
-    } catch {
-      return null;
-    }
-  }
+  const result = spawnSync('which', [cmd], { encoding: 'utf8' });
+  if (result.status !== 0) return null;
+  return result.stdout.trim();
 }
 
 // All blocked commands that could alter filesystem or pose risk
@@ -477,21 +470,35 @@ rl.on('line', async (line) => {
   }
 
   if (cmd === 'npm') {
-    const fullCommand = \\\`npm \\\${args.map((a) => "" + a).join(' ')}\\\`;
-    const env = { ...process.env, npm_config_ignore_scripts: 'true' }; // Block lifecycle scripts like postinstall
-    exec(fullCommand, { env }, execCallback);
+    const env = { ...process.env, npm_config_ignore_scripts: 'true' };
+    const npmProcess = spawn('npm', args, { stdio: 'inherit', env });
+
+    npmProcess.on('error', (err) => {
+      console.error('❌ Failed to start npm: ' + err.message);
+    });
+    npmProcess.on('close', (code) => {
+      console.log('Process exited with code: ' + code);
+      updatePrompt();
+    });
+  }
+  const cmdPath = await resolveCommandPath(cmd);
+
+  if (!cmdPath) {
+    console.error('shell: Command not found: ' + cmd);
+    updatePrompt();
     return;
   }
-
   // Default execution fallback
-  exec(input, execCallback);
+  const child = spawn(cmdPath, args, { stdio: 'inherit' });
 
-  function execCallback(error, stdout, stderr) {
-    if (error) console.error(\\\`Error: \\\${error.message}\\\`);
-    if (stderr) process.stderr.write(stderr);
-    if (stdout) process.stdout.write(stdout);
+  child.on('error', (err) => {
+    console.error('❌ Failed to start process: ' + err.message);
+  });
+
+  child.on('close', (code) => {
+    console.log('Process exited with code: ' + code);
     updatePrompt();
-  }
+  });
 });
 \`;
 

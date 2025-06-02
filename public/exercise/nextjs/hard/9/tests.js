@@ -20,12 +20,12 @@ const mocks = [
 ];
 
 function readAttempts() {
-  if (fs.existsSync('attempts.json')) {
+  if (fs.existsSync('attempts.tests')) {
     try {
-      const data = JSON.parse(fs.readFileSync('attempts.json', 'utf-8'));
+      const data = JSON.parse(fs.readFileSync('attempts.tests', 'utf-8'));
       return data.count >= 1 ? data.count : 1;
     } catch (e) {
-      console.log('Error parsing attempts.json. Resetting counter.');
+      console.log('Error parsing attempts.tests. Resetting counter.');
       return 1;
     }
   }
@@ -34,9 +34,9 @@ function readAttempts() {
 
 function writeAttempts(count) {
   try {
-    fs.writeFileSync('attempts.json', JSON.stringify({ count }, null, 2), 'utf-8');
+    fs.writeFileSync('attempts.tests', JSON.stringify({ count }, null, 2), 'utf-8');
   } catch (e) {
-    console.log(`Failed to write to attempts.json: ${e}`);
+    console.log(`Failed to write to attempts.tests: ${e}`);
   }
 }
 

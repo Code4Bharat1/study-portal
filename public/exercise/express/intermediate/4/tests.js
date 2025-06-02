@@ -3,8 +3,25 @@ const supertest = require('supertest');
 const fs = require('fs');
 const path = require('path');
 
+const attemptsFile = path.join(__dirname, 'attempts.tests');
+const resultFile = path.join(__dirname, 'results.tests');
 const jsFile = path.join(process.cwd(), 'index.js'); // Adjust this path if needed
 const js = fs.readFileSync(jsFile, 'utf8');
+
+function readAttempts() {
+  if (fs.existsSync(attemptsFile)) {
+    try {
+      return Math.max(1, JSON.parse(fs.readFileSync(attemptsFile)).count);
+    } catch {
+      return 1;
+    }
+  }
+  return 1;
+}
+
+function writeAttempts(count) {
+  fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+}
 
 async function checkSyntax() {
   const eslint = new ESLint();
@@ -46,18 +63,11 @@ async function checkInputValidation() {
 
     const request = supertest(app);
 
-    // We assume the user has an input validation on a POST route at /validate or similar
-    // Send invalid payload to trigger validation errors
-    // This might be adjusted depending on the actual route you want to test
+    const invalidPayload = { username: '', email: 'not-an-email' };
 
-    const invalidPayload = { username: '', email: 'not-an-email' }; // example invalid data
-
-    // Try POST request to /validate (or adjust the route to the known input validation route)
     const res = await request.post('/validate').send(invalidPayload);
 
-    // Expect response status 400 or similar for validation errors
     if (res.status === 400 && res.body) {
-      // Expect error message keys or array to exist
       const hasErrors = res.body.errors || res.body.message || typeof res.body === 'string';
 
       if (hasErrors) {
@@ -75,15 +85,30 @@ async function checkInputValidation() {
 }
 
 (async () => {
+  const start = process.hrtime();
   const syntaxOk = await checkSyntax();
   const exportOk = checkExport();
   const validationOk = await checkInputValidation();
+  const allPassed = syntaxOk && exportOk && validationOk;
 
-  if (syntaxOk && exportOk && validationOk) {
-    console.log('\n✅ All checks passed for "Input Validation".');
+  const [sec, nano] = process.hrtime(start);
+  const executionTime = +(sec + nano / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(Boolean).length;
+  const attempts = readAttempts();
+
+  if (allPassed) {
+    fs.writeFileSync(resultFile, JSON.stringify({
+      task: 'Input Validation',
+      attempts,
+      linesOfCode,
+      executionTime,
+      timestamp: new Date().toISOString()
+    }, null, 2));
+    console.log('\n✅ All checks passed. Result saved.');
     process.exit(0);
   } else {
-    console.log('\n❌ One or more checks failed for "Input Validation".');
+    writeAttempts(attempts + 1);
+    console.log(`\n❌ One or more checks failed. Attempt #${attempts + 1} saved.`);
     process.exit(1);
   }
 })();

@@ -5,9 +5,9 @@ const fs = require('fs');
 const path = require('path');
 console.clear();
 
-const attemptsFile = path.join(__dirname, 'attempts.json');
+const attemptsFile = path.join(__dirname, 'attempts.tests');
 const resultFile = path.join(__dirname, 'results.tests');
-const js = fs.readFileSync('index.js', 'utf8');
+const js = fs.readFileSync(path.join(__dirname, 'index.js'), 'utf8');
 
 function readAttempts() {
   if (fs.existsSync(attemptsFile)) {
@@ -40,7 +40,7 @@ async function syntaxVerify() {
 
 function structureVerify() {
   try {
-    const ast = esprima.parseScript(js);
+    esprima.parseScript(js);
     const exportFound = js.includes('module.exports') || js.includes('export default') || js.includes('exports.app');
     console.log(exportFound ? '✔ App export detected.' : '✘ No export found.');
     return exportFound;
@@ -53,7 +53,7 @@ function structureVerify() {
 async function functionalityVerify() {
   let app;
   try {
-    const m = require(path.join(process.cwd(), 'index.js'));
+    const m = require(path.join(__dirname, 'index.js'));
     app = m.app || m.default || m;
   } catch (err) {
     console.log('✘ Failed to load app from index.js:', err.message);
