@@ -39,7 +39,8 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
             console.log("window:", window)
 
             // Save start timestamp in localStorage (always overwrite)
-            localStorage.setItem('startTimestamp', Date.now().toString());
+            localStorage.setItem('startTimestamp', Date.now()); 
+            console.log(localStorage.getItem('startTimestamp'))
 
             vm.applyFsDiff({ destroy: ['web-c.done'], create: {} });
 
@@ -61,7 +62,7 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
               onLoad();
 
               // Save start timestamp in localStorage (always overwrite)
-              localStorage.setItem('startTimestamp', Date.now().toString());
+              localStorage.setItem('startTimestamp', Date.now());
 
               vm.applyFsDiff({ destroy: ['web-c.done'], create: {} });
 
