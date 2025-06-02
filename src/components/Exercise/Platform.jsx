@@ -35,8 +35,8 @@ function extendMenuItemClicks(menuItems, extraFunction) {
     return {
       ...item,
       onClick: (e) => {
-        originalClick?.(e);    // call the original onClick
-        extraFunction?.(e);    // call the additional function
+        originalClick?.(e); // call the original onClick
+        extraFunction?.(e); // call the additional function
       },
     };
   });
@@ -57,11 +57,21 @@ function Instructions({ task, onClose }) {
 
         <ReactMarkdown
           components={{
-            h1: ({ children }) => <h1 className="text-2xl font-bold mb-4">{children}</h1>,
-            h2: ({ children }) => <h2 className="text-xl font-semibold mb-3">{children}</h2>,
-            h3: ({ children }) => <h3 className="text-lg font-semibold mt-4 mb-2">{children}</h3>,
-            p: ({ children }) => <p className="mb-2 text-gray-800">{children}</p>,
-            li: ({ children }) => <li className="ml-6 list-disc mb-1">{children}</li>,
+            h1: ({ children }) => (
+              <h1 className="text-2xl font-bold mb-4">{children}</h1>
+            ),
+            h2: ({ children }) => (
+              <h2 className="text-xl font-semibold mb-3">{children}</h2>
+            ),
+            h3: ({ children }) => (
+              <h3 className="text-lg font-semibold mt-4 mb-2">{children}</h3>
+            ),
+            p: ({ children }) => (
+              <p className="mb-2 text-gray-800">{children}</p>
+            ),
+            li: ({ children }) => (
+              <li className="ml-6 list-disc mb-1">{children}</li>
+            ),
             code: ({ children }) => (
               <code className="bg-gray-100 text-sm px-1 py-0.5 rounded text-red-600 font-mono">
                 {children}
@@ -87,12 +97,12 @@ const TestPassed = ({ result, level }) => {
   const [breakdown, setBreakdown] = useState({
     passScore: 0,
     attemptScore: 0,
-    timeScore: 0
+    timeScore: 0,
   });
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const startTime = localStorage.getItem('startTime');
+    const startTime = localStorage.getItem("startTime");
     if (!startTime) {
       console.error("Start time not found in local storage.");
       return;
@@ -104,26 +114,27 @@ const TestPassed = ({ result, level }) => {
     setTimeTaken(durationInSeconds);
 
     const passed = result.syntaxCheckPassed && result.structureCheckPassed;
-    
+
     let max_score = 0;
-    if (level == "Hard"){
+    if (level == "Hard") {
       max_score = 100;
-    } else if(level == "Intermediate"){
+    } else if (level == "Intermediate") {
       max_score = 70;
-    } else{
+    } else {
       max_score = 50;
     }
 
-    const passScore = passed ? (0.6 * max_score) : 0;
+    const passScore = passed ? 0.6 * max_score : 0;
 
-    const attemptScore = result.attempts < 10 
-      ? ((10 - result.attempts) / 10) * (0.2 * max_score)
-      : 0;
+    const attemptScore =
+      result.attempts < 10
+        ? ((10 - result.attempts) / 10) * (0.2 * max_score)
+        : 0;
 
-    const timeScore = durationInSeconds < 120 
-      ? ((120 - durationInSeconds) / 120) * (0.2 * max_score)
-      : 0;
-
+    const timeScore =
+      durationInSeconds < 120
+        ? ((120 - durationInSeconds) / 120) * (0.2 * max_score)
+        : 0;
 
     const totalScore = passScore + attemptScore + timeScore;
 
@@ -131,23 +142,23 @@ const TestPassed = ({ result, level }) => {
     setBreakdown({
       passScore: Math.round(passScore),
       attemptScore: Math.round(attemptScore),
-      timeScore: Math.round(timeScore)
+      timeScore: Math.round(timeScore),
     });
   }, [result]);
 
   const handleClose = () => {
     setVisible(false);
-    
-    axios.post('http://localhost:5000/submit/exercise', loginData)
-      .then(response => {
-        console.log('Success:', response.data);
+
+    axios
+      .post("http://localhost:3902/submit/exercise", loginData)
+      .then((response) => {
+        console.log("Success:", response.data);
         // handle success
       })
-      .catch(error => {
-        console.error('Error:', error);
+      .catch((error) => {
+        console.error("Error:", error);
         // handle error
       });
-
   };
 
   if (!visible) return null;
@@ -162,25 +173,47 @@ const TestPassed = ({ result, level }) => {
         &times;
       </button>
 
-      <h1 className="text-3xl font-bold text-green-700 text-center mb-4">🎉 Congratulations! 🎉</h1>
-      <p className="text-center text-gray-700 mb-2">Your code passed all checks!</p>
+      <h1 className="text-3xl font-bold text-green-700 text-center mb-4">
+        🎉 Congratulations! 🎉
+      </h1>
+      <p className="text-center text-gray-700 mb-2">
+        Your code passed all checks!
+      </p>
 
       <div className="text-center text-gray-800 mt-4">
-        <p><span className="font-semibold">Time Taken:</span> {timeTaken.toFixed(2)} seconds</p>
-        <p><span className="font-semibold">Attempts:</span> {result.attempts}</p>
+        <p>
+          <span className="font-semibold">Time Taken:</span>{" "}
+          {timeTaken.toFixed(2)} seconds
+        </p>
+        <p>
+          <span className="font-semibold">Attempts:</span> {result.attempts}
+        </p>
       </div>
 
       <div className="mt-6 bg-white rounded-md shadow-inner p-4">
-        <h2 className="text-lg font-semibold text-gray-800 mb-3">📊 Score Breakdown</h2>
+        <h2 className="text-lg font-semibold text-gray-800 mb-3">
+          📊 Score Breakdown
+        </h2>
         <ul className="space-y-2 text-gray-700">
-          <li>✅ Passed Checks: <span className="font-bold">{breakdown.passScore} / 30</span></li>
-          <li>🔁 Attempts Bonus: <span className="font-bold">{breakdown.attemptScore} / 10</span></li>
-          <li>⏱️ Time Bonus: <span className="font-bold">{breakdown.timeScore} / 10</span></li>
+          <li>
+            ✅ Passed Checks:{" "}
+            <span className="font-bold">{breakdown.passScore} / 30</span>
+          </li>
+          <li>
+            🔁 Attempts Bonus:{" "}
+            <span className="font-bold">{breakdown.attemptScore} / 10</span>
+          </li>
+          <li>
+            ⏱️ Time Bonus:{" "}
+            <span className="font-bold">{breakdown.timeScore} / 10</span>
+          </li>
         </ul>
       </div>
 
       <div className="mt-6 text-center">
-        <h2 className="text-2xl font-bold text-green-800">Total Score: {score} / 50</h2>
+        <h2 className="text-2xl font-bold text-green-800">
+          Total Score: {score} / 50
+        </h2>
       </div>
     </div>
   );
@@ -194,7 +227,7 @@ function TestNotPassed({ onClose }) {
         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
         onClick={onClose}
       />
-      
+
       {/* Centered Modal */}
       <div className="fixed top-1/2 left-1/2 z-50 w-[90%] max-w-md bg-white rounded-lg shadow-xl p-6 transform -translate-x-1/2 -translate-y-1/2">
         <div className="flex justify-between items-center mb-4">
@@ -209,7 +242,8 @@ function TestNotPassed({ onClose }) {
         </div>
 
         <p className="text-gray-700">
-          You haven&apos;t completed the exercise. To test if your code is correct, enter
+          You haven&apos;t completed the exercise. To test if your code is
+          correct, enter
           <code className="mx-1 bg-gray-100 text-red-600 font-mono text-sm px-2 py-0.5 rounded">
             run-tests
           </code>
@@ -220,7 +254,6 @@ function TestNotPassed({ onClose }) {
   );
 }
 
-
 // Main Component
 export default function QuestionPlatform({
   setSidebarContent,
@@ -228,7 +261,7 @@ export default function QuestionPlatform({
   files,
   filesOpened,
   task,
-  exerciseTitle
+  exerciseTitle,
 }) {
   const [sandboxLoaded, setSandboxLoaded] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState("Basic");
@@ -238,7 +271,6 @@ export default function QuestionPlatform({
   const [result, setResult] = useState(null);
   const [questionNum, setQuestionNum] = useState(null);
 
-
   const showInstructions = () => setShowingInstructions(true);
   const hideInstructions = () => setShowingInstructions(false);
 
@@ -246,24 +278,24 @@ export default function QuestionPlatform({
 
   const handleSubmit = async () => {
     try {
-          const container = document.getElementById("stackblitz-container");
-          if (!container) throw new Error("Container element not found");
-  
-          const vm = await sdk.connect(container);
-          
-          const fsSnap = await vm.getFsSnapshot();
-          if ((Object.keys(fsSnap)).includes('result.tests')){
-            setResult(fsSnap["result.tests"]);
-            setResultPage(true);
-            return;
-          } else{
-            // setCongrats(true)
-            setAlert(true);
-            return;
-          }
-      } catch (error) {
-          console.error("Error during StackBlitz VM setup:", error);
+      const container = document.getElementById("stackblitz-container");
+      if (!container) throw new Error("Container element not found");
+
+      const vm = await sdk.connect(container);
+
+      const fsSnap = await vm.getFsSnapshot();
+      if (Object.keys(fsSnap).includes("result.tests")) {
+        setResult(fsSnap["result.tests"]);
+        setResultPage(true);
+        return;
+      } else {
+        // setCongrats(true)
+        setAlert(true);
+        return;
       }
+    } catch (error) {
+      console.error("Error during StackBlitz VM setup:", error);
+    }
   };
 
   const handleLevelChange = (event) => {
@@ -290,7 +322,6 @@ export default function QuestionPlatform({
     return extendMenuItemClicks(menuItems, () => setShowingInstructions(true));
   }, [menuItems]);
 
-
   return (
     <div className="relative">
       {/* Instructions Overlay */}
@@ -302,7 +333,7 @@ export default function QuestionPlatform({
 
       {showAlert && <TestNotPassed onClose={() => setShowModal(false)} />}
 
-      {showResult && <TestPassed result={result}/>}
+      {showResult && <TestPassed result={result} />}
 
       {/* Top Bar */}
       <div className="flex justify-between items-center py-5 pl-3 pr-1 relative z-10">
@@ -318,8 +349,8 @@ export default function QuestionPlatform({
               level === "Basic"
                 ? "bg-blue-500 hover:bg-blue-600 ring-blue-300"
                 : level === "intermediate"
-                  ? "bg-green-500 hover:bg-green-600 ring-green-300"
-                  : "bg-red-500 hover:bg-red-600 ring-red-300";
+                ? "bg-green-500 hover:bg-green-600 ring-green-300"
+                : "bg-red-500 hover:bg-red-600 ring-red-300";
 
             return (
               <label key={level}>
@@ -344,9 +375,7 @@ export default function QuestionPlatform({
           })}
         </div>
 
-        <div className="text-3xl font-bold mx-5">
-          {exerciseTitle}
-        </div>
+        <div className="text-3xl font-bold mx-5">{exerciseTitle}</div>
 
         {/* Instructions & Submit Buttons */}
         <div className="flex space-x-2">
@@ -357,10 +386,10 @@ export default function QuestionPlatform({
             Instructions
           </button>
 
-          <button 
+          <button
             className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
             onClick={handleSubmit}
-            >
+          >
             Submit
           </button>
         </div>
