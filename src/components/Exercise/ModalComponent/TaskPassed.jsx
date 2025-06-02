@@ -8,13 +8,13 @@ export default function TestPassed({ result, level, onClose }) {
   const [breakdown, setBreakdown] = useState({ passScore: 0, attemptScore: 0, timeScore: 0 });
 
   useEffect(() => {
-    const startTime = localStorage.getItem("startTimestamp");
+    let startTime = localStorage.getItem("startTimestamp");
     if (!startTime) return console.error("Start time not found in local storage.");
-    
+
+    startTime = new Date(Number(startTime));
     const endTime = new Date(result.timestamp)
-    console.log(startTime, endTime)
-    const end = new Date(endTime).getTime()
-    const start = new Date(startTime).getTime();
+    const end = endTime.getTime()
+    const start = startTime.getTime();
     const duration = (end - start) / 1000;
 
     console.log(end, start, duration)
