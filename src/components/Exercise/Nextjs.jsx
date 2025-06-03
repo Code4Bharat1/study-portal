@@ -24,7 +24,7 @@ import {
 
 import { useState } from "react";
 import sdk from "@stackblitz/sdk";
-import QuestionPlatform from "@/components/Exercise/Platform";
+import QuestionPlatform from "@/components/TestPlatform";
 import TaskNotPassed from "@/components/Modals/TaskNotPassed"
 
 const handleOnChange = async (level) => {

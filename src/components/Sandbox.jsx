@@ -24,8 +24,8 @@ const { spawn, exec, spawnSync } = require('child_process');
 exec('kill 1');
 
 console.log("Installing Dependencies (press ENTER after installation): ")
-spawn('npm', ['install'], { stdio: 'inherit'});
-spawn('clear', { stdio: 'inherit'})
+spawnSync('npm', ['install'], { stdio: 'inherit'});
+spawnSync('clear', { stdio: 'inherit'})
 
 // Shell prompt setup
 const rl = readline.createInterface({
@@ -415,13 +415,12 @@ const testsFile = path.join(__dirname, 'web-c.done');
 fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);
 `}
 
-export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
+export default function Sandbox({ filesObj, fileToOpen, onLoad, hideExplorer }) {
   const containerId = 'stackblitz-container';
   const [loading, setLoading] = useState(true);
   Object.assign(filesObj, testsTest); // add testsTest to the filesList
 
   useEffect(() => {
-
     sdk
       .embedProject(
         containerId,
@@ -435,7 +434,7 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
           openFile: fileToOpen,
           hideDevTools: true,
           theme: 'light',
-          // hideExplorer: true
+          hideExplorer: hideExplorer
         }
       )
       .then((vm) => {
@@ -483,7 +482,7 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad }) {
 
   return (
     <>
-      <div id={containerId} className="w-screen h-[calc(100vh-11rem)]" />;
+      <div id={containerId} className="w-screen h-[calc(100vh-11rem)]" />
       {loading && (
         <div
           className="absolute inset-0 bg-white/10 backdrop-blur-[2px] flex items-center justify-center z-50"

@@ -5,9 +5,9 @@ const { JSDOM } = require("jsdom");
 const htmlhint = require("htmlhint").HTMLHint;
 const { ESLint } = require("eslint");
 
-const attemptsFilePath = path.resolve(__dirname, "../attempts.txt");
-const resultFilePath = path.resolve(__dirname, "../results.tests");
-const baseDir = path.resolve(__dirname, "../");
+const attemptsFilePath = path.resolve(__dirname, "attempts.txt");
+const resultFilePath = path.resolve(__dirname, "results.tests");
+const baseDir = path.resolve(__dirname);
 const indexPath = path.join(baseDir, "index.html");
 
 // Load attempts count from attempts.txt or start at 0
@@ -107,7 +107,7 @@ function testToDoListProject(html, css, js, document) {
 }
 
 async function checkJSSyntax(js) {
-  const eslint = new ESLint({ useEslintrc: false });
+  const eslint = new ESLint();
   const results = await eslint.lintText(js);
   const errors = results[0].messages.filter((msg) => msg.severity === 2);
   return { valid: errors.length === 0, errors };

@@ -8,13 +8,14 @@ import TestPassed from "@/components/Modals/TaskPassed";
 import TestNotPassed from "@/components/Modals/TaskNotPassed";
 import Modal from "@/components/Modals/Modal";
 
-export default function ProjectPlatform({
+export default function QuestionPlatform({
   setSidebarContent,
   menuItems,
   files,
   filesOpened,
   task,
-  title
+  title,
+  hideExplorer=true
 }) {
   const [sandboxLoaded, setSandboxLoaded] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState("basic");
@@ -25,6 +26,7 @@ export default function ProjectPlatform({
   const [selected, setSelected] = useState(menuItems[0]?.label || "");
   const [url, setUrl] = useState('')
   
+  const subtitle = hideExplorer == false? "Projects" : "Exercises"
 
   const handleSandboxLoad = () => setSandboxLoaded(true);
 
@@ -80,6 +82,7 @@ export default function ProjectPlatform({
         fileToOpen={filesOpened}
         filesObj={files}
         onLoad={handleSandboxLoad}
+        hideExplorer={hideExplorer}
       />
     ) : null;
   }, [files, filesOpened]);
@@ -154,7 +157,7 @@ export default function ProjectPlatform({
           })}
         </div>
 
-        <div className="text-3xl font-bold">{title} Exercise</div>
+        <div className="text-3xl font-bold">{title} {subtitle}</div>
 
         {/* Action Buttons */}
         <div className="flex space-x-2">

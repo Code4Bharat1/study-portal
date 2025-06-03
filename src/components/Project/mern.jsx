@@ -1,7 +1,8 @@
+"use client"
 import { FaFileAlt, FaHeading, FaListUl, FaWindowMaximize, FaShieldAlt, FaCode } from "react-icons/fa";
 import { useState } from "react";
 import sdk from "@stackblitz/sdk"
-import ProjectPlatform from "@/components/Project/Platform";
+import QuestionPlatform from "@/components/TestPlatform";
 
 
 const handleOnChange = async (level) => {
@@ -132,13 +133,14 @@ export default function MernProjectPlatform() {
 
 
     return (
-        <ProjectPlatform
+        <QuestionPlatform
             menuItems={menu}
             files={sandboxFiles}
             filesOpened={sandboxFilesOpened}
             setSidebarContent={setSidebarContent}
             task={task}
             title={"MERN"}
+            hideExplorer={0}
         />
     );
 }

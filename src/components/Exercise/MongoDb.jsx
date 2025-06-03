@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react';
-import QuestionPlatform from '@/components/Exercise/Platform';
+import QuestionPlatform from '@/components/TestPlatform';
 
 import sdk from "@stackblitz/sdk";
 
