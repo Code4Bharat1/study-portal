@@ -764,7 +764,7 @@ export default function ReactExercisePlatform() {
   const [task, setTask] = useState(menu[0].task)
 
   const setSidebarContent = (event) => {
-    const value = event.target.value.toLowerCase();
+    const value = (event.target.value).toLowerCase().toLowerCase();
     switch (value) {
       case 'basic':
         setMenu(basicMenu);

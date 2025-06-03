@@ -26,6 +26,7 @@ export default function QuestionPlatform({
   const [selected, setSelected] = useState(menuItems[0]?.label || "");
   const [url, setUrl] = useState('');
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   const subtitle = hideExplorer === false ? "Projects" : "Exercises";
 
@@ -72,6 +73,7 @@ export default function QuestionPlatform({
     const level = e.target.value.toLowerCase();
     if (!(await checkPreviousExerciseAttempted())) {
       setSelectedLevel(level);
+      setIsSidebarVisible(true);
       setSidebarContent(e);
       setShowingInstructions(true);
     }
@@ -193,7 +195,7 @@ export default function QuestionPlatform({
         <div className="order-2 grow">{sandboxElement}</div>
         {sandboxLoaded && (
           <div className="order-1">
-            <Sidebar menuItems={extendedMenu} selected={selected} setSelected={setSelected} />
+            <Sidebar menuItems={extendedMenu} selected={selected} setSelected={setSelected} isVisible={isSidebarVisible} setIsVisible={setIsSidebarVisible} />
           </div>
         )}
       </div>

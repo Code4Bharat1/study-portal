@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react'; // icon for toggle button
 
-const Sidebar = ({ menuItems, selected, setSelected }) => {
-  const [isVisible, setIsVisible] = useState(true);
+const Sidebar = ({ menuItems, selected, setSelected, isVisible, setIsVisible }) => {
+  
 
   useEffect(() => {
     if (menuItems.length > 0 && menuItems[0].onClick) {
