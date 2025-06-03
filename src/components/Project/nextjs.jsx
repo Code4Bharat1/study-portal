@@ -140,7 +140,7 @@ export default function NextJsProjectPlatform() {
             setSidebarContent={setSidebarContent}
             task={task}
             title={"Next.js"}
-            hideExplorer={0}
+            hideExplorer={false}
         />
     );
 }

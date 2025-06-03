@@ -140,7 +140,7 @@ export default function MernProjectPlatform() {
             setSidebarContent={setSidebarContent}
             task={task}
             title={"MERN"}
-            hideExplorer={0}
+            hideExplorer={false}
         />
     );
 }
