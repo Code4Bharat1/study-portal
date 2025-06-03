@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
+
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     username: "",
@@ -21,7 +22,7 @@ export default function RegisterPage() {
 
     try {
       const response = await fetch(
-        "https://sp-api.code4bharat.com/api/auth/register",
+        `https://sp-api.code4bharat.com/api/auth/register`, // Use the base URL
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -32,24 +33,30 @@ export default function RegisterPage() {
       const text = await response.text();
       console.log("Raw response:", text);
 
+      let data;
       try {
-        const data = JSON.parse(text);
-
-        if (response.status === 409) {
-          sessionStorage.setItem("registeredEmail", formData.email);
-          return router.push("/login");
-        }
-
-        if (!response.ok) {
-          throw new Error(data.message || "Registration failed");
-        }
-
-        localStorage.setItem("token", data.token);
-        router.push("/login");
+        data = JSON.parse(text);
       } catch (jsonError) {
         console.error("JSON parse error:", text);
         throw new Error("Server returned invalid JSON");
       }
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          sessionStorage.setItem("registeredEmail", formData.email);
+          router.push("/login");
+          return;
+        } else if (response.status === 500) {
+          throw new Error("Server error. Please try again later.");
+        }
+        throw new Error(data.message || "Registration failed");
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("username", formData.username);
+
+      router.push("/");
     } catch (err) {
       setError(err.message);
       console.error("Registration error:", err);
@@ -66,7 +73,6 @@ export default function RegisterPage() {
         transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
         className="relative max-w-md w-full p-8 bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl ring-1 ring-gray-100/50 overflow-hidden"
       >
-        {/* Decorative subtle glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(0,162,255,0.1)_0%,transparent_60%)] pointer-events-none" />
 
         <motion.h1

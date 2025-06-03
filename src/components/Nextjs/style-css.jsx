@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
             <span className="font-semibold">For Coders:</span> Use a <code>.module.css</code> file alongside the component, importing and applying scoped classes for isolated styling.
           </p>
           <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
-            <code>{`// app/components/Card.js
+            <code>{`// app/@/components/Card.js
 import styles from './Card.module.css';
 
 export default function Card() {
@@ -78,7 +78,7 @@ export default function Card() {
   );
 }
 
-// app/components/Card.module.css
+// app/@/components/Card.module.css
 .card {
   background-color: #ffffff;
   border-radius: 8px;
@@ -111,7 +111,7 @@ export default function Card() {
             <span className="font-semibold">For Coders:</span> Inline CSS applies styles directly in JSX via the <code>style</code> attribute, ideal for small tweaks but limited for complex styling.
           </p>
           <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
-            <code>{`// app/components/QuickButton.js
+            <code>{`// app/@/components/QuickButton.js
 export default function QuickButton() {
   return (
     <button
@@ -143,7 +143,7 @@ export default function QuickButton() {
             <span className="font-semibold">For Coders:</span> Styled JSX, a Next.js-specific CSS-in-JS solution, scopes styles to a component, defined within JSX using a <code>style jsx</code> tag.
           </p>
           <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
-            <code>{`// app/components/StyledCard.js
+            <code>{`// app/@/components/StyledCard.js
 export default function StyledCard() {
   return (
     <div>

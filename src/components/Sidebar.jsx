@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-const Sidebar = ({ menuItems }) => {
-  const [selected, setSelected] = useState(menuItems[0]?.label || "");
+const Sidebar = ({ menuItems, selected, setSelected }) => {
 
   useEffect(() => {
     if (menuItems.length > 0 && menuItems[0].onClick) {
@@ -31,10 +30,10 @@ const Sidebar = ({ menuItems }) => {
                 name="sidebar-items"
                 value={label}
                 checked={isSelected}
-                onChange={() => {
-                  setSelected(label);
-                  onClick();
-                }}
+                onChange={async () => {
+                  if (await onClick())
+                    setSelected(label);
+                  }}
                 className="hidden"
               />
               {icon}

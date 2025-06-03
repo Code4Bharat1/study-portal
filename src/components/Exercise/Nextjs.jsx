@@ -24,7 +24,8 @@ import {
 
 import { useState } from "react";
 import sdk from "@stackblitz/sdk";
-import QuestionPlatform from "@/components/Exercise/Platform";
+import QuestionPlatform from "@/components/TestPlatform";
+import TaskNotPassed from "@/components/Modals/TaskNotPassed"
 
 const handleOnChange = async (level) => {
   try {
@@ -638,13 +639,13 @@ const packageJson = `{
   "version": "0.1.0",
   "private": true,
   "stackblitz": {
-    "startCommand": "npm run test && source ~/.jshrc"
+    "startCommand": "node tests.test && source ~/.jshrc",
+"installDependencies": false
   }, "scripts": {
-    "dev": "npm run test && next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node tests.test"
   },
   "dependencies": {
     "next": "^14.0.0",
@@ -707,6 +708,8 @@ export default function NextJSExercisePlatform() {
       files={sandboxFiles}
       filesOpened={sandboxFilesOpened}
       setSidebarContent={setSidebarContent}
+      title={"Next.js"}
+
     />
   );
 }

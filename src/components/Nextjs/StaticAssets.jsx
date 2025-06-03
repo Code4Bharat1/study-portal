@@ -31,7 +31,7 @@ const NextStaticFilesAndAssetsPage = () => {
             <span className="font-semibold">For Coders:</span> Static images can be referenced directly in HTML or JSX using the <code>src</code> attribute, or optimized using the <code>Image</code> component from <code>next/image</code>.
           </p>
           <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
-            <code>{`// app/components/Logo.js
+            <code>{`// app/@/components/Logo.js
 import Image from 'next/image';
 
 export default function Logo() {

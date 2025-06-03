@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react';
-import QuestionPlatform from '@/components/Exercise/Platform';
+import QuestionPlatform from '@/components/TestPlatform';
 
 import sdk from "@stackblitz/sdk";
 
@@ -514,20 +514,16 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);
 const packageJson = `{
   "name": "mongodb-exercise",
   "stackblitz": {
-    "startCommand": "npm run test"
-  },
-  "stackblitz": {
-    "startCommand": "npm run test && source ~/.jshrc"
-  }, "scripts": {
-    "execute": "node driver.js",
-    "test": "node tests.test"
+    "startCommand": "node tests.test && source ~/.jshrc",
+"installDependencies": false
   },
   "dependencies": {
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "eslint": "^9.25.0",
-    "globals": "^16.0.0"
+    "globals": "^16.0.0",
+    "tingodb": "^0.6.1"
   }
 }`
 
@@ -582,6 +578,8 @@ export default function MongodDBExercisePlatform() {
             files={sandboxFiles}
             filesOpened={sandboxFilesOpened}
             setSidebarContent={setSidebarContent}
+            title={"Mongodb"}
+
         />
     );
 }

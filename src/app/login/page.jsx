@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+ // Import the base URL
+
 export default function LoginPage() {
   const [formData, setFormData] = useState({
-    email: "Amaan",
+    email: "",
     password: "",
   });
   const [error, setError] = useState("");
@@ -19,7 +21,7 @@ export default function LoginPage() {
 
     try {
       const response = await fetch(
-        "https://sp-api.code4bharat.com/api/auth/login",
+        `https://sp-api.code4bharat.com/api/auth/login`, // Use the base URL
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -38,10 +40,18 @@ export default function LoginPage() {
       }
 
       if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error("Invalid email or password. Please try again.");
+        } else if (response.status === 500) {
+          throw new Error("Server error. Please try again later.");
+        }
         throw new Error(data.message || "Login failed");
       }
 
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("username", data.username);
+
       router.push("/");
     } catch (err) {
       setError(err.message);
@@ -59,7 +69,6 @@ export default function LoginPage() {
         transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
         className="relative max-w-md w-full p-6 bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl ring-1 ring-gray-100/50 overflow-hidden"
       >
-        {/* Decorative subtle glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(0,162,255,0.1)_0%,transparent_60%)] pointer-events-none" />
 
         <motion.h1
@@ -91,7 +100,7 @@ export default function LoginPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M12 8v4m12 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
               <span>{error}</span>

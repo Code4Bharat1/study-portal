@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import sdk from "@stackblitz/sdk"
 
-import QuestionPlatform from "@/components/Exercise/Platform";
+import QuestionPlatform from "@/components/TestPlatform";
 
 const handleOnChange = async (level) => {
     try {
@@ -637,13 +637,8 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);
 const packageJson = `{
   "name": "sqlite-exercise",
   "stackblitz": {
-    "startCommand": "npm run test"
-  },
-  "stackblitz": {
-    "startCommand": "npm run test && source ~/.jshrc"
-  }, "scripts": {
-    "execute": "node driver.js",
-    "test": "node tests.test"
+    "startCommand": "node tests.test && source ~/.jshrc",
+"installDependencies": false
   },
   "dependencies": {
     "sqlite3": "^5.1.6"
@@ -651,7 +646,8 @@ const packageJson = `{
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "eslint": "^9.25.0",
-    "globals": "^16.0.0"
+    "globals": "^16.0.0",
+    "sqlite3": "^5.1.6"
   }
 }
 `
@@ -716,6 +712,8 @@ export default function MysqlExercisePlatform() {
             files={sandboxFiles}
             filesOpened={sandboxFilesOpened}
             setSidebarContent={setSidebarContent}
+            title={"MySQL"}
+
         />
     );
 }

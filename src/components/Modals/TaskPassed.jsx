@@ -1,45 +1,54 @@
-// components/TestPassed.jsx
 import { useEffect, useState } from "react";
 import { LEVEL_SCORE_MAP, calculateScore } from "./utils";
 
-export default function TestPassed({ result, level, onClose }) {
+export default function TestPassed({ result, level, onClose, url, type = "exercise" }) {
   const [score, setScore] = useState(0);
   const [timeTaken, setTimeTaken] = useState(0);
   const [breakdown, setBreakdown] = useState({ passScore: 0, attemptScore: 0, timeScore: 0 });
 
   useEffect(() => {
-    const startTime = localStorage.getItem("startTimestamp");
-    if (!startTime) return console.error("Start time not found in local storage.");
-    
-    const endTime = new Date(result.timestamp)
-    console.log(startTime, endTime)
-    const end = new Date(endTime).getTime()
-    const start = new Date(startTime).getTime();
-    const duration = (end - start) / 1000;
+    let startTime = localStorage.getItem("startTimestamp");
+    if (!startTime) {
+      console.error("Start time not found in local storage.");
+      return;
+    }
 
-    console.log(end, start, duration)
+    startTime = new Date(Number(startTime));
+    const endTime = new Date(result.timestamp);
+    const duration = (endTime - startTime) / 1000;
 
     setTimeTaken(duration);
 
     const { total, breakdown } = calculateScore(result.attempts, duration, level);
     setScore(total);
     setBreakdown(breakdown);
-  }, [result]);
+  }, [result, level]);
 
   const handleClose = () => {
-    onClose();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found");
+      onClose();
+      return;
+    }
 
-    fetch("http://localhost:3902/submit/exercise", {
+    fetch("https://sp-api.code4bharat.com/api/submit/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: localStorage.getItem("token"),
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ score }),
+      body: JSON.stringify({ score, url, userId: localStorage.getItem("userId"), type }),
     })
       .then((res) => res.json())
-      .then((data) => console.log("Score submitted:", data))
-      .catch((err) => console.error("Submission error:", err));
+      .then((data) => {
+        console.log("Score submitted:", data);
+        onClose();
+      })
+      .catch((err) => {
+        console.error("Submission error:", err);
+        onClose();
+      });
   };
 
   return (

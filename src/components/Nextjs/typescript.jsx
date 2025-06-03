@@ -76,7 +76,7 @@ npm install --save-dev typescript @types/react @types/node
             <span className="font-semibold">For Coders:</span> TypeScript allows you to define props types for components, ensuring correct data is passed and catching errors during development.
           </p>
           <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
-            <code>{`// app/components/Greeting.tsx
+            <code>{`// app/@/components/Greeting.tsx
 type GreetingProps = {
   name: string;
   age?: number; // Optional prop
@@ -93,7 +93,7 @@ export default function Greeting({ name, age }: GreetingProps) {
 
 // Usage in a page
 // app/greeting/page.tsx
-import Greeting from '../components/Greeting';
+import Greeting from '../@/components/Greeting';
 
 export default function GreetingPage() {
   return <Greeting name="Alice" age={25} />;

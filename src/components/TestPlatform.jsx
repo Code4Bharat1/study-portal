@@ -1,13 +1,12 @@
-"use client";
 import { useState, useMemo } from "react";
 import Sidebar from "@/components/Sidebar";
 import Sandbox from "@/components/Sandbox";
 import sdk from "@stackblitz/sdk";
-import Instructions from "./ModalComponent/Instructions";
-import TestPassed from "./ModalComponent/TaskPassed";
-import TestNotPassed from "./ModalComponent/TaskNotPassed";
-import Modal from "./ModalComponent/Modal";
-import { normalizeLevel } from "./ModalComponent/utils";
+import Instructions from "@/components/Modals/Instructions";
+import TestPassed from "@/components/Modals/TaskPassed";
+import TestNotPassed from "@/components/Modals/TaskNotPassed";
+import Modal from "@/components/Modals/Modal";
+import Leaderboard from "@/components/Leaderboard";
 
 export default function QuestionPlatform({
   setSidebarContent,
@@ -15,14 +14,20 @@ export default function QuestionPlatform({
   files,
   filesOpened,
   task,
-  exerciseTitle,
+  title,
+  hideExplorer = true
 }) {
   const [sandboxLoaded, setSandboxLoaded] = useState(false);
-  const [selectedLevel, setSelectedLevel] = useState("Basic");
+  const [selectedLevel, setSelectedLevel] = useState("basic");
   const [showingInstructions, setShowingInstructions] = useState(false);
   const [showAlert, setAlert] = useState(false);
   const [showResult, setResultPage] = useState(false);
   const [result, setResult] = useState(null);
+  const [selected, setSelected] = useState(menuItems[0]?.label || "");
+  const [url, setUrl] = useState('');
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+
+  const subtitle = hideExplorer === false ? "Projects" : "Exercises";
 
   const handleSandboxLoad = () => setSandboxLoaded(true);
 
@@ -35,8 +40,11 @@ export default function QuestionPlatform({
       const fsSnap = await vm.getFsSnapshot();
 
       if ("results.tests" in fsSnap && fsSnap["results.tests"]) {
+        const index = menuItems.findIndex(item => item.label === selected) + 1;
+        setUrl(`${title.replace(".", "").toLowerCase()}/${selectedLevel.toLowerCase()}/${index}`);
         setResult(JSON.parse(fsSnap["results.tests"]));
         setResultPage(true);
+        await vm.applyFsDiff({ destroy: ['results.tests', 'attempts.tests'], create: {} });
       } else {
         setAlert(true);
       }
@@ -46,11 +54,27 @@ export default function QuestionPlatform({
     }
   };
 
-  const handleLevelChange = (e) => {
-    const level = normalizeLevel(e.target.value);
-    setSelectedLevel(level);
-    setSidebarContent(e);
-    setShowingInstructions(true);
+  const checkPreviousExerciseAttempted = async () => {
+    const container = document.getElementById("stackblitz-container");
+    if (!container) throw new Error("Container element not found");
+
+    const vm = await sdk.connect(container);
+    const files = Object.keys(await vm.getFsSnapshot());
+
+    if (files.includes('results.tests') || files.includes('attempts.tests')) {
+      setAlert(true);
+      return 1;
+    }
+    return 0;
+  };
+
+  const handleLevelChange = async (e) => {
+    const level = e.target.value.toLowerCase();
+    if (!(await checkPreviousExerciseAttempted())) {
+      setSelectedLevel(level);
+      setSidebarContent(e);
+      setShowingInstructions(true);
+    }
   };
 
   const sandboxElement = useMemo(() => {
@@ -59,6 +83,7 @@ export default function QuestionPlatform({
         fileToOpen={filesOpened}
         filesObj={files}
         onLoad={handleSandboxLoad}
+        hideExplorer={hideExplorer}
       />
     ) : null;
   }, [files, filesOpened]);
@@ -66,9 +91,14 @@ export default function QuestionPlatform({
   const extendedMenu = useMemo(() => {
     return menuItems.map((item) => ({
       ...item,
-      onClick: (e) => {
-        item.onClick?.(e);
-        setShowingInstructions(true);
+      onClick: async (e) => {
+        const previousAttempt = await checkPreviousExerciseAttempted();
+        if (!previousAttempt) {
+          item.onClick?.(e);
+          setShowingInstructions(true);
+          return 1;
+        }
+        return 0;
       },
     }));
   }, [menuItems]);
@@ -89,7 +119,13 @@ export default function QuestionPlatform({
 
       {showResult && (
         <Modal onClose={() => setResultPage(false)} ariaLabel="Test Passed">
-          <TestPassed result={result} onClose={() => setResultPage(false)} level={selectedLevel} />
+          <TestPassed result={result} onClose={() => setResultPage(false)} level={selectedLevel} url={url} />
+        </Modal>
+      )}
+
+      {showLeaderboard && (
+        <Modal onClose={() => setShowLeaderboard(false)} ariaLabel="Leaderboard">
+          <Leaderboard />
         </Modal>
       )}
 
@@ -98,13 +134,13 @@ export default function QuestionPlatform({
         {/* Difficulty Buttons */}
         <div className="flex space-x-3" role="radiogroup" aria-label="Difficulty">
           {["Basic", "Intermediate", "Hard"].map((level) => {
-            const isSelected = selectedLevel === level;
+            const isSelected = selectedLevel === level.toLowerCase();
             const baseColor =
               level === "Basic"
                 ? "bg-blue-500 hover:bg-blue-600 ring-blue-300"
                 : level === "Intermediate"
-                ? "bg-green-500 hover:bg-green-600 ring-green-300"
-                : "bg-red-500 hover:bg-red-600 ring-red-300";
+                  ? "bg-green-500 hover:bg-green-600 ring-green-300"
+                  : "bg-red-500 hover:bg-red-600 ring-red-300";
 
             return (
               <label key={level}>
@@ -127,7 +163,7 @@ export default function QuestionPlatform({
           })}
         </div>
 
-        <div className="text-3xl font-bold">{exerciseTitle}</div>
+        <div className="text-3xl font-bold">{title} {subtitle}</div>
 
         {/* Action Buttons */}
         <div className="flex space-x-2">
@@ -136,6 +172,12 @@ export default function QuestionPlatform({
             className="px-3 py-1 text-sm bg-indigo-500 text-white rounded hover:bg-indigo-600"
           >
             Instructions
+          </button>
+          <button
+            onClick={() => setShowLeaderboard(true)}
+            className="px-3 py-1 text-sm bg-purple-500 text-white rounded hover:bg-purple-600"
+          >
+            Leaderboard
           </button>
           <button
             onClick={handleSubmit}
@@ -151,7 +193,7 @@ export default function QuestionPlatform({
         <div className="order-2 grow">{sandboxElement}</div>
         {sandboxLoaded && (
           <div className="order-1 w-64">
-            <Sidebar menuItems={extendedMenu} />
+            <Sidebar menuItems={extendedMenu} selected={selected} setSelected={setSelected} />
           </div>
         )}
       </div>

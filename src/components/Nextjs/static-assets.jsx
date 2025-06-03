@@ -31,7 +31,7 @@ const NextStaticAssets = () => {
             <span className="font-semibold">For Coders:</span> Static assets can be referenced directly in JSX or optimized using the <code>Image</code> component from <code>next/image</code> for better performance.
           </p>
           <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mb-4">
-            <code>{`// app/components/Logo.tsx
+            <code>{`// app/@/components/Logo.tsx
 import Image from 'next/image';
 
 export default function Logo() {

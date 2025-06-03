@@ -124,6 +124,6 @@ async function checkSendEmail() {
     process.exit(0);
   } else {
     console.log(`\n❌ One or more checks failed. Attempts: ${attempts}`);
-    process.exit(1);
+    ;
   }
 })();

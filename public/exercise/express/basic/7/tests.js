@@ -77,13 +77,13 @@ function checkMiddlewareUsage() {
       console.log('\n✅ All tests passed for Logger Middleware');
       process.exit(0);
     } catch (e) {
-      process.exit(1);
+      ;
     }
   } else {
     attempts += 1;
     writeAttempts(attempts);
     console.log('\n❌ Test failed for Logger Middleware');
     console.log(`❌ Tests failed. Attempt #${attempts} recorded.`);
-    process.exit(1);
+    ;
   }
 })();

@@ -51,7 +51,7 @@ const checklist = [
       "Use Image Optimization via the built-in next/image component.",
       "Enable Automatic Static Optimization by keeping pages pure (no getServerSideProps if not needed).",
       "Use code splitting by dynamic importing components (next/dynamic).",
-      "Use lazy loading for off-screen components/images.",
+      "Use lazy loading for off-screen @/components/images.",
       "Minify and compress images and static assets.",
     ],
   },

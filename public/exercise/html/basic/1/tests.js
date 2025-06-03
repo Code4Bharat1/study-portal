@@ -113,7 +113,6 @@ const syntaxPassed = syntaxVerify();
 
 if (!syntaxPassed) {
   console.log('🚨 Syntax failed, skipping structure verification.');
-  process.exit(); // Exit if syntax is invalid
 }
 
 // Run structure verification only if syntax passed

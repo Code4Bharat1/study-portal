@@ -186,7 +186,7 @@ async function functionalVerify() {
   const syntaxPassed = await syntaxVerify();
   if (!syntaxPassed) {
     console.log('\nAborting due to syntax errors.');
-    process.exit(1);
+    ;
   }
 
   const structurePassed = codeVerify();
@@ -216,12 +216,12 @@ async function functionalVerify() {
       process.exit(0);
     } catch (e) {
       console.log(`Error writing result: ${e.message}`);
-      process.exit(1);
+      ;
     }
   } else {
     attempts++;
     writeAttempts(attempts);
     console.log(`\nOne or more checks failed. Attempt #${attempts}. Please review and try again.`);
-    process.exit(1);
+    ;
   }
 })();

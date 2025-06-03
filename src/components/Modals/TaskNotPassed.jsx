@@ -1,4 +1,4 @@
-// components/TestNotPassed.jsx
+// @/components/TestNotPassed.jsx
 export default function TestNotPassed({ onClose }) {
   return (
     <div className="text-gray-800">
@@ -12,6 +12,13 @@ export default function TestNotPassed({ onClose }) {
           run-tests
         </code>
         in the terminal.
+      </p>
+      <p className="mb-4">
+        If already tested, then press the
+        <code className="mx-2 bg-gray-100 text-red-600 font-mono text-sm px-2 py-0.5 rounded">
+          Submit
+        </code>
+        present above.
       </p>
       <button
         onClick={onClose}

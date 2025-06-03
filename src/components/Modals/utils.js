@@ -1,9 +1,10 @@
-// utils.js
-
 export const LEVEL_SCORE_MAP = {
-  Basic: 50,
-  Intermediate: 70,
-  Hard: 100,
+  basic: 50,
+  intermediate: 70,
+  hard: 100,
+  project_basic: 150,
+  project_intermediate: 225,
+  project_hard: 300
 };
 
 export const MAX_ATTEMPTS = 10;
@@ -13,7 +14,7 @@ export const normalizeLevel = (level) =>
   level.charAt(0).toUpperCase() + level.slice(1).toLowerCase();
 
 export const calculateScore = (attempts, duration, level) => {
-  const maxScore = LEVEL_SCORE_MAP[level] || 50;
+  const maxScore = LEVEL_SCORE_MAP[level] || LEVEL_SCORE_MAP[level.split('_')[1]] || 50;
   const passScore = 0.6 * maxScore;
   const attemptScore =
     attempts < MAX_ATTEMPTS
