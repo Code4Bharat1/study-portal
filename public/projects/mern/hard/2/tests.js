@@ -1,6 +1,11 @@
 // test/social-dashboard.test.js
-require('@babel/register')({ presets: ['@babel/preset-react'] });
-const path = require('path');
+require('@babel/register')({
+  extensions: ['.js', '.jsx'],
+  presets: [
+    '@babel/preset-env',
+    ['@babel/preset-react', { runtime: 'automatic' }],
+  ],
+});const path = require('path');
 const fs = require('fs');
 const { ESLint } = require('eslint');
 const request = require('supertest');

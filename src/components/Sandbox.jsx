@@ -182,6 +182,7 @@ rl.on('line', async (line) => {
   // Handle custom 'test' command
   // Handle custom 'test' command
   if (cmd === 'run-tests') {
+    rl.pause(); // <--- pause readline to free stdin
     const testFile = path.resolve(process.cwd(), 'tests.test');
 
     if (!fs.existsSync(testFile)) {
@@ -197,6 +198,7 @@ rl.on('line', async (line) => {
 
     testProcess.on('close', (code) => {
       console.log(\\\`\\nTest process exited with code: \\\${code}\\\`);
+      rl.resume()
       updatePrompt();
     });
 
@@ -204,6 +206,7 @@ rl.on('line', async (line) => {
   }
 
   if (cmd === 'npx') {
+    rl.pause(); // <--- pause readline to free stdin
     if (args[0] === 'node') {
       console.error("Error: 'npx node' is disabled. Use node instead.");
       updatePrompt();
@@ -213,12 +216,14 @@ rl.on('line', async (line) => {
     const npxProcess = spawn('npx', args, { stdio: 'inherit' });
     npxProcess.on('close', (code) => {
       console.log('Process exited with code: ' + code);
+      rl.resume()
       updatePrompt();
     });
     return;
   }
 
   if (cmd === 'node') {
+    rl.pause(); // <--- pause readline to free stdin
     const targetFile = args[0];
     if (!targetFile) {
       console.error('Usage: node <script.js>');
@@ -267,27 +272,21 @@ rl.on('line', async (line) => {
       },
     };
 
-    const allowedBuiltins = [
-      'path',
-      'url',
-      'http',
-      'https',
-      'buffer',
-      'events',
-      'stream',
-      'util',
-      'assert',
-      'querystring',
-      'zlib',
-      'timers',
-      'net',
-      'dns',
+    const blockedBuiltins = [
+      'child_process', 'vm'
     ];
 
     function safeRequire(mod) {
+      console.log(process.cwd(), mod)
       if (mod === 'fs') return fsMock;
-      if (allowedBuiltins.includes(mod)) return require(mod);
-      throw new Error('Module ' + mod + ' is not allowed');
+      if (blockedBuiltins.includes(mod)) throw new Error('Module ' + mod + ' is not allowed');
+      try {
+        const resolved = require.resolve(mod, { paths: [baseDir] });
+        return require(resolved);
+      } catch (err) {
+          throw new Error('Module ' + mod + ' could not be loaded');
+      }
+      
     }
 
     let resolvedPath;
@@ -321,7 +320,6 @@ rl.on('line', async (line) => {
     try {
       vm.runInContext(code, context, {
         filename: resolvedPath,
-        timeout: 5000,
       });
     } catch (err) {
       console.error('Sandbox error:', err.message);
@@ -332,11 +330,12 @@ rl.on('line', async (line) => {
   }
 
   if (cmd === 'cd') {
-  if (args.length == 0){
-        console.log(process.cwd());
-        updatePrompt();
-        return;
-      }
+    rl.pause(); // <--- pause readline to free stdin
+    if (args.length == 0){
+          console.log(process.cwd());
+          updatePrompt();
+          return;
+        }
       const targetDir = args[0];
     try {
       if (targetDir.includes('~')) {
@@ -375,6 +374,7 @@ rl.on('line', async (line) => {
   }
 
   if (cmd === 'npm') {
+    rl.pause(); // <--- pause readline to free stdin
     const env = { ...process.env, npm_config_ignore_scripts: 'true' };
     const npmProcess = spawn('npm', args, { stdio: 'inherit', env });
 
@@ -383,8 +383,10 @@ rl.on('line', async (line) => {
     });
     npmProcess.on('close', (code) => {
       console.log('Process exited with code: ' + code);
+      rl.resume()
       updatePrompt();
     });
+    return;
   }
   const cmdPath = await resolveCommandPath(cmd);
 
@@ -402,6 +404,7 @@ rl.on('line', async (line) => {
 
   child.on('close', (code) => {
     console.log('Process exited with code: ' + code);
+    rl.resume()
     updatePrompt();
   });
 });
@@ -485,7 +488,7 @@ export default function Sandbox({ filesObj, fileToOpen, onLoad, hideExplorer }) 
       <div id={containerId} className="w-screen h-[calc(100vh-11rem)]" />
       {loading && (
         <div
-          className="absolute inset-0 bg-white/10 backdrop-blur-[2px] flex items-center justify-center z-50"
+          className="absolute inset-0 bg-white/10 backdrop-blur-[2px] flex items-center justify-center z-50 select-0"
           tabIndex={0}
           onKeyDown={(e) => e.preventDefault()}
           onKeyUp={(e) => e.preventDefault()}

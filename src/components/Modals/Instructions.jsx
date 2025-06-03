@@ -14,6 +14,10 @@ const markdownTemplate = `
 
 > npm run <any-predifined-script-in-package.json>
 
+**OR**
+
+> npx <any-installed-module> // for example npx http-server
+
 ### You must pass the tests before submitting. To run the tests and test your code: 
 
 > run-tests

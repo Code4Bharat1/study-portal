@@ -1,6 +1,11 @@
 // test/blog-platform.test.js
-require('@babel/register')({ presets: ['@babel/preset-react'] });
-const fs = require('fs');
+require('@babel/register')({
+  extensions: ['.js', '.jsx'],
+  presets: [
+    '@babel/preset-env',
+    ['@babel/preset-react', { runtime: 'automatic' }],
+  ],
+});const fs = require('fs');
 const path = require('path');
 const { ESLint } = require('eslint');
 const request = require('supertest');

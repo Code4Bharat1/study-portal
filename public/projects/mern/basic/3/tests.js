@@ -1,6 +1,11 @@
 // test/todo-api.test.js
-require('@babel/register')({ presets: ['@babel/preset-react'] });
-const { ESLint } = require('eslint');
+require('@babel/register')({
+  extensions: ['.js', '.jsx'],
+  presets: [
+    '@babel/preset-env',
+    ['@babel/preset-react', { runtime: 'automatic' }],
+  ],
+});const { ESLint } = require('eslint');
 const fs = require('fs');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;

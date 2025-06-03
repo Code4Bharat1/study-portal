@@ -40,17 +40,17 @@ const intermediateMenu = [
     label: "1. Dynamic Blog with API",
     icon: <FaFileAlt className="inline mr-2 text-xl" />,
     task: `**Task:** Build a dynamic blog using Next.js with API routes to fetch blog posts from a mock API. Use SSG and ISR for rendering.`,
-    onClick: (e) => handleOnChange("basic/2")},
+    onClick: (e) => handleOnChange("intermediate/1")},
   {
     label: "2. E-Commerce Cart Page",
     icon: <FaHeading className="inline mr-2 text-xl" />,
     task: `**Task:** Create an e-commerce cart page in Next.js with client-side state management. Use Tailwind CSS for styling and add API routes for product data.`,
-    onClick: (e) => handleOnChange("basic/2")},
+    onClick: (e) => handleOnChange("intermediate/2")},
   {
     label: "3. User Profile with Authentication",
     icon: <FaListUl className="inline mr-2 text-xl" />,
     task: `**Task:** Develop a user profile page in Next.js with authentication using NextAuth.js. Fetch user data from an API and display it securely.`,
-    onClick: (e) => handleOnChange("basic/2")},
+    onClick: (e) => handleOnChange("intermediate/3")},
 ];
 
 const basicMenu = [
@@ -58,7 +58,7 @@ const basicMenu = [
     label: "1. Static Portfolio",
     icon: <FaFileAlt className="inline mr-2 text-xl" />,
     task: `**Task:** Create a static portfolio site using Next.js with a home page, about page, and contact page. Use CSS modules for styling.`,
-    onClick: (e) => handleOnChange("basic/2")},
+    onClick: (e) => handleOnChange("basic/1")},
   {
     label: "2. Blog with Static Generation",
     icon: <FaHeading className="inline mr-2 text-xl" />,
@@ -68,7 +68,7 @@ const basicMenu = [
     label: "3. Task Tracker",
     icon: <FaListUl className="inline mr-2 text-xl" />,
     task: `**Task:** Create a task tracker app in Next.js. Use client-side state to add and remove tasks, and style with Tailwind CSS.`,
-    onClick: (e) => handleOnChange("basic/2")},
+    onClick: (e) => handleOnChange("basic/3")},
 ];
 
 const hardMenu = [
@@ -76,17 +76,17 @@ const hardMenu = [
     label: "1. Full-Stack Dashboard",
     icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
     task: `**Task:** Build a full-stack dashboard in Next.js with API routes, user authentication, and dynamic data fetching. Use Tailwind CSS for styling.`,
-    onClick: (e) => handleOnChange("basic/2")},
+    onClick: (e) => handleOnChange("hard/1")},
   {
     label: "2. Real-Time Collaboration App",
     icon: <FaShieldAlt className="inline mr-2 text-xl" />,
     task: `**Task:** Create a real-time collaboration app in Next.js using WebSockets. Implement features like shared document editing and user presence.`,
-    onClick: (e) => handleOnChange("basic/2")},
+    onClick: (e) => handleOnChange("hard/2")},
   {
     label: "3. Advanced E-Commerce Platform",
     icon: <FaCode className="inline mr-2 text-xl" />,
     task: `**Task:** Develop an advanced e-commerce platform in Next.js with payment integration (e.g., Stripe), product search, and user reviews.`,
-    onClick: (e) => handleOnChange("basic/2")},
+    onClick: (e) => handleOnChange("hard/3")},
 ];
 
 const sandboxFiles = {
