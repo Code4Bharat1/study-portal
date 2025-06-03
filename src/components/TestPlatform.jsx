@@ -192,7 +192,7 @@ export default function QuestionPlatform({
       <div className="flex flex-row pr-2">
         <div className="order-2 grow">{sandboxElement}</div>
         {sandboxLoaded && (
-          <div className="order-1 w-64">
+          <div className="order-1">
             <Sidebar menuItems={extendedMenu} selected={selected} setSelected={setSelected} />
           </div>
         )}
