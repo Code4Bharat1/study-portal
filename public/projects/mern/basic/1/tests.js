@@ -1,5 +1,11 @@
 // test/simple-crud-app.test.js
-require('@babel/register')({ presets: ['@babel/preset-react'] });
+require('@babel/register')({
+  extensions: ['.js', '.jsx'],
+  presets: [
+    '@babel/preset-env',
+    ['@babel/preset-react', { runtime: 'automatic' }],
+  ],
+});
 const { ESLint } = require('eslint');
 const fs = require('fs');
 const parser = require('@babel/parser');
@@ -13,7 +19,7 @@ const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
 const app = require('../backend/app');
-const Frontend = require('../frontend/App').default;
+const Frontend = require('../frontend/App.jsx').default;
 
 describe('Simple CRUD App with TingoDB – Full Stack Test', () => {
   let db;
