@@ -32,7 +32,7 @@ export default function TestPassed({ result, level, onClose, url, type = "exerci
       return;
     }
 
-    fetch("https://sp-api.code4bharat.com/api/submit/", {
+    fetch("https://sp-api.code4bharat.com/api/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

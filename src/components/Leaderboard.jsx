@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
 
-
 export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [userRank, setUserRank] = useState(null);
@@ -16,12 +15,23 @@ export default function Leaderboard() {
           throw new Error('Please login to view the leaderboard.');
         }
 
-        const response = await fetch(`https://sp-api.code4bharat.com/api/leaderboard`, { // Use the base URL
+        const response = await fetch(`https://sp-api.code4bharat.com/api/leaderboard`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
+        const text = await response.text(); // Capture raw response
+        console.log("Raw leaderboard response:", text); // Log for debugging
+        console.log("Response status:", response.status); // Log status code
+
         if (!response.ok) {
-          const errorData = await response.json();
+          let errorData;
+          try {
+            errorData = JSON.parse(text);
+          } catch (jsonError) {
+            console.error("Failed to parse leaderboard response:", text);
+            throw new Error('Server returned invalid response');
+          }
+
           if (response.status === 401) {
             localStorage.removeItem('token');
             localStorage.removeItem('userId');
@@ -30,7 +40,7 @@ export default function Leaderboard() {
           throw new Error(errorData.message || 'Failed to fetch leaderboard.');
         }
 
-        const data = await response.json();
+        const data = JSON.parse(text);
         setLeaderboard(data.leaderboard);
         setUserRank(data.user);
         setLoading(false);
