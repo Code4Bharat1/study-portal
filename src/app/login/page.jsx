@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
- // Import the base URL
+// Import the base URL
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -21,7 +21,7 @@ export default function LoginPage() {
 
     try {
       const response = await fetch(
-        `https://sp-api.code4bharat.com/api/auth/login`, // Use the base URL
+        `http://localhost:3902/api/auth/login`, // Use the base URL
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

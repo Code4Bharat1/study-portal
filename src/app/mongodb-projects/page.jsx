@@ -33,7 +33,7 @@ export default function MongoDBProjects() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "https://sp-api.code4bharat.com/api/projects?category=mongodb",
+        "http://localhost:3902/api/projects?category=mongodb",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -65,7 +65,7 @@ export default function MongoDBProjects() {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `https://sp-api.code4bharat.com/api/scores?userId=${userId}`,
+        `http://localhost:3902/api/scores?userId=${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -97,17 +97,14 @@ export default function MongoDBProjects() {
   const runCode = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://sp-api.code4bharat.com/api/execute",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ code, category: "mongodb" }),
-        }
-      );
+      const response = await fetch("http://localhost:3902/api/execute", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ code, category: "mongodb" }),
+      });
       if (!response.ok) {
         if (response.status === 403) {
           localStorage.removeItem("token");
@@ -132,22 +129,19 @@ export default function MongoDBProjects() {
     try {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://sp-api.code4bharat.com/api/scores",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            userId,
-            category: "mongodb",
-            projectId: "mock-project-id",
-            score,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:3902/api/scores", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userId,
+          category: "mongodb",
+          projectId: "mock-project-id",
+          score,
+        }),
+      });
       if (!response.ok) {
         if (response.status === 403) {
           localStorage.removeItem("token");

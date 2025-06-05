@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
-
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     username: "",
@@ -22,7 +21,7 @@ export default function RegisterPage() {
 
     try {
       const response = await fetch(
-        `https://sp-api.code4bharat.com/api/auth/register`, // Use the base URL
+        `http://localhost:3902/api/auth/register`, // Use the base URL
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

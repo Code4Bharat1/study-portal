@@ -23,7 +23,7 @@ export default function MongoDBProjectDetail() {
   const fetchProject = async () => {
     try {
       const response = await fetch(
-        `https://sp-api.code4bharat.com/api/projects/${slug}`,
+        `http://localhost:3902/api/projects/${slug}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }

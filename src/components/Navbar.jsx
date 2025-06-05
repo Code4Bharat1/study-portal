@@ -30,8 +30,7 @@ export default function Navbar() {
     { name: "Java", link: "/firstJava" },
     { name: "Sql", link: "/sql" },
     { name: "MySql", link: "/mysql" },
-    { name: "Next.js", link: "/nextjs"},
-
+    { name: "Next.js", link: "/nextjs" },
   ];
 
   const learningItems = [
@@ -39,7 +38,7 @@ export default function Navbar() {
     { name: "Video", link: "/video" },
     { name: "Quizz Test", link: "/quizz" },
     { name: "Exercises", link: "/exercises" },
-    {name: "Practical-exercises" , link: "/exercises/react"},
+    { name: "Practical-Exercise", link: "/practical-exercise" },
     { name: "Best Practices", link: "/bestpracticecard" },
   ];
 
@@ -47,8 +46,8 @@ export default function Navbar() {
     { name: "Home", link: "/" },
     { name: "Contact", link: "/contact" },
     { name: "Activity", link: "/activity" },
-    { name: "Leaderboard", link: "/leaderboard" }
-
+    { name: "Main-Projects", link: "/project-card" },
+    { name: "Leaderboard", link: "/leaderboard" },
   ];
 
   const allItems = [...navbarItems, ...learningItems, ...menuItems];
@@ -103,7 +102,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            
+
             <div className="flex-shrink-0 flex items-center">
               <div className="text-3xl font-semibold flex items-center space-x-2">
                 <PiFlowerLotusDuotone className="text-blue-600 w-8 h-8 animate-glow" />
