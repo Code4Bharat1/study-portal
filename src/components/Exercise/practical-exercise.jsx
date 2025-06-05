@@ -25,55 +25,55 @@ export default function Exercises() {
     {
       title: "HTML",
       description: "Build responsive web layouts and master semantic HTML5 elements through hands-on exercises.",
-      url: "/exercises/html", // Placeholder URL
+      url: "/exercises/html",
       icon: "🌐",
     },
     {
       title: "CSS",
       description: "Style web pages with modern CSS techniques, including Flexbox, Grid, and animations.",
-      url: "/exercises/css", // Placeholder URL
+      url: "/exercises/css",
       icon: "🎨",
     },
     {
       title: "JavaScript",
       description: "Create interactive features using vanilla JavaScript, DOM manipulation, and ES6+ syntax.",
-      url: "/exercises/javascript", // Placeholder URL
+      url: "/exercises/javascript",
       icon: "⚡",
     },
     {
       title: "React",
       description: "Develop dynamic user interfaces with React components, hooks, and state management.",
-      url: "/exercises/react", // Placeholder URL
+      url: "/exercises/react",
       icon: "⚛️",
     },
     {
-      title: "Node.js ",
+      title: "Node.js",
       description: "Build RESTful APIs and server-side applications using Node.js and Express framework.",
-      url: "/exercises/nodejs", // Placeholder URL
+      url: "/exercises/nodejs",
       icon: "🖥️",
     },
     {
       title: "MongoDB",
       description: "Design and query NoSQL databases with MongoDB for scalable data storage.",
-      url: "/exercises/mongodb", // Placeholder URL
+      url: "/exercises/mongodb",
       icon: "🍃",
     },
     {
       title: "Next.js",
       description: "Create server-rendered React apps with Next.js, focusing on routing and optimization.",
-      url: "/exercises/nextjs", // Placeholder URL
+      url: "/exercises/nextjs",
       icon: "🚀",
     },
     {
       title: "MySQL",
       description: "Master relational database management with MySQL, including schema design and queries.",
-      url: "/exercises/mysql", // Placeholder URL
+      url: "/exercises/mysql",
       icon: "🗄️",
     },
     {
       title: "SQL",
       description: "Write complex SQL queries for data manipulation and analysis in relational databases.",
-      url: "/exercises/sql", // Placeholder URL
+      url: "/exercises/sql",
       icon: "📊",
     },
   ];
@@ -93,21 +93,27 @@ export default function Exercises() {
       </div>
 
       <div className="relative max-w-6xl mx-auto space-y-8">
-        <div className="flex justify-between items-center">
-          <h1 className="text-4xl sm:text-5xl font-extrabold flex items-center justify-center gap-3 animate-fade-in">
-            <span className="text-5xl sm:text-6xl">📚</span> Practical Exercises
-          </h1>
+        {/* Header Section */}
+        <header className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-5xl sm:text-6xl">📚</span>
+            <h1 className="text-3xl sm:text-4xl font-extrabold animate-fade-in">
+              Practical Exercises
+            </h1>
+          </div>
+          
           <button
             onClick={toggleTheme}
-            className={`p-3 rounded-full transition-transform duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+            className={`p-3 rounded-full transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
               isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
-            } text-white`}
+            } text-white shadow-md`}
             aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {isDarkMode ? '☀️' : '🌙'}
           </button>
-        </div>
+        </header>
 
+        {/* Exercise Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up">
           {exercises.map((exercise, index) => (
             <Tilt
@@ -117,16 +123,18 @@ export default function Exercises() {
               glareEnable={true}
               glareMaxOpacity={0.2}
               glareColor="#ffffff"
+              scale={1.02}
+              transitionSpeed={1500}
             >
               <div
-                className={`p-6 rounded-2xl shadow-lg border transition-all backdrop-blur-lg cursor-pointer ${
+                className={`h-full p-6 rounded-2xl shadow-lg border transition-all backdrop-blur-lg cursor-pointer hover:shadow-xl ${
                   isDarkMode
                     ? index % 2 === 0
-                      ? 'bg-gray-800/50 border-gray-700'
-                      : 'bg-gray-700/50 border-gray-600'
+                      ? 'bg-gray-800/50 border-gray-700 hover:bg-gray-800/70'
+                      : 'bg-gray-700/50 border-gray-600 hover:bg-gray-700/70'
                     : index % 2 === 0
-                      ? 'bg-white/70 border-blue-200'
-                      : 'bg-blue-50/50 border-blue-100'
+                      ? 'bg-white/70 border-blue-200 hover:bg-white/90'
+                      : 'bg-blue-50/50 border-blue-100 hover:bg-blue-50/70'
                 }`}
                 role="button"
                 tabIndex={0}
@@ -135,28 +143,37 @@ export default function Exercises() {
                 aria-label={`Start ${exercise.title} exercise`}
                 style={{ '--index': index }}
               >
-                <div className="flex flex-col items-center sm:items-start gap-4">
+                <div className="flex flex-col h-full gap-4">
                   <div className={`text-4xl sm:text-5xl ${
                     isDarkMode ? 'text-blue-400' : 'text-blue-600'
                   }`}>
                     {exercise.icon}
                   </div>
-                  <div className="text-center sm:text-left">
-                    <h2 className={`text-xl sm:text-2xl font-semibold ${
+                  <div className="flex-1">
+                    <h2 className={`text-xl sm:text-2xl font-semibold mb-2 ${
                       isDarkMode ? 'text-gray-200' : 'text-gray-800'
-                    }`}>{exercise.title}</h2>
-                    <p className={`text-base mt-2 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}>{exercise.description}</p>
-                    <button
-                      className={`mt-4 px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-                        isDarkMode ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-500 text-white hover:bg-blue-600'
-                      }`}
-                      onClick={() => handleRedirect(exercise.url)}
-                    >
-                      Start Exercise
-                    </button>
+                    }`}>
+                      {exercise.title}
+                    </h2>
+                    <p className={`text-sm sm:text-base ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
+                      {exercise.description}
+                    </p>
                   </div>
+                  <button
+                    className={`w-full mt-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                      isDarkMode 
+                        ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                    } shadow-md`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRedirect(exercise.url);
+                    }}
+                  >
+                    Start Exercise
+                  </button>
                 </div>
               </div>
             </Tilt>
@@ -194,7 +211,7 @@ export default function Exercises() {
         @keyframes fade-in {
           from {
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(-10px);
           }
           to {
             opacity: 1;
@@ -204,7 +221,7 @@ export default function Exercises() {
         @keyframes slide-up {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(10px);
           }
           to {
             opacity: 1;
@@ -218,10 +235,10 @@ export default function Exercises() {
           animation: float-delayed 10s ease-in-out infinite;
         }
         .animate-fade-in {
-          animation: fade-in 0.6s ease-out;
+          animation: fade-in 0.4s ease-out;
         }
         .animate-slide-up {
-          animation: slide-up 0.6s ease-out forwards;
+          animation: slide-up 0.4s ease-out forwards;
           animation-delay: calc(0.1s * var(--index));
         }
       `}</style>

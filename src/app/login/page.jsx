@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-// Import the base URL
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -21,7 +20,7 @@ export default function LoginPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:3902/api/auth/login`, // Use the base URL
+        `http://localhost:3902/api/auth/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -48,9 +47,46 @@ export default function LoginPage() {
         throw new Error(data.message || "Login failed");
       }
 
+      // ENHANCED: Better validation and storage of user data
+      console.log("Login response data:", data); // Debug log
+
+      if (!data.token) {
+        throw new Error("No authentication token received");
+      }
+
+      if (!data.userId) {
+        throw new Error("No user ID received from server");
+      }
+
+      // Clear any existing data first
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("username");
+
+      // Store new data with validation
       localStorage.setItem("token", data.token);
-      localStorage.setItem("userId", data.userId);
-      localStorage.setItem("username", data.username);
+      localStorage.setItem("userId", String(data.userId)); // Ensure it's a string
+      
+      if (data.username) {
+        localStorage.setItem("username", data.username);
+      }
+
+      // CRITICAL: Verify the data was actually stored
+      const storedUserId = localStorage.getItem("userId");
+      const storedToken = localStorage.getItem("token");
+
+      console.log("Stored data verification:", {
+        storedUserId,
+        storedToken: storedToken ? "Present" : "Missing",
+        originalUserId: data.userId
+      });
+
+      if (!storedUserId || storedUserId === "undefined" || storedUserId === "null") {
+        throw new Error("Failed to store user session data");
+      }
+
+      // Small delay to ensure localStorage is fully written
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       router.push("/");
     } catch (err) {
@@ -177,7 +213,7 @@ export default function LoginPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d="M12 11c0-1.1-.9-2-2-2s-2 .9-2 2 2 4 2 4m2-4c0-1.1.9-2 2-2s2 .9 2 2-2 4-2 4m-6 5v-1a2 2 0 012-2h4a2 2 0 012 2v1M5 8h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10a2 2 0 012-2z"
+                  d="M12 11c0-1.1-.9-2-2-2s-2 .9-2 2s2 4 2 4m2-4c0-1.1.9-2 2-2s2 .9 2 2-2 4-2 4m-6 5v-1a2 2 0 012-2h4a2 2 0 012 2v1M5 8h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10a2 2 0 012-2z"
                 />
               </motion.svg>
             </motion.div>
@@ -234,6 +270,15 @@ export default function LoginPage() {
             Register now
           </Link>
         </motion.div>
+
+        {/* Debug info for development */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="mt-4 p-2 bg-gray-100 text-xs rounded">
+            <strong>Debug - Current Storage:</strong><br/>
+            UserId: {typeof window !== 'undefined' ? localStorage.getItem("userId") : 'N/A'}<br/>
+            Token: {typeof window !== 'undefined' ? (localStorage.getItem("token") ? 'Present' : 'Missing') : 'N/A'}
+          </div>
+        )}
       </motion.div>
     </div>
   );
