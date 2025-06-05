@@ -5,6 +5,7 @@ require('@babel/register')({
     '@babel/preset-env',
     ['@babel/preset-react', { runtime: 'automatic' }],
   ],
+  ignore: [/node_modules/],
 });const { ESLint } = require('eslint');
 const fs = require('fs');
 const parser = require('@babel/parser');
@@ -15,9 +16,11 @@ const path = require('path');
 const { render, screen } = require('@testing-library/react');
 const React = require('react');
 const { JSDOM } = require('jsdom');
+require('@testing-library/dom');
 
-const app = require('../backend/app');
-const Frontend = require('../frontend/App').default;
+
+const app = require('./backend/index.js');
+const Frontend = require('./frontend/src/App.jsx').default;
 
 describe('To-Do API – TingoDB Full Stack Test', () => {
   let db, todos;
@@ -56,7 +59,7 @@ describe('To-Do API – TingoDB Full Stack Test', () => {
     const errors = results.flatMap(r => r.messages).filter(m => m.severity === 2);
     expect(errors.length).toBe(0);
 
-    const code = fs.readFileSync('frontend/App.jsx', 'utf8');
+    const code = fs.readFileSync('frontend/src/App.jsx', 'utf8');
     const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });
 
     let hasTaskInput = false;

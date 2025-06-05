@@ -5,6 +5,7 @@ require('@babel/register')({
     '@babel/preset-env',
     ['@babel/preset-react', { runtime: 'automatic' }],
   ],
+  ignore: [/node_modules/],
 });const fs = require('fs');
 const path = require('path');
 const { ESLint } = require('eslint');
@@ -15,9 +16,9 @@ const { render, screen } = require('@testing-library/react');
 const { JSDOM } = require('jsdom');
 const React = require('react');
 const { Db } = require('tingodb')();
-
-const app = require('../backend/app');
-const Frontend = require('../frontend/App').default;
+require('@testing-library/dom');
+const app = require('./backend/index.js');
+const Frontend = require('./frontend/src/App.jsx').default;
 
 describe('Blog Platform – Full Stack', () => {
   const db = new Db(path.join(__dirname, '../backend/data'), {});
@@ -45,7 +46,7 @@ describe('Blog Platform – Full Stack', () => {
     const eslint = new ESLint();
     const results = await eslint.lintFiles(['frontend/**/*.jsx']);
     expect(results.flatMap(r => r.messages).filter(m => m.severity === 2).length).toBe(0);
-    const code = fs.readFileSync('frontend/App.jsx', 'utf8');
+    const code = fs.readFileSync('frontend/src/App.jsx', 'utf8');
     const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });
     let hasEditor = false, hasUseState = false;
     traverse(ast, {

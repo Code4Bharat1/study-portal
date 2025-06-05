@@ -34,6 +34,93 @@ const handleOnChange = async (level) => {
     
 };
 
+const eslintConfig = `import js from '@eslint/js';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import globals from 'globals';
+
+export default [
+  js.configs.recommended,
+  {
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+    rules: {
+      // React/JSX rules
+      'react/jsx-uses-react': 'off', // Not needed with React 17+ (automatic runtime)
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+
+      // General code quality rules
+      'no-unused-vars': 'warn',
+      'no-undef': 'error',
+      'no-console': 'off',
+      semi: ['error', 'always'],
+      quotes: ['error', 'single'],
+    },
+  },
+];`
+
+const packageJson = `{
+  "name": "MERN Project",
+  "version": "1.0.0",
+  "description": "A full-stack CRUD application with TingoDB.",
+  "stackblitz": {
+    "startCommand": "node tests.test && source ~/.jshrc",
+    "installDependencies": false
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tingodb": "^0.6.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/parser": "^7.27.5",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/register": "^7.27.1",
+    "@babel/traverse": "^7.27.4",
+    "@testing-library/react": "^16.3.0",
+    "eslint": "^9.28.0",
+    "jsdom": "^26.1.0",
+    "supertest": "^7.1.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      [
+        "@babel/preset-react",
+        {
+          "runtime": "automatic"
+        }
+      ]
+    ]
+  }
+}`  
+
 const intermediateMenu =  [
   {
     label: "1. User Authentication System",
@@ -100,23 +187,11 @@ const hardMenu =  [
   },
 ];
 const sandboxFiles = {
-    "server.js": "const express = require('express');\nconst app = express();\napp.listen(3000, () => console.log('Server running'));",
-    "client/index.html": "<!DOCTYPE html><html><head><title>MERN Project</title></head><body><div id='root'></div><script src='index.js'></script></body></html>",
-        "client/index.js": "import React from 'react';\nimport ReactDOM from 'react-dom';\nReactDOM.render(<h1>Hello, MERN!</h1>, document.getElementById('root'));",
-        "package.json": `{
-        "name": "mern-sandbox",
-        "stackblitz": {
-            "startCommand": "node tests.test && source ~/.jshrc",
-            "installDependencies": false
-        },
-        "dependencies": {
-            "express": "^4.18.2",
-            "react": "^18.2.0",
-            "react-dom": "^18.2.0",
-            "servor": "^4.0.2",
-            "tingodb": "^0.6.1"
-        }
-    }`
+    'backend/index.js': '',
+    'backend/Readme.md': 'Install dependencies with `npm install` inside this folder and run the server with `node index.js`.',
+    'Readme.md': 'This is a MERN project. The backend is in the `backend` folder. You would have to Use `npm create vite@latest` to create a new React app, when prompted for project name, use `frontend`.',
+    'package.json': packageJson,
+    'eslint.config.js': eslintConfig
 }
 
 const sandboxFilesOpened = "server.js"

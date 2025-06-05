@@ -5,7 +5,9 @@ require('@babel/register')({
     '@babel/preset-env',
     ['@babel/preset-react', { runtime: 'automatic' }],
   ],
+  ignore: [/node_modules/],
 });
+
 const { ESLint } = require('eslint');
 const fs = require('fs');
 const parser = require('@babel/parser');
@@ -18,15 +20,15 @@ const React = require('react');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
-const app = require('../backend/app');
-const Frontend = require('../frontend/App.jsx').default;
+const app = require('./backend/index.js');
+const Frontend = require('./frontend/src/App.jsx').default;
 
 describe('Simple CRUD App with TingoDB – Full Stack Test', () => {
   let db;
   let users;
 
   beforeAll(() => {
-    const dbPath = path.join(__dirname, '../backend/data');
+    const dbPath = path.join(__dirname, './backend/data');
     db = new Db(dbPath, {});
     users = db.collection('users');
   });
@@ -69,7 +71,7 @@ describe('Simple CRUD App with TingoDB – Full Stack Test', () => {
       throw new Error('ESLint errors found.');
     }
 
-    const frontendCode = fs.readFileSync('frontend/App.jsx', 'utf8');
+    const frontendCode = fs.readFileSync('frontend/src/App.jsx', 'utf8');
     const ast = parser.parse(frontendCode, { sourceType: 'module', plugins: ['jsx'] });
     let foundComponent = false;
 

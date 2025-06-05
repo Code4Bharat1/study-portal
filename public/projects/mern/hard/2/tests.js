@@ -5,6 +5,7 @@ require('@babel/register')({
     '@babel/preset-env',
     ['@babel/preset-react', { runtime: 'automatic' }],
   ],
+  ignore: [/node_modules/],
 });const path = require('path');
 const fs = require('fs');
 const { ESLint } = require('eslint');
@@ -14,10 +15,11 @@ const traverse = require('@babel/traverse').default;
 const { Db } = require('tingodb')();
 const { render, screen } = require('@testing-library/react');
 const { JSDOM } = require('jsdom');
+require('@testing-library/dom');
 const React = require('react');
 
-const app = require('../backend/app');
-const Frontend = require('../frontend/App').default;
+const app = require('./backend/index.js');
+const Frontend = require('./frontend/src/App.jsx').default;
 
 describe('Social Media Dashboard – Full Stack', () => {
   const db = new Db(path.join(__dirname, '../backend/data'), {});
@@ -47,7 +49,7 @@ describe('Social Media Dashboard – Full Stack', () => {
     const eslint = new ESLint();
     const results = await eslint.lintFiles(['frontend/**/*.jsx']);
     expect(results.flatMap(r => r.messages).filter(m => m.severity === 2).length).toBe(0);
-    const code = fs.readFileSync('frontend/App.jsx', 'utf8');
+    const code = fs.readFileSync('frontend/src/App.jsx', 'utf8');
     const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });
 
     let hasEffect = false, hasProfileText = false;

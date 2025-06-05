@@ -7,6 +7,7 @@ import traverse from '@babel/traverse';
 import fs from 'fs';
 import path from 'path';
 import io from 'socket.io-client';
+require('@testing-library/dom');
 
 const backendEntryPath = path.resolve('./backend/app.js');
 const frontendEntryPath = path.resolve('./frontend/src/App.jsx');

@@ -36,18 +36,18 @@ export default function Navbar() {
   const learningItems = [
     { name: "Tutorial", link: "/tutorial" },
     { name: "Video", link: "/video" },
-    { name: "Quizz Test", link: "/quizz" },
-    { name: "Exercises", link: "/exercises" },
+    { name: "Quiz Test", link: "/quizz" },
+    { name: "Interview Q&A", link: "/exercises" },
     { name: "Practical-Exercise", link: "/practical-exercise" },
+    { name: "Practical-Projects", link: "/project-card" },
     { name: "Best Practices", link: "/bestpracticecard" },
+    { name: "Leaderboard", link: "/leaderboard" }
   ];
 
   const navbarItems = [
     { name: "Home", link: "/" },
     { name: "Contact", link: "/contact" },
     { name: "Activity", link: "/activity" },
-    { name: "Main-Projects", link: "/project-card" },
-    { name: "Leaderboard", link: "/leaderboard" },
   ];
 
   const allItems = [...navbarItems, ...learningItems, ...menuItems];

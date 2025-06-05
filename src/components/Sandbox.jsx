@@ -23,7 +23,7 @@ const { spawn, exec, spawnSync } = require('child_process');
 
 exec('kill 1');
 
-console.log("Installing Dependencies (press ENTER after installation): ")
+console.log("Installing Dependencies: ")
 spawnSync('npm', ['install'], { stdio: 'inherit'});
 spawnSync('clear', { stdio: 'inherit'})
 
@@ -33,15 +33,11 @@ const rl = readline.createInterface({
   output: process.stdout,
   prompt: '',
 });
+
 // Directories allowed for execution
 const baseDir = \\\`\${__dirname}\\\`;
 const allowedDirs = [baseDir];
 
-function isPathAllowed(resolvedPath) {
-  return allowedDirs.some(
-    (dir) => resolvedPath === dir || resolvedPath.startsWith(dir + path.sep)
-  );
-}
 
 async function resolveCommandPath(cmd) {
   if (cmd.startsWith('/') || cmd.startsWith('./') || cmd.startsWith('../')) {
@@ -180,13 +176,12 @@ rl.on('line', async (line) => {
     return;
   }
   // Handle custom 'test' command
-  // Handle custom 'test' command
   if (cmd === 'run-tests') {
     rl.pause(); // <--- pause readline to free stdin
-    const testFile = path.resolve(process.cwd(), 'tests.test');
+    const testFile = path.resolve(baseDir, 'tests.test');
 
     if (!fs.existsSync(testFile)) {
-      console.error('❌ tests.test not found in current directory.');
+      console.error('❌ tests.test not found in root directory.');
       updatePrompt();
       return;
     }
@@ -194,6 +189,12 @@ rl.on('line', async (line) => {
     const testProcess = spawn('node', [testFile], {
       stdio: 'inherit',
       env: { ...process.env },
+    });
+
+    testProcess.on('error', (err) => {
+      console.error('❌ Failed to start test process:', err.message);
+      rl.resume();
+      updatePrompt();
     });
 
     testProcess.on('close', (code) => {
@@ -214,6 +215,13 @@ rl.on('line', async (line) => {
     }
 
     const npxProcess = spawn('npx', args, { stdio: 'inherit' });
+
+    npxProcess.on('error', (err) => {
+      console.error('❌ Failed to start npx process:', err.message);
+      rl.resume();
+      updatePrompt();
+    });
+
     npxProcess.on('close', (code) => {
       console.log('Process exited with code: ' + code);
       rl.resume()
@@ -277,7 +285,6 @@ rl.on('line', async (line) => {
     ];
 
     function safeRequire(mod) {
-      console.log(process.cwd(), mod)
       if (mod === 'fs') return fsMock;
       if (blockedBuiltins.includes(mod)) throw new Error('Module ' + mod + ' is not allowed');
       try {

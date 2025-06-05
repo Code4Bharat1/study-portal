@@ -11,6 +11,7 @@ import path from 'path';
 const attemptsPath = path.resolve(__dirname, 'attempts.tests');
 const resultsPath = path.resolve(__dirname, 'results.tests');
 
+require('@testing-library/dom');
 function readAttempts() {
   try {
     return parseInt(fs.readFileSync(attemptsPath, 'utf8'), 10) || 0;
