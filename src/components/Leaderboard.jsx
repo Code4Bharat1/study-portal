@@ -166,10 +166,10 @@ export default function Leaderboard() {
         } bottom-1/4 -right-48 animate-float-delayed`}></div>
       </div>
 
-      {/* Floating back to top button */}
+      {/* Floating back to top button - NOW CENTERED */}
       <motion.button
         onClick={scrollToTop}
-        className={`fixed right-8 bottom-8 z-50 p-3 rounded-full shadow-xl transition-all ${
+        className={`fixed left-1/2 bottom-8 z-50 p-3 rounded-full shadow-xl transition-all transform -translate-x-1/2 ${
           isDarkMode ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
         } ${isScrolled ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         whileHover={{ scale: 1.1 }}
