@@ -1,36 +1,65 @@
-"use client";
-
 import React, { useState, useRef, useEffect } from "react";
-import { BsChatDots } from "react-icons/bs";
-import { PiFlowerLotusDuotone } from "react-icons/pi";
-import { motion } from "framer-motion";
+import { BsChatDots, BsArrowUp, BsTrash, BsCopy } from "react-icons/bs";
+import { PiFlowerLotusDuotone, PiSpinnerGap } from "react-icons/pi";
 
 export default function GeminiChat() {
   const [showChat, setShowChat] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const [response, setResponse] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!prompt.trim()) return;
+    if (e) e.preventDefault();
+    if (!prompt.trim() || loading) return;
 
+    const userMessage = { type: 'user', content: prompt, timestamp: Date.now() };
+    setMessages(prev => [...prev, userMessage]);
+    
+    const currentPrompt = prompt;
+    setPrompt("");
     setLoading(true);
-    setResponse("");
+    setError("");
+    setIsTyping(true);
 
     try {
       const res = await fetch("http://localhost:3902/api/ask-gemini/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt: currentPrompt }),
       });
 
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const data = await res.json();
-      setResponse(data.text || "No response from SkillBridge.");
+      
+      // Simulate typing effect
+      setTimeout(() => {
+        const botMessage = { 
+          type: 'bot', 
+          content: data.text || "No response from SkillBridge.", 
+          timestamp: Date.now() 
+        };
+        setMessages(prev => [...prev, botMessage]);
+        setIsTyping(false);
+      }, 500);
+      
     } catch (error) {
       console.error("Error:", error);
-      setResponse("Failed to get response from SkillBridge.");
+      setError("Failed to connect to SkillBridge. Please try again.");
+      const errorMessage = { 
+        type: 'bot', 
+        content: "Sorry, I'm having trouble connecting right now. Please try again.", 
+        timestamp: Date.now(),
+        isError: true
+      };
+      setMessages(prev => [...prev, errorMessage]);
+      setIsTyping(false);
     } finally {
       setLoading(false);
     }
@@ -39,88 +68,43 @@ export default function GeminiChat() {
   const toggleChat = () => {
     setShowChat(!showChat);
     if (!showChat) {
-      setPrompt("");
-      setResponse("");
+      setError("");
     }
+  };
+
+  const clearChat = () => {
+    setMessages([]);
+    setPrompt("");
+    setError("");
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
   };
 
   const formatResponse = (text) => {
     if (!text) return null;
+    
     return text.split("\n").map((line, i) => {
+      // Handle code blocks
+      if (line.startsWith("```")) {
+        return null; // Skip code block markers for now
+      }
+      
       // Handle **text** for bold
-      if (line.startsWith("**") && line.endsWith("**")) {
+      if (line.includes("**")) {
+        const parts = line.split("**");
         return (
-          <p
-            key={i}
-            className="font-bold my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
-          >
-            {line.replace(/\*\*/g, "")}
-          </p>
-        );
-      }
-      // Handle *text* for bold
-      if (
-        line.startsWith("*") &&
-        line.endsWith("*") &&
-        !line.startsWith("* ")
-      ) {
-        return (
-          <p
-            key={i}
-            className="font-bold my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
-          >
-            {line.replace(/\*/g, "")}
-          </p>
-        );
-      }
-      // Handle * text for list items
-      if (line.startsWith("* ")) {
-        return (
-          <li
-            key={i}
-            className="list-disc ml-5 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
-          >
-            {line.substring(2)}
-          </li>
-        );
-      }
-      // Handle headings
-      if (line.match(/^#+\s/)) {
-        const level = line.match(/^#+/)[0].length;
-        const HeadingTag = `h${Math.min(6, level)}`;
-        return (
-          <HeadingTag
-            key={i}
-            className={`font-bold my-3 text-${
-              7 - level
-            }xl bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent`}
-          >
-            {line.replace(/^#+\s/, "")}
-          </HeadingTag>
-        );
-      }
-      // Handle empty lines
-      if (line.trim() === "") {
-        return <br key={i} />;
-      }
-      // Handle inline code
-      if (line.includes("`")) {
-        const parts = line.split("`");
-        return (
-          <p key={i} className="my-2">
+          <p key={i} className="my-2 leading-relaxed">
             {parts.map((part, j) =>
               j % 2 === 1 ? (
-                <code
-                  key={j}
-                  className="bg-gray-600 px-1.5 py-0.5 rounded text-sm font-mono text-white"
-                >
+                <strong key={j} className="font-semibold bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
                   {part}
-                </code>
+                </strong>
               ) : (
-                <span
-                  key={j}
-                  className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
-                >
+                <span key={j} className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
                   {part}
                 </span>
               )
@@ -128,158 +112,249 @@ export default function GeminiChat() {
           </p>
         );
       }
+      
+      // Handle * text for list items
+      if (line.startsWith("* ") || line.startsWith("- ")) {
+        return (
+          <li key={i} className="list-disc ml-6 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent leading-relaxed">
+            {line.substring(2)}
+          </li>
+        );
+      }
+      
+      // Handle numbered lists
+      if (line.match(/^\d+\.\s/)) {
+        return (
+          <li key={i} className="list-decimal ml-6 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent leading-relaxed">
+            {line.replace(/^\d+\.\s/, "")}
+          </li>
+        );
+      }
+      
+      // Handle headings
+      if (line.match(/^#+\s/)) {
+        const level = line.match(/^#+/)[0].length;
+        const HeadingTag = `h${Math.min(6, level)}`;
+        const sizeClass = level === 1 ? "text-xl" : level === 2 ? "text-lg" : "text-base";
+        return React.createElement(
+          HeadingTag,
+          {
+            key: i,
+            className: `font-bold my-3 ${sizeClass} bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent`
+          },
+          line.replace(/^#+\s/, "")
+        );
+      }
+      
+      // Handle empty lines
+      if (line.trim() === "") {
+        return <div key={i} className="h-2" />;
+      }
+      
+      // Handle inline code
+      if (line.includes("`")) {
+        const parts = line.split("`");
+        return (
+          <p key={i} className="my-2 leading-relaxed">
+            {parts.map((part, j) =>
+              j % 2 === 1 ? (
+                <code
+                  key={j}
+                  className="bg-gray-600 px-2 py-1 rounded text-sm font-mono text-white"
+                >
+                  {part}
+                </code>
+              ) : (
+                <span key={j} className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+                  {part}
+                </span>
+              )
+            )}
+          </p>
+        );
+      }
+      
       // Default paragraph
       return (
-        <p
-          key={i}
-          className="my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
-        >
+        <p key={i} className="my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent leading-relaxed">
           {line}
         </p>
       );
     });
   };
 
-  useEffect(() => {
-    setResponse("");
-  }, [prompt]);
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [response]);
+  }, [messages, isTyping]);
+
+  useEffect(() => {
+    if (showChat && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [showChat]);
 
   return (
     <>
       {/* Floating Button */}
       {!showChat && (
-        <motion.div
-          className="fixed bottom-6 right-6 w-40 h-16 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:from-gray-800 hover:to-black transition-all duration-300 z-50"
+        <div
+          className="fixed bottom-6 right-6 w-40 h-16 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] rounded-full flex items-center justify-center shadow-xl cursor-pointer hover:from-gray-800 hover:to-black hover:scale-105 transition-all duration-300 z-50 group"
           onClick={toggleChat}
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
         >
-          <BsChatDots className="text-white text-lg mr-2" />
-          <span className="text-white text-md font-medium">Ask me</span>
-        </motion.div>
+          <BsChatDots className="text-white text-lg mr-2 group-hover:animate-pulse" />
+          <span className="text-white text-sm font-medium">Ask me</span>
+        </div>
       )}
 
       {/* Chatbox */}
       {showChat && (
-        <motion.div
-          className="fixed bottom-6 right-6 w-96 h-[400px] bg-black rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+        <div
+          className="fixed bottom-6 right-6 w-96 h-[500px] bg-black rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-gray-700"
         >
           {/* Header */}
           <div className="p-4 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white flex justify-between items-center">
             <div className="flex items-center">
               <PiFlowerLotusDuotone className="text-blue-400 w-6 h-6 mr-2" />
-              <strong className="text-lg">SkillBridge AI Assistant</strong>
+              <strong className="text-lg">SkillBridge AI</strong>
             </div>
-            <button
-              onClick={toggleChat}
-              className="text-white hover:bg-gray-800 rounded-full p-1 focus:outline-none"
-            >
-              ✕
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={clearChat}
+                className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-2 transition-all duration-200"
+                title="Clear chat"
+              >
+                <BsTrash className="w-4 h-4" />
+              </button>
+              <button
+                onClick={toggleChat}
+                className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-2 transition-all duration-200"
+                title="Close chat"
+              >
+                ✕
+              </button>
+            </div>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mx-4 mt-3 p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
+
           {/* Messages */}
-          <div className="flex-1 p-4 bg-white border border-2 overflow-y-auto">
-            {!prompt && !response && !loading && (
-              <div className="mb-4">
-                <div className="font-bold text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent mb-2">
-                  SkillBridge
-                </div>
-                <div className="text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
-                  How could I help you?
-                </div>
+          <div className="flex-1 p-4 overflow-y-auto bg-white">
+            {messages.length === 0 && !loading && (
+              <div className="text-center py-8">
+                <PiFlowerLotusDuotone className="w-12 h-12 text-blue-500 mx-auto mb-3" />
+                <p className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent font-medium mb-2">Welcome to SkillBridge AI!</p>
+                <p className="text-gray-500 text-sm">How can I help you today?</p>
               </div>
             )}
-            {prompt && (
-              <div className="mb-4">
-                <div className="font-bold text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent mb-2">
-                  You
-                </div>
-                <div className="text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
-                  {prompt}
-                </div>
-              </div>
-            )}
-            {response && (
-              <div className="mb-4">
-                <div className="font-bold text-sm bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent mb-2">
-                  SkillBridge
-                </div>
-                <div className="text-sm">{formatResponse(response)}</div>
-              </div>
-            )}
-            {loading && (
-              <div className="flex justify-center items-center">
-                <svg
-                  className="animate-spin h-6 w-6 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
+
+            {messages.map((message, index) => (
+              <div
+                key={message.timestamp}
+                className={`mb-4 ${message.type === 'user' ? 'text-right' : 'text-left'}`}
+              >
+                <div
+                  className={`inline-block max-w-[80%] p-3 rounded-2xl ${
+                    message.type === 'user'
+                      ? 'bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white'
+                      : message.isError
+                      ? 'bg-red-900/10 border border-red-500/30'
+                      : 'bg-gray-50 border border-gray-200 shadow-sm'
+                  }`}
                 >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
+                  {message.type === 'user' ? (
+                    <p className="text-sm leading-relaxed">{message.content}</p>
+                  ) : (
+                    <div className="text-sm">
+                      {formatResponse(message.content)}
+                      {!message.isError && (
+                        <button
+                          onClick={() => copyToClipboard(message.content)}
+                          className="mt-2 text-gray-400 hover:text-gray-600 transition-colors"
+                          title="Copy response"
+                        >
+                          <BsCopy className="w-3 h-3" />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {/* Typing Indicator */}
+            {isTyping && (
+              <div className="mb-4 text-left">
+                <div className="inline-block bg-gray-50 border border-gray-200 shadow-sm p-3 rounded-2xl">
+                  <div className="flex items-center gap-1">
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                    </div>
+                    <span className="text-xs text-gray-500 ml-2">SkillBridge is typing...</span>
+                  </div>
+                </div>
               </div>
             )}
+
             <div ref={messagesEndRef} />
           </div>
 
           {/* Input */}
-          <div className="p-3  border-t border-gray-700 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364]">
-            <form onSubmit={handleSubmit} className="flex items-center gap-2">
-              <textarea
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Ask anything..."
-                className="flex-1 p-2 rounded-lg border border-gray-600 focus:ring-2 focus:ring-gray-500 focus:border-transparent resize-none h-12 text-sm focus:outline-none text-black bg-white placeholder-gray-400"
-              />
+          <div className="p-4 border-t border-gray-700 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364]">
+            <div className="flex items-end gap-3">
+              <div className="flex-1 relative">
+                <textarea
+                  ref={textareaRef}
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Type your message..."
+                  className="w-full p-3 pr-12 rounded-xl border border-gray-600 focus:ring-2 focus:ring-gray-500 focus:border-transparent resize-none max-h-32 text-sm focus:outline-none text-black bg-white placeholder-gray-400 transition-all duration-200"
+                  rows="1"
+                  style={{
+                    minHeight: '44px',
+                    height: 'auto',
+                    overflowY: prompt.split('\n').length > 3 ? 'scroll' : 'hidden'
+                  }}
+                />
+                <div className="absolute right-3 bottom-3 text-xs text-gray-400">
+                  {prompt.length}/1000
+                </div>
+              </div>
               <button
-                type="submit"
-                disabled={loading || !prompt.trim()}
-                className={`bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white p-2 rounded-lg hover:from-gray-800 hover:to-black focus:outline-none transition duration-200 ${
-                  loading || !prompt.trim()
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
+                onClick={handleSubmit}
+                disabled={loading || !prompt.trim() || prompt.length > 1000}
+                className={`bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white p-3 rounded-xl hover:from-gray-800 hover:to-black focus:outline-none transition-all duration-200 transform ${
+                  loading || !prompt.trim() || prompt.length > 1000
+                    ? "opacity-50 cursor-not-allowed scale-95"
+                    : "hover:scale-105 shadow-lg"
                 }`}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                  />
-                </svg>
+                {loading ? (
+                  <PiSpinnerGap className="h-5 w-5 animate-spin" />
+                ) : (
+                  <BsArrowUp className="h-5 w-5" />
+                )}
               </button>
-            </form>
+            </div>
+            <p className="text-xs text-gray-300 mt-2 text-center">
+              Press Enter to send, Shift+Enter for new line
+            </p>
           </div>
-        </motion.div>
+        </div>
       )}
     </>
   );
