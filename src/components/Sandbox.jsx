@@ -8,6 +8,8 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+console.clear();
+
 // 1. Resolve base path
 const basePath = path.dirname(__dirname); // current script's folder
 
@@ -25,7 +27,7 @@ exec('kill 1');
 
 console.log("Installing Dependencies: ")
 spawnSync('npm', ['install'], { stdio: 'inherit'});
-spawnSync('clear', { stdio: 'inherit'})
+console.clear();
 
 // Shell prompt setup
 const rl = readline.createInterface({
@@ -145,275 +147,287 @@ rl.on('SIGINT', () => {
   updatePrompt();});
 
 rl.on('line', async (line) => {
-  const input = line.trim();
+  try {
+    const input = line.trim();
 
-  if (input.includes('>') || input.includes('<')) {
-    console.log(\\\`shell: \\\${input} not found\\\`);
-    updatePrompt();
-    return;
-  }
-
-  const parts = input.split(/\\\\s+/);
-  const cmd = parts[0];
-  const args = parts.slice(1);
-
-  // Block command if on the forbidden list
-  if (blockedCommands.has(cmd)) {
-    console.log(\\\`shell: \\\${cmd} not found\\\`);
-    updatePrompt();
-    return;
-  }
-
-  // Block path-based execution like ./file or /usr/bin/node
-  if (
-    cmd.startsWith('/') ||
-    cmd.startsWith('./') ||
-    cmd.startsWith('../') ||
-    cmd.includes('/')
-  ) {
-    console.error('❌ Executing files via path is not allowed.');
-    updatePrompt();
-    return;
-  }
-  // Handle custom 'test' command
-  if (cmd === 'run-tests') {
-    rl.pause(); // <--- pause readline to free stdin
-    const testFile = path.resolve(baseDir, 'tests.test');
-
-    if (!fs.existsSync(testFile)) {
-      console.error('❌ tests.test not found in root directory.');
+    if (input.includes('>') || input.includes('<')) {
+      console.log(\\\`shell: \\\${input} not found\\\`);
       updatePrompt();
       return;
     }
 
-    const testProcess = spawn('node', [testFile], {
-      stdio: 'inherit',
-      env: { ...process.env },
-    });
+    const parts = input.split(/\\\\s+/);
+    const cmd = parts[0];
+    const args = parts.slice(1);
 
-    testProcess.on('error', (err) => {
-      console.error('❌ Failed to start test process:', err.message);
-      rl.resume();
-      updatePrompt();
-    });
-
-    testProcess.on('close', (code) => {
-      console.log(\\\`\\nTest process exited with code: \\\${code}\\\`);
-      rl.resume()
-      updatePrompt();
-    });
-
-    return;
-  }
-
-  if (cmd === 'npx') {
-    rl.pause(); // <--- pause readline to free stdin
-    if (args[0] === 'node') {
-      console.error("Error: 'npx node' is disabled. Use node instead.");
+    // Block command if on the forbidden list
+    if (blockedCommands.has(cmd)) {
+      console.log(\\\`shell: \\\${cmd} not found\\\`);
       updatePrompt();
       return;
     }
 
-    const npxProcess = spawn('npx', args, { stdio: 'inherit' });
-
-    npxProcess.on('error', (err) => {
-      console.error('❌ Failed to start npx process:', err.message);
-      rl.resume();
-      updatePrompt();
-    });
-
-    npxProcess.on('close', (code) => {
-      console.log('Process exited with code: ' + code);
-      rl.resume()
-      updatePrompt();
-    });
-    return;
-  }
-
-  if (cmd === 'node') {
-    rl.pause(); // <--- pause readline to free stdin
-    const targetFile = args[0];
-    if (!targetFile) {
-      console.error('Usage: node <script.js>');
+    // Block path-based execution like ./file or /usr/bin/node
+    if (
+      cmd.startsWith('/') ||
+      cmd.startsWith('./') ||
+      cmd.startsWith('../') ||
+      cmd.includes('/')
+    ) {
+      console.error('❌ Executing files via path is not allowed.');
       updatePrompt();
       return;
     }
+    // Handle custom 'test' command
+    if (cmd === 'run-tests') {
+      rl.pause(); // <--- pause readline to free stdin
+      const testFile = path.resolve(baseDir, 'tests.test');
 
-    const blockedFiles = new Set([
-      path.resolve(process.cwd(), 'tests.test'),
-      path.resolve(process.cwd(), 'attempts.test'),
-      path.resolve(process.cwd(), 'result.test'),
-    ]);
-
-    function isInsideCwd(filePath) {
-      const resolved = path.resolve(process.cwd(), filePath);
-      return resolved.startsWith(process.cwd() + path.sep);
-    }
-
-    function isBlocked(filePath) {
-      const resolved = path.resolve(process.cwd(), filePath);
-      return blockedFiles.has(resolved);
-    }
-
-    const fsMock = {
-      ...fs,
-      readFileSync(file, ...args) {
-        const resolved = path.resolve(file);
-        if (!isInsideCwd(resolved))
-          throw new Error('Denied outside CWD: ' + file);
-        if (isBlocked(resolved)) throw new Error('Read denied: ' + file);
-        return fs.readFileSync(resolved, ...args);
-      },
-      writeFileSync(file, ...args) {
-        const resolved = path.resolve(file);
-        if (!isInsideCwd(resolved))
-          throw new Error('Denied outside CWD: ' + file);
-        if (isBlocked(resolved)) throw new Error('Write denied: ' + file);
-        return fs.writeFileSync(resolved, ...args);
-      },
-      unlinkSync() {
-        throw new Error('unlinkSync is blocked');
-      },
-      unlink() {
-        const cb = arguments[arguments.length - 1];
-        process.nextTick(() => cb(new Error('unlink is blocked')));
-      },
-    };
-
-    const blockedBuiltins = [
-      'child_process', 'vm'
-    ];
-
-    function safeRequire(mod) {
-      if (mod === 'fs') return fsMock;
-      if (blockedBuiltins.includes(mod)) throw new Error('Module ' + mod + ' is not allowed');
-      try {
-        const resolved = require.resolve(mod, { paths: [baseDir] });
-        return require(resolved);
-      } catch (err) {
-          throw new Error('Module ' + mod + ' could not be loaded');
+      if (!fs.existsSync(testFile)) {
+        console.error('❌ tests.test not found in root directory.');
+        updatePrompt();
+        return;
       }
-      
+
+      const testProcess = spawn('node', [testFile], {
+        stdio: 'inherit',
+        env: { ...process.env },
+      });
+
+      testProcess.on('error', (err) => {
+        console.error('❌ Failed to start test process:', err.message);
+        rl.resume();
+        updatePrompt();
+      });
+
+      testProcess.on('close', (code) => {
+        console.log(\\\`\\nTest process exited with code: \\\${code}\\\`);
+        rl.resume()
+        updatePrompt();
+      });
+
+      return;
     }
 
-    let resolvedPath;
-    if (targetFile === '.' || targetFile === './') {
-      resolvedPath = path.join(process.cwd(), 'index.js');
-    } else if (targetFile === '..' || targetFile === '../') {
-      resolvedPath = path.join(path.resolve(process.cwd(), '..'), 'index.js');
-    } else {
-      resolvedPath = path.resolve(process.cwd(), targetFile);
+    if (cmd === 'npx') {
+      rl.pause(); // <--- pause readline to free stdin
+      if (args[0] === 'node') {
+        console.error("Error: 'npx node' is disabled. Use node instead.");
+        updatePrompt();
+        return;
+      }
+
+      const npxProcess = spawn('npx', args, { stdio: 'inherit' });
+
+      npxProcess.on('error', (err) => {
+        console.error('❌ Failed to start npx process:', err.message);
+        rl.resume();
+        updatePrompt();
+      });
+
+      npxProcess.on('close', (code) => {
+        console.log('Process exited with code: ' + code);
+        rl.resume()
+        updatePrompt();
+      });
+      return;
     }
 
-    if (!fs.existsSync(resolvedPath)) {
-      console.error('File not found:', resolvedPath);
+    if (cmd === 'node') {
+      rl.pause(); // <--- pause readline to free stdin
+      const targetFile = args[0];
+      if (!targetFile) {
+        console.error('Usage: node <script.js>');
+        updatePrompt();
+        return;
+      }
+
+      const blockedFiles = new Set([
+        path.resolve(process.cwd(), 'tests.test'),
+        path.resolve(process.cwd(), 'attempts.test'),
+        path.resolve(process.cwd(), 'result.test'),
+      ]);
+
+      function isInsideCwd(filePath) {
+        const resolved = path.resolve(process.cwd(), filePath);
+        return resolved.startsWith(process.cwd() + path.sep);
+      }
+
+      function isBlocked(filePath) {
+        const resolved = path.resolve(process.cwd(), filePath);
+        return blockedFiles.has(resolved);
+      }
+
+      const fsMock = {
+        ...fs,
+        readFileSync(file, ...args) {
+          const resolved = path.resolve(file);
+          if (!isInsideCwd(resolved))
+            throw new Error('Denied outside CWD: ' + file);
+          if (isBlocked(resolved)) throw new Error('Read denied: ' + file);
+          return fs.readFileSync(resolved, ...args);
+        },
+        writeFileSync(file, ...args) {
+          const resolved = path.resolve(file);
+          if (!isInsideCwd(resolved))
+            throw new Error('Denied outside CWD: ' + file);
+          if (isBlocked(resolved)) throw new Error('Write denied: ' + file);
+          return fs.writeFileSync(resolved, ...args);
+        },
+        unlinkSync() {
+          throw new Error('unlinkSync is blocked');
+        },
+        unlink() {
+          const cb = arguments[arguments.length - 1];
+          process.nextTick(() => cb(new Error('unlink is blocked')));
+        },
+      };
+
+      const blockedBuiltins = [
+        'child_process', 'vm'
+      ];
+
+      function safeRequire(mod) {
+        if (mod === 'fs') return fsMock;
+        if (blockedBuiltins.includes(mod)) throw new Error('Module ' + mod + ' is not allowed');
+        try {
+          const resolved = require.resolve(mod, { paths: [baseDir] });
+          return require(resolved);
+        } catch (err) {
+            throw new Error('Module ' + mod + ' could not be loaded');
+        }
+        
+      }
+
+      let resolvedPath;
+      if (targetFile === '.' || targetFile === './') {
+        resolvedPath = path.join(process.cwd(), 'index.js');
+      } else if (targetFile === '..' || targetFile === '../') {
+        resolvedPath = path.join(path.resolve(process.cwd(), '..'), 'index.js');
+      } else {
+        resolvedPath = path.resolve(process.cwd(), targetFile);
+      }
+
+      if (!fs.existsSync(resolvedPath)) {
+        console.error('File not found:', resolvedPath);
+        updatePrompt();
+        return;
+      }
+
+      const code = fs.readFileSync(resolvedPath, 'utf-8');
+      const sandbox = {
+        console,
+        setTimeout,
+        setInterval,
+        clearTimeout,
+        clearInterval,
+        require: safeRequire,
+        Buffer,
+        process: { env: {} },
+        __dirname: process.cwd()
+      };
+
+      const context = vm.createContext(sandbox);
+      try {
+        vm.runInContext(code, context, {
+          filename: resolvedPath,
+        });
+      } catch (err) {
+        console.error('Sandbox error:', err);
+      }
+
       updatePrompt();
       return;
     }
 
-    const code = fs.readFileSync(resolvedPath, 'utf-8');
-    const sandbox = {
-      console,
-      setTimeout,
-      setInterval,
-      clearTimeout,
-      clearInterval,
-      require: safeRequire,
-      Buffer,
-      process: { env: {} },
-    };
-
-    const context = vm.createContext(sandbox);
-    try {
-      vm.runInContext(code, context, {
-        filename: resolvedPath,
-      });
-    } catch (err) {
-      console.error('Sandbox error:', err.message);
-    }
-
-    updatePrompt();
-    return;
-  }
-
-  if (cmd === 'cd') {
-    rl.pause(); // <--- pause readline to free stdin
-    if (args.length == 0){
-          console.log(process.cwd());
+    if (cmd === 'cd') {
+      rl.pause(); // <--- pause readline to free stdin
+      if (args.length == 0){
+            console.log(process.cwd());
+            updatePrompt();
+            return;
+          }
+        const targetDir = args[0];
+      try {
+        if (targetDir.includes('~')) {
+          console.error('❌ Error: "~" is not allowed.');
           updatePrompt();
           return;
         }
-      const targetDir = args[0];
-    try {
-      if (targetDir.includes('~')) {
-        console.error('❌ Error: "~" is not allowed.');
-        updatePrompt();
-        return;
+
+        const resolved = targetDir.startsWith('/')
+          ? path.resolve(baseDir, '.' + targetDir)
+          : path.resolve(process.cwd(), targetDir);
+
+        if (
+          !allowedDirs.some(
+            (dir) => resolved === dir || resolved.startsWith(dir + path.sep)
+          )
+        ) {
+          console.error('❌ Access Restricted.');
+          updatePrompt();
+          return;
+        }
+
+        if (!fs.existsSync(resolved) || !fs.statSync(resolved).isDirectory()) {
+          console.error('❌ Error: Not a valid directory.');
+          updatePrompt();
+          return;
+        }
+
+        process.chdir(resolved);
+      } catch (err) {
+        console.error(\\\`cd: \\\${err.message}\\\`);
       }
 
-      const resolved = targetDir.startsWith('/')
-        ? path.resolve(baseDir, '.' + targetDir)
-        : path.resolve(process.cwd(), targetDir);
-
-      if (
-        !allowedDirs.some(
-          (dir) => resolved === dir || resolved.startsWith(dir + path.sep)
-        )
-      ) {
-        console.error('❌ Access Restricted.');
-        updatePrompt();
-        return;
-      }
-
-      if (!fs.existsSync(resolved) || !fs.statSync(resolved).isDirectory()) {
-        console.error('❌ Error: Not a valid directory.');
-        updatePrompt();
-        return;
-      }
-
-      process.chdir(resolved);
-    } catch (err) {
-      console.error(\\\`cd: \\\${err.message}\\\`);
+      updatePrompt();
+      return;
     }
 
-    updatePrompt();
-    return;
-  }
+    if (cmd === 'npm') {
+      rl.pause(); // <--- pause readline to free stdin
+      const env = { ...process.env, npm_config_ignore_scripts: 'true' };
+      const npmProcess = spawn('npm', args, { stdio: 'inherit', env });
 
-  if (cmd === 'npm') {
-    rl.pause(); // <--- pause readline to free stdin
-    const env = { ...process.env, npm_config_ignore_scripts: 'true' };
-    const npmProcess = spawn('npm', args, { stdio: 'inherit', env });
+      npmProcess.on('error', (err) => {
+        console.error('❌ Failed to start npm: ' + err.message);
+      });
+      npmProcess.on('close', (code) => {
+        console.log('Process exited with code: ' + code);
+        try {
+          const Module = require('module');
+          if (args.includes('install')) {
+            Module._initPaths();
+            console.log('🔁 Module paths reloaded. Newly installed packages are now available.');
+          }
+        } catch (e) {
+          console.warn('⚠️ Failed to reinitialize module paths:', e.message);
+        }
+        rl.resume()
+        updatePrompt();
+      });
+      return;
+    }
+    const cmdPath = await resolveCommandPath(cmd);
 
-    npmProcess.on('error', (err) => {
-      console.error('❌ Failed to start npm: ' + err.message);
+    if (!cmdPath) {
+      console.error('shell: Command not found: ' + cmd);
+      updatePrompt();
+      return;
+    }
+    // Default execution fallback
+    const child = spawn(cmdPath, args, { stdio: 'inherit' });
+
+    child.on('error', (err) => {
+      console.error('❌ Failed to start process: ' + err.message);
     });
-    npmProcess.on('close', (code) => {
+
+    child.on('close', (code) => {
       console.log('Process exited with code: ' + code);
       rl.resume()
       updatePrompt();
     });
-    return;
-  }
-  const cmdPath = await resolveCommandPath(cmd);
-
-  if (!cmdPath) {
-    console.error('shell: Command not found: ' + cmd);
-    updatePrompt();
-    return;
-  }
-  // Default execution fallback
-  const child = spawn(cmdPath, args, { stdio: 'inherit' });
-
-  child.on('error', (err) => {
-    console.error('❌ Failed to start process: ' + err.message);
-  });
-
-  child.on('close', (code) => {
-    console.log('Process exited with code: ' + code);
-    rl.resume()
-    updatePrompt();
-  });
+  } catch(err){console.log(err)}
 });
 \`;
 
