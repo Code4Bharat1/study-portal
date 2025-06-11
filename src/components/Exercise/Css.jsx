@@ -231,7 +231,9 @@ const sandboxFiles = {
   "dependencies": {
     "cheerio": "^1.0.0",
     "htmlhint": "^1.1.4",
-    "servor": "^4.0.2"
+    "servor": "^4.0.2",
+    "jsdom": "^26.1.0",
+    "stylelint": "^16.20.0"
   }
 }`}
 const sandboxFilesOpened = "index.html"
