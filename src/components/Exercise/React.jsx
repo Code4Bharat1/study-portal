@@ -340,7 +340,6 @@ export default [
 
 const sandboxFiles = {
   'App.jsx': '',
-  'tests.test': testContent,
   'vite.config.js': viteConfig,
   'Main.jsx': mainJsx,
   'package.json': packageJson,
