@@ -41,13 +41,14 @@ export default function Navbar() {
     { name: "Practical-Exercise", link: "/practical-exercise" },
     { name: "Practical-Projects", link: "/project-card" },
     { name: "Best Practices", link: "/bestpracticecard" },
-    { name: "Leaderboard", link: "/leaderboard" }
+    { name: "Leaderboard", link: "/leaderboard" },
   ];
 
   const navbarItems = [
     { name: "Home", link: "/" },
     { name: "Contact", link: "/contact" },
     { name: "Activity", link: "/activity" },
+    { name: "Editor", link: "/a1_code" },
   ];
 
   const allItems = [...navbarItems, ...learningItems, ...menuItems];
