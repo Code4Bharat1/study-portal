@@ -1,389 +1,518 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import '@/app/UniversalCompiler.css'; // Assume a CSS file for styling
 
-const UniversalCompiler = () => {
-  const [currentFile, setCurrentFile] = useState('react/App.js');
-  const [openTabs, setOpenTabs] = useState(['react/App.js']);
+const CodeCompiler = () => {
+  const [currentFile, setCurrentFile] = useState('src/index.js');
+  const [openTabs, setOpenTabs] = useState(['src/index.js']);
   const [expandedFolders, setExpandedFolders] = useState({
-    react: true,
-    nextjs: true,
-    nodejs: true,
-    express: true,
-    mongodb: true,
-    vanilla: true
+    src: true,
+    utils: true
   });
-  const [activeRuntime, setActiveRuntime] = useState('react');
   const [output, setOutput] = useState('');
   const [errors, setErrors] = useState('');
   const [isRunning, setIsRunning] = useState(false);
-  const [serverStatus, setServerStatus] = useState({
-    express: 'stopped',
-    mongodb: 'stopped',
-    nextjs: 'stopped'
-  });
-
   const [fileContents, setFileContents] = useState({
-    // File contents as provided
-    'react/App.js': `...`, // Use the provided React App.js content
-    'react/App.css': `...`, // Use the provided React App.css content
-    'nextjs/pages/index.js': `...`, // Use the provided Next.js index.js content
-    'nextjs/pages/api/data.js': `...`, // Use the provided Next.js API content
-    'nextjs/styles/Home.module.css': `...`, // Use the provided Next.js styles
-    'nodejs/server.js': `...`, // Use the provided Node.js server.js content
-    'express/routes/users.js': `...`, // Use the provided Express routes content
-    'mongodb/models/User.js': `...`, // Use the provided MongoDB User model content
-    'mongodb/db.js': `...`, // Use the provided MongoDB db.js content
-    'vanilla/index.html': `...`, // Use the provided Vanilla HTML content
-    'vanilla/style.css': `...`, // Use the provided Vanilla CSS content
-    'vanilla/script.js': `...` // We'll add the script.js content below
+    'package.json': `{
+  "name": "js-compiler",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  }
+}`,
+    'src/index.js': `// Welcome to the JavaScript Compiler!
+// Try editing this code and click Run to see the output
+
+console.log("Hello, World!");
+
+// Example: Simple calculator
+function calculate(a, b, operation) {
+  switch(operation) {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return b !== 0 ? a / b : 'Error: Division by zero';
+    default: return 'Error: Unknown operation';
+  }
+}
+
+console.log("Calculator Examples:");
+console.log("5 + 3 =", calculate(5, 3, '+'));
+console.log("10 - 4 =", calculate(10, 4, '-'));
+console.log("6 * 7 =", calculate(6, 7, '*'));
+console.log("15 / 3 =", calculate(15, 3, '/'));
+
+// Example: Working with arrays
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(n => n * 2);
+console.log("Original numbers:", numbers);
+console.log("Doubled numbers:", doubled);
+
+// Example: Async/await simulation
+async function fetchData() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve("Data fetched successfully!");
+    }, 1000);
+  });
+}
+
+fetchData().then(data => console.log(data));`,
+    'src/math.js': `// Math utility functions
+export function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+export function isPrime(num) {
+  if (num <= 1) return false;
+  if (num <= 3) return true;
+  if (num % 2 === 0 || num % 3 === 0) return false;
+  
+  for (let i = 5; i * i <= num; i += 6) {
+    if (num % i === 0 || num % (i + 2) === 0) return false;
+  }
+  return true;
+}
+
+export function factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}`,
+    'utils/helpers.js': `// Helper utility functions
+export function formatDate(date) {
+  return new Date(date).toLocaleDateString();
+}
+
+export function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+export function deepClone(obj) {
+  if (obj === null || typeof obj !== "object") return obj;
+  if (obj instanceof Date) return new Date(obj.getTime());
+  if (obj instanceof Array) return obj.map(item => deepClone(item));
+  
+  const clonedObj = {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      clonedObj[key] = deepClone(obj[key]);
+    }
+  }
+  return clonedObj;
+}`
   });
 
-  const codeEditorRef = useRef(null);
+  const editorRef = useRef(null);
+  const monacoRef = useRef(null);
+  const outputRef = useRef(null);
 
-  // File structure for the explorer
-  const fileStructure = {
-    react: ['App.js', 'App.css'],
-    nextjs: ['pages/index.js', 'pages/api/data.js', 'styles/Home.module.css'],
-    nodejs: ['server.js'],
-    express: ['routes/users.js'],
-    mongodb: ['models/User.js', 'db.js'],
-    vanilla: ['index.html', 'style.css', 'script.js']
+  // Load Monaco Editor
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js';
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      window.require.config({ 
+        paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } 
+      });
+      
+      window.require(['vs/editor/editor.main'], () => {
+        if (editorRef.current && !monacoRef.current) {
+          monacoRef.current = window.monaco.editor.create(editorRef.current, {
+            value: fileContents[currentFile],
+            language: getLanguageFromFile(currentFile),
+            theme: 'vs-dark',
+            fontSize: 14,
+            lineHeight: 20,
+            minimap: { enabled: false },
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+            tabSize: 2,
+            insertSpaces: true,
+            wordWrap: 'on',
+            bracketPairColorization: { enabled: true },
+            guides: {
+              bracketPairs: true,
+              indentation: true
+            }
+          });
+
+          monacoRef.current.onDidChangeModelContent(() => {
+            const newContent = monacoRef.current.getValue();
+            setFileContents(prev => ({
+              ...prev,
+              [currentFile]: newContent
+            }));
+          });
+        }
+      });
+    };
+
+    return () => {
+      if (monacoRef.current) {
+        monacoRef.current.dispose();
+      }
+    };
+  }, []);
+
+  // Update editor when file changes
+  useEffect(() => {
+    if (monacoRef.current && fileContents[currentFile]) {
+      const model = monacoRef.current.getModel();
+      if (model) {
+        window.monaco.editor.setModelLanguage(model, getLanguageFromFile(currentFile));
+        monacoRef.current.setValue(fileContents[currentFile]);
+      }
+    }
+  }, [currentFile]);
+
+  // Auto-scroll output to bottom
+  useEffect(() => {
+    if (outputRef.current) {
+      outputRef.current.scrollTop = outputRef.current.scrollHeight;
+    }
+  }, [output]);
+
+  const getLanguageFromFile = (fileName) => {
+    const ext = fileName.split('.').pop();
+    switch (ext) {
+      case 'js': return 'javascript';
+      case 'json': return 'json';
+      case 'css': return 'css';
+      case 'html': return 'html';
+      case 'md': return 'markdown';
+      default: return 'javascript';
+    }
   };
 
-  // Handle folder toggle
-  const toggleFolder = (folder) => {
+  const getFileIcon = (fileName) => {
+    const ext = fileName.split('.').pop();
+    switch (ext) {
+      case 'js': return '⚡';
+      case 'json': return '📦';
+      case 'css': return '🎨';
+      case 'html': return '🌐';
+      case 'md': return '📝';
+      default: return '📄';
+    }
+  };
+
+  const getIconColor = (fileName) => {
+    const ext = fileName.split('.').pop();
+    switch (ext) {
+      case 'js': return 'text-yellow-400';
+      case 'json': return 'text-green-400';
+      case 'css': return 'text-blue-400';
+      default: return 'text-gray-400';
+    }
+  };
+
+  const openFile = (fileName) => {
+    setCurrentFile(fileName);
+    if (!openTabs.includes(fileName)) {
+      setOpenTabs(prev => [...prev, fileName]);
+    }
+  };
+
+  const closeTab = (fileName, e) => {
+    e.stopPropagation();
+    const newTabs = openTabs.filter(tab => tab !== fileName);
+    setOpenTabs(newTabs);
+    
+    if (fileName === currentFile && newTabs.length > 0) {
+      setCurrentFile(newTabs[newTabs.length - 1]);
+    }
+  };
+
+  const toggleFolder = (folderName) => {
     setExpandedFolders(prev => ({
       ...prev,
-      [folder]: !prev[folder]
+      [folderName]: !prev[folderName]
     }));
   };
 
-  // Handle file selection
-  const selectFile = (file) => {
-    setCurrentFile(file);
-    if (!openTabs.includes(file)) {
-      setOpenTabs([...openTabs, file]);
-    }
-  };
-
-  // Close a tab
-  const closeTab = (file) => {
-    const newTabs = openTabs.filter(tab => tab !== file);
-    setOpenTabs(newTabs);
-    if (currentFile === file && newTabs.length > 0) {
-      setCurrentFile(newTabs[newTabs.length - 1]);
-    } else if (newTabs.length === 0) {
-      setCurrentFile('');
-    }
-  };
-
-  // Handle code changes
-  const handleCodeChange = (e) => {
-    setFileContents(prev => ({
-      ...prev,
-      [currentFile]: e.target.value
-    }));
-  };
-
-  // Simulate running the code
-  const runCode = async () => {
+  const executeCode = async () => {
     setIsRunning(true);
     setOutput('');
     setErrors('');
 
     try {
-      switch (activeRuntime) {
-        case 'react':
-          setOutput('Simulating React app compilation...\n' +
-            '✓ Compiled successfully!\n' +
-            'React app is running with the current App.js configuration.');
-          break;
-        case 'nextjs':
-          setOutput('Simulating Next.js app compilation...\n' +
-            '✓ Compiled successfully!\n' +
-            'Next.js app is running with SSR and API routes.');
-          break;
-        case 'nodejs':
-          setOutput('Simulating Node.js server execution...\n' +
-            '✓ Server started successfully!\n' +
-            `API endpoints available at http://localhost:3001`);
-          setServerStatus(prev => ({ ...prev, express: 'running' }));
-          break;
-        case 'mongodb':
-          setOutput('Simulating MongoDB connection...\n' +
-            '✓ Connected to MongoDB successfully!\n' +
-            'Database operations ready.');
-          setServerStatus(prev => ({ ...prev, mongodb: 'running' }));
-          break;
-        case 'vanilla':
-          setOutput('Simulating Vanilla JS execution...\n' +
-            '✓ HTML, CSS, and JS loaded successfully!\n' +
-            'Vanilla app is running.');
-          break;
-        default:
-          setOutput('No runtime selected.');
+      // Create a sandboxed execution environment
+      const logs = [];
+      const errors = [];
+      
+      // Override console methods to capture output
+      const originalConsole = {
+        log: console.log,
+        error: console.error,
+        warn: console.warn,
+        info: console.info
+      };
+
+      const mockConsole = {
+        log: (...args) => logs.push(['log', ...args]),
+        error: (...args) => {
+          logs.push(['error', ...args]);
+          errors.push(...args);
+        },
+        warn: (...args) => logs.push(['warn', ...args]),
+        info: (...args) => logs.push(['info', ...args])
+      };
+
+      // Get the code to execute
+      const codeToRun = fileContents[currentFile];
+      
+      // Create a function that executes the user's code
+      const executeUserCode = new Function('console', 'setTimeout', 'setInterval', 'clearTimeout', 'clearInterval', 'Promise', codeToRun);
+      
+      // Custom setTimeout/setInterval for demo purposes (limited time)
+      const mockSetTimeout = (fn, delay) => {
+        if (delay > 5000) delay = 5000; // Max 5 second delay
+        return setTimeout(fn, delay);
+      };
+      
+      const mockSetInterval = (fn, delay) => {
+        if (delay < 100) delay = 100; // Min 100ms interval
+        return setInterval(fn, delay);
+      };
+
+      // Execute the code with mocked environment
+      await executeUserCode(mockConsole, mockSetTimeout, mockSetInterval, clearTimeout, clearInterval, Promise);
+
+      // Format output
+      const formattedLogs = logs.map(([type, ...args]) => {
+        const timestamp = new Date().toLocaleTimeString();
+        const argsStr = args.map(arg => {
+          if (typeof arg === 'object') {
+            return JSON.stringify(arg, null, 2);
+          }
+          return String(arg);
+        }).join(' ');
+        
+        const prefix = type === 'error' ? '❌' : type === 'warn' ? '⚠️' : type === 'info' ? 'ℹ️' : '✅';
+        return `[${timestamp}] ${prefix} ${argsStr}`;
+      }).join('\n');
+
+      setOutput(formattedLogs || 'Code executed successfully (no output)');
+      
+      if (errors.length > 0) {
+        setErrors(errors.join('\n'));
       }
+
     } catch (error) {
-      setErrors(`Error: ${error.message}`);
+      setErrors(`Runtime Error: ${error.message}\n${error.stack || ''}`);
+      setOutput('');
     } finally {
       setIsRunning(false);
     }
   };
 
-  // Stop server
-  const stopServer = (type) => {
-    setServerStatus(prev => ({ ...prev, [type]: 'stopped' }));
-    setOutput(`✓ ${type.charAt(0).toUpperCase() + type.slice(1)} server stopped.`);
+  const clearOutput = () => {
+    setOutput('');
+    setErrors('');
   };
 
-  // Add the missing script.js content for Vanilla JS
-  useEffect(() => {
-    setFileContents(prev => ({
-      ...prev,
-      'vanilla/script.js': `
-(function() {
-  // Todo List
-  const todoInput = document.getElementById('todoInput');
-  const addTodoBtn = document.getElementById('addTodo');
-  const todoList = document.getElementById('todoList');
-
-  // Load todos from localStorage
-  let todos = JSON.parse(localStorage.getItem('todos')) || [];
-
-  // Render todos
-  function renderTodos() {
-    todoList.innerHTML = '';
-    todos.forEach((todo, index) => {
-      const li = document.createElement('li');
-      li.className = \`todo-item \${todo.completed ? 'completed' : ''}\`;
-      li.innerHTML = \`
-        <span>\${todo.text}</span>
-        <div class="todo-actions">
-          <button onclick="toggleTodo(\${index})">\${todo.completed ? 'Undo' : 'Complete'}</button>
-          <button onclick="deleteTodo(\${index})">Delete</button>
-        </div>
-      \`;
-      todoList.appendChild(li);
-    });
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }
-
-  // Add todo
-  addTodoBtn.addEventListener('click', () => {
-    const text = todoInput.value.trim();
-    if (text) {
-      todos.push({ text, completed: false });
-      todoInput.value = '';
-      renderTodos();
+  const fileTree = [
+    { name: 'package.json', type: 'file', path: 'package.json' },
+    {
+      name: 'src',
+      type: 'folder',
+      children: [
+        { name: 'index.js', type: 'file', path: 'src/index.js' },
+        { name: 'math.js', type: 'file', path: 'src/math.js' }
+      ]
+    },
+    {
+      name: 'utils',
+      type: 'folder',
+      children: [
+        { name: 'helpers.js', type: 'file', path: 'utils/helpers.js' }
+      ]
     }
-  });
-
-  // Toggle todo completion
-  window.toggleTodo = (index) => {
-    todos[index].completed = !todos[index].completed;
-    renderTodos();
-  };
-
-  // Delete todo
-  window.deleteTodo = (index) => {
-    todos.splice(index, 1);
-    renderTodos();
-  };
-
-  // Weather App
-  const cityInput = document.getElementById('cityInput');
-  const getWeatherBtn = document.getElementById('getWeather');
-  const weatherInfo = document.getElementById('weatherInfo');
-
-  getWeatherBtn.addEventListener('click', async () => {
-    const city = cityInput.value.trim();
-    if (city) {
-      try {
-        weatherInfo.innerHTML = 'Loading...';
-        // Mock weather API response
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const mockWeather = {
-          city,
-          temperature: Math.floor(Math.random() * 30) + 10,
-          description: 'Clear',
-          humidity: Math.floor(Math.random() * 100)
-        };
-        weatherInfo.innerHTML = \`
-          <h3>\${mockWeather.city}</h3>
-          <p>Temperature: \${mockWeather.temperature}°C</p>
-          <p>Description: \${mockWeather.description}</p>
-          <p>Humidity: \${mockWeather.humidity}%</p>
-        \`;
-      } catch (error) {
-        weatherInfo.innerHTML = 'Error fetching weather data.';
-      }
-    }
-  });
-
-  // Calculator
-  window.appendToDisplay = (value) => {
-    document.getElementById('display').value += value;
-  };
-
-  window.clearDisplay = () => {
-    document.getElementById('display').value = '';
-  };
-
-  window.deleteLast = () => {
-    const display = document.getElementById('display');
-    display.value = display.value.slice(0, -1);
-  };
-
-  window.calculate = () => {
-    const display = document.getElementById('display');
-    try {
-      display.value = eval(display.value) || '';
-    } catch (error) {
-      display.value = 'Error';
-    }
-  };
-
-  // API Demo
-  const fetchUsersBtn = document.getElementById('fetchUsers');
-  const fetchPostsBtn = document.getElementById('fetchPosts');
-  const clearDataBtn = document.getElementById('clearData');
-  const apiData = document.getElementById('apiData');
-
-  fetchUsersBtn.addEventListener('click', async () => {
-    try {
-      apiData.innerHTML = 'Loading...';
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const mockUsers = [
-        { id: 1, name: 'John Doe', email: 'john@example.com' },
-        { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
-      ];
-      apiData.innerHTML = \`
-        <h3>Users</h3>
-        <ul>\${mockUsers.map(user => \`<li>\${user.name} (\${user.email})</li>\`).join('')}</ul>
-      \`;
-    } catch (error) {
-      apiData.innerHTML = 'Error fetching users.';
-    }
-  });
-
-  fetchPostsBtn.addEventListener('click', async () => {
-    try {
-      apiData.innerHTML = 'Loading...';
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const mockPosts = [
-        { id: 1, title: 'First Post', content: 'Hello, World!' },
-        { id: 2, title: 'Second Post', content: 'JavaScript is awesome!' }
-      ];
-      apiData.innerHTML = \`
-        <h3>Posts</h3>
-        <ul>\${mockPosts.map(post => \`<li>\${post.title}: \${post.content}</li>\`).join('')}</ul>
-      \`;
-    } catch (error) {
-      apiData.innerHTML = 'Error fetching posts.';
-    }
-  });
-
-  clearDataBtn.addEventListener('click', () => {
-    apiData.innerHTML = '';
-  });
-
-  // Initial render
-  renderTodos();
-})();
-      `
-    }));
-  }, []);
+  ];
 
   return (
-    <div className="universal-compiler">
-      <div className="compiler-layout">
+    <div className="h-screen bg-gray-900 text-gray-100 flex overflow-hidden">
+      {/* Sidebar */}
+      <div className="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
+        {/* Header */}
+        <div className="h-12 border-b border-gray-700 flex items-center px-4">
+          <div className="w-6 h-6 bg-yellow-500 rounded flex items-center justify-center mr-3">
+            <span className="text-black font-bold text-xs">JS</span>
+          </div>
+          <span className="text-sm font-medium">COMPILER</span>
+        </div>
+
+        {/* Project Info */}
+        <div className="p-4 border-b border-gray-700">
+          <div className="flex items-center mb-2">
+            <span className="text-xs text-gray-400">▼ PROJECT</span>
+          </div>
+          <h3 className="text-sm font-medium mb-1">JavaScript Compiler</h3>
+          <p className="text-xs text-gray-400 mb-3">Real-time JavaScript execution environment</p>
+          <div className="flex text-xs text-gray-400 space-x-4">
+            <span>⚡ Live execution</span>
+            <span>🔒 Sandboxed</span>
+          </div>
+        </div>
+
         {/* File Explorer */}
-        <div className="file-explorer">
-          <h3>File Explorer</h3>
-          {Object.keys(fileStructure).map(folder => (
-            <div key={folder} className="folder">
-              <div
-                className="folder-name"
-                onClick={() => toggleFolder(folder)}
-              >
-                {expandedFolders[folder] ? '▼' : '▶'} {folder}
-              </div>
-              {expandedFolders[folder] && (
-                <div className="files">
-                  {fileStructure[folder].map(file => (
+        <div className="flex-1 overflow-auto">
+          <div className="p-2">
+            <div className="flex items-center mb-2">
+              <span className="text-xs text-gray-400">▼ FILES</span>
+            </div>
+            <div className="space-y-1">
+              {fileTree.map((item) => (
+                <div key={item.name}>
+                  {item.type === 'file' ? (
                     <div
-                      key={`${folder}/${file}`}
-                      className={`file ${currentFile === `${folder}/${file}` ? 'active' : ''}`}
-                      onClick={() => selectFile(`${folder}/${file}`)}
+                      className={`flex items-center px-2 py-1 hover:bg-gray-700 rounded cursor-pointer ${
+                        currentFile === item.path ? 'bg-gray-700' : ''
+                      }`}
+                      onClick={() => openFile(item.path)}
                     >
-                      {file}
+                      <span className={`mr-2 text-sm ${getIconColor(item.name)}`}>
+                        {getFileIcon(item.name)}
+                      </span>
+                      <span className="text-sm">{item.name}</span>
                     </div>
-                  ))}
+                  ) : (
+                    <div>
+                      <div
+                        className="flex items-center px-2 py-1 hover:bg-gray-700 rounded cursor-pointer"
+                        onClick={() => toggleFolder(item.name)}
+                      >
+                        <span className="mr-2">
+                          {expandedFolders[item.name] ? '📂' : '📁'}
+                        </span>
+                        <span className="text-sm">{item.name}</span>
+                      </div>
+                      {expandedFolders[item.name] && (
+                        <div className="ml-4 space-y-1">
+                          {item.children.map((child) => (
+                            <div
+                              key={child.path}
+                              className={`flex items-center px-2 py-1 hover:bg-gray-700 rounded cursor-pointer ${
+                                currentFile === child.path ? 'bg-gray-700' : ''
+                              }`}
+                              onClick={() => openFile(child.path)}
+                            >
+                              <span className={`mr-2 text-sm ${getIconColor(child.name)}`}>
+                                {getFileIcon(child.name)}
+                              </span>
+                              <span className="text-sm">{child.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Run Controls */}
+        <div className="p-4 border-t border-gray-700">
+          <button
+            onClick={executeCode}
+            disabled={isRunning}
+            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded text-sm font-medium mb-2 transition-colors"
+          >
+            {isRunning ? '⏵ Running...' : '▶ Run Code'}
+          </button>
+          <button
+            onClick={clearOutput}
+            className="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+          >
+            🗑 Clear Output
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Tab Bar */}
+        <div className="h-10 bg-gray-800 border-b border-gray-700 flex items-center">
+          <div className="flex">
+            {openTabs.map((tab) => (
+              <div
+                key={tab}
+                className={`flex items-center px-4 py-2 border-r border-gray-700 cursor-pointer ${
+                  currentFile === tab ? 'bg-gray-900' : 'bg-gray-800 hover:bg-gray-700'
+                }`}
+                onClick={() => setCurrentFile(tab)}
+              >
+                <span className={`mr-2 text-sm ${getIconColor(tab)}`}>
+                  {getFileIcon(tab)}
+                </span>
+                <span className="text-sm">{tab.split('/').pop()}</span>
+                {openTabs.length > 1 && (
+                  <button
+                    className="ml-2 text-gray-400 hover:text-gray-200"
+                    onClick={(e) => closeTab(tab, e)}
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Editor and Output */}
+        <div className="flex-1 flex">
+          {/* Editor */}
+          <div className="w-1/2 flex flex-col">
+            <div ref={editorRef} className="flex-1" />
+          </div>
+
+          {/* Output Panel */}
+          <div className="w-1/2 bg-gray-900 border-l border-gray-700 flex flex-col">
+            <div className="h-10 bg-gray-800 border-b border-gray-700 flex items-center px-4">
+              <span className="text-sm text-gray-400">Console Output</span>
+              <div className="ml-auto flex items-center space-x-2">
+                <span className={`w-2 h-2 rounded-full ${isRunning ? 'bg-green-400 animate-pulse' : 'bg-gray-500'}`}></span>
+                <span className="text-xs text-gray-400">{isRunning ? 'Running' : 'Ready'}</span>
+              </div>
+            </div>
+            
+            <div className="flex-1 flex flex-col">
+              {/* Output */}
+              <div className="flex-1 overflow-auto">
+                <div ref={outputRef} className="p-4 font-mono text-sm space-y-1">
+                  {output ? (
+                    <pre className="whitespace-pre-wrap text-green-400">{output}</pre>
+                  ) : (
+                    <div className="text-gray-500 italic">No output yet. Click "Run Code" to execute.</div>
+                  )}
+                </div>
+              </div>
+
+              {/* Errors */}
+              {errors && (
+                <div className="border-t border-gray-700 bg-red-900/20">
+                  <div className="h-8 bg-red-800/30 border-b border-red-700 flex items-center px-4">
+                    <span className="text-sm text-red-400">❌ Errors</span>
+                  </div>
+                  <div className="p-4 font-mono text-sm">
+                    <pre className="whitespace-pre-wrap text-red-400">{errors}</pre>
+                  </div>
                 </div>
               )}
             </div>
-          ))}
-        </div>
-
-        {/* Editor Section */}
-        <div className="editor-section">
-          {/* Tabs */}
-          <div className="tabs">
-            {openTabs.map(tab => (
-              <div key={tab} className={`tab ${currentFile === tab ? 'active' : ''}`}>
-                <span onClick={() => setCurrentFile(tab)}>{tab}</span>
-                <button onClick={() => closeTab(tab)}>×</button>
-              </div>
-            ))}
-          </div>
-
-          {/* Code Editor */}
-          {currentFile && (
-            <textarea
-              ref={codeEditorRef}
-              className="code-editor"
-              value={fileContents[currentFile] || ''}
-              onChange={handleCodeChange}
-            />
-          )}
-        </div>
-
-        {/* Output and Controls */}
-        <div className="output-section">
-          {/* Runtime Selector */}
-          <div className="runtime-selector">
-            <select
-              value={activeRuntime}
-              onChange={(e) => setActiveRuntime(e.target.value)}
-            >
-              <option value="react">React</option>
-              <option value="nextjs">Next.js</option>
-              <option value="nodejs">Node.js/Express</option>
-              <option value="mongodb">MongoDB</option>
-              <option value="vanilla">Vanilla JS</option>
-            </select>
-            <button onClick={runCode} disabled={isRunning}>
-              {isRunning ? 'Running...' : 'Run Code'}
-            </button>
-            {['express', 'mongodb', 'nextjs'].map(type => (
-              serverStatus[type] === 'running' && (
-                <button
-                  key={type}
-                  onClick={() => stopServer(type)}
-                  className="stop-button"
-                >
-                  Stop {type.charAt(0).toUpperCase() + type.slice(1)}
-                </button>
-              )
-            ))}
-          </div>
-
-          {/* Output Display */}
-          <div className="output">
-            <h3>Output</h3>
-            <pre>{output}</pre>
-            {errors && <pre className="errors">{errors}</pre>}
           </div>
         </div>
       </div>
@@ -391,4 +520,4 @@ const UniversalCompiler = () => {
   );
 };
 
-export default UniversalCompiler;
+export default CodeCompiler;
