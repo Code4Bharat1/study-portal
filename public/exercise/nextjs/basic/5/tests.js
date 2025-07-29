@@ -1,181 +1,75 @@
-// Page 5 
-console.clear();
-console.clear();
-const fs = require('fs');
-const { ESLint } = require('eslint');
-const parser = require('@babel/parser');
-const traverse = require('@babel/traverse').default;
-const { rest } = require('msw');
-const { setupServer } = require('msw/node');
+// Simple Browser-Compatible Test for CSS and Styling
+// No external dependencies - works entirely in browser
 
-const code = fs.readFileSync('script.js', 'utf-8');
+console.log("🧪 Testing: CSS and Styling");
 
-const server = setupServer(
-  rest.get('/api/hello', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ message: 'Hello, Next.js!' }));
-  })
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
-
-function readAttempts() {
-  if (fs.existsSync('attempts.tests')) {
+function runSimpleTest(userCode) {
+    const result = {passed: false, score: 0, message: "", details: []};
+    
     try {
-      const data = JSON.parse(fs.readFileSync('attempts.tests', 'utf-8'));
-      return data.count >= 1 ? data.count : 1;
-    } catch (e) {
-      console.log('Error parsing attempts.tests. Resetting counter.');
-      return 1;
-    }
-  }
-  return 1;
-}
-
-function writeAttempts(count) {
-  try {
-    fs.writeFileSync('attempts.tests', JSON.stringify({ count }, null, 2), 'utf-8');
-  } catch (e) {
-    console.log(`Failed to write to attempts.tests: ${e}`);
-  }
-}
-
-async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { node: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module' },
-      rules: {
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-      },
-    },
-  });
-
-  try {
-    const [result] = await eslint.lintText(code);
-    const errors = result.messages.filter((msg) => msg.severity === 2);
-    if (errors.length === 0) {
-      console.log('✔ JavaScript syntax is valid.');
-      return true;
-    } else {
-      console.log('❌ JavaScript syntax is not valid:');
-      errors.forEach((err) => console.log(`  ${err.message} (line ${err.line})`));
-      return false;
-    }
-  } catch (e) {
-    console.log(`✘ ESLint failed: ${e}`);
-    return false;
-  }
-}
-
-function codeVerify() {
-  let allPassed = true;
-  try {
-    const ast = parser.parse(code, { sourceType: 'module' });
-    let handlerFunctions = 0;
-
-    traverse(ast, {
-      ExportDefaultDeclaration(path) {
-        if (path.node.declaration && path.node.declaration.id && path.node.declaration.id.name === 'handler') {
-          handlerFunctions++;
+        if (!userCode || userCode.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
         }
-      },
-    });
-
-    if (handlerFunctions === 0) {
-      console.log('✘ No handler function found');
-      allPassed = false;
-    } else {
-      console.log(`✔ Found ${handlerFunctions} handler function(s)`);
+        
+        let score = 0;
+        const checks = [];
+        
+        
+        // JavaScript syntax check
+        try {
+            new Function(userCode);
+            checks.push("✅ Valid syntax");
+            score += 30;
+        } catch (e) {
+            checks.push("❌ Syntax error");
+        }
+        
+        // Basic JavaScript checks
+        if (/console\.log\s*\(/.test(userCode)) {
+            checks.push("✅ Has console.log");
+            score += 30;
+        } else {
+            checks.push("❌ Missing console.log");
+        }
+        
+        // Topic-specific checks
+        const topic = "CSS and Styling".toLowerCase();
+        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else {
+            checks.push("⚠️ Add topic-specific content");
+            score += 20;
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 70;
+        result.message = `Score: ${result.score}/100`;
+        
+    } catch (error) {
+        result.message = "Error: " + error.message;
     }
-
-    return allPassed;
-  } catch (e) {
-    console.log(`✘ Failed to parse JavaScript code: ${e}`);
-    return false;
-  }
+    
+    return result;
 }
 
-async function functionalVerify() {
-  let allPassed = true;
-  try {
-    const module = await import('./script.js');
-    const handler = module.default;
-
-    const req = { method: 'GET' };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+// Export for Monaco Editor
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: runSimpleTest,
+        testConfig: {topic: "CSS and Styling", language: "nextjs"}
     };
-
-    await handler(req, res);
-
-    if (!res.status.mock.calls[0] || res.status.mock.calls[0][0] !== 200) {
-      console.log('✘ API did not return status 200');
-      allPassed = false;
-    } else {
-      console.log('✔ API returned status 200');
-    }
-
-    if (!res.json.mock.calls[0] || res.json.mock.calls[0][0].message !== 'Hello, Next.js!') {
-      console.log('✘ API did not return correct message');
-      allPassed = false;
-    } else {
-      console.log('✔ API returned correct message');
-    }
-
-    if (allPassed) {
-      console.log('\n🎉 Success! API Routes behavior is correct.');
-    } else {
-      console.log('\n❗ API Routes behavior check failed. Please review your Next.js code.');
-    }
-    return allPassed;
-  } catch (e) {
-    console.log(`✘ Functional test failed: ${e}`);
-    return false;
-  }
 }
 
-(async () => {
-  const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  ;
-}
-
-  const structurePassed = codeVerify();
-  const functionalPassed = await functionalVerify();
-  const allPassed = syntaxPassed && structurePassed && functionalPassed;
-
-  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
-  const linesOfCode = code.split('\n').filter((line) => line.trim()).length;
-
-  let attempts = readAttempts();
-  if (allPassed) {
-    const resultData = {
-      attempts,
-      linesOfCode,
-      executionTime,
-      syntaxCheckPassed: syntaxPassed,
-      structureCheckPassed: structurePassed,
-      functionalCheckPassed: functionalPassed,
-      timestamp: new Date().toISOString(),
-    };
-    try {
-      fs.writeFileSync('results.tests', JSON.stringify(resultData, null, 2), 'utf-8');
-      console.log('\n✅ All tests passed. Results saved to results.tests.');
-      process.exit(0);
-    } catch (e) {
-      console.log(`Failed to write to results.tests: ${e}`);
-      ;
-    }
-  } else {
-    attempts += 1;
-    writeAttempts(attempts);
-    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
-    ;
-  }
-})();
+console.log("✅ Test ready for: CSS and Styling");

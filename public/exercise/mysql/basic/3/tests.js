@@ -1,50 +1,83 @@
-const fs = require('fs');
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+// Test for MySQL INSERT and Data Entry
+// JavaScript test that validates MySQL INSERT operations
 
-const DB_FILE = path.join(__dirname, 'data', 'database.db');
-const ATTEMPT_FILE = path.join(__dirname'attempts.tests';
-const PASS_FILE = path.join(__dirname, 'passed_basic_3.txt');
+console.log("🧪 Testing: MySQL INSERT and Data Entry");
 
-function loadAttempts() {
-  if (fs.existsSync(ATTEMPT_FILE)) return JSON.parse(fs.readFileSync(ATTEMPT_FILE, 'utf8'));
-  return { attempts: 0, start: Date.now() };
+function runSimpleTest(userCode) {
+    const result = {passed: false, score: 0, message: "", details: []};
+    
+    try {
+        if (!userCode || userCode.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
+        }
+        
+        let score = 0;
+        const checks = [];
+        
+        // Remove comments and normalize whitespace
+        const cleanCode = userCode.replace(/--.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
+        
+        // Check for INSERT INTO statement
+        if (/INSERT\s+INTO\s+/i.test(cleanCode)) {
+            checks.push("✅ Uses INSERT INTO statement");
+            score += 30;
+        } else {
+            checks.push("❌ Missing INSERT INTO statement");
+        }
+        
+        // Check for VALUES clause
+        if (/VALUES\s*\(/i.test(cleanCode)) {
+            checks.push("✅ Includes VALUES clause");
+            score += 25;
+        } else {
+            checks.push("❌ Missing VALUES clause");
+        }
+        
+        // Check for column specification
+        if (/INSERT\s+INTO\s+\w+\s*\([^)]+\)\s+VALUES/i.test(cleanCode)) {
+            checks.push("✅ Specifies column names in INSERT");
+            score += 25;
+        } else {
+            checks.push("❌ Missing column specification");
+        }
+        
+        // Check for multiple value insertion or proper data types
+        const hasMultipleValues = /VALUES\s*\([^)]+\)\s*,\s*\([^)]+\)/i.test(cleanCode);
+        const hasStringValues = /'[^']*'|"[^"]*"/.test(cleanCode);
+        const hasNumericValues = /\b\d+\b/.test(cleanCode);
+        
+        if (hasMultipleValues || (hasStringValues && hasNumericValues)) {
+            checks.push("✅ Inserts multiple records or mixed data types");
+            score += 20;
+        } else {
+            checks.push("❌ Missing multiple records or varied data types");
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 70;
+        
+        if (result.passed) {
+            result.message = `Excellent data insertion! Score: ${result.score}/100`;
+        } else {
+            result.message = `Score: ${result.score}/100 - Use INSERT INTO with VALUES and column names`;
+        }
+        
+    } catch (error) {
+        result.message = "Error analyzing MySQL INSERT: " + error.message;
+        result.details = ["❌ INSERT analysis failed"];
+    }
+    
+    return result;
 }
 
-function saveAttempts(data) {
-  fs.writeFileSync(ATTEMPT_FILE, JSON.stringify(data));
+// Export for Monaco Editor
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: runSimpleTest,
+        testConfig: {topic: "MySQL INSERT and Data Entry", language: "mysql"}
+    };
 }
 
-async function runTest() {
-  const state = loadAttempts();
-  const db = new sqlite3.Database(DB_FILE);
-  const userCode = fs.readFileSync(path.join(__dirname, 'script.js'), 'utf8');
-  const runUserCode = new Function('db', userCode);
-
-  try {
-    await new Promise((resolve) => db.serialize(resolve));
-    db.run(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)`);
-
-    db.run(`DELETE FROM users`);
-    db.run(`INSERT INTO users (name) VALUES ('Alice'), ('Bob')`);
-
-    runUserCode(db);
-    await new Promise(res => setTimeout(res, 100));
-
-    db.all(`SELECT * FROM users`, (err, rows) => {
-      if (err) throw err;
-      if (!Array.isArray(rows) || rows.length < 2) throw new Error("Select all failed");
-      fs.writeFileSync(PASS_FILE, `Passed after ${state.attempts} failed attempt(s).`);
-      state.attempts = 0; state.start = null; saveAttempts(state);
-      console.log("🎉 Passed!");
-    });
-
-  } catch (err) {
-    state.attempts++;
-    saveAttempts(state);
-    console.error("❌ Failed:", err.message);
-  } finally {
-    db.close();
-  }
-}
-runTest();
+console.log("✅ MySQL INSERT test ready for: INSERT and Data Entry");

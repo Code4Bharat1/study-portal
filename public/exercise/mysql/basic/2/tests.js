@@ -1,77 +1,81 @@
-const fs = require('fs');
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+// Test for MySQL Database and Table Creation
+// JavaScript test that validates MySQL DDL commands
 
-const DB_PATH = path.join(__dirname, 'data', 'database.db');
-const USER_SCRIPT_PATH = path.join(__dirname, 'script.js');
-const ATTEMPT_FILE = path.join(__dirname'attempts.tests';
-const PASS_FILE = path.join(__dirname, 'passed_basic_2.txt');
+console.log("🧪 Testing: MySQL Database and Table Creation");
 
-function loadAttempts() {
-  if (fs.existsSync(ATTEMPT_FILE)) {
-    return JSON.parse(fs.readFileSync(ATTEMPT_FILE, 'utf8'));
-  }
-  return { attempts: 0, start: Date.now() };
+function runSimpleTest(userCode) {
+    const result = {passed: false, score: 0, message: "", details: []};
+    
+    try {
+        if (!userCode || userCode.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
+        }
+        
+        let score = 0;
+        const checks = [];
+        
+        // Remove comments and normalize whitespace
+        const cleanCode = userCode.replace(/--.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
+        
+        // Check for CREATE DATABASE statement
+        if (/CREATE\s+DATABASE\s+/i.test(cleanCode)) {
+            checks.push("✅ Creates database with CREATE DATABASE");
+            score += 25;
+        } else {
+            checks.push("❌ Missing CREATE DATABASE statement");
+        }
+        
+        // Check for CREATE TABLE statement
+        if (/CREATE\s+TABLE\s+/i.test(cleanCode)) {
+            checks.push("✅ Creates table with CREATE TABLE");
+            score += 25;
+        } else {
+            checks.push("❌ Missing CREATE TABLE statement");
+        }
+        
+        // Check for column definitions with data types
+        const dataTypes = /\b(INT|INTEGER|VARCHAR|CHAR|TEXT|DATETIME|TIMESTAMP|DATE|DECIMAL|FLOAT|DOUBLE|BOOLEAN)\s*\(\s*\d+\s*\)|\b(INT|INTEGER|TEXT|DATETIME|TIMESTAMP|DATE|BOOLEAN)\b/i;
+        if (dataTypes.test(cleanCode)) {
+            checks.push("✅ Defines columns with proper data types");
+            score += 25;
+        } else {
+            checks.push("❌ Missing column data type definitions");
+        }
+        
+        // Check for constraints (PRIMARY KEY, NOT NULL, AUTO_INCREMENT)
+        const constraints = /PRIMARY\s+KEY|NOT\s+NULL|AUTO_INCREMENT|UNIQUE|DEFAULT/i;
+        if (constraints.test(cleanCode)) {
+            checks.push("✅ Uses table constraints (PRIMARY KEY, NOT NULL, etc.)");
+            score += 25;
+        } else {
+            checks.push("❌ Missing table constraints");
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 70;
+        
+        if (result.passed) {
+            result.message = `Great database design! Score: ${result.score}/100`;
+        } else {
+            result.message = `Score: ${result.score}/100 - Create database and tables with proper structure`;
+        }
+        
+    } catch (error) {
+        result.message = "Error analyzing MySQL DDL: " + error.message;
+        result.details = ["❌ DDL analysis failed"];
+    }
+    
+    return result;
 }
 
-function saveAttempts(data) {
-  fs.writeFileSync(ATTEMPT_FILE, JSON.stringify(data));
+// Export for Monaco Editor
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: runSimpleTest,
+        testConfig: {topic: "MySQL Database and Table Creation", language: "mysql"}
+    };
 }
 
-function deleteDatabase() {
-  if (fs.existsSync(DB_PATH)) {
-    fs.unlinkSync(DB_PATH);
-  }
-}
-
-async function runTest() {
-  const state = loadAttempts();
-  if (!state.start) state.start = Date.now();
-
-  deleteDatabase();
-
-  const db = new sqlite3.Database(DB_PATH);
-
-  // Ensure the table exists before user script runs (in case they only insert)
-  await new Promise((resolve, reject) => {
-    db.run(`CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT);`, err => {
-      if (err) reject(err);
-      else resolve();
-    });
-  });
-
-  const code = fs.readFileSync(USER_SCRIPT_PATH, 'utf8');
-
-  try {
-    const runUserCode = new Function('db', code);
-    runUserCode(db);
-
-    // Wait for lazy writes
-    await new Promise(res => setTimeout(res, 100));
-
-    const rowCount = await new Promise((resolve, reject) => {
-      db.get(`SELECT COUNT(*) AS count FROM users;`, (err, row) => {
-        if (err) reject(new Error("Error querying users table."));
-        else resolve(row.count);
-      });
-    });
-
-    if (rowCount < 1) throw new Error("No records found in users table.");
-
-    fs.writeFileSync(PASS_FILE, `Passed after ${state.attempts} failed attempt(s) in ${Math.round((Date.now() - state.start) / 1000)} seconds.`);
-    console.log("🎉 Test passed! File created.");
-
-    state.attempts = 0;
-    state.start = null;
-    saveAttempts(state);
-  } catch (err) {
-    state.attempts++;
-    saveAttempts(state);
-    console.error(`❌ Test failed: ${err.message}`);
-    console.log(`Attempts so far: ${state.attempts}`);
-  } finally {
-    db.close();
-  }
-}
-
-runTest();
+console.log("✅ MySQL DDL test ready for: Database and Table Creation");

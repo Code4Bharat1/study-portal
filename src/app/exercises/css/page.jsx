@@ -1,5 +1,5 @@
-import CssExercisePlatform from "@/components/Exercise/Css";
+import CssExerciseMonacoPlatform from "@/components/Exercise/CssMonaco";
 
-export default function ContentDisplay(){
-    return (<CssExercisePlatform></CssExercisePlatform>)
+export default function CSSExercisePage(){
+    return (<CssExerciseMonacoPlatform></CssExerciseMonacoPlatform>)
 }

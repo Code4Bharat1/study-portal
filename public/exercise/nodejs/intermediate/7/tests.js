@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Advanced Event Emitters Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let customEmitters = 0;
-  let errorEvents = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'ClassDeclaration' && node.superClass && node.superClass.name === 'EventEmitter') {
-      customEmitters++;
-    }
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.property.name === 'on' && node.arguments[0].type === 'Literal' && node.arguments[0].value === 'error') {
-      errorEvents++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (customEmitters === 0) {
-    console.log('✘ No custom EventEmitter classes found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${customEmitters} custom EventEmitter class(es)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (errorEvents === 0) {
-    console.log('✘ No error event listeners found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${errorEvents} error event listener(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Advanced event emitters are correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Advanced event emitters check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

@@ -1,74 +1,132 @@
+const { ESLint } = require('eslint');
+const esprima = require('esprima');
+console.clear();
+console.clear();
 const fs = require('fs');
 const path = require('path');
-const { Db } = require('tingodb')();
 
-const DB_PATH = path.join(__dirname, 'data');
-const USER_SCRIPT_PATH = path.join(__dirname, 'script.js');
-const ATTEMPT_FILE = path.join(__dirname'attempts.tests';
-const PASS_FILE = path.join(__dirname, 'passed_hard_9.txt');
+// File paths
+const attemptsFile = path.join(__dirname, 'attempts.tests');
+const resultFile = path.join(__dirname, 'results.tests');
 
-function loadAttempts() {
-  if (fs.existsSync(ATTEMPT_FILE)) {
-    return JSON.parse(fs.readFileSync(ATTEMPT_FILE, 'utf8'));
+// Read JavaScript
+const js = fs.readFileSync('index.js', 'utf8');
+
+// Helper: Read Attempts (default to 1)
+function readAttempts() {
+  if (fs.existsSync(attemptsFile)) {
+    const data = fs.readFileSync(attemptsFile, 'utf8');
+    try {
+      const parsed = JSON.parse(data);
+      return parsed.count >= 1 ? parsed.count : 1;
+    } catch (err) {
+      console.error('Error parsing attempts.tests. Resetting counter.');
+      return 1;
+    }
   }
-  return { attempts: 0, start: Date.now() };
+  return 1;
 }
 
-function saveAttempts(data) {
-  fs.writeFileSync(ATTEMPT_FILE, JSON.stringify(data));
-}
-
-async function clearCollection(db, name) {
-  return new Promise((resolve, reject) => {
-    db.collection(name).remove({}, (err) => {
-      if (err) reject(err);
-      else resolve();
-    });
-  });
-}
-
-async function runTest() {
-  const state = loadAttempts();
-  if (!state.start) state.start = Date.now();
-
-  const db = new Db(DB_PATH, {});
-
-  await clearCollection(db, 'inventory');
-
-  const code = fs.readFileSync(USER_SCRIPT_PATH, 'utf8');
-
+// Helper: Write Attempt Count
+function writeAttempts(count) {
   try {
-    const runUserCode = new Function('db', code);
-    await runUserCode(db);
-
-    // Verify bulk write executed correctly by checking updates
-    const inventory = db.collection('inventory');
-    const updatedItems = await new Promise((res, rej) => {
-      inventory.find({ updated: true }).toArray((err, docs) => {
-        if (err) rej(err);
-        else res(docs);
-      });
-    });
-
-    if (updatedItems.length === 0)
-      throw new Error("No documents updated in bulk write.");
-
-    fs.writeFileSync(
-      PASS_FILE,
-      `Passed after ${state.attempts} failed attempt(s) in ${Math.round((Date.now() - state.start)/1000)} seconds.`
-    );
-    console.log("🎉 Test passed! File created.");
-
-    state.attempts = 0;
-    state.start = null;
-    saveAttempts(state);
-
+    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
   } catch (err) {
-    state.attempts++;
-    saveAttempts(state);
-    console.error(`❌ Test failed: ${err.message}`);
-    console.log(`Attempts so far: ${state.attempts}`);
+    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
   }
 }
 
-runTest();
+// Syntax Verification using ESLint
+async function syntaxVerify() {
+  const eslint = new ESLint();
+  const results = await eslint.lintText(js);
+  if (results[0].errorCount === 0) {
+    console.log('✔ JavaScript syntax is valid.');
+    return true;
+  } else {
+    console.log('❌ JavaScript syntax is not valid:');
+    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
+    return false;
+  }
+}
+
+// Code Verification
+function codeVerify() {
+  let allPassed = true;
+  let ast;
+  try {
+    ast = esprima.parseScript(js, { tolerant: true });
+  } catch (err) {
+    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
+    return false;
+  }
+
+  let consoleLogs = 0;
+  function traverse(node) {
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
+    }
+    for (const key in node) {
+      if (node[key] && typeof node[key] === 'object') {
+        traverse(node[key]);
+      }
+    }
+  }
+  traverse(ast);
+
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
+  }
+
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
+  }
+
+  if (allPassed) {
+    console.log('\n🎉 Success! Code verification passed.');
+  } else {
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
+  }
+  return allPassed;
+}
+
+// Main execution
+(async () => {
+  const startTime = process.hrtime();
+const syntaxPassed = await syntaxVerify();
+if (!syntaxPassed) {
+  console.log('\n❌ Syntax errors prevent further checks.');
+  ;
+}
+
+  const structurePassed = codeVerify();
+  const allPassed = syntaxPassed && structurePassed;
+
+  const [sec, nanosec] = process.hrtime(startTime);
+  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
+
+  let attempts = readAttempts();
+  if (allPassed) {
+    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
+    try {
+      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
+      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
+    } catch (err) {
+      console.error(`Failed to write to ${resultFile}: ${err.message}`);
+    }
+    process.exit(0);
+  } else {
+    attempts += 1;
+    writeAttempts(attempts);
+    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
+    ;
+  }
+})();

@@ -32,6 +32,14 @@ export default function QuestionPlatform({
 
   const handleSandboxLoad = () => setSandboxLoaded(true);
 
+  const handleInstructionsClose = () => {
+    setShowingInstructions(false);
+    // Start the timer when instructions are closed (user starts working)
+    const currentTime = Date.now();
+    localStorage.setItem("startTimestamp", currentTime.toString());
+    console.log("Timer started for exercise at:", new Date(currentTime).toISOString());
+  };
+
   const handleSubmit = async () => {
     try {
       const container = document.getElementById("stackblitz-container");
@@ -96,6 +104,9 @@ export default function QuestionPlatform({
       onClick: async (e) => {
         const previousAttempt = await checkPreviousExerciseAttempted();
         if (!previousAttempt) {
+          // Clear any existing timer when starting a new exercise
+          localStorage.removeItem("startTimestamp");
+          
           item.onClick?.(e);
           setShowingInstructions(true);
           return 1;
@@ -108,8 +119,8 @@ export default function QuestionPlatform({
   return (
     <div className="relative">
       {showingInstructions && (
-        <Modal onClose={() => setShowingInstructions(false)} ariaLabel="Instructions">
-          <Instructions task={task} onClose={() => setShowingInstructions(false)} />
+        <Modal onClose={handleInstructionsClose} ariaLabel="Instructions">
+          <Instructions task={task} onClose={handleInstructionsClose} />
         </Modal>
       )}
 

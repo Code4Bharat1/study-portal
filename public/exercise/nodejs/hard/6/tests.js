@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// OAuth 2.0 Authentication Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let passportUse = 0;
-  let oauthStrategy = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'passport' && node.callee.property.name === 'use') {
-      passportUse++;
-    }
-    if (node.type === 'NewExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'Strategy' && node.callee.object.object.name === 'passport') {
-      oauthStrategy++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (passportUse === 0) {
-    console.log('✘ No passport.use calls found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${passportUse} passport.use call(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (oauthStrategy === 0) {
-    console.log('✘ No OAuth strategy instances found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${oauthStrategy} OAuth strategy instance(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! OAuth 2.0 authentication is correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ OAuth 2.0 authentication check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

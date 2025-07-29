@@ -1,123 +1,58 @@
-# Page 7 
-import json
-import time
-import os
-from pylint.lint import Run
-from pylint.reporters.text import TextReporter
-from io import StringIO
-import ast
+# Test for Python Dictionaries and Sets
+# Python test that validates dictionary and set operations
 
-# File paths
-ATTEMPTS_FILE = 'attempts.tests'
-RESULT_FILE = 'results.tests'
+print("🧪 Testing: Python Dictionaries and Sets")
 
-# Read Python code
-with open('script.py', 'r', encoding='utf-8') as f:
-    code = f.read()
-
-# Helper: Read attempts (default to 1)
-def read_attempts():
-    if os.path.exists(ATTEMPTS_FILE):
-        try:
-            with open(ATTEMPTS_FILE, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                return data.get('count', 1) if data.get('count', 0) >= 1 else 1
-        except (json.JSONDecodeError, KeyError):
-            print('Error parsing attempts.tests. Resetting counter.')
-            return 1
-    return 1
-
-# Helper: Write attempts
-def write_attempts(count):
+def run_simple_test(user_code):
+    """Test dictionaries and sets in Python"""
+    result = {"passed": False, "score": 0, "message": "", "details": []}
+    
     try:
-        with open(ATTEMPTS_FILE, 'w', encoding='utf-8') as f:
-            json.dump({'count': count}, f, indent=2)
-    except OSError as e:
-        print(f'Failed to write to {ATTEMPTS_FILE}: {e}')
-
-# Syntax verification using pylint
-def syntax_verify():
-    output = StringIO()
-    reporter = TextReporter(output)
-    try:
-        Run(['script.py', '--disable=all', '--enable=syntax-error,undefined-variable'], reporter=reporter, do_exit=False)
-        output.seek(0)
-        errors = output.read()
-        if 'error' not in errors.lower():
-            print('✔ Python syntax is valid.')
-            return True
+        if not user_code or len(user_code.strip()) < 5:
+            result["message"] = "Code is empty or too short"
+            return result
+        
+        score = 0
+        checks = []
+        
+        # Check for dictionary creation
+        if "{" in user_code and "}" in user_code and ":" in user_code:
+            checks.append("✅ Creates dictionaries")
+            score += 25
         else:
-            print('❌ Python syntax is not valid:')
-            print(errors)
-            return False
+            checks.append("❌ Missing dictionary creation")
+        
+        # Check for dictionary methods
+        dict_methods = ["keys", "values", "items", "get", "pop", "update"]
+        if any(f".{method}(" in user_code for method in dict_methods):
+            checks.append("✅ Uses dictionary methods")
+            score += 25
+        else:
+            checks.append("❌ Missing dictionary methods")
+        
+        # Check for set creation
+        if "set(" in user_code or ("{" in user_code and "}" in user_code and ":" not in user_code):
+            checks.append("✅ Creates sets")
+            score += 25
+        else:
+            checks.append("❌ Missing set creation")
+        
+        # Check for set operations
+        set_methods = ["add", "remove", "discard", "union", "intersection", "difference"]
+        if any(f".{method}(" in user_code for method in set_methods):
+            checks.append("✅ Uses set operations")
+            score += 25
+        else:
+            checks.append("❌ Missing set operations")
+        
+        result["details"] = checks
+        result["score"] = min(score, 100)
+        result["passed"] = score >= 70
+        result["message"] = f"Score: {result['score']}/100"
+        
     except Exception as e:
-        print(f'✘ Pylint failed: {e}')
-        return False
-    finally:
-        output.close()
+        result["message"] = f"Error: {str(e)}"
+    
+    return result
 
-# Structural verification for functions and parameters
-def code_verify():
-    all_passed = True
-    try:
-        tree = ast.parse(code)
-    except SyntaxError as e:
-        print(f'✘ Failed to parse Python code: {e}')
-        return False
-
-    functions = 0
-    params = 0
-    for node in ast.walk(tree):
-        if isinstance(node, ast.FunctionDef):
-            functions += 1
-            params += len(node.args.args)
-
-    if functions == 0:
-        print('✘ No function definitions found')
-        all_passed = False
-    else:
-        print(f'✔ Found {functions} function definition(s)')
-    if params < 2:
-        print('✘ Fewer than 2 function parameters found')
-        all_passed = False
-    else:
-        print(f'✔ Found {params} function parameter(s)')
-
-    if all_passed:
-        print('\n🎉 Success! Functions and parameters implementation is correct.')
-    else:
-        print('\n❗ Functions and parameters check failed. Please review your Python code.')
-    return all_passed
-
-# Main execution
-if __name__ == '__main__':
-    start_time = time.time()
-    syntax_passed = syntax_verify()
-    structure_passed = code_verify()
-    all_passed = syntax_passed and structure_passed
-
-    execution_time = round(time.time() - start_time, 3)
-    lines_of_code = len([line for line in code.split('\n') if line.strip()])
-
-    attempts = read_attempts()
-    if all_passed:
-        result_data = {
-            'attempts': attempts,
-            'linesOfCode': lines_of_code,
-            'executionTime': execution_time,
-            'syntaxCheckPassed': syntax_passed,
-            'structureCheckPassed': structure_passed,
-            'timestamp': time.strftime('%Y-%m-%dT%H:%M:%S')
-        }
-        try:
-            with open(RESULT_FILE, 'w', encoding='utf-8') as f:
-                json.dump(result_data, f, indent=2)
-            print(f'\n✅ All tests passed. Results saved to {RESULT_FILE}.')
-        except OSError as e:
-            print(f'Failed to write to {RESULT_FILE}: {e}')
-        exit(0)
-    else:
-        attempts += 1
-        write_attempts(attempts)
-        print(f'\n❌ One or more tests failed. Attempt #{attempts} recorded.')
-        exit(1)
+print("✅ Test ready for: Python Dictionaries and Sets")

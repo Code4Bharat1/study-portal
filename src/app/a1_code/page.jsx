@@ -11,6 +11,8 @@ const CodeCompiler = () => {
   const [output, setOutput] = useState('');
   const [errors, setErrors] = useState('');
   const [isRunning, setIsRunning] = useState(false);
+  const [editorLoaded, setEditorLoaded] = useState(false);
+  const [fallbackMode, setFallbackMode] = useState(false);
   const [fileContents, setFileContents] = useState({
     'package.json': `{
   "name": "js-compiler",
@@ -20,44 +22,7 @@ const CodeCompiler = () => {
     "start": "node src/index.js"
   }
 }`,
-    'src/index.js': `// Welcome to the JavaScript Compiler!
-// Try editing this code and click Run to see the output
-
-console.log("Hello, World!");
-
-// Example: Simple calculator
-function calculate(a, b, operation) {
-  switch(operation) {
-    case '+': return a + b;
-    case '-': return a - b;
-    case '*': return a * b;
-    case '/': return b !== 0 ? a / b : 'Error: Division by zero';
-    default: return 'Error: Unknown operation';
-  }
-}
-
-console.log("Calculator Examples:");
-console.log("5 + 3 =", calculate(5, 3, '+'));
-console.log("10 - 4 =", calculate(10, 4, '-'));
-console.log("6 * 7 =", calculate(6, 7, '*'));
-console.log("15 / 3 =", calculate(15, 3, '/'));
-
-// Example: Working with arrays
-const numbers = [1, 2, 3, 4, 5];
-const doubled = numbers.map(n => n * 2);
-console.log("Original numbers:", numbers);
-console.log("Doubled numbers:", doubled);
-
-// Example: Async/await simulation
-async function fetchData() {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve("Data fetched successfully!");
-    }, 1000);
-  });
-}
-
-fetchData().then(data => console.log(data));`,
+    'src/index.js': ``,
     'src/math.js': `// Math utility functions
 export function fibonacci(n) {
   if (n <= 1) return n;
@@ -114,67 +79,159 @@ export function deepClone(obj) {
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
   const outputRef = useRef(null);
+  const textareaRef = useRef(null);
+  const isUpdatingFromEditor = useRef(false);
 
-  // Load Monaco Editor
+  // Load Monaco Editor with fallback
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js';
-    document.head.appendChild(script);
+    let isComponentMounted = true;
+    let loadTimeout;
 
-    script.onload = () => {
-      window.require.config({ 
-        paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } 
-      });
-      
-      window.require(['vs/editor/editor.main'], () => {
-        if (editorRef.current && !monacoRef.current) {
-          monacoRef.current = window.monaco.editor.create(editorRef.current, {
-            value: fileContents[currentFile],
-            language: getLanguageFromFile(currentFile),
-            theme: 'vs-dark',
-            fontSize: 14,
-            lineHeight: 20,
-            minimap: { enabled: false },
-            scrollBeyondLastLine: false,
-            automaticLayout: true,
-            tabSize: 2,
-            insertSpaces: true,
-            wordWrap: 'on',
-            bracketPairColorization: { enabled: true },
-            guides: {
-              bracketPairs: true,
-              indentation: true
-            }
-          });
+    const loadMonaco = async () => {
+      try {
+        // Set a timeout for Monaco loading
+        loadTimeout = setTimeout(() => {
+          if (isComponentMounted && !editorLoaded) {
+            console.warn('Monaco Editor loading timeout, switching to fallback mode');
+            setFallbackMode(true);
+            setEditorLoaded(true);
+          }
+        }, 10000); // 10 second timeout
 
-          monacoRef.current.onDidChangeModelContent(() => {
+        // Check if Monaco is already loaded
+        if (window.monaco) {
+          clearTimeout(loadTimeout);
+          initializeEditor();
+          return;
+        }
+
+        // Load Monaco Editor
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js';
+        script.async = true;
+        
+        script.onload = () => {
+          if (!isComponentMounted) return;
+          clearTimeout(loadTimeout);
+          
+          try {
+            window.require.config({ 
+              paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } 
+            });
+            
+            window.require(['vs/editor/editor.main'], () => {
+              if (isComponentMounted && window.monaco) {
+                initializeEditor();
+              }
+            });
+          } catch (error) {
+            console.error('Error configuring Monaco:', error);
+            setFallbackMode(true);
+            setEditorLoaded(true);
+          }
+        };
+
+        script.onerror = () => {
+          console.error('Failed to load Monaco Editor');
+          setFallbackMode(true);
+          setEditorLoaded(true);
+        };
+
+        document.head.appendChild(script);
+      } catch (error) {
+        console.error('Error loading Monaco Editor:', error);
+        setFallbackMode(true);
+        setEditorLoaded(true);
+      }
+    };
+
+    const initializeEditor = () => {
+      if (!editorRef.current || monacoRef.current || !window.monaco) return;
+
+      try {
+        monacoRef.current = window.monaco.editor.create(editorRef.current, {
+          value: fileContents[currentFile],
+          language: getLanguageFromFile(currentFile),
+          theme: 'vs-dark',
+          fontSize: 14,
+          lineHeight: 20,
+          minimap: { enabled: false },
+          scrollBeyondLastLine: false,
+          automaticLayout: true,
+          tabSize: 2,
+          insertSpaces: true,
+          wordWrap: 'on',
+          bracketPairColorization: { enabled: true },
+          guides: {
+            bracketPairs: true,
+            indentation: true
+          },
+          readOnly: false,
+          selectOnLineNumbers: true,
+          roundedSelection: false,
+          cursorStyle: 'line',
+          mouseWheelZoom: true
+        });
+
+        monacoRef.current.onDidChangeModelContent(() => {
+          if (!isUpdatingFromEditor.current) {
             const newContent = monacoRef.current.getValue();
             setFileContents(prev => ({
               ...prev,
               [currentFile]: newContent
             }));
-          });
-        }
-      });
+          }
+        });
+
+        setEditorLoaded(true);
+        // Focus the editor
+        setTimeout(() => {
+          if (monacoRef.current) {
+            monacoRef.current.focus();
+          }
+        }, 100);
+      } catch (error) {
+        console.error('Error initializing Monaco Editor:', error);
+        setFallbackMode(true);
+        setEditorLoaded(true);
+      }
     };
 
+    // Add a small delay to ensure the DOM is ready
+    const timer = setTimeout(loadMonaco, 100);
+
     return () => {
+      isComponentMounted = false;
+      clearTimeout(timer);
+      clearTimeout(loadTimeout);
       if (monacoRef.current) {
-        monacoRef.current.dispose();
+        try {
+          monacoRef.current.dispose();
+          monacoRef.current = null;
+        } catch (error) {
+          console.error('Error disposing Monaco Editor:', error);
+        }
       }
     };
   }, []);
 
-  // Update editor when file changes
+  // Update editor when file changes (but not when content changes from typing)
   useEffect(() => {
-    if (monacoRef.current && fileContents[currentFile]) {
-      const model = monacoRef.current.getModel();
-      if (model) {
-        window.monaco.editor.setModelLanguage(model, getLanguageFromFile(currentFile));
-        monacoRef.current.setValue(fileContents[currentFile]);
+    if (monacoRef.current && !fallbackMode) {
+      try {
+        isUpdatingFromEditor.current = true;
+        const model = monacoRef.current.getModel();
+        if (model) {
+          window.monaco.editor.setModelLanguage(model, getLanguageFromFile(currentFile));
+          monacoRef.current.setValue(fileContents[currentFile] || '');
+        }
+        isUpdatingFromEditor.current = false;
+      } catch (error) {
+        console.error('Error updating Monaco editor:', error);
+        isUpdatingFromEditor.current = false;
       }
     }
-  }, [currentFile]);
+  }, [currentFile]); // Only trigger when currentFile changes, not fileContents
 
   // Auto-scroll output to bottom
   useEffect(() => {
@@ -241,6 +298,14 @@ export function deepClone(obj) {
     }));
   };
 
+  const handleTextareaChange = (e) => {
+    const newContent = e.target.value;
+    setFileContents(prev => ({
+      ...prev,
+      [currentFile]: newContent
+    }));
+  };
+
   const executeCode = async () => {
     setIsRunning(true);
     setOutput('');
@@ -251,14 +316,6 @@ export function deepClone(obj) {
       const logs = [];
       const errors = [];
       
-      // Override console methods to capture output
-      const originalConsole = {
-        log: console.log,
-        error: console.error,
-        warn: console.warn,
-        info: console.info
-      };
-
       const mockConsole = {
         log: (...args) => logs.push(['log', ...args]),
         error: (...args) => {
@@ -271,6 +328,12 @@ export function deepClone(obj) {
 
       // Get the code to execute
       const codeToRun = fileContents[currentFile];
+      
+      if (!codeToRun.trim()) {
+        setOutput('No code to execute. Write some JavaScript code and try again.');
+        setIsRunning(false);
+        return;
+      }
       
       // Create a function that executes the user's code
       const executeUserCode = new Function('console', 'setTimeout', 'setInterval', 'clearTimeout', 'clearInterval', 'Promise', codeToRun);
@@ -364,6 +427,11 @@ export function deepClone(obj) {
             <span>⚡ Live execution</span>
             <span>🔒 Sandboxed</span>
           </div>
+          {fallbackMode && (
+            <div className="mt-2 text-xs text-yellow-400">
+              📝 Using fallback editor
+            </div>
+          )}
         </div>
 
         {/* File Explorer */}
@@ -476,7 +544,23 @@ export function deepClone(obj) {
         <div className="flex-1 flex">
           {/* Editor */}
           <div className="w-1/2 flex flex-col">
-            <div ref={editorRef} className="flex-1" />
+            {fallbackMode ? (
+              <textarea
+                ref={textareaRef}
+                value={fileContents[currentFile]}
+                onChange={handleTextareaChange}
+                className="flex-1 bg-gray-900 text-gray-100 p-4 font-mono text-sm resize-none border-none outline-none"
+                style={{
+                  fontFamily: 'Consolas, Monaco, "Courier New", monospace',
+                  lineHeight: '1.5',
+                  tabSize: 2
+                }}
+                placeholder="Start typing your JavaScript code here..."
+                spellCheck={false}
+              />
+            ) : (
+              <div ref={editorRef} className="flex-1" />
+            )}
           </div>
 
           {/* Output Panel */}
@@ -496,7 +580,7 @@ export function deepClone(obj) {
                   {output ? (
                     <pre className="whitespace-pre-wrap text-green-400">{output}</pre>
                   ) : (
-                    <div className="text-gray-500 italic">No output yet. Click "Run Code" to execute.</div>
+                    <div className="text-gray-500 italic">No output yet. Write some code and click "Run Code" to execute.</div>
                   )}
                 </div>
               </div>

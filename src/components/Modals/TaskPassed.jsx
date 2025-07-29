@@ -2,6 +2,21 @@
 import { useEffect, useState } from "react";
 import { LEVEL_SCORE_MAP, calculateScore } from "./utils";
 
+// Helper function to format time in a user-friendly way
+const formatTime = (seconds) => {
+  if (seconds < 60) {
+    return `${seconds.toFixed(1)} seconds`;
+  } else if (seconds < 3600) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.round(seconds % 60);
+    return `${minutes}m ${remainingSeconds}s`;
+  } else {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${hours}h ${minutes}m`;
+  }
+};
+
 export default function TestPassed({
   result,
   level,
@@ -20,29 +35,92 @@ export default function TestPassed({
   });
 
   useEffect(() => {
-    try {
-      const startTimestamp = localStorage.getItem("startTimestamp");
-      if (!startTimestamp) {
-        console.error("Start time not found in localStorage.");
-        setError("Timer data missing. Score calculation may be inaccurate.");
-        return;
+    const calculateScoreFromTimer = async () => {
+      try {
+        let startTime = null;
+        let duration = 60; // Default fallback duration in seconds
+        
+        // First try localStorage
+        const startTimestamp = localStorage.getItem("startTimestamp");
+        if (startTimestamp) {
+          const startTimeMs = Number(startTimestamp);
+          const endTimeMs = result.timestamp ? new Date(result.timestamp).getTime() : Date.now();
+          
+          // Validate timestamps
+          if (!isNaN(startTimeMs) && !isNaN(endTimeMs) && endTimeMs > startTimeMs) {
+            duration = Math.max(1, (endTimeMs - startTimeMs) / 1000);
+            console.log('Timer calculation:', { 
+              startTimeMs, 
+              endTimeMs, 
+              durationMs: endTimeMs - startTimeMs, 
+              durationSeconds: duration 
+            });
+          } else {
+            console.warn('Invalid timestamp data:', { startTimestamp, resultTimestamp: result.timestamp });
+          }
+        } else {
+          // Fallback: try to get timer data from StackBlitz file system
+          try {
+            const container = document.getElementById("stackblitz-container");
+            if (container) {
+              const sdk = await import("@stackblitz/sdk");
+              const vm = await sdk.default.connect(container);
+              const fsSnap = await vm.getFsSnapshot();
+              
+              if ("timer.tests" in fsSnap && fsSnap["timer.tests"]) {
+                const timerData = JSON.parse(fsSnap["timer.tests"]);
+                if (timerData.startTimestamp) {
+                  const startTimeMs = Number(timerData.startTimestamp);
+                  const endTimeMs = result.timestamp ? new Date(result.timestamp).getTime() : Date.now();
+                  
+                  if (!isNaN(startTimeMs) && !isNaN(endTimeMs) && endTimeMs > startTimeMs) {
+                    duration = Math.max(1, (endTimeMs - startTimeMs) / 1000);
+                    console.log('Timer data found in StackBlitz file system');
+                  }
+                }
+              }
+            }
+          } catch (stackblitzError) {
+            console.warn('Could not retrieve timer from StackBlitz:', stackblitzError);
+          }
+        }
+
+        // Cap the duration to reasonable limits (max 30 minutes)
+        if (duration > 1800) {
+          console.warn(`Duration capped from ${duration}s to 1800s (30 minutes)`);
+          duration = 1800;
+        }
+
+        // Ensure minimum duration
+        duration = Math.max(1, Math.round(duration));
+
+        setTimeTaken(duration);
+
+        const { total, breakdown } = calculateScore(result.attempts, duration, level);
+        setScore(total);
+        setBreakdown(breakdown);
+        
+        console.log('Score calculated:', { 
+          total, 
+          breakdown, 
+          duration, 
+          attempts: result.attempts,
+          startTimestamp,
+          resultTimestamp: result.timestamp
+        });
+      } catch (err) {
+        console.error('Error calculating score:', err);
+        setError('Failed to calculate score');
+        // Use a default duration for scoring
+        const duration = 60;
+        setTimeTaken(duration);
+        const { total, breakdown } = calculateScore(result.attempts, duration, level);
+        setScore(total);
+        setBreakdown(breakdown);
       }
+    };
 
-      const startTime = new Date(Number(startTimestamp));
-      const endTime = new Date(result.timestamp);
-      const duration = Math.max(1, (endTime - startTime) / 1000); // Ensure minimum 1 second
-
-      setTimeTaken(duration);
-
-      const { total, breakdown } = calculateScore(result.attempts, duration, level);
-      setScore(total);
-      setBreakdown(breakdown);
-      
-      console.log('Score calculated:', { total, breakdown, duration, attempts: result.attempts });
-    } catch (err) {
-      console.error('Error calculating score:', err);
-      setError('Failed to calculate score');
-    }
+    calculateScoreFromTimer();
   }, [result, level]);
 
   const handleSubmit = async () => {
@@ -148,7 +226,7 @@ export default function TestPassed({
       <p className="mb-4">Your code passed all test cases!</p>
 
       <div className="mb-4">
-        <p><strong>Time Taken:</strong> {timeTaken.toFixed(2)} seconds</p>
+        <p><strong>Time Taken:</strong> {formatTime(timeTaken)}</p>
         <p><strong>Attempts:</strong> {result.attempts}</p>
         <p><strong>Level:</strong> {level}</p>
         <p><strong>Type:</strong> {type}</p>

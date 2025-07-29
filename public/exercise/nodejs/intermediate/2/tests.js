@@ -1,4 +1,3 @@
-// Page 2 
 const { ESLint } = require('eslint');
 const esprima = require('esprima');
 console.clear();
@@ -51,25 +50,21 @@ async function syntaxVerify() {
   }
 }
 
-// ES Modules in Node.js Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
   try {
-    ast = esprima.parseModule(js, { tolerant: true });
+    ast = esprima.parseScript(js, { tolerant: true });
   } catch (err) {
-    console.log(`✘ Failed to parse JavaScript as module: ${err.message}`);
+    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
     return false;
   }
 
-  let imports = 0;
-  let exports = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'ImportDeclaration') {
-      imports++;
-    }
-    if (node.type === 'ExportNamedDeclaration' || node.type === 'ExportDefaultDeclaration') {
-      exports++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -79,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (imports === 0) {
-    console.log('✘ No import statements found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${imports} import statement(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (exports === 0) {
-    console.log('✘ No export statements found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${exports} export statement(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! ES modules are correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ ES modules check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

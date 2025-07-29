@@ -1,5 +1,5 @@
-import NextJsExercisePlatform from "@/components/Exercise/Nextjs";
+import NextjsExerciseMonacoPlatform from "@/components/Exercise/NextjsMonaco";
 
-export default function ContentDisplay(){
-    return (<NextJsExercisePlatform></NextJsExercisePlatform>)
+export default function NextjsExercisePage(){
+    return (<NextjsExerciseMonacoPlatform></NextjsExerciseMonacoPlatform>)
 }

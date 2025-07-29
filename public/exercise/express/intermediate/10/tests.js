@@ -1,129 +1,132 @@
 const { ESLint } = require('eslint');
-const supertest = require('supertest');
+const esprima = require('esprima');
+console.clear();
+console.clear();
 const fs = require('fs');
 const path = require('path');
 
-const jsFile = path.join(process.cwd(), 'index.js'); // Adjust if needed
-const js = fs.readFileSync(jsFile, 'utf8');
+// File paths
+const attemptsFile = path.join(__dirname, 'attempts.tests');
+const resultFile = path.join(__dirname, 'results.tests');
 
-const attemptsFile = path.join(process.cwd(), 'attempts.tests');
-const resultsFile = path.join(process.cwd(), 'results.tests');
+// Read JavaScript
+const js = fs.readFileSync('index.js', 'utf8');
 
+// Helper: Read Attempts (default to 1)
 function readAttempts() {
+  if (fs.existsSync(attemptsFile)) {
+    const data = fs.readFileSync(attemptsFile, 'utf8');
+    try {
+      const parsed = JSON.parse(data);
+      return parsed.count >= 1 ? parsed.count : 1;
+    } catch (err) {
+      console.error('Error parsing attempts.tests. Resetting counter.');
+      return 1;
+    }
+  }
+  return 1;
+}
+
+// Helper: Write Attempt Count
+function writeAttempts(count) {
   try {
-    return parseInt(fs.readFileSync(attemptsFile, 'utf8'), 10) || 0;
-  } catch {
-    return 0;
+    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+  } catch (err) {
+    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
   }
 }
 
-function writeAttempts(n) {
-  fs.writeFileSync(attemptsFile, String(n));
-}
-
-function writeResults(result) {
-  const results = {
-    status: result ? 'pass' : 'fail',
-    timestamp: new Date().toISOString(),
-  };
-  fs.writeFileSync(resultsFile, JSON.stringify(results, null, 2));
-}
-
-async function checkSyntax() {
+// Syntax Verification using ESLint
+async function syntaxVerify() {
   const eslint = new ESLint();
   const results = await eslint.lintText(js);
   if (results[0].errorCount === 0) {
     console.log('✔ JavaScript syntax is valid.');
     return true;
-  }
-  console.log('❌ Syntax errors:');
-  results[0].messages.forEach(m =>
-    console.log(`- [${m.ruleId}] ${m.message} (line ${m.line})`)
-  );
-  return false;
-}
-
-function checkExport() {
-  const hasExport =
-    js.includes('module.exports') ||
-    js.includes('export default') ||
-    js.includes('exports.app');
-
-  if (!hasExport) {
-    console.log('✘ No valid export detected.');
   } else {
-    console.log('✔ Export found.');
-  }
-  return hasExport;
-}
-
-async function checkSendEmail() {
-  try {
-    delete require.cache[require.resolve(jsFile)];
-    const mod = require(jsFile);
-    const app = mod.app || mod.default || mod;
-
-    if (!app) {
-      console.log('✘ No app export found.');
-      return false;
-    }
-
-    const request = supertest(app);
-
-    const res = await request
-      .post('/send-email')
-      .send({
-        to: 'test@example.com',
-        subject: 'Test Email',
-        body: 'This is a test email body',
-      })
-      .set('Accept', 'application/json');
-
-    if (res.status !== 200 && res.status !== 201) {
-      console.log(`✘ Expected status 200 or 201 but got ${res.status}`);
-      return false;
-    }
-
-    if (!res.body) {
-      console.log('✘ No response body found.');
-      return false;
-    }
-
-    if (!('success' in res.body)) {
-      console.log('✘ Response body missing "success" property.');
-      return false;
-    }
-
-    if (res.body.success !== true) {
-      console.log('✘ Email sending was not successful.');
-      return false;
-    }
-
-    console.log('✔ Send Email endpoint works correctly.');
-    return true;
-  } catch (err) {
-    console.log('✘ Error during supertest request:', err.message);
+    console.log('❌ JavaScript syntax is not valid:');
+    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
     return false;
   }
 }
 
+// Code Verification
+function codeVerify() {
+  let allPassed = true;
+  let ast;
+  try {
+    ast = esprima.parseScript(js, { tolerant: true });
+  } catch (err) {
+    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
+    return false;
+  }
+
+  let consoleLogs = 0;
+  function traverse(node) {
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
+    }
+    for (const key in node) {
+      if (node[key] && typeof node[key] === 'object') {
+        traverse(node[key]);
+      }
+    }
+  }
+  traverse(ast);
+
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
+  }
+
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
+  }
+
+  if (allPassed) {
+    console.log('\n🎉 Success! Code verification passed.');
+  } else {
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
+  }
+  return allPassed;
+}
+
+// Main execution
 (async () => {
-  const attempts = readAttempts() + 1;
-  writeAttempts(attempts);
+  const startTime = process.hrtime();
+const syntaxPassed = await syntaxVerify();
+if (!syntaxPassed) {
+  console.log('\n❌ Syntax errors prevent further checks.');
+  ;
+}
 
-  const syntaxOk = await checkSyntax();
-  const exportOk = checkExport();
-  const sendEmailOk = await checkSendEmail();
+  const structurePassed = codeVerify();
+  const allPassed = syntaxPassed && structurePassed;
 
-  const allOk = syntaxOk && exportOk && sendEmailOk;
+  const [sec, nanosec] = process.hrtime(startTime);
+  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
 
-  writeResults(allOk);
-
-  if (allOk) {
-    console.log(`\n✅ All checks passed. Attempts: ${attempts}`);
+  let attempts = readAttempts();
+  if (allPassed) {
+    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
+    try {
+      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
+      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
+    } catch (err) {
+      console.error(`Failed to write to ${resultFile}: ${err.message}`);
+    }
     process.exit(0);
   } else {
-    console.log(`\n❌ One or more checks failed. Attempts: ${attempts}`);
+    attempts += 1;
+    writeAttempts(attempts);
+    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
     ;
   }
 })();

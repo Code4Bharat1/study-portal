@@ -442,82 +442,226 @@ fs.writeFileSync(testsFile, "WebContainer Booted", null, 2);
 export default function Sandbox({ filesObj, fileToOpen, onLoad, hideExplorer }) {
   const containerId = 'stackblitz-container';
   const [loading, setLoading] = useState(true);
-  Object.assign(filesObj, testsTest); // add testsTest to the filesList
+  const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+  
+  // Add testsTest to the filesList
+  Object.assign(filesObj, testsTest);
 
   useEffect(() => {
-    sdk
-      .embedProject(
-        containerId,
-        {
-          files: filesObj,
-          title: 'Code4Bharat Sandbox',
-          description: 'Try MERN right in your Browser',
-          template: 'node',
-        },
-        {
-          openFile: fileToOpen,
-          hideDevTools: true,
-          theme: 'light',
-          hideExplorer: hideExplorer
-        }
-      )
-      .then((vm) => {
-        const intervalId = setInterval(async () => {
-          const files = Object.keys(await vm.getFsSnapshot());
-          if (files.includes('web-c.done')) {
-            clearInterval(intervalId);
-            onLoad();
-            console.log("window:", window)
+    let timeoutId;
+    let intervalId;
+    let isComponentMounted = true;
 
-            // Save start timestamp in localStorage (always overwrite)
-            localStorage.setItem('startTimestamp', Date.now()); 
-            console.log(localStorage.getItem('startTimestamp'))
-
-            vm.applyFsDiff({ destroy: ['web-c.done'], create: {} });
-
-            setLoading(false)
-          }
-        }, 3000);
-      })
-      .catch((err) => {
-        console.error('Failed to embed StackBlitz project:', err);
+    const initializeStackBlitz = async () => {
+      try {
+        setError(null);
+        
+        // Clear any existing container content
         const container = document.getElementById(containerId);
-        if (!container) throw new Error('Container element not found');
+        if (container) {
+          container.innerHTML = '';
+        }
 
-        sdk.connect(container).then((vm) => {
-          const intervalId = setInterval(async () => {
+        // Set a timeout for the entire operation
+        timeoutId = setTimeout(() => {
+          if (isComponentMounted) {
+            setError('StackBlitz connection timeout. Retrying...');
+            if (retryCount < 3) {
+              setRetryCount(prev => prev + 1);
+            }
+          }
+        }, 30000); // 30 second timeout
+
+        const vm = await sdk.embedProject(
+          containerId,
+          {
+            files: filesObj,
+            title: 'Code4Bharat Sandbox',
+            description: 'Try MERN right in your Browser',
+            template: 'node',
+          },
+          {
+            openFile: fileToOpen,
+            hideDevTools: true,
+            theme: 'light',
+            hideExplorer: hideExplorer,
+            // Add these options to improve reliability
+            forceEmbedLayout: true,
+            clickToLoad: false,
+            view: 'editor',
+            terminalHeight: 50
+          }
+        );
+
+        if (!isComponentMounted) return;
+
+        // Clear the timeout since we got a successful connection
+        clearTimeout(timeoutId);
+
+        // Wait for the WebContainer to boot
+        intervalId = setInterval(async () => {
+          try {
+            if (!isComponentMounted) {
+              clearInterval(intervalId);
+              return;
+            }
+
             const files = Object.keys(await vm.getFsSnapshot());
-
             if (files.includes('web-c.done')) {
               clearInterval(intervalId);
-              onLoad();
+              
+              if (onLoad) onLoad();
+              
+              // Clean up the boot file
+              await vm.applyFsDiff({ 
+                destroy: ['web-c.done'], 
+                create: {} 
+              });
 
-              // Save start timestamp in localStorage (always overwrite)
-              localStorage.setItem('startTimestamp', Date.now());
-
-              vm.applyFsDiff({ destroy: ['web-c.done'], create: {} });
-
-              setLoading(false)
+              setLoading(false);
             }
-          }, 3000);
-        });
-      });
-  }, [filesObj, fileToOpen, onLoad]);
+          } catch (err) {
+            console.warn('Error checking file system:', err);
+            // Continue trying - this might be a temporary issue
+          }
+        }, 2000); // Check every 2 seconds instead of 3
+
+      } catch (err) {
+        console.error('Failed to embed StackBlitz project:', err);
+        
+        if (!isComponentMounted) return;
+        
+        clearTimeout(timeoutId);
+        
+        // Try to connect to existing container as fallback
+        try {
+          const container = document.getElementById(containerId);
+          if (!container) {
+            throw new Error('Container element not found');
+          }
+
+          const vm = await sdk.connect(container);
+          
+          intervalId = setInterval(async () => {
+            try {
+              if (!isComponentMounted) {
+                clearInterval(intervalId);
+                return;
+              }
+
+              const files = Object.keys(await vm.getFsSnapshot());
+              if (files.includes('web-c.done')) {
+                clearInterval(intervalId);
+                
+                if (onLoad) onLoad();
+                
+                await vm.applyFsDiff({ 
+                  destroy: ['web-c.done'], 
+                  create: {} 
+                });
+
+                setLoading(false);
+              }
+            } catch (err) {
+              console.warn('Error in fallback connection:', err);
+            }
+          }, 2000);
+
+        } catch (fallbackErr) {
+          console.error('Fallback connection also failed:', fallbackErr);
+          setError(`StackBlitz failed to load: ${err.message}`);
+          
+          if (retryCount < 3) {
+            setTimeout(() => {
+              if (isComponentMounted) {
+                setRetryCount(prev => prev + 1);
+              }
+            }, 5000);
+          }
+        }
+      }
+    };
+
+    initializeStackBlitz();
+
+    // Cleanup function
+    return () => {
+      isComponentMounted = false;
+      if (timeoutId) clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [filesObj, fileToOpen, onLoad, hideExplorer, retryCount]);
+
+  // Auto-retry logic
+  useEffect(() => {
+    if (retryCount > 0 && retryCount <= 3) {
+      const timer = setTimeout(() => {
+        setLoading(true);
+        setError(null);
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [retryCount]);
+
+  if (error && retryCount >= 3) {
+    return (
+      <div className="w-screen h-[calc(100vh-11rem)] flex items-center justify-center bg-gray-100">
+        <div className="text-center p-8 bg-white rounded-lg shadow-lg max-w-md">
+          <h2 className="text-xl font-bold text-red-600 mb-4">StackBlitz Connection Failed</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <div className="space-y-2 text-sm text-gray-500">
+            <p>This might be due to:</p>
+            <ul className="list-disc list-inside text-left">
+              <li>Network connectivity issues</li>
+              <li>StackBlitz service being temporarily unavailable</li>
+              <li>Browser blocking third-party iframes</li>
+              <li>Ad blockers or security extensions</li>
+            </ul>
+          </div>
+          <button
+            onClick={() => {
+              setRetryCount(0);
+              setError(null);
+              setLoading(true);
+            }}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       <div id={containerId} className="w-screen h-[calc(100vh-11rem)]" />
       {loading && (
         <div
-          className="absolute inset-0 bg-white/10 backdrop-blur-[2px] flex items-center justify-center z-50 select-0"
+          className="absolute inset-0 bg-white/10 backdrop-blur-[2px] flex items-center justify-center z-50 select-none"
           tabIndex={0}
           onKeyDown={(e) => e.preventDefault()}
           onKeyUp={(e) => e.preventDefault()}
         >
-          <span className="text-lg font-semibold text-gray-700">Loading Sidebar, Sandbox & Installing Dependencies</span>
+          <div className="text-center">
+            <span className="text-lg font-semibold text-gray-700 block mb-2">
+              Loading Sidebar, Sandbox & Installing Dependencies
+            </span>
+            {retryCount > 0 && (
+              <span className="text-sm text-gray-500">
+                Retry attempt {retryCount}/3
+              </span>
+            )}
+            {error && (
+              <span className="text-sm text-orange-600 block mt-2">
+                {error}
+              </span>
+            )}
+          </div>
         </div>
       )}
     </>
-
-  )
+  );
 }

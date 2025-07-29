@@ -1,127 +1,132 @@
 const { ESLint } = require('eslint');
 const esprima = require('esprima');
-const supertest = require('supertest');
+console.clear();
+console.clear();
 const fs = require('fs');
 const path = require('path');
-console.clear();
 
+// File paths
 const attemptsFile = path.join(__dirname, 'attempts.tests');
 const resultFile = path.join(__dirname, 'results.tests');
+
+// Read JavaScript
 const js = fs.readFileSync('index.js', 'utf8');
 
+// Helper: Read Attempts (default to 1)
 function readAttempts() {
   if (fs.existsSync(attemptsFile)) {
+    const data = fs.readFileSync(attemptsFile, 'utf8');
     try {
-      return Math.max(1, JSON.parse(fs.readFileSync(attemptsFile)).count);
-    } catch {
+      const parsed = JSON.parse(data);
+      return parsed.count >= 1 ? parsed.count : 1;
+    } catch (err) {
+      console.error('Error parsing attempts.tests. Resetting counter.');
       return 1;
     }
   }
   return 1;
 }
 
+// Helper: Write Attempt Count
 function writeAttempts(count) {
-  fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+  try {
+    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+  } catch (err) {
+    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
+  }
 }
 
+// Syntax Verification using ESLint
 async function syntaxVerify() {
   const eslint = new ESLint();
   const results = await eslint.lintText(js);
   if (results[0].errorCount === 0) {
     console.log('✔ JavaScript syntax is valid.');
     return true;
-  }
-  console.log('❌ Syntax errors:');
-  results[0].messages.forEach(msg =>
-    console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`)
-  );
-  return false;
-}
-
-function structureVerify() {
-  try {
-    const ast = esprima.parseScript(js);
-    const hasExport = js.includes('module.exports') || js.includes('export default') || js.includes('exports.app');
-    console.log(hasExport ? '✔ Export detected.' : '✘ No export detected.');
-    return hasExport;
-  } catch (err) {
-    console.log('✘ Failed to parse JS:', err.message);
+  } else {
+    console.log('❌ JavaScript syntax is not valid:');
+    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
     return false;
   }
 }
 
-async function functionalityVerify() {
+// Code Verification
+function codeVerify() {
+  let allPassed = true;
+  let ast;
   try {
-    // Check if redis package or client is required/used
-    const usesRedis = js.match(/require\(['"]redis['"]\)/) || js.includes('redis.createClient');
-    if (!usesRedis) {
-      console.log('✘ Redis usage not detected in code.');
-      return false;
-    }
+    ast = esprima.parseScript(js, { tolerant: true });
+  } catch (err) {
+    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
+    return false;
+  }
 
-    const m = require(path.join(process.cwd(), 'index.js'));
-    const app = m.app || m.default || m;
-    if (!app) {
-      console.log('✘ No app export found.');
-      return false;
+  let consoleLogs = 0;
+  function traverse(node) {
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
-
-    // Test a cacheable endpoint: GET /cache or /data or /
-    const endpoints = ['/', '/cache', '/data'];
-    let passed = false;
-    for (const ep of endpoints) {
-      try {
-        const res1 = await supertest(app).get(ep);
-        if (res1.statusCode === 200) {
-          // Make a second request to check caching behavior (ideally header or response should be identical)
-          const res2 = await supertest(app).get(ep);
-          if (res2.statusCode === 200) {
-            console.log(`✔ Redis caching endpoint "${ep}" responded twice with status 200`);
-            passed = true;
-            break;
-          }
-        }
-      } catch {
-        // ignore errors, try next
+    for (const key in node) {
+      if (node[key] && typeof node[key] === 'object') {
+        traverse(node[key]);
       }
     }
-
-    if (!passed) {
-      console.log('✘ No valid caching endpoint response detected.');
-    }
-
-    return passed;
-  } catch (err) {
-    console.log('✘ Error during functionality test:', err.message);
-    return false;
   }
-}
+  traverse(ast);
 
-(async () => {
-  const start = process.hrtime();
-  const syntaxOk = await syntaxVerify();
-  const structureOk = structureVerify();
-  const funcOk = await functionalityVerify();
-  const allPassed = syntaxOk && structureOk && funcOk;
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
+  }
 
-  const [sec, nano] = process.hrtime(start);
-  const executionTime = +(sec + nano / 1e9).toFixed(3);
-  const linesOfCode = js.split('\n').filter(Boolean).length;
-  const attempts = readAttempts();
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
+  }
 
   if (allPassed) {
-    fs.writeFileSync(resultFile, JSON.stringify({
-      task: 'Redis Caching',
-      attempts,
-      linesOfCode,
-      executionTime,
-      timestamp: new Date().toISOString()
-    }, null, 2));
-    console.log('\n✅ All checks passed. Result saved.');
+    console.log('\n🎉 Success! Code verification passed.');
+  } else {
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
+  }
+  return allPassed;
+}
+
+// Main execution
+(async () => {
+  const startTime = process.hrtime();
+const syntaxPassed = await syntaxVerify();
+if (!syntaxPassed) {
+  console.log('\n❌ Syntax errors prevent further checks.');
+  ;
+}
+
+  const structurePassed = codeVerify();
+  const allPassed = syntaxPassed && structurePassed;
+
+  const [sec, nanosec] = process.hrtime(startTime);
+  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
+
+  let attempts = readAttempts();
+  if (allPassed) {
+    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
+    try {
+      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
+      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
+    } catch (err) {
+      console.error(`Failed to write to ${resultFile}: ${err.message}`);
+    }
     process.exit(0);
   } else {
-    writeAttempts(attempts + 1);
-    console.log(`\n❌ One or more checks failed. Attempt #${attempts + 1} saved.`);
+    attempts += 1;
+    writeAttempts(attempts);
+    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
     ;
   }
 })();

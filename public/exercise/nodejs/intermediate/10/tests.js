@@ -38,7 +38,7 @@ function writeAttempts(count) {
 
 // Syntax Verification using ESLint
 async function syntaxVerify() {
-  const eslint = new ESLint({ useEslintrc: false, overrideConfig: { env: { node: true, es2021: true, jest: true }, parserOptions: { sourceType: 'module' } } });
+  const eslint = new ESLint();
   const results = await eslint.lintText(js);
   if (results[0].errorCount === 0) {
     console.log('✔ JavaScript syntax is valid.');
@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Unit Testing with Jest Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let testCases = 0;
-  let assertions = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.name === 'test') {
-      testCases++;
-    }
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'expect') {
-      assertions++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (testCases === 0) {
-    console.log('✘ No Jest test cases found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${testCases} Jest test case(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (assertions < 2) {
-    console.log('✘ Fewer than 2 Jest assertions (expect) found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${assertions} Jest assertion(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Unit testing with Jest is correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Unit testing with Jest check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

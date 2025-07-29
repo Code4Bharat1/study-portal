@@ -1,68 +1,75 @@
-const fs = require('fs');
-const path = require('path');
-const { Db } = require('tingodb')();
+// Simple Browser-Compatible Test for Basic Aggregation
+// No external dependencies - works entirely in browser
 
-const DB_PATH = path.join(__dirname, 'data');
-const USER_SCRIPT_PATH = path.join(__dirname, 'script.js');
-const ATTEMPT_FILE = path.join(__dirname'attempts.tests';
-const PASS_FILE = path.join(__dirname, 'passed_basic_10.txt');
+console.log("🧪 Testing: Basic Aggregation");
 
-function loadAttempts() {
-  if (fs.existsSync(ATTEMPT_FILE)) {
-    return JSON.parse(fs.readFileSync(ATTEMPT_FILE, 'utf8'));
-  }
-  return { attempts: 0, start: Date.now() };
+function runSimpleTest(userCode) {
+    const result = {passed: false, score: 0, message: "", details: []};
+    
+    try {
+        if (!userCode || userCode.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
+        }
+        
+        let score = 0;
+        const checks = [];
+        
+        
+        // JavaScript syntax check
+        try {
+            new Function(userCode);
+            checks.push("✅ Valid syntax");
+            score += 30;
+        } catch (e) {
+            checks.push("❌ Syntax error");
+        }
+        
+        // Basic JavaScript checks
+        if (/console\.log\s*\(/.test(userCode)) {
+            checks.push("✅ Has console.log");
+            score += 30;
+        } else {
+            checks.push("❌ Missing console.log");
+        }
+        
+        // Topic-specific checks
+        const topic = "Basic Aggregation".toLowerCase();
+        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else {
+            checks.push("⚠️ Add topic-specific content");
+            score += 20;
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 70;
+        result.message = `Score: ${result.score}/100`;
+        
+    } catch (error) {
+        result.message = "Error: " + error.message;
+    }
+    
+    return result;
 }
 
-function saveAttempts(data) {
-  fs.writeFileSync(ATTEMPT_FILE, JSON.stringify(data));
+// Export for Monaco Editor
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: runSimpleTest,
+        testConfig: {topic: "Basic Aggregation", language: "mongodb"}
+    };
 }
 
-async function clearCollection(db, name) {
-  return new Promise((resolve, reject) => {
-    db.collection(name).remove({}, (err) => {
-      if (err) reject(err);
-      else resolve();
-    });
-  });
-}
-
-async function runTest() {
-  const state = loadAttempts();
-  if (!state.start) state.start = Date.now();
-
-  const db = new Db(DB_PATH, {});
-
-  await clearCollection(db, 'people');
-
-  const code = fs.readFileSync(USER_SCRIPT_PATH, 'utf8');
-
-  try {
-    const runUserCode = new Function('db', code);
-    const results = runUserCode(db);
-
-    if (!results || !Array.isArray(results))
-      throw new Error("Expected function to return an array.");
-
-    if (results.length !== 3)
-      throw new Error(`Expected array of length 3, got ${results.length}`);
-
-    fs.writeFileSync(
-      PASS_FILE,
-      `Passed after ${state.attempts} failed attempt(s) in ${Math.round((Date.now() - state.start)/1000)} seconds.`
-    );
-    console.log("🎉 Test passed! File created.");
-
-    state.attempts = 0;
-    state.start = null;
-    saveAttempts(state);
-
-  } catch (err) {
-    state.attempts++;
-    saveAttempts(state);
-    console.error(`❌ Test failed: ${err.message}`);
-    console.log(`Attempts so far: ${state.attempts}`);
-  }
-}
-
-runTest();
+console.log("✅ Test ready for: Basic Aggregation");

@@ -1,5 +1,5 @@
-const { HTMLHint } = require('htmlhint');
-const cheerio = require('cheerio');
+const { ESLint } = require('eslint');
+const esprima = require('esprima');
 console.clear();
 console.clear();
 const fs = require('fs');
@@ -9,8 +9,8 @@ const path = require('path');
 const attemptsFile = path.join(__dirname, 'attempts.tests');
 const resultFile = path.join(__dirname, 'results.tests');
 
-// Read HTML
-const html = fs.readFileSync('index.html', 'utf8');
+// Read JavaScript
+const js = fs.readFileSync('index.js', 'utf8');
 
 // Helper: Read Attempts (default to 1)
 function readAttempts() {
@@ -36,181 +36,97 @@ function writeAttempts(count) {
   }
 }
 
-// Syntax Verification using HTMLHint
-function syntaxVerify() {
-  const rules = {
-    'tagname-lowercase': true,
-    'attr-lowercase': true,
-    'doctype-first': true,
-    'tag-pair': true,
-    'attr-no-duplication': true,
-    'attr-value-not-empty': true,
-  };
-  const results = HTMLHint.verify(html, rules);
-
-  if (results.length === 0) {
-    console.log('✔ HTML syntax is valid.');
+// Syntax Verification using ESLint
+async function syntaxVerify() {
+  const eslint = new ESLint();
+  const results = await eslint.lintText(js);
+  if (results[0].errorCount === 0) {
+    console.log('✔ JavaScript syntax is valid.');
     return true;
   } else {
-    console.log('❌ HTML Syntax is not valid:');
-    results.forEach((msg) => {
-      console.log(`- [${msg.rule.id}] ${msg.message} (line ${msg.line})`);
-    });
+    console.log('❌ JavaScript syntax is not valid:');
+    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
     return false;
   }
 }
 
-// Boilerplate and Semantic HTML Verification
-function codeVerify($) {
+// Code Verification
+function codeVerify() {
   let allPassed = true;
-
-  // Boilerplate Checks
-  if (!/^<!DOCTYPE html>/i.test(html.trim())) {
-    console.log('✘ <!DOCTYPE html> declaration is missing or incorrect');
-    allPassed = false;
-  } else {
-    console.log('✔ <!DOCTYPE html> is present');
+  let ast;
+  try {
+    ast = esprima.parseScript(js, { tolerant: true });
+  } catch (err) {
+    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
+    return false;
   }
 
-  if ($('html').length > 0) {
-    const htmlLang = $('html').attr('lang');
-    if (htmlLang === 'en') {
-      console.log('✔ <html> has lang="en"');
-    } else {
-      console.log(`✘ <html> should have lang="en", but found lang="${htmlLang || 'missing'}"`);
-      allPassed = false;
+  let consoleLogs = 0;
+  function traverse(node) {
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
-  } else {
-    console.log('✘ <html> is missing');
-    allPassed = false;
-  }
-
-  if ($('head').length > 0) {
-    console.log('✔ <head> exists');
-  } else {
-    console.log('✘ <head> is missing');
-    allPassed = false;
-  }
-
-  const metaCharset = $('head meta[charset]');
-  if (metaCharset.length > 0 && metaCharset.attr('charset').toLowerCase() === 'utf-8') {
-    console.log('✔ <meta charset="UTF-8"> is present');
-  } else {
-    console.log('✘ <meta charset="UTF-8"> is missing or incorrect');
-    allPassed = false;
-  }
-
-  const metaViewport = $('head meta[name="viewport"]');
-  if (metaViewport.length > 0 && metaViewport.attr('content') === 'width=device-width, initial-scale=1.0') {
-    console.log('✔ <meta name="viewport" content="width=device-width, initial-scale=1.0"> is present');
-  } else {
-    console.log('✘ <meta name="viewport" content="width=device-width, initial-scale=1.0"> is missing or incorrect');
-    allPassed = false;
-  }
-
-  if ($('head title').length > 0) {
-    const titleText = $('title').text().trim();
-    if (titleText) {
-      console.log('✔ <title> exists in <head> with text');
-    } else {
-      console.log('✘ <title> is empty');
-      allPassed = false;
-    }
-  } else {
-    console.log('✘ <title> is missing or not in <head>');
-    allPassed = false;
-  }
-
-  if ($('body').length > 0) {
-    console.log('✔ <body> exists');
-  } else {
-    console.log('✘ <body> is missing');
-    allPassed = false;
-  }
-
-  // Semantic HTML Checks
-  const semanticTags = ['header', 'nav', 'main', 'article', 'section', 'aside', 'footer'];
-  semanticTags.forEach((tag) => {
-    const elements = $(`body ${tag}`);
-    if (elements.length > 0) {
-      console.log(`✔ Found ${elements.length} <${tag}> tag(s) in <body>`);
-      let allValid = true;
-      elements.each((index, element) => {
-        const content = $(element).text().trim();
-        const hasChildren = $(element).children().length > 0;
-        if (!content && !hasChildren) {
-          console.log(`✘ <${tag}> ${index + 1} is empty`);
-          allValid = false;
-          allPassed = false;
-        } else {
-          console.log(`✔ <${tag}> ${index + 1} has content`);
-        }
-        const parentTag = $(element).parent().prop('tagName').toLowerCase();
-        const validParents = ['body', 'div', 'section', 'article'];
-        if (!validParents.includes(parentTag)) {
-          console.log(`✘ <${tag}> ${index + 1} is not in a valid container (found inside <${parentTag}>)`);
-          allValid = false;
-          allPassed = false;
-        } else {
-          console.log(`✔ <${tag}> ${index + 1} is properly placed inside <${parentTag}>`);
-        }
-      });
-      if (allValid) {
-        console.log(`✔ All <${tag}> tags are valid`);
+    for (const key in node) {
+      if (node[key] && typeof node[key] === 'object') {
+        traverse(node[key]);
       }
-    } else {
-      console.log(`✘ At least one <${tag}> tag is required in <body>`);
-      allPassed = false;
     }
-  });
+  }
+  traverse(ast);
+
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
+  }
+
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
+  }
 
   if (allPassed) {
-    console.log('\n🎉 Success! HTML boilerplate and semantic HTML elements are correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Boilerplate or semantic HTML check failed. Please review your HTML.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
-
   return allPassed;
 }
 
-// Start execution timer
-const startTime = process.hrtime();
-const $ = cheerio.load(html);
-
-// Run both verifications
-const syntaxPassed = syntaxVerify();
-const structurePassed = codeVerify($);
-const allPassed = syntaxPassed && structurePassed;
-
-// Execution metrics
-const [sec, nanosec] = process.hrtime(startTime);
-const executionTime = +(sec + nanosec / 1e9).toFixed(3);
-const linesOfCode = html.split('\n').filter((line) => line.trim()).length;
-
-// Read current attempts
-let attempts = readAttempts();
-
-// Save results only if all tests passed
-if (allPassed) {
-  const resultData = {
-    attempts,
-    linesOfCode,
-    executionTime,
-    
-    timestamp: new Date().toISOString(),
-  };
-
-  try {
-    fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
-    console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
-  } catch (err) {
-    console.error(`Failed to write to ${resultFile}: ${err.message}`);
-  }
-  process.exit(0);
-} else {
-  // Increment attempts if tests failed
-  attempts += 1;
-  writeAttempts(attempts);
-  console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
+// Main execution
+(async () => {
+  const startTime = process.hrtime();
+const syntaxPassed = await syntaxVerify();
+if (!syntaxPassed) {
+  console.log('\n❌ Syntax errors prevent further checks.');
   ;
 }
+
+  const structurePassed = codeVerify();
+  const allPassed = syntaxPassed && structurePassed;
+
+  const [sec, nanosec] = process.hrtime(startTime);
+  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
+
+  let attempts = readAttempts();
+  if (allPassed) {
+    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
+    try {
+      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
+      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
+    } catch (err) {
+      console.error(`Failed to write to ${resultFile}: ${err.message}`);
+    }
+    process.exit(0);
+  } else {
+    attempts += 1;
+    writeAttempts(attempts);
+    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
+    ;
+  }
+})();

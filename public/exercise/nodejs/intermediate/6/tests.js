@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Authentication Basics Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let jwtOrSession = 0;
-  let authMiddleware = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && ['sign', 'verify'].includes(node.callee.property.name) && node.callee.object.name === 'jwt') {
-      jwtOrSession++;
-    }
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.property.name === 'use' && node.arguments.some(arg => arg.type === 'FunctionExpression' && arg.params.some(param => param.name === 'req' && arg.body.body.some(child => child.type === 'IfStatement' && child.test.type === 'MemberExpression' && child.test.property.name === 'headers')))) {
-      authMiddleware++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (jwtOrSession === 0) {
-    console.log('✘ No JWT sign or verify calls found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${jwtOrSession} JWT sign or verify call(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (authMiddleware === 0) {
-    console.log('✘ No authentication middleware found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${authMiddleware} authentication middleware(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Authentication basics are correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Authentication basics check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

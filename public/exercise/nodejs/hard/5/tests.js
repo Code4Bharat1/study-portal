@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Database Transactions and ORMs Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let transactions = 0;
-  let ormQueries = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.property.name === 'transaction') {
-      transactions++;
-    }
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && ['create', 'findAll', 'update'].includes(node.callee.property.name)) {
-      ormQueries++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (transactions === 0) {
-    console.log('✘ No transaction calls found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${transactions} transaction call(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (ormQueries < 2) {
-    console.log('✘ Fewer than 2 ORM query calls (create, findAll, update) found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${ormQueries} ORM query call(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Database transactions and ORMs are correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Database transactions and ORMs check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

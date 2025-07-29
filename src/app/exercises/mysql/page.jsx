@@ -1,7 +1,5 @@
-//import MySqlExercisePlatform from "@/components/Exercise/Mysql";
+import MysqlExerciseMonacoPlatform from "@/components/Exercise/MysqlMonaco";
 
-import MysqlExercisePlatform from "@/components/Exercise/MySql";
-
-export default function ContentDisplay(){
-    return (<MysqlExercisePlatform></MysqlExercisePlatform>)
+export default function MysqlExercisePage(){
+    return (<MysqlExerciseMonacoPlatform></MysqlExerciseMonacoPlatform>)
 }

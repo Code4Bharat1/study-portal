@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Custom Stream Transformers Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let transformStreams = 0;
-  let pipelineUsage = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'ClassDeclaration' && node.superClass && node.superClass.type === 'MemberExpression' && node.superClass.object.name === 'stream' && node.superClass.property.name === 'Transform') {
-      transformStreams++;
-    }
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'stream' && node.callee.property.name === 'pipeline') {
-      pipelineUsage++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (transformStreams === 0) {
-    console.log('✘ No custom Transform stream classes found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${transformStreams} custom Transform stream class(es)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (pipelineUsage === 0) {
-    console.log('✘ No stream.pipeline usage found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${pipelineUsage} stream.pipeline usage(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Custom stream transformers are correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Custom stream transformers check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

@@ -62,9 +62,15 @@ export default function Navbar() {
     if (token) {
       setIsLoggedIn(true);
       const userData = localStorage.getItem("user");
-      if (userData) {
-        const { name } = JSON.parse(userData);
-        setUsername(name);
+      if (userData && userData !== "undefined" && userData !== "null") {
+        try {
+          const { name } = JSON.parse(userData);
+          setUsername(name);
+        } catch (error) {
+          console.error("Error parsing user data:", error);
+          // Clear invalid data
+          localStorage.removeItem("user");
+        }
       }
     }
   }, []);

@@ -1,5 +1,5 @@
-import ExpressExercisePlatform from "@/components/Exercise/Express";
+import ExpressExerciseMonacoPlatform from "@/components/Exercise/ExpressMonaco";
 
-export default function ContentDisplay(){
-    return (<ExpressExercisePlatform></ExpressExercisePlatform>)
+export default function ExpressExercisePage(){
+    return (<ExpressExerciseMonacoPlatform></ExpressExerciseMonacoPlatform>)
 }

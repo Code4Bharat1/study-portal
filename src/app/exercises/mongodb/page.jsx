@@ -1,5 +1,5 @@
-import MongoDBExercisePlatform from "@/components/Exercise/MongoDb";
+import MongodbExerciseMonacoPlatform from "@/components/Exercise/MongodbMonaco";
 
-export default function ContentDisplay(){
-    return (<MongoDBExercisePlatform></MongoDBExercisePlatform>)
+export default function MongodbExercisePage(){
+    return (<MongodbExerciseMonacoPlatform></MongodbExerciseMonacoPlatform>)
 }

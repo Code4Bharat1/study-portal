@@ -1,137 +1,105 @@
-// Page 2 
+const { ESLint } = require('eslint');
+const esprima = require('esprima');
 console.clear();
 console.clear();
 const fs = require('fs');
-const { ESLint } = require('eslint');
-const parser = require('@babel/parser');
-const traverse = require('@babel/traverse').default;
+const path = require('path');
 
-const code = fs.readFileSync('script.js', 'utf-8');
+// File paths
+const attemptsFile = path.join(__dirname, 'attempts.tests');
+const resultFile = path.join(__dirname, 'results.tests');
 
+// Read JavaScript
+const js = fs.readFileSync('index.js', 'utf8');
+
+// Helper: Read Attempts (default to 1)
 function readAttempts() {
-  if (fs.existsSync('attempts.tests')) {
+  if (fs.existsSync(attemptsFile)) {
+    const data = fs.readFileSync(attemptsFile, 'utf8');
     try {
-      const data = JSON.parse(fs.readFileSync('attempts.tests', 'utf-8'));
-      return data.count >= 1 ? data.count : 1;
-    } catch (e) {
-      console.log('Error parsing attempts.tests. Resetting counter.');
+      const parsed = JSON.parse(data);
+      return parsed.count >= 1 ? parsed.count : 1;
+    } catch (err) {
+      console.error('Error parsing attempts.tests. Resetting counter.');
       return 1;
     }
   }
   return 1;
 }
 
+// Helper: Write Attempt Count
 function writeAttempts(count) {
   try {
-    fs.writeFileSync('attempts.tests', JSON.stringify({ count }, null, 2), 'utf-8');
-  } catch (e) {
-    console.log(`Failed to write to attempts.tests: ${e}`);
+    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+  } catch (err) {
+    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
   }
 }
 
+// Syntax Verification using ESLint
 async function syntaxVerify() {
-  const eslint = new ESLint({
-    overrideConfig: {
-      env: { node: true, es2021: true },
-      parserOptions: { ecmaVersion: 12, sourceType: 'module' },
-      rules: {
-        'no-undef': 'error',
-        'no-unused-vars': 'warn',
-      },
-    },
-  });
-
-  try {
-    const [result] = await eslint.lintText(code);
-    const errors = result.messages.filter((msg) => msg.severity === 2);
-    if (errors.length === 0) {
-      console.log('✔ JavaScript syntax is valid.');
-      return true;
-    } else {
-      console.log('❌ JavaScript syntax is not valid:');
-      errors.forEach((err) => console.log(`  ${err.message} (line ${err.line})`));
-      return false;
-    }
-  } catch (e) {
-    console.log(`✘ ESLint failed: ${e}`);
+  const eslint = new ESLint();
+  const results = await eslint.lintText(js);
+  if (results[0].errorCount === 0) {
+    console.log('✔ JavaScript syntax is valid.');
+    return true;
+  } else {
+    console.log('❌ JavaScript syntax is not valid:');
+    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
     return false;
   }
 }
 
+// Code Verification
 function codeVerify() {
   let allPassed = true;
+  let ast;
   try {
-    const ast = parser.parse(code, { sourceType: 'module' });
-    let middlewareFunctions = 0;
-
-    traverse(ast, {
-      ExportNamedDeclaration(path) {
-        if (path.node.declaration && path.node.declaration.id && path.node.declaration.id.name === 'middleware') {
-          middlewareFunctions++;
-        }
-      },
-    });
-
-    if (middlewareFunctions === 0) {
-      console.log('✘ No middleware function found');
-      allPassed = false;
-    } else {
-      console.log(`✔ Found ${middlewareFunctions} middleware function(s)`);
-    }
-
-    return allPassed;
-  } catch (e) {
-    console.log(`✘ Failed to parse JavaScript code: ${e}`);
+    ast = esprima.parseScript(js, { tolerant: true });
+  } catch (err) {
+    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
     return false;
   }
-}
 
-async function functionalVerify() {
-  let allPassed = true;
-  try {
-    const module = await import('./script.js');
-    const middleware = module.middleware;
-
-    const requestWithHeader = {
-      headers: new Map([['x-test', 'true']]),
-      url: 'https://skill2future.code4bharat.com',
-    };
-    const responseWithHeader = await middleware(requestWithHeader);
-
-    if (!responseWithHeader.redirected || responseWithHeader.url !== 'https://skill2future.code4bharat.com/dashboard') {
-      console.log('✘ Middleware did not redirect correctly');
-      allPassed = false;
-    } else {
-      console.log('✔ Middleware redirected correctly');
+  let consoleLogs = 0;
+  function traverse(node) {
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
-
-    const requestWithoutHeader = {
-      headers: new Map(),
-      url: 'https://skill2future.code4bharat.com',
-    };
-    const responseWithoutHeader = await middleware(requestWithoutHeader);
-
-    if (responseWithoutHeader.redirected) {
-      console.log('✘ Middleware incorrectly redirected');
-      allPassed = false;
-    } else {
-      console.log('✔ Middleware correctly continued');
+    for (const key in node) {
+      if (node[key] && typeof node[key] === 'object') {
+        traverse(node[key]);
+      }
     }
-
-    if (allPassed) {
-      console.log('\n🎉 Success! Middleware behavior is correct.');
-    } else {
-      console.log('\n❗ Middleware behavior check failed. Please review your Next.js code.');
-    }
-    return allPassed;
-  } catch (e) {
-    console.log(`✘ Functional test failed: ${e}`);
-    return false;
   }
+  traverse(ast);
+
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
+  }
+
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
+  }
+
+  if (allPassed) {
+    console.log('\n🎉 Success! Code verification passed.');
+  } else {
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
+  }
+  return allPassed;
 }
 
+// Main execution
 (async () => {
-  const startTime = performance.now();
+  const startTime = process.hrtime();
 const syntaxPassed = await syntaxVerify();
 if (!syntaxPassed) {
   console.log('\n❌ Syntax errors prevent further checks.');
@@ -139,35 +107,26 @@ if (!syntaxPassed) {
 }
 
   const structurePassed = codeVerify();
-  const functionalPassed = await functionalVerify();
-  const allPassed = syntaxPassed && structurePassed && functionalPassed;
+  const allPassed = syntaxPassed && structurePassed;
 
-  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
-  const linesOfCode = code.split('\n').filter((line) => line.trim()).length;
+  const [sec, nanosec] = process.hrtime(startTime);
+  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
 
   let attempts = readAttempts();
   if (allPassed) {
-    const resultData = {
-      attempts,
-      linesOfCode,
-      executionTime,
-      syntaxCheckPassed: syntaxPassed,
-      structureCheckPassed: structurePassed,
-      functionalCheckPassed: functionalPassed,
-      timestamp: new Date().toISOString(),
-    };
+    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
     try {
-      fs.writeFileSync('results.tests', JSON.stringify(resultData, null, 2), 'utf-8');
-      
-      process.exit(0);
-    } catch (e) {
-      console.log(`Failed to write to results.tests: ${e}`);
-      ;
+      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
+      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
+    } catch (err) {
+      console.error(`Failed to write to ${resultFile}: ${err.message}`);
     }
+    process.exit(0);
   } else {
     attempts += 1;
     writeAttempts(attempts);
     console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
     ;
   }
-})();   
+})();

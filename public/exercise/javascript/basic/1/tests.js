@@ -1,132 +1,85 @@
-const { ESLint } = require('eslint');
-const esprima = require('esprima');
-console.clear();
-console.clear();
-const fs = require('fs');
-const path = require('path');
+// Test for Variables and Data Types
+// Topic-specific tests for exercise 1
 
-// File paths
-const attemptsFile = path.join(__dirname, 'attempts.tests');
-const resultFile = path.join(__dirname, 'results.tests');
+console.log("🧪 Testing: Variables and Data Types");
 
-// Read JavaScript
-const js = fs.readFileSync('script.js', 'utf8');
-
-// Helper: Read Attempts (default to 1)
-function readAttempts() {
-  if (fs.existsSync(attemptsFile)) {
-    const data = fs.readFileSync(attemptsFile, 'utf8');
+function runSimpleTest(userCode) {
+    const result = {passed: false, score: 0, message: "", details: []};
+    
     try {
-      const parsed = JSON.parse(data);
-      return parsed.count >= 1 ? parsed.count : 1;
-    } catch (err) {
-      console.error('Error parsing attempts.tests. Resetting counter.');
-      return 1;
-    }
-  }
-  return 1;
-}
-
-// Helper: Write Attempt Count
-function writeAttempts(count) {
-  try {
-    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
-  } catch (err) {
-    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
-  }
-}
-
-// Syntax Verification using ESLint
-async function syntaxVerify() {
-  const eslint = new ESLint();
-  const results = await eslint.lintText(js);
-  if (results[0].errorCount === 0) {
-    console.log('✔ JavaScript syntax is valid.');
-    return true;
-  } else {
-    console.log('❌ JavaScript syntax is not valid:');
-    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
-    return false;
-  }
-}
-
-// Variables and Data Types Verification
-function codeVerify() {
-  let allPassed = true;
-  let ast;
-  try {
-    ast = esprima.parseScript(js, { tolerant: true });
-  } catch (err) {
-    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
-    return false;
-  }
-
-  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
-  if (variableDeclarations.length === 0) {
-    console.log('✘ No variable declarations found');
-    allPassed = false;
-  } else {
-    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
-    const types = new Set();
-    variableDeclarations.forEach((decl, index) => {
-      decl.declarations.forEach((d, i) => {
-        if (d.init) {
-          const type = d.init.type;
-          if (type === 'Literal') {
-            types.add(typeof d.init.value);
-          }
+        if (!userCode || userCode.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
         }
-      });
-    });
-    const requiredTypes = ['string', 'number', 'boolean'];
-    requiredTypes.forEach(type => {
-      if (types.has(type)) {
-        console.log(`✔ Found ${type} data type`);
-      } else {
-        console.log(`✘ Missing ${type} data type`);
-        allPassed = false;
-      }
-    });
-  }
-
-  if (allPassed) {
-    console.log('\n🎉 Success! Variables and data types are correct.');
-  } else {
-    console.log('\n❗ Variables or data types check failed. Please review your JavaScript.');
-  }
-  return allPassed;
-}
-
-// Main execution
-(async () => {
-  const startTime = process.hrtime();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  ;
-}
-
-  const structurePassed = codeVerify();
-  const allPassed = syntaxPassed && structurePassed;
-
-  const [sec, nanosec] = process.hrtime(startTime);
-  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
-  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
-
-  let attempts = readAttempts();
-  if (allPassed) {
-    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
-    try {
-      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
-      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
-    } catch (err) {
-      console.error(`Failed to write to ${resultFile}: ${err.message}`);
+        
+        let score = 0;
+        const checks = [];
+        
+        // JavaScript syntax check
+        try {
+            new Function(userCode);
+            checks.push("✅ Valid syntax");
+            score += 20;
+        } catch (e) {
+            checks.push("❌ Syntax error: " + e.message);
+            result.details = checks;
+            result.score = 0;
+            result.message = "Fix syntax errors first";
+            return result;
+        }
+        
+        // Check for variable declarations
+        if (/(?:let|const|var)\s+\w+/.test(userCode)) {
+            checks.push("✅ Has variable declarations");
+            score += 25;
+        } else {
+            checks.push("❌ Missing variable declarations (use let, const, or var)");
+        }
+        
+        // Check for string variable
+        if (/(?:let|const|var)\s+\w+\s*=\s*["'`]/.test(userCode)) {
+            checks.push("✅ Has string variable");
+            score += 20;
+        } else {
+            checks.push("❌ Missing string variable");
+        }
+        
+        // Check for number variable
+        if (/(?:let|const|var)\s+\w+\s*=\s*\d+/.test(userCode)) {
+            checks.push("✅ Has number variable");
+            score += 20;
+        } else {
+            checks.push("❌ Missing number variable");
+        }
+        
+        // Check for boolean variable
+        if (/(?:let|const|var)\s+\w+\s*=\s*(?:true|false)/.test(userCode)) {
+            checks.push("✅ Has boolean variable");
+            score += 15;
+        } else {
+            checks.push("❌ Missing boolean variable");
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 70;
+        result.message = result.passed ? 
+            `Great! Score: ${result.score}/100` : 
+            `Score: ${result.score}/100 - Create variables of different data types`;
+        
+    } catch (error) {
+        result.message = "Error: " + error.message;
     }
-    process.exit(0);
-  } else {
-    attempts += 1;
-    writeAttempts(attempts);
-    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
-    ;
-  }
-})();
+    
+    return result;
+}
+
+// Export for Monaco Editor
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: runSimpleTest,
+        testConfig: {topic: "Variables and Data Types", language: "javascript"}
+    };
+}
+
+console.log("✅ Test ready for: Variables and Data Types");

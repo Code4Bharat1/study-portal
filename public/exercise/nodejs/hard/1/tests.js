@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Worker Threads Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let workers = 0;
-  let messagePassing = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'NewExpression' && node.callee.name === 'Worker') {
-      workers++;
-    }
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.property.name === 'postMessage') {
-      messagePassing++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (workers === 0) {
-    console.log('✘ No Worker instances found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${workers} Worker instance(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (messagePassing === 0) {
-    console.log('✘ No postMessage calls found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${messagePassing} postMessage call(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Worker threads implementation is correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Worker threads check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

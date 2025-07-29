@@ -1,5 +1,5 @@
-import JsExercisePlatform from "@/components/Exercise/Javascript";
+import JavaScriptMonacoExercisePlatform from "@/components/Exercise/JavascriptMonaco";
 
 export default function ContentDisplay(){
-    return (<JsExercisePlatform></JsExercisePlatform>)
+    return (<JavaScriptMonacoExercisePlatform></JavaScriptMonacoExercisePlatform>)
 }

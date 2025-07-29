@@ -1,40 +1,81 @@
-# Welcome! Please follow the instructions below to complete and test your work.
+# HTML Basic Exercise 1: Basic HTML Structure
 
-# Task: Create a basic HTML page with a title "My First Page" and a visible heading that says "Welcome to My Website"
----
+## 🎯 Learning Objectives
+- Understand basic html structure concepts
+- Practice html programming fundamentals
+- Apply best practices and coding standards
+- Develop problem-solving skills
 
-## ✅ Steps to Test Your Code
+## 📋 Task Description
+Create a basic HTML document with proper structure including DOCTYPE, html, head, and body tags.
 
-1. Open the terminal.
-2. Run the following command to execute the tests:
+## 🔧 Requirements
+1. Write clean, readable code
+2. Follow HTML best practices
+3. Include appropriate comments
+4. Test your solution thoroughly
+5. Handle edge cases appropriately
+6. Use meaningful variable/function names
 
-   ```bash
-   npm run test
-   ```
+## 🚀 How to Complete This Exercise
 
-3. ✅ You **must** run and **pass** the tests before submitting your code.
+### Step 1: Write Your Code
+- Open the `index.html` file in the editor
+- Read the task requirements carefully
+- Implement your solution step by step
+- Test your code frequently
 
-> ⚠️ **Note:** If a command is already running in the terminal, press `Ctrl + C` to cancel it before typing the test command.
+### Step 2: Run Your Code
+- Click the "▶️ Run" button to execute your code
+- Check the output panel for results
+- Debug any errors that appear
+- Verify your solution works correctly
 
----
+### Step 3: Test Your Solution
+- Click the "🧪 Test" button to run automated tests
+- Review test results and feedback
+- Fix any failing tests
+- Ensure all requirements are met
 
-## 🛠 Having Trouble Running Your Code?
+### Step 4: Submit
+- Once all tests pass, click the "Submit" button
+- Your solution will be evaluated and scored
+- Review feedback for improvement opportunities
 
-If your code isn't executing properly or you're not seeing the expected output:
+## ✅ Success Criteria
+- [ ] Code runs without syntax errors
+- [ ] All functional requirements met
+- [ ] Proper HTML syntax used
+- [ ] Code is well-organized and readable
+- [ ] Edge cases handled appropriately
+- [ ] Best practices followed
 
-```bash
-npm run start
-```
+## 📚 Key Concepts to Research
+- Basic HTML Structure fundamentals
+- HTML syntax and features
+- Problem-solving strategies
+- Code organization principles
+- Testing and debugging techniques
 
-This will help you start the development server and troubleshoot any issues.
+## 🔍 Testing Information
+Your code will be automatically tested for:
+- Syntax correctness and compilation
+- Functional requirement compliance
+- Code structure and organization
+- Performance and efficiency
+- Error handling and edge cases
 
----
+## 💡 Tips
+- Start with a simple solution, then optimize
+- Use console output for debugging
+- Test with different input values
+- Read error messages carefully
+- Don't hesitate to research concepts you're unsure about
+- Practice makes perfect!
 
-## ✏️ What You Need to Edit
-
-- For now, **only edit the `index.html` file**.
-- You can close this file once you've read the instructions.
-
----
-
-Good luck, and happy coding! 🚀
+## 🎓 Learning Resources
+- Official HTML documentation
+- Online tutorials and guides
+- Practice exercises and challenges
+- Community forums and discussions
+- Code examples and best practices

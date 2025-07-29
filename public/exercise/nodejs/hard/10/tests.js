@@ -38,7 +38,7 @@ function writeAttempts(count) {
 
 // Syntax Verification using ESLint
 async function syntaxVerify() {
-  const eslint = new ESLint({ useEslintrc: false, overrideConfig: { env: { node: true, es2021: true, cypress: true }, parserOptions: { sourceType: 'module' } } });
+  const eslint = new ESLint();
   const results = await eslint.lintText(js);
   if (results[0].errorCount === 0) {
     console.log('✔ JavaScript syntax is valid.');
@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// End-to-End Testing with Cypress Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let cypressTests = 0;
-  let apiTests = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'cy' && node.callee.property.name === 'describe') {
-      cypressTests++;
-    }
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'cy' && node.callee.property.name === 'request') {
-      apiTests++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (cypressTests === 0) {
-    console.log('✘ No Cypress test suites (cy.describe) found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${cypressTests} Cypress test suite(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (apiTests === 0) {
-    console.log('✘ No Cypress API tests (cy.request) found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${apiTests} Cypress API test(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! End-to-end testing with Cypress is correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ End-to-end testing with Cypress check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

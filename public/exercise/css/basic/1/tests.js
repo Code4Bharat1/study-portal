@@ -1,135 +1,72 @@
-// Page 1 
-console.clear();
-console.clear();
-const fs = require('fs');
-const stylelint = require('stylelint');
-const { JSDOM } = require('jsdom');
-const postcss = require('postcss');
+// Test for CSS Selectors and Properties
+// JavaScript test that validates CSS code
 
-const css = fs.readFileSync('style.css', 'utf-8');
+console.log("🧪 Testing: CSS Selectors and Properties");
 
-function reads() {
-  try {
-    return fs.existsSync('s.json') ? JSON.parse(fs.readFileSync('s.json')).count || 1 : 1;
-  } catch {
-    return 1;
-  }
-}
-
-function writes(count) {
-  try {
-    fs.writeFileSync('s.json', JSON.stringify({ count }, null, 2));
-  } catch (e) {
-    console.log(`Failed to write s.json: ${e}`);
-  }
-}
-
-async function syntaxVerify() {
-  try {
-    const { results } = await stylelint.lint({ code: css, config: { extends: 'stylelint-config-standard' } });
-    const errors = results[0].warnings.filter(w => w.severity === 'error');
-    if (errors.length === 0) {
-      console.log('✔ CSS syntax is valid.');
-      return true;
-    }
-    console.log('❌ CSS syntax errors:');
-    errors.forEach(err => console.log(`  ${err.text} (line ${err.line})`));
-    return false;
-  } catch (e) {
-    console.log(`✘ Stylelint failed: ${e}`);
-    return false;
-  }
-}
-
-async function codeVerify() {
-  let allPassed = true;
-  try {
-    const root = await postcss.parse(css);
-    let classSelectors = 0;
-    let idSelectors = 0;
-    root.walkRules(rule => {
-      if (rule.selector.startsWith('.')) classSelectors++;
-      if (rule.selector.startsWith('#')) idSelectors++;
-    });
-    if (classSelectors === 0) {
-      console.log('✘ No class selectors found');
-      allPassed = false;
-    } else {
-      console.log(`✔ Found ${classSelectors} class selector(s)`);
-    }
-    if (idSelectors === 0) {
-      console.log('✘ No ID selectors found');
-      allPassed = false;
-    } else {
-      console.log(`✔ Found ${idSelectors} ID selector(s)`);
-    }
-    return allPassed;
-  } catch (e) {
-    console.log(`✘ Failed to parse CSS: ${e}`);
-    return false;
-  }
-}
-
-async function functionalVerify() {
-  let allPassed = true;
-  try {
-    const dom = new JSDOM(`
-      <div class="test-class" id="test-id" data-testid="selector">Test</div>
-    `);
-    const { window } = dom;
-    const style = window.document.createElement('style');
-    style.textContent = css;
-    window.document.head.appendChild(style);
-    const element = window.document.querySelector('[data-testid="selector"]');
-    const computedStyle = window.getComputedStyle(element);
-    if (computedStyle.color !== 'rgb(0, 0, 255)') {
-      console.log('✘ Class selector not applied');
-      allPassed = false;
-    } else {
-      console.log('✔ Class selector applied');
-    }
-    if (computedStyle.fontWeight !== '700') {
-      console.log('✘ ID selector not applied');
-      allPassed = false;
-    } else {
-      console.log('✔ ID selector applied');
-    }
-    return allPassed;
-  } catch (e) {
-    console.log(`✘ Functional test failed: ${e}`);
-    return false;
-  }
-}
-
-(async () => {
-  const startTime = performance.now();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-}
-
-  const structurePassed = await codeVerify();
-  const functionalPassed = await functionalVerify();
-  const allPassed = syntaxPassed && structurePassed && functionalPassed;
-
-  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
-  const linesOfCode = css.split('\n').filter(line => line.trim()).length;
-
-  let s = reads();
-  if (allPassed) {
-    const resultData = { s, linesOfCode, executionTime, timestamp: new Date().toISOString() };
+function runSimpleTest(userCode) {
+    const result = {passed: false, score: 0, message: "", details: []};
+    
     try {
-      fs.writeFileSync('results.tests', JSON.stringify(resultData, null, 2));
-      
-      process.exit(0);
-    } catch (e) {
-      
-      ;
+        if (!userCode || userCode.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
+        }
+        
+        let score = 0;
+        const checks = [];
+        
+        // Check for CSS selectors
+        if (/[.#]?\w+\s*\{/.test(userCode)) {
+            checks.push("✅ Has CSS selectors");
+            score += 25;
+        } else {
+            checks.push("❌ Missing CSS selectors");
+        }
+        
+        // Check for CSS properties
+        if (/\w+\s*:\s*[^;]+;/.test(userCode)) {
+            checks.push("✅ Has CSS properties");
+            score += 25;
+        } else {
+            checks.push("❌ Missing CSS properties");
+        }
+        
+        // Check for color properties
+        if (/color\s*:|background-color\s*:/.test(userCode)) {
+            checks.push("✅ Uses color properties");
+            score += 25;
+        } else {
+            checks.push("❌ Missing color properties");
+        }
+        
+        // Check for proper CSS syntax
+        if (/\{[^}]*\}/.test(userCode)) {
+            checks.push("✅ Proper CSS syntax structure");
+            score += 25;
+        } else {
+            checks.push("❌ Missing proper CSS syntax structure");
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 70;
+        result.message = result.passed ? 
+            `Great! Score: ${result.score}/100` : 
+            `Score: ${result.score}/100 - Use CSS selectors and properties`;
+        
+    } catch (error) {
+        result.message = "Error: " + error.message;
     }
-  } else {
-    s += 1;
-    writes(s);
-    console.log(`\n❌ Tests failed.  #${s} recorded.`);
-    ;
-  }
-})();
+    
+    return result;
+}
+
+// Export for Monaco Editor
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: runSimpleTest,
+        testConfig: {topic: "CSS Selectors and Properties", language: "css"}
+    };
+}
+
+console.log("✅ Test ready for: CSS Selectors and Properties");

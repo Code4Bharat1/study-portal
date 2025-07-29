@@ -1,5 +1,5 @@
-import HtmlExercisePlatform from "@/components/Exercise/Html";
+import HtmlExerciseMonacoPlatform from "@/components/Exercise/HtmlMonaco";
 
-export default function ContentDisplay(){
-    return (<HtmlExercisePlatform></HtmlExercisePlatform>)
+export default function HtmlExercisePage(){
+    return (<HtmlExerciseMonacoPlatform></HtmlExerciseMonacoPlatform>)
 }

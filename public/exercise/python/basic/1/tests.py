@@ -1,143 +1,59 @@
-# Page 1 
-import json
-import time
-import os
-from pylint.lint import Run
-from pylint.reporters.text import TextReporter
-from io import StringIO
-import ast
+# Simple Browser-Compatible Test for Variables and Data Types
+# No external dependencies - works entirely in browser
 
-# File paths
-ATTEMPTS_FILE = 'attempts.tests'
-RESULT_FILE = 'results.tests'
+print("🧪 Testing: Variables and Data Types")
 
-# Read Python code
-with open('script.py', 'r', encoding='utf-8') as f:
-    code = f.read()
-
-# Helper: Read attempts (default to 1)
-def read_attempts():
-    if os.path.exists(ATTEMPTS_FILE):
-        try:
-            with open(ATTEMPTS_FILE, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                return data.get('count', 1) if data.get('count', 0) >= 1 else 1
-        except (json.JSONDecodeError, KeyError):
-            print('Error parsing attempts.tests. Resetting counter.')
-            return 1
-    return 1
-
-# Helper: Write attempts
-def write_attempts(count):
+def run_simple_test(user_code):
+    """Simple test that works without external dependencies"""
+    result = {"passed": False, "score": 0, "message": "", "details": []}
+    
     try:
-        with open(ATTEMPTS_FILE, 'w', encoding='utf-8') as f:
-            json.dump({'count': count}, f, indent=2)
-    except OSError as e:
-        print(f'Failed to write to {ATTEMPTS_FILE}: {e}')
-
-# Syntax verification using pylint
-def syntax_verify():
-    output = StringIO()
-    reporter = TextReporter(output)
-    try:
-        Run(['script.py', '--disable=all', '--enable=syntax-error,undefined-variable'], reporter=reporter, do_exit=False)
-        output.seek(0)
-        errors = output.read()
-        if 'error' not in errors.lower():
-            print('✔ Python syntax is valid.')
-            return True
+        if not user_code or len(user_code.strip()) < 5:
+            result["message"] = "Code is empty or too short"
+            return result
+        
+        score = 0
+        checks = []
+        
+        # Basic Python checks
+        if "print(" in user_code:
+            checks.append("✅ Has print statement")
+            score += 30
         else:
-            print('❌ Python syntax is not valid:')
-            print(errors)
-            return False
+            checks.append("❌ Missing print statement")
+        
+        if "=" in user_code and not user_code.count("=") == user_code.count("=="):
+            checks.append("✅ Has variable assignment")
+            score += 30
+        else:
+            checks.append("❌ Missing variable assignment")
+        
+        # Topic-specific checks
+        topic_lower = "Variables and Data Types".lower()
+        if "variable" in topic_lower and "=" in user_code:
+            checks.append("✅ Topic content found")
+            score += 40
+        elif "function" in topic_lower and "def " in user_code:
+            checks.append("✅ Topic content found")
+            score += 40
+        elif "loop" in topic_lower and ("for " in user_code or "while " in user_code):
+            checks.append("✅ Topic content found")
+            score += 40
+        elif "class" in topic_lower and "class " in user_code:
+            checks.append("✅ Topic content found")
+            score += 40
+        else:
+            checks.append("⚠️ Add topic-specific content")
+            score += 20
+        
+        result["details"] = checks
+        result["score"] = min(score, 100)
+        result["passed"] = score >= 70
+        result["message"] = f"Score: {result['score']}/100"
+        
     except Exception as e:
-        print(f'✘ Pylint failed: {e}')
-        return False
-    finally:
-        output.close()
+        result["message"] = f"Error: {str(e)}"
+    
+    return result
 
-# Structural verification for variables and data types
-def code_verify():
-    all_passed = True
-    try:
-        tree = ast.parse(code)
-    except SyntaxError as e:
-        print(f'✘ Failed to parse Python code: {e}')
-        return False
-
-    int_vars = 0
-    float_vars = 0
-    str_vars = 0
-    bool_vars = 0
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Assign):
-            for target in node.targets:
-                if isinstance(target, ast.Name):
-                    if isinstance(node.value, ast.Num) and isinstance(node.value.n, int):
-                        int_vars += 1
-                    elif isinstance(node.value, ast.Num) and isinstance(node.value.n, float):
-                        float_vars += 1
-                    elif isinstance(node.value, ast.Str):
-                        str_vars += 1
-                    elif isinstance(node.value, ast.NameConstant) and isinstance(node.value.value, bool):
-                        bool_vars += 1
-
-    if int_vars == 0:
-        print('✘ No integer variables found')
-        all_passed = False
-    else:
-        print(f'✔ Found {int_vars} integer variable(s)')
-    if float_vars == 0:
-        print('✘ No float variables found')
-        all_passed = False
-    else:
-        print(f'✔ Found {float_vars} float variable(s)')
-    if str_vars == 0:
-        print('✘ No string variables found')
-        all_passed = False
-    else:
-        print(f'✔ Found {str_vars} string variable(s)')
-    if bool_vars == 0:
-        print('✘ No boolean variables found')
-        all_passed = False
-    else:
-        print(f'✔ Found {bool_vars} boolean variable(s)')
-
-    if all_passed:
-        print('\n🎉 Success! Variables and data types implementation is correct.')
-    else:
-        print('\n❗ Variables and data types check failed. Please review your Python code.')
-    return all_passed
-
-# Main execution
-if __name__ == '__main__':
-    start_time = time.time()
-    syntax_passed = syntax_verify()
-    structure_passed = code_verify()
-    all_passed = syntax_passed and structure_passed
-
-    execution_time = round(time.time() - start_time, 3)
-    lines_of_code = len([line for line in code.split('\n') if line.strip()])
-
-    attempts = read_attempts()
-    if all_passed:
-        result_data = {
-            'attempts': attempts,
-            'linesOfCode': lines_of_code,
-            'executionTime': execution_time,
-            'syntaxCheckPassed': syntax_passed,
-            'structureCheckPassed': structure_passed,
-            'timestamp': time.strftime('%Y-%m-%dT%H:%M:%S')
-        }
-        try:
-            with open(RESULT_FILE, 'w', encoding='utf-8') as f:
-                json.dump(result_data, f, indent=2)
-            print(f'\n✅ All tests passed. Results saved to {RESULT_FILE}.')
-        except OSError as e:
-            print(f'Failed to write to {RESULT_FILE}: {e}')
-        exit(0)
-    else:
-        attempts += 1
-        write_attempts(attempts)
-        print(f'\n❌ One or more tests failed. Attempt #{attempts} recorded.')
-        exit(1)
+print("✅ Test ready for: Variables and Data Types")

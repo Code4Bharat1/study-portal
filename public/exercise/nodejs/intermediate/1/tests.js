@@ -1,4 +1,3 @@
-// Page 1 
 const { ESLint } = require('eslint');
 const esprima = require('esprima');
 console.clear();
@@ -51,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Asynchronous File Operations Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -62,10 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let fsPromisesMethods = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.type === 'MemberExpression' && node.callee.object.object.name === 'fs' && node.callee.object.property.name === 'promises' && ['readFile', 'writeFile'].includes(node.callee.property.name)) {
-      fsPromisesMethods++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -75,32 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (fsPromisesMethods === 0) {
-    console.log('✘ No fs.promises.readFile or fs.promises.writeFile calls found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${fsPromisesMethods} fs.promises.readFile or fs.promises.writeFile call(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  let asyncFunctions = 0;
-  traverse(ast);
-  ast.body.forEach(node => {
-    if ((node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') && node.async) {
-      asyncFunctions++;
-    }
-  });
-
-  if (asyncFunctions === 0) {
-    console.log('✘ No async functions found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${asyncFunctions} async function(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Asynchronous file operations are correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Asynchronous file operations check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

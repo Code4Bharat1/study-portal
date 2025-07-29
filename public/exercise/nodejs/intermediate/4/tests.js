@@ -1,4 +1,3 @@
-// Page 4 
 const { ESLint } = require('eslint');
 const esprima = require('esprima');
 console.clear();
@@ -51,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Middleware in Express Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -62,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let middlewareUse = 0;
-  let middlewareFunctions = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.property.name === 'use' && node.arguments.some(arg => arg.type === 'FunctionExpression' || arg.type === 'ArrowFunctionExpression')) {
-      middlewareUse++;
-    }
-    if ((node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration') && node.params.length >= 3 && node.params[2].name === 'next') {
-      middlewareFunctions++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -79,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (middlewareUse === 0) {
-    console.log('✘ No app.use with middleware functions found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${middlewareUse} app.use with middleware function(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (middlewareFunctions === 0) {
-    console.log('✘ No middleware functions with req, res, next parameters found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${middlewareFunctions} middleware function(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Express middleware is correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Express middleware check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

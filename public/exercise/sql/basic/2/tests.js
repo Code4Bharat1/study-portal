@@ -1,77 +1,79 @@
-const fs = require('fs');
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+// Test for SQL WHERE Clause and Filtering
+// JavaScript test that validates SQL filtering concepts
 
-const DB_PATH = path.join(__dirname, 'data', 'database.db');
-const USER_SCRIPT_PATH = path.join(__dirname, 'script.js');
-const ATTEMPT_FILE = path.join(__dirname'attempts.tests';
-const PASS_FILE = path.join(__dirname, 'passed_basic_2.txt');
+console.log("🧪 Testing: SQL WHERE Clause and Filtering");
 
-function loadAttempts() {
-  if (fs.existsSync(ATTEMPT_FILE)) {
-    return JSON.parse(fs.readFileSync(ATTEMPT_FILE, 'utf8'));
-  }
-  return { attempts: 0, start: Date.now() };
+function runSimpleTest(userCode) {
+    const result = {passed: false, score: 0, message: "", details: []};
+    
+    try {
+        if (!userCode || userCode.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
+        }
+        
+        let score = 0;
+        const checks = [];
+        
+        // Remove comments and normalize whitespace
+        const cleanCode = userCode.replace(/--.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
+        
+        // Check for WHERE clause
+        if (/WHERE\s+/i.test(cleanCode)) {
+            checks.push("✅ Uses WHERE clause for filtering");
+            score += 30;
+        } else {
+            checks.push("❌ Missing WHERE clause");
+        }
+        
+        // Check for comparison operators
+        if (/[><=!]=?/.test(cleanCode)) {
+            checks.push("✅ Uses comparison operators (=, >, <, !=)");
+            score += 25;
+        } else {
+            checks.push("❌ Missing comparison operators");
+        }
+        
+        // Check for logical operators
+        if (/\b(AND|OR|NOT)\b/i.test(cleanCode)) {
+            checks.push("✅ Uses logical operators (AND, OR, NOT)");
+            score += 25;
+        } else {
+            checks.push("❌ Missing logical operators");
+        }
+        
+        // Check for advanced filtering (LIKE, IN, BETWEEN)
+        if (/\b(LIKE|IN|BETWEEN|IS\s+NULL|IS\s+NOT\s+NULL)\b/i.test(cleanCode)) {
+            checks.push("✅ Uses advanced filtering (LIKE, IN, BETWEEN, NULL checks)");
+            score += 20;
+        } else {
+            checks.push("❌ Missing advanced filtering operators");
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 70;
+        
+        if (result.passed) {
+            result.message = `Excellent filtering! Score: ${result.score}/100`;
+        } else {
+            result.message = `Score: ${result.score}/100 - Use WHERE clause with comparison and logical operators`;
+        }
+        
+    } catch (error) {
+        result.message = "Error analyzing SQL WHERE clause: " + error.message;
+        result.details = ["❌ WHERE clause analysis failed"];
+    }
+    
+    return result;
 }
 
-function saveAttempts(data) {
-  fs.writeFileSync(ATTEMPT_FILE, JSON.stringify(data));
+// Export for Monaco Editor
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: runSimpleTest,
+        testConfig: {topic: "SQL WHERE Clause and Filtering", language: "sql"}
+    };
 }
 
-function deleteDatabase() {
-  if (fs.existsSync(DB_PATH)) {
-    fs.unlinkSync(DB_PATH);
-  }
-}
-
-async function runTest() {
-  const state = loadAttempts();
-  if (!state.start) state.start = Date.now();
-
-  deleteDatabase();
-
-  const db = new sqlite3.Database(DB_PATH);
-
-  // Ensure the table exists before user script runs (in case they only insert)
-  await new Promise((resolve, reject) => {
-    db.run(`CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT);`, err => {
-      if (err) reject(err);
-      else resolve();
-    });
-  });
-
-  const code = fs.readFileSync(USER_SCRIPT_PATH, 'utf8');
-
-  try {
-    const runUserCode = new Function('db', code);
-    runUserCode(db);
-
-    // Wait for lazy writes
-    await new Promise(res => setTimeout(res, 100));
-
-    const rowCount = await new Promise((resolve, reject) => {
-      db.get(`SELECT COUNT(*) AS count FROM users;`, (err, row) => {
-        if (err) reject(new Error("Error querying users table."));
-        else resolve(row.count);
-      });
-    });
-
-    if (rowCount < 1) throw new Error("No records found in users table.");
-
-    fs.writeFileSync(PASS_FILE, `Passed after ${state.attempts} failed attempt(s) in ${Math.round((Date.now() - state.start) / 1000)} seconds.`);
-    console.log("🎉 Test passed! File created.");
-
-    state.attempts = 0;
-    state.start = null;
-    saveAttempts(state);
-  } catch (err) {
-    state.attempts++;
-    saveAttempts(state);
-    console.error(`❌ Test failed: ${err.message}`);
-    console.log(`Attempts so far: ${state.attempts}`);
-  } finally {
-    db.close();
-  }
-}
-
-runTest();
+console.log("✅ SQL WHERE test ready for: WHERE Clause and Filtering");

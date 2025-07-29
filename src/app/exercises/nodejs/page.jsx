@@ -1,5 +1,5 @@
-import NodeJsExercisePlatform from "@/components/Exercise/Nodejs";
+import NodejsExerciseMonacoPlatform from "@/components/Exercise/NodejsMonaco";
 
-export default function ContentDisplay(){
-    return (<NodeJsExercisePlatform></NodeJsExercisePlatform>)
+export default function NodejsExercisePage(){
+    return (<NodejsExerciseMonacoPlatform></NodejsExerciseMonacoPlatform>)
 }

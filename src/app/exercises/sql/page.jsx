@@ -1,5 +1,5 @@
-import SqlExercisePlatform from "@/components/Exercise/Sql";
+import SqlExerciseMonacoPlatform from "@/components/Exercise/SqlMonaco";
 
-export default function ContentDisplay(){
-    return (<SqlExercisePlatform></SqlExercisePlatform>)
+export default function SqlExercisePage(){
+    return (<SqlExerciseMonacoPlatform></SqlExerciseMonacoPlatform>)
 }

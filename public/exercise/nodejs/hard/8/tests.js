@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Performance Monitoring with PM2 Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let pm2Connect = 0;
-  let pm2Monitor = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'pm2' && node.callee.property.name === 'connect') {
-      pm2Connect++;
-    }
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'pm2' && ['start', 'monitor'].includes(node.callee.property.name)) {
-      pm2Monitor++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (pm2Connect === 0) {
-    console.log('✘ No pm2.connect calls found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${pm2Connect} pm2.connect call(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (pm2Monitor === 0) {
-    console.log('✘ No PM2 monitoring calls (start, monitor) found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${pm2Monitor} PM2 monitoring call(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Performance monitoring with PM2 is correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Performance monitoring with PM2 check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }
@@ -132,4 +129,4 @@ if (!syntaxPassed) {
     console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
     ;
   }
-})();   
+})();

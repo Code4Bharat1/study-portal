@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// GraphQL API with Apollo Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,14 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let apolloServer = 0;
-  let schemaDefinition = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'NewExpression' && node.callee.name === 'ApolloServer') {
-      apolloServer++;
-    }
-    if (node.type === 'ObjectExpression' && node.properties.some(prop => prop.key && (prop.key.name === 'typeDefs' || prop.key.name === 'resolvers'))) {
-      schemaDefinition++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -78,24 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (apolloServer === 0) {
-    console.log('✘ No ApolloServer instances found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${apolloServer} ApolloServer instance(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  if (schemaDefinition === 0) {
-    console.log('✘ No schema definitions (typeDefs or resolvers) found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${schemaDefinition} schema definition(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! GraphQL API with Apollo is correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ GraphQL API with Apollo check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }

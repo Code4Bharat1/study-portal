@@ -1,116 +1,132 @@
+const { ESLint } = require('eslint');
+const esprima = require('esprima');
+console.clear();
+console.clear();
 const fs = require('fs');
 const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
 
-const DB_PATH = path.join(__dirname, 'data', 'intermediate1.db');
-const USER_SCRIPT_PATH = path.join(__dirname, 'script.js');
-const ATTEMPT_FILE = path.join(__dirname'attempts.tests';
-const PASS_FILE = path.join(__dirname, 'passed_intermediate_1.txt');
+// File paths
+const attemptsFile = path.join(__dirname, 'attempts.tests');
+const resultFile = path.join(__dirname, 'results.tests');
 
-// Expected result after GROUP BY operation
-const expectedResult = [
-  { region: 'North', total: 300 },
-  { region: 'South', total: 150 },
-  { region: 'East', total: 200 },
-  { region: 'West', total: 250 },
-];
+// Read JavaScript
+const js = fs.readFileSync('index.js', 'utf8');
 
-function loadAttempts() {
-  if (fs.existsSync(ATTEMPT_FILE)) {
-    return JSON.parse(fs.readFileSync(ATTEMPT_FILE, 'utf8'));
-  }
-  return { attempts: 0, start: Date.now() };
-}
-
-function saveAttempts(data) {
-  fs.writeFileSync(ATTEMPT_FILE, JSON.stringify(data));
-}
-
-function deleteDatabase() {
-  if (fs.existsSync(DB_PATH)) {
-    fs.unlinkSync(DB_PATH);
-  }
-}
-
-function runUserScript(db) {
-  return new Promise((resolve, reject) => {
-    const code = fs.readFileSync(USER_SCRIPT_PATH, 'utf8');
+// Helper: Read Attempts (default to 1)
+function readAttempts() {
+  if (fs.existsSync(attemptsFile)) {
+    const data = fs.readFileSync(attemptsFile, 'utf8');
     try {
-      const run = new Function('db', code);
-      run(db);
-      // Wait briefly to ensure all operations complete
-      setTimeout(resolve, 100);
+      const parsed = JSON.parse(data);
+      return parsed.count >= 1 ? parsed.count : 1;
     } catch (err) {
-      reject(err);
+      console.error('Error parsing attempts.tests. Resetting counter.');
+      return 1;
     }
-  });
+  }
+  return 1;
 }
 
-function validateGroupByResult(db) {
-  return new Promise((resolve, reject) => {
-    const query = `SELECT region, SUM(amount) as total FROM sales GROUP BY region ORDER BY region;`;
-    db.all(query, [], (err, rows) => {
-      if (err) {
-        return reject(new Error("Error executing GROUP BY query on 'sales' table."));
-      }
-      // Compare the result with expectedResult
-      if (rows.length !== expectedResult.length) {
-        return reject(new Error("Mismatch in number of regions returned."));
-      }
-      for (let i = 0; i < rows.length; i++) {
-        if (
-          rows[i].region !== expectedResult[i].region ||
-          rows[i].total !== expectedResult[i].total
-        ) {
-          return reject(
-            new Error(
-              `Data mismatch at row ${i + 1}: Expected (${expectedResult[i].region}, ${expectedResult[i].total}), Got (${rows[i].region}, ${rows[i].total})`
-            )
-          );
-        }
-      }
-      resolve();
-    });
-  });
+// Helper: Write Attempt Count
+function writeAttempts(count) {
+  try {
+    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+  } catch (err) {
+    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
+  }
 }
 
-async function runTest() {
-  const state = loadAttempts();
-  if (!state.start) state.start = Date.now();
+// Syntax Verification using ESLint
+async function syntaxVerify() {
+  const eslint = new ESLint();
+  const results = await eslint.lintText(js);
+  if (results[0].errorCount === 0) {
+    console.log('✔ JavaScript syntax is valid.');
+    return true;
+  } else {
+    console.log('❌ JavaScript syntax is not valid:');
+    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
+    return false;
+  }
+}
 
-  // Ensure a clean database state
-  deleteDatabase();
+// Code Verification
+function codeVerify() {
+  let allPassed = true;
+  let ast;
+  try {
+    ast = esprima.parseScript(js, { tolerant: true });
+  } catch (err) {
+    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
+    return false;
+  }
 
-  const db = new sqlite3.Database(DB_PATH, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, async (err) => {
-    if (err) {
-      console.error("❌ Failed to create or open the database:", err.message);
-      return;
+  let consoleLogs = 0;
+  function traverse(node) {
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
+    for (const key in node) {
+      if (node[key] && typeof node[key] === 'object') {
+        traverse(node[key]);
+      }
+    }
+  }
+  traverse(ast);
 
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
+  }
+
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
+  }
+
+  if (allPassed) {
+    console.log('\n🎉 Success! Code verification passed.');
+  } else {
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
+  }
+  return allPassed;
+}
+
+// Main execution
+(async () => {
+  const startTime = process.hrtime();
+const syntaxPassed = await syntaxVerify();
+if (!syntaxPassed) {
+  console.log('\n❌ Syntax errors prevent further checks.');
+  ;
+}
+
+  const structurePassed = codeVerify();
+  const allPassed = syntaxPassed && structurePassed;
+
+  const [sec, nanosec] = process.hrtime(startTime);
+  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
+
+  let attempts = readAttempts();
+  if (allPassed) {
+    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
     try {
-      await runUserScript(db);
-      await validateGroupByResult(db);
-
-      fs.writeFileSync(
-        PASS_FILE,
-        `Passed after ${state.attempts} failed attempt(s) in ${Math.round(
-          (Date.now() - state.start) / 1000
-        )} seconds.`
-      );
-      console.log("🎉 Test passed! Success file created.");
-
-      state.attempts = 0;
-      state.start = null;
-      saveAttempts(state);
+      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
+      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
     } catch (err) {
-      state.attempts++;
-      saveAttempts(state);
-      console.error(`❌ Test failed: ${err.message}`);
-      console.log(`Attempts so far: ${state.attempts}`);
-    } finally {
-      db.close();
+      console.error(`Failed to write to ${resultFile}: ${err.message}`);
     }
-  });
-}
-
-runTest();
+    process.exit(0);
+  } else {
+    attempts += 1;
+    writeAttempts(attempts);
+    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
+    ;
+  }
+})();

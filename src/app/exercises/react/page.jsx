@@ -1,5 +1,5 @@
-import ReactExercisePlatform from "@/components/Exercise/React";
+import ReactExerciseMonacoPlatform from "@/components/Exercise/ReactMonaco";
 
-export default function ContentDisplay(){
-    return (<ReactExercisePlatform></ReactExercisePlatform>)
+export default function ReactExercisePage(){
+    return (<ReactExerciseMonacoPlatform></ReactExerciseMonacoPlatform>)
 }

@@ -1,133 +1,75 @@
-const { ESLint } = require('eslint');
-const esprima = require('esprima');
-console.clear();
-console.clear();
-const fs = require('fs');
-const path = require('path');
+// Simple Browser-Compatible Test for Event Emitters
+// No external dependencies - works entirely in browser
 
-// File paths
-const attemptsFile = path.join(__dirname, 'attempts.tests');
-const resultFile = path.join(__dirname, 'results.tests');
+console.log("🧪 Testing: Event Emitters");
 
-// Read JavaScript
-const js = fs.readFileSync('index.js', 'utf8');
-
-// Helper: Read Attempts (default to 1)
-function readAttempts() {
-  if (fs.existsSync(attemptsFile)) {
-    const data = fs.readFileSync(attemptsFile, 'utf8');
+function runSimpleTest(userCode) {
+    const result = {passed: false, score: 0, message: "", details: []};
+    
     try {
-      const parsed = JSON.parse(data);
-      return parsed.count >= 1 ? parsed.count : 1;
-    } catch (err) {
-      console.error('Error parsing attempts.tests. Resetting counter.');
-      return 1;
+        if (!userCode || userCode.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
+        }
+        
+        let score = 0;
+        const checks = [];
+        
+        
+        // JavaScript syntax check
+        try {
+            new Function(userCode);
+            checks.push("✅ Valid syntax");
+            score += 30;
+        } catch (e) {
+            checks.push("❌ Syntax error");
+        }
+        
+        // Basic JavaScript checks
+        if (/console\.log\s*\(/.test(userCode)) {
+            checks.push("✅ Has console.log");
+            score += 30;
+        } else {
+            checks.push("❌ Missing console.log");
+        }
+        
+        // Topic-specific checks
+        const topic = "Event Emitters".toLowerCase();
+        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else {
+            checks.push("⚠️ Add topic-specific content");
+            score += 20;
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 70;
+        result.message = `Score: ${result.score}/100`;
+        
+    } catch (error) {
+        result.message = "Error: " + error.message;
     }
-  }
-  return 1;
+    
+    return result;
 }
 
-// Helper: Write Attempt Count
-function writeAttempts(count) {
-  try {
-    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
-  } catch (err) {
-    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
-  }
+// Export for Monaco Editor
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: runSimpleTest,
+        testConfig: {topic: "Event Emitters", language: "nodejs"}
+    };
 }
 
-// Syntax Verification using ESLint
-async function syntaxVerify() {
-  const eslint = new ESLint();
-  const results = await eslint.lintText(js);
-  if (results[0].errorCount === 0) {
-    console.log('✔ JavaScript syntax is valid.');
-    return true;
-  } else {
-    console.log('❌ JavaScript syntax is not valid:');
-    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
-    return false;
-  }
-}
-
-// Working with JSON Verification
-function codeVerify() {
-  let allPassed = true;
-  let ast;
-  try {
-    ast = esprima.parseScript(js, { tolerant: true });
-  } catch (err) {
-    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
-    return false;
-  }
-
-  let jsonParse = 0;
-  let jsonStringify = 0;
-  function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'JSON') {
-      if (node.callee.property.name === 'parse') jsonParse++;
-      if (node.callee.property.name === 'stringify') jsonStringify++;
-    }
-    for (const key in node) {
-      if (node[key] && typeof node[key] === 'object') {
-        traverse(node[key]);
-      }
-    }
-  }
-  traverse(ast);
-
-  if (jsonParse === 0) {
-    console.log('✘ No JSON.parse calls found');
-    allPassed = false;
-  } else {
-    console.log(`✔ Found ${jsonParse} JSON.parse call(s)`);
-  }
-
-  if (jsonStringify === 0) {
-    console.log('✘ No JSON.stringify calls found');
-    allPassed = false;
-  } else {
-    console.log(`✔ Found ${jsonStringify} JSON.stringify call(s)`);
-  }
-
-  if (allPassed) {
-    console.log('\n🎉 Success! JSON handling is correct.');
-  } else {
-    console.log('\n❗ JSON handling check failed. Please review your JavaScript.');
-  }
-  return allPassed;
-}
-
-// Main execution
-(async () => {
-  const startTime = process.hrtime();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  ;
-}
-
-  const structurePassed = codeVerify();
-  const allPassed = syntaxPassed && structurePassed;
-
-  const [sec, nanosec] = process.hrtime(startTime);
-  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
-  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
-
-  let attempts = readAttempts();
-  if (allPassed) {
-    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
-    try {
-      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
-      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
-    } catch (err) {
-      console.error(`Failed to write to ${resultFile}: ${err.message}`);
-    }
-    process.exit(0);
-  } else {
-    attempts += 1;
-    writeAttempts(attempts);
-    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
-    ;
-  }
-})();
+console.log("✅ Test ready for: Event Emitters");

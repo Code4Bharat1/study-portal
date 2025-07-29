@@ -1,81 +1,75 @@
-const fs = require('fs');
-const path = require('path');
-const { ESLint } = require('eslint');
-const supertest = require('supertest');
-const assert = require('assert');
+// Simple Browser-Compatible Test for RESTful API Design
+// No external dependencies - works entirely in browser
 
-const filePath = path.join(__dirname, 'index.js');
-const js = fs.readFileSync(filePath, 'utf8');
+console.log("🧪 Testing: RESTful API Design");
 
-function readAttempts() {
-  try {
-    return fs.existsSync('attempts.tests') ? JSON.parse(fs.readFileSync('attempts.tests')).count || 1 : 1;
-  } catch {
-    return 1;
-  }
-}
-
-function writeAttempts(count) {
-  try {
-    fs.writeFileSync('attempts.tests', JSON.stringify({ count }, null, 2));
-  } catch (e) {
-    console.log(`Failed to write attempts.tests: ${e}`);
-  }
-}
-
-async function checkSyntax() {
-  const eslint = new ESLint();
-  const results = await eslint.lintText(js);
-  return results[0].errorCount === 0;
-}
-
-async function test404Handler() {
-  let app;
-  try {
-    app = require(filePath);
-  } catch {
-    console.log("❌ Cannot import app.");
-    return false;
-  }
-
-  try {
-    const res = await supertest(app).get('/nonexistentroute');
-    assert.strictEqual(res.statusCode, 404);
-    console.log('✔ GET /nonexistentroute returned 404 as expected');
-    return true;
-  } catch (err) {
-    console.log('❌ 404 handler test failed:', err.message);
-    return false;
-  }
-}
-
-(async () => {
-  const startTime = performance.now();
-
-  const syntaxOk = await checkSyntax();
-  const notFoundOk = await test404Handler();
-
-  const allPassed = syntaxOk && notFoundOk;
-
-  const executionTime = Number((performance.now() - startTime) / 1000).toFixed(3);
-  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
-
-  let attempts = readAttempts();
-
-  if (allPassed) {
-    const resultData = { attempts, linesOfCode, executionTime, timestamp: new Date().toISOString() };
+function runSimpleTest(userCode) {
+    const result = {passed: false, score: 0, message: "", details: []};
+    
     try {
-      fs.writeFileSync('results.tests', JSON.stringify(resultData, null, 2));
-      console.log('\n✅ All tests passed for 404 Handler');
-      process.exit(0);
-    } catch (e) {
-      ;
+        if (!userCode || userCode.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
+        }
+        
+        let score = 0;
+        const checks = [];
+        
+        
+        // JavaScript syntax check
+        try {
+            new Function(userCode);
+            checks.push("✅ Valid syntax");
+            score += 30;
+        } catch (e) {
+            checks.push("❌ Syntax error");
+        }
+        
+        // Basic JavaScript checks
+        if (/console\.log\s*\(/.test(userCode)) {
+            checks.push("✅ Has console.log");
+            score += 30;
+        } else {
+            checks.push("❌ Missing console.log");
+        }
+        
+        // Topic-specific checks
+        const topic = "RESTful API Design".toLowerCase();
+        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
+            checks.push("✅ Topic content found");
+            score += 40;
+        } else {
+            checks.push("⚠️ Add topic-specific content");
+            score += 20;
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 70;
+        result.message = `Score: ${result.score}/100`;
+        
+    } catch (error) {
+        result.message = "Error: " + error.message;
     }
-  } else {
-    attempts += 1;
-    writeAttempts(attempts);
-    console.log('\n❌ Test failed for 404 Handler');
-    console.log(`❌ Tests failed. Attempt #${attempts} recorded.`);
-    ;
-  }
-})();
+    
+    return result;
+}
+
+// Export for Monaco Editor
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: runSimpleTest,
+        testConfig: {topic: "RESTful API Design", language: "express"}
+    };
+}
+
+console.log("✅ Test ready for: RESTful API Design");

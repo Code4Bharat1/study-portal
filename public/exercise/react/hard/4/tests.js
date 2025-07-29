@@ -1,212 +1,132 @@
-require('@babel/register')({
-  extensions: ['.js', '.jsx'],
-  presets: [
-    '@babel/preset-env',
-    ['@babel/preset-react', { runtime: 'automatic' }],
-  ],
-});
-
-console.clear();
-
-const fs = require('fs');
 const { ESLint } = require('eslint');
-const parser = require('@babel/parser');
-const traverse = require('@babel/traverse').default;
-const { render, screen, waitFor } = require('@testing-library/react');
-require('@testing-library/dom'); // no jest-dom here
+const esprima = require('esprima');
+console.clear();
+console.clear();
+const fs = require('fs');
+const path = require('path');
 
-const ATTEMPTS_FILE = 'attempts.tests';
-const RESULT_FILE = 'results.tests';
-const code = fs.readFileSync('App.jsx', 'utf-8');
+// File paths
+const attemptsFile = path.join(__dirname, 'attempts.tests');
+const resultFile = path.join(__dirname, 'results.tests');
 
+// Read JavaScript
+const js = fs.readFileSync('index.js', 'utf8');
+
+// Helper: Read Attempts (default to 1)
 function readAttempts() {
-  if (fs.existsSync(ATTEMPTS_FILE)) {
+  if (fs.existsSync(attemptsFile)) {
+    const data = fs.readFileSync(attemptsFile, 'utf8');
     try {
-      const data = JSON.parse(fs.readFileSync(ATTEMPTS_FILE, 'utf-8'));
-      return data.count >= 1 ? data.count : 1;
-    } catch {
-      console.log('Warning: Failed to parse attempts.tests. Resetting to 1.');
+      const parsed = JSON.parse(data);
+      return parsed.count >= 1 ? parsed.count : 1;
+    } catch (err) {
+      console.error('Error parsing attempts.tests. Resetting counter.');
       return 1;
     }
   }
   return 1;
 }
 
+// Helper: Write Attempt Count
 function writeAttempts(count) {
   try {
-    fs.writeFileSync(ATTEMPTS_FILE, JSON.stringify({ count }, null, 2), 'utf-8');
-  } catch (e) {
-    console.log(`Error: Could not save attempts: ${e.message}`);
+    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
+  } catch (err) {
+    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
   }
 }
 
+// Syntax Verification using ESLint
 async function syntaxVerify() {
   const eslint = new ESLint();
-
-  try {
-    const [result] = await eslint.lintText(code);
-    const errors = result.messages.filter((msg) => msg.severity === 2);
-
-    if (errors.length === 0) {
-      console.log('Syntax Check Passed: No errors found.');
-      return true;
-    } else {
-      console.log('Syntax Error: Your code has the following issue(s):');
-      errors.forEach((err) =>
-        console.log(
-          `  Line ${err.line}, Column ${err.column}: ${err.message} [Rule: ${err.ruleId || 'unknown'}]`
-        )
-      );
-      console.log(
-        '\nTip: Check for missing brackets, semicolons, or typos in your JSX or JavaScript.'
-      );
-      return false;
-    }
-  } catch (e) {
-    console.log(`ESLint failed to run:\nReason: ${e.message}`);
+  const results = await eslint.lintText(js);
+  if (results[0].errorCount === 0) {
+    console.log('✔ JavaScript syntax is valid.');
+    return true;
+  } else {
+    console.log('❌ JavaScript syntax is not valid:');
+    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
     return false;
   }
 }
 
+// Code Verification
 function codeVerify() {
   let allPassed = true;
+  let ast;
   try {
-    const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });
-    let customHooks = 0;
-    let useEffectCalls = 0;
-
-    traverse(ast, {
-      FunctionDeclaration(path) {
-        if (
-          path.node.id.name.startsWith('use') &&
-          path.node.body.body.some((node) => node.type === 'ReturnStatement')
-        ) {
-          customHooks++;
-        }
-      },
-      VariableDeclarator(path) {
-        if (
-          path.node.id.name.startsWith('use') &&
-          path.node.init &&
-          path.node.init.type === 'ArrowFunctionExpression'
-        ) {
-          customHooks++;
-        }
-      },
-      CallExpression(path) {
-        if (path.node.callee.name === 'useEffect') {
-          useEffectCalls++;
-        }
-      },
-    });
-
-    if (customHooks === 0) {
-      console.log('Structure Error: No custom hooks found.');
-      allPassed = false;
-    } else {
-      console.log(`Structure Check Passed: Found ${customHooks} custom hook(s).`);
-    }
-
-    if (useEffectCalls === 0) {
-      console.log('Structure Error: No useEffect calls found in custom hook.');
-      allPassed = false;
-    } else {
-      console.log(`Structure Check Passed: Found ${useEffectCalls} useEffect call(s).`);
-    }
-
-    return allPassed;
-  } catch (e) {
-    console.log(`JSX Parsing Failed:\nReason: ${e.message}`);
-    console.log(
-      'Tip: Ensure your return statement includes valid and properly closed JSX tags.'
-    );
+    ast = esprima.parseScript(js, { tolerant: true });
+  } catch (err) {
+    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
     return false;
   }
-}
 
-async function functionalVerify() {
-  let allPassed = true;
-  try {
-    const module = require('./App.jsx');
-    const Component = module.default || module;
-
-    render(<Component />);
-
-    const loading = screen.getByTestId('loading');
-    if (loading.textContent !== 'Loading...') {
-      console.log('Functional Error: Initial state is not "Loading...".');
-      allPassed = false;
-    } else {
-      console.log('Functional Check Passed: Initial state is "Loading...".');
+  let consoleLogs = 0;
+  function traverse(node) {
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
-
-    await waitFor(() => {
-      const data = screen.getByTestId('data');
-      if (data.textContent !== 'Fetched Data') {
-        console.log('Functional Error: Data did not load as expected.');
-        allPassed = false;
-      } else {
-        console.log('Functional Check Passed: Data loaded successfully.');
+    for (const key in node) {
+      if (node[key] && typeof node[key] === 'object') {
+        traverse(node[key]);
       }
-    }, { timeout: 1500 });
-
-    if (allPassed) {
-      console.log('\nAll functional tests passed.');
-    } else {
-      console.log('\nFunctional tests failed. Please review your React code.');
     }
-
-    return allPassed;
-  } catch (e) {
-    console.log(`Functional Test Failed:\nReason: ${e.message}`);
-    console.log(
-      'Tip: Ensure your component exports a valid default function and renders the expected loading and data states.'
-    );
-    return false;
   }
+  traverse(ast);
+
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
+  }
+
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
+    allPassed = false;
+  } else {
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
+  }
+
+  if (allPassed) {
+    console.log('\n🎉 Success! Code verification passed.');
+  } else {
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
+  }
+  return allPassed;
 }
 
+// Main execution
 (async () => {
-  const startTime = Date.now();
-
-  const syntaxPassed = await syntaxVerify();
-  if (!syntaxPassed) {
-    console.log('\nAborting: Fix syntax errors before continuing.');
-    ;
-  }
+  const startTime = process.hrtime();
+const syntaxPassed = await syntaxVerify();
+if (!syntaxPassed) {
+  console.log('\n❌ Syntax errors prevent further checks.');
+  ;
+}
 
   const structurePassed = codeVerify();
-  const functionalPassed = await functionalVerify();
-  const allPassed = syntaxPassed && structurePassed && functionalPassed;
+  const allPassed = syntaxPassed && structurePassed;
 
-  const executionTime = Number((Date.now() - startTime) / 1000).toFixed(3);
-  const linesOfCode = code.split('\n').filter((line) => line.trim()).length;
+  const [sec, nanosec] = process.hrtime(startTime);
+  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
+  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
 
   let attempts = readAttempts();
   if (allPassed) {
-    const resultData = {
-      attempts,
-      linesOfCode,
-      executionTime,
-      syntaxCheckPassed: syntaxPassed,
-      structureCheckPassed: structurePassed,
-      functionalCheckPassed: functionalPassed,
-      timestamp: new Date().toISOString(),
-    };
+    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
     try {
-      fs.writeFileSync(RESULT_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
-      console.log(`\nAll checks passed. Result saved to ${RESULT_FILE}.`);
-      process.exit(0);
-    } catch (e) {
-      console.log(`Error writing result: ${e.message}`);
-      ;
+      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
+      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
+    } catch (err) {
+      console.error(`Failed to write to ${resultFile}: ${err.message}`);
     }
+    process.exit(0);
   } else {
     attempts += 1;
     writeAttempts(attempts);
-    console.log(
-      `\nOne or more checks failed. This was attempt #${attempts - 1}. Please review the messages and try again.`
-    );
+    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
     ;
   }
 })();

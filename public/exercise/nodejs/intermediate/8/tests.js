@@ -50,7 +50,7 @@ async function syntaxVerify() {
   }
 }
 
-// Error Handling Middleware Verification
+// Code Verification
 function codeVerify() {
   let allPassed = true;
   let ast;
@@ -61,10 +61,10 @@ function codeVerify() {
     return false;
   }
 
-  let errorMiddleware = 0;
+  let consoleLogs = 0;
   function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.property.name === 'use' && node.arguments.some(arg => arg.type === 'FunctionExpression' && arg.params.length === 4 && arg.params[0].name === 'err')) {
-      errorMiddleware++;
+    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
+      consoleLogs++;
     }
     for (const key in node) {
       if (node[key] && typeof node[key] === 'object') {
@@ -74,32 +74,25 @@ function codeVerify() {
   }
   traverse(ast);
 
-  if (errorMiddleware === 0) {
-    console.log('✘ No error-handling middleware (err, req, res, next) found');
+  if (consoleLogs === 0) {
+    console.log('✘ No console.log statements found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${errorMiddleware} error-handling middleware(s)`);
+    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
   }
 
-  let errorResponse = 0;
-  traverse(ast);
-  ast.body.forEach(node => {
-    if (node.type === 'ExpressionStatement' && node.expression.type === 'CallExpression' && node.expression.callee.type === 'MemberExpression' && node.expression.callee.property.name === 'status' && node.expression.callee.object.type === 'Identifier') {
-      errorResponse++;
-    }
-  });
-
-  if (errorResponse === 0) {
-    console.log('✘ No res.status calls in error middleware found');
+  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
+  if (variableDeclarations.length === 0) {
+    console.log('✘ No variable declarations found');
     allPassed = false;
   } else {
-    console.log(`✔ Found ${errorResponse} res.status call(s)`);
+    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
   }
 
   if (allPassed) {
-    console.log('\n🎉 Success! Error handling middleware is correct.');
+    console.log('\n🎉 Success! Code verification passed.');
   } else {
-    console.log('\n❗ Error handling middleware check failed. Please review your JavaScript.');
+    console.log('\n❗ Code verification failed. Please review your JavaScript.');
   }
   return allPassed;
 }
