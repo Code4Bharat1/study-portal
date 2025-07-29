@@ -3,7 +3,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Tilt from "react-parallax-tilt";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiSun, FiMoon, FiAward, FiUser, FiBarChart2, FiChevronUp } from "react-icons/fi";
+import {
+  FiSun,
+  FiMoon,
+  FiAward,
+  FiUser,
+  FiBarChart2,
+  FiChevronUp,
+} from "react-icons/fi";
 
 export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
@@ -39,9 +46,12 @@ export default function Leaderboard() {
           return;
         }
 
-        const response = await fetch(`http://localhost:3902/api/leaderboard`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await fetch(
+          `https://sp-api.code4bharat.com/api/leaderboard`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const text = await response.text();
         if (!response.ok) {
@@ -94,7 +104,9 @@ export default function Leaderboard() {
     if (rank === 1) return "from-yellow-400 to-yellow-600";
     if (rank === 2) return "from-gray-300 to-gray-400";
     if (rank === 3) return "from-amber-500 to-amber-700";
-    return isDarkMode ? "from-gray-700 to-gray-800" : "from-blue-100 to-blue-200";
+    return isDarkMode
+      ? "from-gray-700 to-gray-800"
+      : "from-blue-100 to-blue-200";
   };
 
   const getRankBorder = (rank) => {
@@ -177,7 +189,9 @@ export default function Leaderboard() {
       <motion.button
         onClick={scrollToTop}
         className={`fixed left-1/2 bottom-4 sm:bottom-6 z-50 p-2 sm:p-3 rounded-full shadow-xl transition-all transform -translate-x-1/2 ${
-          isDarkMode ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+          isDarkMode
+            ? "bg-blue-600 hover:bg-blue-700"
+            : "bg-blue-500 hover:bg-blue-600"
         } ${isScrolled ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
@@ -209,9 +223,7 @@ export default function Leaderboard() {
               />
             </div>
             <div>
-              <h1
-                className="text-xl sm:text-2xl lg:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600"
-              >
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">
                 Global Leaderboard
               </h1>
               <p
@@ -230,11 +242,15 @@ export default function Leaderboard() {
               whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
               className={`p-2 rounded-lg transition-all ${
-                isDarkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-100"
+                isDarkMode
+                  ? "bg-gray-800 hover:bg-gray-700"
+                  : "bg-white hover:bg-gray-100"
               } shadow-md border ${
                 isDarkMode ? "border-gray-700" : "border-blue-200"
               }`}
-              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={
+                isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+              }
             >
               {isDarkMode ? (
                 <FiSun className="text-base sm:text-lg text-yellow-400" />
@@ -283,7 +299,9 @@ export default function Leaderboard() {
                 : "bg-red-50/70 border-red-200 text-red-600"
             }`}
           >
-            <p className="text-sm sm:text-base font-medium text-center">{error}</p>
+            <p className="text-sm sm:text-base font-medium text-center">
+              {error}
+            </p>
           </motion.div>
         )}
 
@@ -332,22 +350,23 @@ export default function Leaderboard() {
                         isDarkMode ? "text-blue-300" : "text-blue-600"
                       }`}
                     >
-                      <FiUser className="inline text-base sm:text-lg" /> Your Position
+                      <FiUser className="inline text-base sm:text-lg" /> Your
+                      Position
                     </h2>
                     <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 relative z-10">
                       <div className="relative">
                         <div
-                          className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold border-3 ${
-                            getRankBorder(userRank.rank)
-                          } bg-gradient-to-br ${getRankColor(userRank.rank)}`}
+                          className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold border-3 ${getRankBorder(
+                            userRank.rank
+                          )} bg-gradient-to-br ${getRankColor(userRank.rank)}`}
                         >
                           {userRank.rank}
                           {getMedalIcon(userRank.rank)}
                         </div>
                         <div
-                          className={`absolute -inset-1.5 rounded-full border-2 ${
-                            getRankBorder(userRank.rank)
-                          } opacity-50 animate-ping`}
+                          className={`absolute -inset-1.5 rounded-full border-2 ${getRankBorder(
+                            userRank.rank
+                          )} opacity-50 animate-ping`}
                         ></div>
                       </div>
                       <div className="flex-1 text-center sm:text-left">
@@ -370,7 +389,9 @@ export default function Leaderboard() {
                         <div className="w-full">
                           <div className="flex justify-between text-xs mb-0.5">
                             <span
-                              className={`${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                              className={`${
+                                isDarkMode ? "text-gray-400" : "text-gray-600"
+                              }`}
                             >
                               Progress
                             </span>
@@ -379,7 +400,13 @@ export default function Leaderboard() {
                                 isDarkMode ? "text-blue-300" : "text-blue-600"
                               }`}
                             >
-                              {Math.min(Math.floor((userRank.skillPoints / 10000) * 100), 100)}%
+                              {Math.min(
+                                Math.floor(
+                                  (userRank.skillPoints / 10000) * 100
+                                ),
+                                100
+                              )}
+                              %
                             </span>
                           </div>
                           <div
@@ -417,13 +444,27 @@ export default function Leaderboard() {
             >
               <div
                 className={`inline-flex flex-wrap justify-center gap-1 sm:gap-2 rounded-lg p-1 backdrop-blur-lg ${
-                  isDarkMode ? "bg-gray-800/50 border border-gray-700" : "bg-white/80 border border-blue-200"
+                  isDarkMode
+                    ? "bg-gray-800/50 border border-gray-700"
+                    : "bg-white/80 border border-blue-200"
                 }`}
               >
                 {[
-                  { id: "all", label: "All", icon: <FiBarChart2 className="mr-1" /> },
-                  { id: "top3", label: "Top 3", icon: <FiAward className="mr-1" /> },
-                  { id: "top10", label: "Top 10", icon: <FiUser className="mr-1" /> },
+                  {
+                    id: "all",
+                    label: "All",
+                    icon: <FiBarChart2 className="mr-1" />,
+                  },
+                  {
+                    id: "top3",
+                    label: "Top 3",
+                    icon: <FiAward className="mr-1" />,
+                  },
+                  {
+                    id: "top10",
+                    label: "Top 10",
+                    icon: <FiUser className="mr-1" />,
+                  },
                 ].map((tab) => (
                   <motion.button
                     key={tab.id}
@@ -484,17 +525,17 @@ export default function Leaderboard() {
                       <div className="flex flex-col items-center">
                         <div className="relative mb-3 sm:mb-4">
                           <div
-                            className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold border-3 ${
-                              getRankBorder(entry.rank)
-                            } bg-gradient-to-br ${getRankColor(entry.rank)}`}
+                            className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold border-3 ${getRankBorder(
+                              entry.rank
+                            )} bg-gradient-to-br ${getRankColor(entry.rank)}`}
                           >
                             {entry.rank}
                             {getMedalIcon(entry.rank)}
                           </div>
                           <div
-                            className={`absolute -inset-2 rounded-full border-2 ${
-                              getRankBorder(entry.rank)
-                            } opacity-40 animate-pulse`}
+                            className={`absolute -inset-2 rounded-full border-2 ${getRankBorder(
+                              entry.rank
+                            )} opacity-40 animate-pulse`}
                           ></div>
                         </div>
                         <h3
@@ -516,7 +557,11 @@ export default function Leaderboard() {
                             isDarkMode ? "text-gray-400" : "text-gray-600"
                           }`}
                         >
-                          {entry.rank === 1 ? "Champion" : entry.rank === 2 ? "Runner-up" : "Third Place"}
+                          {entry.rank === 1
+                            ? "Champion"
+                            : entry.rank === 2
+                            ? "Runner-up"
+                            : "Third Place"}
                         </p>
                       </div>
                     </div>
@@ -544,116 +589,135 @@ export default function Leaderboard() {
                   transition={{ staggerChildren: 0.05 }}
                   className="space-y-2 sm:space-y-3"
                 >
-                  {(activeTab === "all" ? getRemaining() : getTop10().slice(3)).map(
-                    (entry, index) => (
-                      <motion.div
-                        key={entry.rank}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.05 * index }}
-                        className="relative"
+                  {(activeTab === "all"
+                    ? getRemaining()
+                    : getTop10().slice(3)
+                  ).map((entry, index) => (
+                    <motion.div
+                      key={entry.rank}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.05 * index }}
+                      className="relative"
+                    >
+                      <Tilt
+                        tiltMaxAngleX={3}
+                        tiltMaxAngleY={3}
+                        glareEnable={true}
+                        glareMaxOpacity={0.1}
+                        glareColor="#ffffff"
+                        glarePosition="all"
+                        scale={1.01}
+                        className="rounded-lg"
                       >
-                        <Tilt
-                          tiltMaxAngleX={3}
-                          tiltMaxAngleY={3}
-                          glareEnable={true}
-                          glareMaxOpacity={0.1}
-                          glareColor="#ffffff"
-                          glarePosition="all"
-                          scale={1.01}
-                          className="rounded-lg"
+                        <div
+                          className={`p-3 sm:p-4 rounded-lg shadow-md border transition-all ${
+                            isDarkMode
+                              ? "bg-gray-800/70 border-gray-700 hover:border-blue-500/50"
+                              : "bg-white/90 border-blue-200 hover:border-blue-400"
+                          } relative overflow-hidden group`}
+                          role="listitem"
                         >
                           <div
-                            className={`p-3 sm:p-4 rounded-lg shadow-md border transition-all ${
-                              isDarkMode
-                                ? "bg-gray-800/70 border-gray-700 hover:border-blue-500/50"
-                                : "bg-white/90 border-blue-200 hover:border-blue-400"
-                            } relative overflow-hidden group`}
-                            role="listitem"
-                          >
-                            <div
-                              className={`absolute inset-0 ${
-                                isDarkMode ? "bg-blue-900/10" : "bg-blue-100/30"
-                              } opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                            ></div>
+                            className={`absolute inset-0 ${
+                              isDarkMode ? "bg-blue-900/10" : "bg-blue-100/30"
+                            } opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                          ></div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 relative z-10">
-                              <div className="relative">
-                                <div
-                                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-sm sm:text-base font-bold border-2 ${
-                                    getRankBorder(entry.rank)
-                                  } bg-gradient-to-br ${getRankColor(entry.rank)}`}
-                                >
-                                  {entry.rank}
-                                  {getMedalIcon(entry.rank)}
-                                </div>
-                                {entry.rank <= 3 && (
-                                  <div
-                                    className={`absolute -inset-1 rounded-full border ${
-                                      getRankBorder(entry.rank)
-                                    } opacity-30 group-hover:opacity-60 transition-opacity`}
-                                  ></div>
-                                )}
+                          <div className="flex items-center gap-2 sm:gap-3 relative z-10">
+                            <div className="relative">
+                              <div
+                                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-sm sm:text-base font-bold border-2 ${getRankBorder(
+                                  entry.rank
+                                )} bg-gradient-to-br ${getRankColor(
+                                  entry.rank
+                                )}`}
+                              >
+                                {entry.rank}
+                                {getMedalIcon(entry.rank)}
                               </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                                  <p
-                                    className={`text-sm sm:text-base font-semibold truncate ${
-                                      isDarkMode ? "text-gray-100" : "text-gray-800"
+                              {entry.rank <= 3 && (
+                                <div
+                                  className={`absolute -inset-1 rounded-full border ${getRankBorder(
+                                    entry.rank
+                                  )} opacity-30 group-hover:opacity-60 transition-opacity`}
+                                ></div>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                                <p
+                                  className={`text-sm sm:text-base font-semibold truncate ${
+                                    isDarkMode
+                                      ? "text-gray-100"
+                                      : "text-gray-800"
+                                  }`}
+                                >
+                                  {entry.username}
+                                </p>
+                                <p
+                                  className={`text-xs sm:text-sm font-medium ${
+                                    isDarkMode
+                                      ? "text-blue-300"
+                                      : "text-blue-600"
+                                  }`}
+                                >
+                                  {formatNumber(entry.skillPoints)}
+                                </p>
+                              </div>
+                              <div className="mt-1 sm:mt-2">
+                                <div className="flex justify-between text-xs mb-0.5">
+                                  <span
+                                    className={`${
+                                      isDarkMode
+                                        ? "text-gray-400"
+                                        : "text-gray-600"
                                     }`}
                                   >
-                                    {entry.username}
-                                  </p>
-                                  <p
-                                    className={`text-xs sm:text-sm font-medium ${
-                                      isDarkMode ? "text-blue-300" : "text-blue-600"
+                                    Skill
+                                  </span>
+                                  <span
+                                    className={`font-medium ${
+                                      isDarkMode
+                                        ? "text-blue-300"
+                                        : "text-blue-600"
                                     }`}
                                   >
-                                    {formatNumber(entry.skillPoints)}
-                                  </p>
+                                    {Math.min(
+                                      Math.floor(
+                                        (entry.skillPoints / 10000) * 100
+                                      ),
+                                      100
+                                    )}
+                                    %
+                                  </span>
                                 </div>
-                                <div className="mt-1 sm:mt-2">
-                                  <div className="flex justify-between text-xs mb-0.5">
-                                    <span
-                                      className={`${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                                    >
-                                      Skill
-                                    </span>
-                                    <span
-                                      className={`font-medium ${
-                                        isDarkMode ? "text-blue-300" : "text-blue-600"
-                                      }`}
-                                    >
-                                      {Math.min(Math.floor((entry.skillPoints / 10000) * 100), 100)}%
-                                    </span>
-                                  </div>
+                                <div
+                                  className={`w-full h-1.5 rounded-full overflow-hidden ${
+                                    isDarkMode ? "bg-gray-700" : "bg-gray-200"
+                                  }`}
+                                >
                                   <div
-                                    className={`w-full h-1.5 rounded-full overflow-hidden ${
-                                      isDarkMode ? "bg-gray-700" : "bg-gray-200"
+                                    className={`h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r ${
+                                      isDarkMode
+                                        ? "from-blue-500 to-purple-500"
+                                        : "from-blue-400 to-purple-400"
                                     }`}
-                                  >
-                                    <div
-                                      className={`h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r ${
-                                        isDarkMode
-                                          ? "from-blue-500 to-purple-500"
-                                          : "from-blue-400 to-purple-400"
-                                      }`}
-                                      style={{
-                                        width: `${Math.min(
-                                          (entry.skillPoints / 10000) * 100,
-                                          100
-                                        )}%`,
-                                      }}
-                                    ></div>
-                                  </div>
+                                    style={{
+                                      width: `${Math.min(
+                                        (entry.skillPoints / 10000) * 100,
+                                        100
+                                      )}%`,
+                                    }}
+                                  ></div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </Tilt>
-                      </motion.div>
-                    )
-                  )}
+                        </div>
+                      </Tilt>
+                    </motion.div>
+                  ))}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -749,7 +813,9 @@ export default function Leaderboard() {
         /* Height-wise responsiveness */
         .leaderboard-container {
           scrollbar-width: thin;
-          scrollbar-color: ${isDarkMode ? "#4b5563 #1f2937" : "#d1d5db #f3f4f6"};
+          scrollbar-color: ${isDarkMode
+            ? "#4b5563 #1f2937"
+            : "#d1d5db #f3f4f6"};
         }
 
         .leaderboard-container::-webkit-scrollbar {

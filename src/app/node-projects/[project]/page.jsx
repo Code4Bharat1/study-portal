@@ -25,7 +25,7 @@ export default function NodeProjectDetail() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3902/api/projects/${slug}`,
+        `https://sp-api.code4bharat.com/api/projects/${slug}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

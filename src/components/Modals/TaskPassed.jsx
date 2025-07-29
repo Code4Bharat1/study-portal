@@ -39,24 +39,33 @@ export default function TestPassed({
       try {
         let startTime = null;
         let duration = 60; // Default fallback duration in seconds
-        
+
         // First try localStorage
         const startTimestamp = localStorage.getItem("startTimestamp");
         if (startTimestamp) {
           const startTimeMs = Number(startTimestamp);
-          const endTimeMs = result.timestamp ? new Date(result.timestamp).getTime() : Date.now();
-          
+          const endTimeMs = result.timestamp
+            ? new Date(result.timestamp).getTime()
+            : Date.now();
+
           // Validate timestamps
-          if (!isNaN(startTimeMs) && !isNaN(endTimeMs) && endTimeMs > startTimeMs) {
+          if (
+            !isNaN(startTimeMs) &&
+            !isNaN(endTimeMs) &&
+            endTimeMs > startTimeMs
+          ) {
             duration = Math.max(1, (endTimeMs - startTimeMs) / 1000);
-            console.log('Timer calculation:', { 
-              startTimeMs, 
-              endTimeMs, 
-              durationMs: endTimeMs - startTimeMs, 
-              durationSeconds: duration 
+            console.log("Timer calculation:", {
+              startTimeMs,
+              endTimeMs,
+              durationMs: endTimeMs - startTimeMs,
+              durationSeconds: duration,
             });
           } else {
-            console.warn('Invalid timestamp data:', { startTimestamp, resultTimestamp: result.timestamp });
+            console.warn("Invalid timestamp data:", {
+              startTimestamp,
+              resultTimestamp: result.timestamp,
+            });
           }
         } else {
           // Fallback: try to get timer data from StackBlitz file system
@@ -66,28 +75,39 @@ export default function TestPassed({
               const sdk = await import("@stackblitz/sdk");
               const vm = await sdk.default.connect(container);
               const fsSnap = await vm.getFsSnapshot();
-              
+
               if ("timer.tests" in fsSnap && fsSnap["timer.tests"]) {
                 const timerData = JSON.parse(fsSnap["timer.tests"]);
                 if (timerData.startTimestamp) {
                   const startTimeMs = Number(timerData.startTimestamp);
-                  const endTimeMs = result.timestamp ? new Date(result.timestamp).getTime() : Date.now();
-                  
-                  if (!isNaN(startTimeMs) && !isNaN(endTimeMs) && endTimeMs > startTimeMs) {
+                  const endTimeMs = result.timestamp
+                    ? new Date(result.timestamp).getTime()
+                    : Date.now();
+
+                  if (
+                    !isNaN(startTimeMs) &&
+                    !isNaN(endTimeMs) &&
+                    endTimeMs > startTimeMs
+                  ) {
                     duration = Math.max(1, (endTimeMs - startTimeMs) / 1000);
-                    console.log('Timer data found in StackBlitz file system');
+                    console.log("Timer data found in StackBlitz file system");
                   }
                 }
               }
             }
           } catch (stackblitzError) {
-            console.warn('Could not retrieve timer from StackBlitz:', stackblitzError);
+            console.warn(
+              "Could not retrieve timer from StackBlitz:",
+              stackblitzError
+            );
           }
         }
 
         // Cap the duration to reasonable limits (max 30 minutes)
         if (duration > 1800) {
-          console.warn(`Duration capped from ${duration}s to 1800s (30 minutes)`);
+          console.warn(
+            `Duration capped from ${duration}s to 1800s (30 minutes)`
+          );
           duration = 1800;
         }
 
@@ -96,25 +116,33 @@ export default function TestPassed({
 
         setTimeTaken(duration);
 
-        const { total, breakdown } = calculateScore(result.attempts, duration, level);
+        const { total, breakdown } = calculateScore(
+          result.attempts,
+          duration,
+          level
+        );
         setScore(total);
         setBreakdown(breakdown);
-        
-        console.log('Score calculated:', { 
-          total, 
-          breakdown, 
-          duration, 
+
+        console.log("Score calculated:", {
+          total,
+          breakdown,
+          duration,
           attempts: result.attempts,
           startTimestamp,
-          resultTimestamp: result.timestamp
+          resultTimestamp: result.timestamp,
         });
       } catch (err) {
-        console.error('Error calculating score:', err);
-        setError('Failed to calculate score');
+        console.error("Error calculating score:", err);
+        setError("Failed to calculate score");
         // Use a default duration for scoring
         const duration = 60;
         setTimeTaken(duration);
-        const { total, breakdown } = calculateScore(result.attempts, duration, level);
+        const { total, breakdown } = calculateScore(
+          result.attempts,
+          duration,
+          level
+        );
         setScore(total);
         setBreakdown(breakdown);
       }
@@ -125,7 +153,7 @@ export default function TestPassed({
 
   const handleSubmit = async () => {
     if (isSubmitting) return;
-    
+
     setIsSubmitting(true);
     setError(null);
 
@@ -137,8 +165,13 @@ export default function TestPassed({
       if (!token) {
         throw new Error("Authentication token missing. Please log in again.");
       }
-      
-      if (!userId || userId === "undefined" || userId === "null" || userId.length < 10) {
+
+      if (
+        !userId ||
+        userId === "undefined" ||
+        userId === "null" ||
+        userId.length < 10
+      ) {
         throw new Error("User session expired. Please log in again.");
       }
 
@@ -150,31 +183,34 @@ export default function TestPassed({
         throw new Error("Invalid score. Cannot submit.");
       }
 
-      console.log('Submitting score:', { score, url, userId, type });
+      console.log("Submitting score:", { score, url, userId, type });
 
-      const response = await fetch("http://localhost:3902/api/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          score: Number(score), // Ensure it's a number
-          url: url.trim(), // Remove any whitespace
-          userId: userId.trim(),
-          type,
-        }),
-      });
+      const response = await fetch(
+        "https://sp-api.code4bharat.com/api/submit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            score: Number(score), // Ensure it's a number
+            url: url.trim(), // Remove any whitespace
+            userId: userId.trim(),
+            type,
+          }),
+        }
+      );
 
       // Handle different response types
       let data;
       const contentType = response.headers.get("content-type");
-      
+
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
       } else {
         const text = await response.text();
-        console.error('Non-JSON response:', text);
+        console.error("Non-JSON response:", text);
         throw new Error("Server returned unexpected response format");
       }
 
@@ -190,26 +226,29 @@ export default function TestPassed({
         } else if (response.status === 400) {
           throw new Error(data.message || "Invalid submission data");
         }
-        
+
         throw new Error(data.message || `Server error (${response.status})`);
       }
 
       console.log("Score submitted successfully:", data);
-      
+
       // Clear the start timestamp after successful submission
       localStorage.removeItem("startTimestamp");
-      
+
       // Close the modal
       onClose();
-      
     } catch (error) {
       console.error("Submission error:", error);
-      setError(error.message || "An error occurred while submitting your score");
-      
+      setError(
+        error.message || "An error occurred while submitting your score"
+      );
+
       // Clear invalid user data for specific errors
-      if (error.message.includes("User not found") || 
-          error.message.includes("Invalid user ID") ||
-          error.message.includes("Session expired")) {
+      if (
+        error.message.includes("User not found") ||
+        error.message.includes("Invalid user ID") ||
+        error.message.includes("Session expired")
+      ) {
         localStorage.removeItem("userId");
         localStorage.removeItem("token");
       }
@@ -226,18 +265,32 @@ export default function TestPassed({
       <p className="mb-4">Your code passed all test cases!</p>
 
       <div className="mb-4">
-        <p><strong>Time Taken:</strong> {formatTime(timeTaken)}</p>
-        <p><strong>Attempts:</strong> {result.attempts}</p>
-        <p><strong>Level:</strong> {level}</p>
-        <p><strong>Type:</strong> {type}</p>
+        <p>
+          <strong>Time Taken:</strong> {formatTime(timeTaken)}
+        </p>
+        <p>
+          <strong>Attempts:</strong> {result.attempts}
+        </p>
+        <p>
+          <strong>Level:</strong> {level}
+        </p>
+        <p>
+          <strong>Type:</strong> {type}
+        </p>
       </div>
 
       <div className="bg-green-100 border border-green-300 rounded-md shadow-inner p-4 mb-4">
         <h2 className="text-xl font-semibold mb-2">📊 Score Breakdown</h2>
         <ul className="space-y-1 text-left inline-block">
-          <li>✅ Passed Checks: <strong>{breakdown.passScore}</strong></li>
-          <li>🔁 Attempts Bonus: <strong>{breakdown.attemptScore}</strong></li>
-          <li>⏱️ Time Bonus: <strong>{breakdown.timeScore}</strong></li>
+          <li>
+            ✅ Passed Checks: <strong>{breakdown.passScore}</strong>
+          </li>
+          <li>
+            🔁 Attempts Bonus: <strong>{breakdown.attemptScore}</strong>
+          </li>
+          <li>
+            ⏱️ Time Bonus: <strong>{breakdown.timeScore}</strong>
+          </li>
         </ul>
       </div>
 
@@ -268,12 +321,16 @@ export default function TestPassed({
       </div>
 
       {/* Debug info (remove in production) */}
-      {process.env.NODE_ENV === 'development' && (
+      {process.env.NODE_ENV === "development" && (
         <div className="mt-4 p-2 bg-gray-100 text-xs text-left rounded">
-          <strong>Debug Info:</strong><br/>
-          URL: {url}<br/>
-          Score: {score}<br/>
-          UserId: {localStorage.getItem("userId")}<br/>
+          <strong>Debug Info:</strong>
+          <br />
+          URL: {url}
+          <br />
+          Score: {score}
+          <br />
+          UserId: {localStorage.getItem("userId")}
+          <br />
           HasToken: {!!localStorage.getItem("token")}
         </div>
       )}

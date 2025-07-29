@@ -21,7 +21,7 @@ export default function RegisterPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:3902/api/auth/register`, // Use the base URL
+        `https://sp-api.code4bharat.com/api/auth/register`, // Use the base URL
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

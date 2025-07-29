@@ -20,7 +20,7 @@ export default function LoginPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:3902/api/auth/login`,
+        `https://sp-api.code4bharat.com/api/auth/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -66,7 +66,7 @@ export default function LoginPage() {
       // Store new data with validation
       localStorage.setItem("token", data.token);
       localStorage.setItem("userId", String(data.userId)); // Ensure it's a string
-      
+
       if (data.username) {
         localStorage.setItem("username", data.username);
       }
@@ -78,15 +78,19 @@ export default function LoginPage() {
       console.log("Stored data verification:", {
         storedUserId,
         storedToken: storedToken ? "Present" : "Missing",
-        originalUserId: data.userId
+        originalUserId: data.userId,
       });
 
-      if (!storedUserId || storedUserId === "undefined" || storedUserId === "null") {
+      if (
+        !storedUserId ||
+        storedUserId === "undefined" ||
+        storedUserId === "null"
+      ) {
         throw new Error("Failed to store user session data");
       }
 
       // Small delay to ensure localStorage is fully written
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       router.push("/");
     } catch (err) {
@@ -272,11 +276,21 @@ export default function LoginPage() {
         </motion.div>
 
         {/* Debug info for development */}
-        {process.env.NODE_ENV === 'development' && (
+        {process.env.NODE_ENV === "development" && (
           <div className="mt-4 p-2 bg-gray-100 text-xs rounded">
-            <strong>Debug - Current Storage:</strong><br/>
-            UserId: {typeof window !== 'undefined' ? localStorage.getItem("userId") : 'N/A'}<br/>
-            Token: {typeof window !== 'undefined' ? (localStorage.getItem("token") ? 'Present' : 'Missing') : 'N/A'}
+            <strong>Debug - Current Storage:</strong>
+            <br />
+            UserId:{" "}
+            {typeof window !== "undefined"
+              ? localStorage.getItem("userId")
+              : "N/A"}
+            <br />
+            Token:{" "}
+            {typeof window !== "undefined"
+              ? localStorage.getItem("token")
+                ? "Present"
+                : "Missing"
+              : "N/A"}
           </div>
         )}
       </motion.div>

@@ -59,7 +59,7 @@ export default function MongoDBQuizPage() {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:3902/api/questions/${quizType}?difficulty=${difficultyLevel}`,
+          `https://sp-api.code4bharat.com/api/questions/${quizType}?difficulty=${difficultyLevel}`,
           {
             headers: {
               "x-auth-token": token,

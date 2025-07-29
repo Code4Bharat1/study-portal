@@ -5,7 +5,7 @@ const submitExercise = async ({
   totalTestCases,
 }) => {
   try {
-    const response = await fetch("http://localhost:3902/api/submit", {
+    const response = await fetch("https://sp-api.code4bharat.com/api/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

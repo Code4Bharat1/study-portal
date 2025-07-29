@@ -16,9 +16,13 @@ export default function GeminiChat() {
     if (e) e.preventDefault();
     if (!prompt.trim() || loading) return;
 
-    const userMessage = { type: 'user', content: prompt, timestamp: Date.now() };
-    setMessages(prev => [...prev, userMessage]);
-    
+    const userMessage = {
+      type: "user",
+      content: prompt,
+      timestamp: Date.now(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+
     const currentPrompt = prompt;
     setPrompt("");
     setLoading(true);
@@ -26,39 +30,42 @@ export default function GeminiChat() {
     setIsTyping(true);
 
     try {
-      const res = await fetch("http://localhost:3902/api/ask-gemini/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: currentPrompt }),
-      });
+      const res = await fetch(
+        "https://sp-api.code4bharat.com/api/ask-gemini/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: currentPrompt }),
+        }
+      );
 
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
 
       const data = await res.json();
-      
+
       // Simulate typing effect
       setTimeout(() => {
-        const botMessage = { 
-          type: 'bot', 
-          content: data.text || "No response from SkillBridge.", 
-          timestamp: Date.now() 
+        const botMessage = {
+          type: "bot",
+          content: data.text || "No response from SkillBridge.",
+          timestamp: Date.now(),
         };
-        setMessages(prev => [...prev, botMessage]);
+        setMessages((prev) => [...prev, botMessage]);
         setIsTyping(false);
       }, 500);
-      
     } catch (error) {
       console.error("Error:", error);
       setError("Failed to connect to SkillBridge. Please try again.");
-      const errorMessage = { 
-        type: 'bot', 
-        content: "Sorry, I'm having trouble connecting right now. Please try again.", 
+      const errorMessage = {
+        type: "bot",
+        content:
+          "Sorry, I'm having trouble connecting right now. Please try again.",
         timestamp: Date.now(),
-        isError: true
+        isError: true,
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
       setIsTyping(false);
     } finally {
       setLoading(false);
@@ -79,20 +86,20 @@ export default function GeminiChat() {
   };
 
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).catch(err => {
-      console.error('Failed to copy text: ', err);
+    navigator.clipboard.writeText(text).catch((err) => {
+      console.error("Failed to copy text: ", err);
     });
   };
 
   const formatResponse = (text) => {
     if (!text) return null;
-    
+
     return text.split("\n").map((line, i) => {
       // Handle code blocks
       if (line.startsWith("```")) {
         return null; // Skip code block markers for now
       }
-      
+
       // Handle **text** for bold
       if (line.includes("**")) {
         const parts = line.split("**");
@@ -100,11 +107,17 @@ export default function GeminiChat() {
           <p key={i} className="my-2 leading-relaxed">
             {parts.map((part, j) =>
               j % 2 === 1 ? (
-                <strong key={j} className="font-semibold bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+                <strong
+                  key={j}
+                  className="font-semibold bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
+                >
                   {part}
                 </strong>
               ) : (
-                <span key={j} className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+                <span
+                  key={j}
+                  className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
+                >
                   {part}
                 </span>
               )
@@ -112,45 +125,52 @@ export default function GeminiChat() {
           </p>
         );
       }
-      
+
       // Handle * text for list items
       if (line.startsWith("* ") || line.startsWith("- ")) {
         return (
-          <li key={i} className="list-disc ml-6 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent leading-relaxed">
+          <li
+            key={i}
+            className="list-disc ml-6 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent leading-relaxed"
+          >
             {line.substring(2)}
           </li>
         );
       }
-      
+
       // Handle numbered lists
       if (line.match(/^\d+\.\s/)) {
         return (
-          <li key={i} className="list-decimal ml-6 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent leading-relaxed">
+          <li
+            key={i}
+            className="list-decimal ml-6 my-1 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent leading-relaxed"
+          >
             {line.replace(/^\d+\.\s/, "")}
           </li>
         );
       }
-      
+
       // Handle headings
       if (line.match(/^#+\s/)) {
         const level = line.match(/^#+/)[0].length;
         const HeadingTag = `h${Math.min(6, level)}`;
-        const sizeClass = level === 1 ? "text-xl" : level === 2 ? "text-lg" : "text-base";
+        const sizeClass =
+          level === 1 ? "text-xl" : level === 2 ? "text-lg" : "text-base";
         return React.createElement(
           HeadingTag,
           {
             key: i,
-            className: `font-bold my-3 ${sizeClass} bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent`
+            className: `font-bold my-3 ${sizeClass} bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent`,
           },
           line.replace(/^#+\s/, "")
         );
       }
-      
+
       // Handle empty lines
       if (line.trim() === "") {
         return <div key={i} className="h-2" />;
       }
-      
+
       // Handle inline code
       if (line.includes("`")) {
         const parts = line.split("`");
@@ -165,7 +185,10 @@ export default function GeminiChat() {
                   {part}
                 </code>
               ) : (
-                <span key={j} className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent">
+                <span
+                  key={j}
+                  className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent"
+                >
                   {part}
                 </span>
               )
@@ -173,10 +196,13 @@ export default function GeminiChat() {
           </p>
         );
       }
-      
+
       // Default paragraph
       return (
-        <p key={i} className="my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent leading-relaxed">
+        <p
+          key={i}
+          className="my-2 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent leading-relaxed"
+        >
           {line}
         </p>
       );
@@ -184,7 +210,7 @@ export default function GeminiChat() {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }
@@ -215,9 +241,7 @@ export default function GeminiChat() {
 
       {/* Chatbox */}
       {showChat && (
-        <div
-          className="fixed bottom-6 right-6 w-96 h-[500px] bg-black rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-gray-700"
-        >
+        <div className="fixed bottom-6 right-6 w-96 h-[500px] bg-black rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-gray-700">
           {/* Header */}
           <div className="p-4 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white flex justify-between items-center">
             <div className="flex items-center">
@@ -254,26 +278,32 @@ export default function GeminiChat() {
             {messages.length === 0 && !loading && (
               <div className="text-center py-8">
                 <PiFlowerLotusDuotone className="w-12 h-12 text-blue-500 mx-auto mb-3" />
-                <p className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent font-medium mb-2">Welcome to SkillBridge AI!</p>
-                <p className="text-gray-500 text-sm">How can I help you today?</p>
+                <p className="bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] bg-clip-text text-transparent font-medium mb-2">
+                  Welcome to SkillBridge AI!
+                </p>
+                <p className="text-gray-500 text-sm">
+                  How can I help you today?
+                </p>
               </div>
             )}
 
             {messages.map((message, index) => (
               <div
                 key={message.timestamp}
-                className={`mb-4 ${message.type === 'user' ? 'text-right' : 'text-left'}`}
+                className={`mb-4 ${
+                  message.type === "user" ? "text-right" : "text-left"
+                }`}
               >
                 <div
                   className={`inline-block max-w-[80%] p-3 rounded-2xl ${
-                    message.type === 'user'
-                      ? 'bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white'
+                    message.type === "user"
+                      ? "bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white"
                       : message.isError
-                      ? 'bg-red-900/10 border border-red-500/30'
-                      : 'bg-gray-50 border border-gray-200 shadow-sm'
+                      ? "bg-red-900/10 border border-red-500/30"
+                      : "bg-gray-50 border border-gray-200 shadow-sm"
                   }`}
                 >
-                  {message.type === 'user' ? (
+                  {message.type === "user" ? (
                     <p className="text-sm leading-relaxed">{message.content}</p>
                   ) : (
                     <div className="text-sm">
@@ -299,11 +329,22 @@ export default function GeminiChat() {
                 <div className="inline-block bg-gray-50 border border-gray-200 shadow-sm p-3 rounded-2xl">
                   <div className="flex items-center gap-1">
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                      <div
+                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        style={{ animationDelay: "0ms" }}
+                      ></div>
+                      <div
+                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        style={{ animationDelay: "150ms" }}
+                      ></div>
+                      <div
+                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        style={{ animationDelay: "300ms" }}
+                      ></div>
                     </div>
-                    <span className="text-xs text-gray-500 ml-2">SkillBridge is typing...</span>
+                    <span className="text-xs text-gray-500 ml-2">
+                      SkillBridge is typing...
+                    </span>
                   </div>
                 </div>
               </div>
@@ -325,9 +366,10 @@ export default function GeminiChat() {
                   className="w-full p-3 pr-12 rounded-xl border border-gray-600 focus:ring-2 focus:ring-gray-500 focus:border-transparent resize-none max-h-32 text-sm focus:outline-none text-black bg-white placeholder-gray-400 transition-all duration-200"
                   rows="1"
                   style={{
-                    minHeight: '44px',
-                    height: 'auto',
-                    overflowY: prompt.split('\n').length > 3 ? 'scroll' : 'hidden'
+                    minHeight: "44px",
+                    height: "auto",
+                    overflowY:
+                      prompt.split("\n").length > 3 ? "scroll" : "hidden",
                   }}
                 />
                 <div className="absolute right-3 bottom-3 text-xs text-gray-400">
