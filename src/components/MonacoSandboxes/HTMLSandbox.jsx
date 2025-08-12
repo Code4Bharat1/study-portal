@@ -107,46 +107,59 @@ export default function HTMLSandbox({
       await new Promise(resolve => setTimeout(resolve, 100));
       
       if (window.exerciseTest && window.exerciseTest.runTests) {
-        const result = window.exerciseTest.runTests(userCode);
+        const testResult = window.exerciseTest.runTests(userCode);
         
-        let outputText = '📊 HTML Test Results:\n';
-        outputText += `Score: ${result.score || 0}/100\n`;
-        outputText += `Passed: ${result.passed ? '✅ Yes' : '❌ No'}\n`;
+        // Handle both sync and async test results
+        const processResult = (result) => {
+          let outputText = '📊 HTML Test Results:\n';
+          outputText += `Score: ${result.score || 0}/100\n`;
+          outputText += `Passed: ${result.passed ? '✅ Yes' : '❌ No'}\n`;
+          
+          if (result.details && result.details.length > 0) {
+            outputText += '\n📋 Details:\n';
+            result.details.forEach(detail => {
+              outputText += `  ${detail}\n`;
+            });
+          }
+          
+          if (result.message) {
+            outputText += `\n💬 ${result.message}`;
+          }
+          
+          setOutput(outputText);
+          
+          // Store results for parent component (store both passed and failed results)
+          setFiles(prev => ({
+            ...prev,
+            'results.tests': JSON.stringify({
+              score: result.score,
+              passed: result.passed,
+              timestamp: new Date().toISOString(),
+              details: result.details || [],
+              message: result.message || ''
+            }, null, 2)
+          }));
+          
+          // Also store attempt data
+          setFiles(prev => ({
+            ...prev,
+            'attempts.tests': JSON.stringify({
+              userCode: userCode,
+              timestamp: new Date().toISOString(),
+              result: result
+            }, null, 2)
+          }));
+        };
         
-        if (result.details && result.details.length > 0) {
-          outputText += '\n📋 Details:\n';
-          result.details.forEach(detail => {
-            outputText += `  ${detail}\n`;
+        // Check if result is a Promise
+        if (testResult && typeof testResult.then === 'function') {
+          testResult.then(processResult).catch(error => {
+            setOutput(prev => prev + '\n❌ Async test error: ' + error.message);
+            console.error('Async HTML test error:', error);
           });
+        } else {
+          processResult(testResult);
         }
-        
-        if (result.message) {
-          outputText += `\n💬 ${result.message}`;
-        }
-        
-        setOutput(outputText);
-        
-        // Store results for parent component (store both passed and failed results)
-        setFiles(prev => ({
-          ...prev,
-          'results.tests': JSON.stringify({
-            score: result.score,
-            passed: result.passed,
-            timestamp: new Date().toISOString(),
-            details: result.details || [],
-            message: result.message || ''
-          }, null, 2)
-        }));
-        
-        // Also store attempt data
-        setFiles(prev => ({
-          ...prev,
-          'attempts.tests': JSON.stringify({
-            userCode: userCode,
-            timestamp: new Date().toISOString(),
-            result: result
-          }, null, 2)
-        }));
         
       } else {
         setOutput('❌ HTML test system not available - window.exerciseTest not found');

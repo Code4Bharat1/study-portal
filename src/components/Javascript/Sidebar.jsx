@@ -24,12 +24,12 @@ const Sidebar = () => {
   );
 
   return (
-    <div className="w-64 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg">
+    <div className="w-full md:w-64 bg-white text-black p-3 md:p-4 h-screen md:fixed flex flex-col border-r shadow-lg">
       {/* Header */}
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 shrink-0">Javascript Tutorial</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center text-gray-800 shrink-0">Javascript Tutorial</h2>
 
       {/* Menu */}
-      <ul className="overflow-y-auto flex-1 custom-scrollbar pr-2">
+      <ul className="overflow-y-auto flex-1 custom-scrollbar pr-1 md:pr-2">
 
         {/* Static Links */}
         <li className="mb-4">

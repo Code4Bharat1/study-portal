@@ -1,5 +1,11 @@
 // @/components/Modals.js
-export default function Modal({ children, onClose, ariaLabel }) {
+export default function Modal({ children, onClose, ariaLabel, size = "default" }) {
+  const sizeClasses = {
+    default: "w-[50%]",
+    small: "w-[35%] max-w-md",
+    large: "w-[70%]"
+  };
+
   return (
     <>
       <div
@@ -10,7 +16,7 @@ export default function Modal({ children, onClose, ariaLabel }) {
         role="dialog"
         aria-modal="true"
         aria-label={ariaLabel}
-        className="fixed my-5 top-1/2 left-1/2 z-50 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl p-6  w-[50%]"
+        className={`fixed my-5 top-1/2 left-1/2 z-50 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl p-6 ${sizeClasses[size]}`}
       >
         <button
           onClick={onClose}

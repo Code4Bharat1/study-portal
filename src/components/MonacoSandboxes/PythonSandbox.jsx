@@ -13,8 +13,10 @@ export default function PythonSandbox({
   const [activeFile, setActiveFile] = useState(fileToOpen || 'script.py');
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
+  const [pyodideReady, setPyodideReady] = useState(false);
   const editorRef = useRef(null);
   const outputRef = useRef(null);
+  const pyodideRef = useRef(null);
 
   useEffect(() => {
     if (filesObj) {
@@ -39,6 +41,75 @@ export default function PythonSandbox({
       onLoad();
     }
   }, [files, onLoad]);
+
+  // Initialize Pyodide
+  useEffect(() => {
+    const initPyodide = async () => {
+      try {
+        setOutput('🐍 Initializing Python environment...\n');
+        
+        // Load Pyodide from CDN
+        if (!window.loadPyodide) {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js';
+          script.onload = async () => {
+            try {
+              const pyodide = await window.loadPyodide({
+                indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/'
+              });
+              
+              // Capture print output
+              pyodide.runPython(`
+import sys
+from io import StringIO
+
+class OutputCapture:
+    def __init__(self):
+        self.output = StringIO()
+        self.original_stdout = sys.stdout
+        self.original_stderr = sys.stderr
+    
+    def start_capture(self):
+        sys.stdout = self.output
+        sys.stderr = self.output
+    
+    def stop_capture(self):
+        sys.stdout = self.original_stdout
+        sys.stderr = self.original_stderr
+        result = self.output.getvalue()
+        self.output = StringIO()
+        return result
+
+output_capture = OutputCapture()
+              `);
+              
+              pyodideRef.current = pyodide;
+              setPyodideReady(true);
+              setOutput('✅ Python environment ready!\n');
+            } catch (error) {
+              setOutput('❌ Failed to initialize Python environment: ' + error.message + '\n');
+            }
+          };
+          script.onerror = () => {
+            setOutput('❌ Failed to load Pyodide library\n');
+          };
+          document.head.appendChild(script);
+        } else {
+          // Pyodide already loaded
+          const pyodide = await window.loadPyodide({
+            indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/'
+          });
+          pyodideRef.current = pyodide;
+          setPyodideReady(true);
+          setOutput('✅ Python environment ready!\n');
+        }
+      } catch (error) {
+        setOutput('❌ Error initializing Python: ' + error.message + '\n');
+      }
+    };
+
+    initPyodide();
+  }, []);
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -68,36 +139,53 @@ export default function PythonSandbox({
     }
   };
 
-  const executePython = (code) => {
+  const executePython = async (code) => {
     return new Promise((resolve) => {
-      const lines = code.split('\n');
-      const outputs = [];
-      
       try {
-        lines.forEach(line => {
-          const trimmed = line.trim();
-          if (trimmed.startsWith('print(')) {
-            const match = trimmed.match(/print\((.*)\)/);
-            if (match) {
-              let content = match[1];
-              if ((content.startsWith('"') && content.endsWith('"')) || 
-                  (content.startsWith("'") && content.endsWith("'"))) {
-                content = content.slice(1, -1);
-              }
-              outputs.push(content);
-            }
-          }
-        });
+        if (!pyodideReady || !pyodideRef.current) {
+          resolve({
+            output: '',
+            errors: 'Python environment not ready. Please wait for initialization.',
+            success: false
+          });
+          return;
+        }
+
+        const pyodide = pyodideRef.current;
         
-        resolve({
-          output: outputs.join('\n') || 'Python code executed (browser simulation)',
-          errors: '',
-          success: true
-        });
+        // Start capturing output
+        pyodide.runPython('output_capture.start_capture()');
+        
+        try {
+          // Execute the user's Python code
+          pyodide.runPython(code);
+          
+          // Stop capturing and get output
+          const output = pyodide.runPython('output_capture.stop_capture()');
+          
+          resolve({
+            output: output || 'Code executed successfully (no output)',
+            errors: '',
+            success: true
+          });
+        } catch (pythonError) {
+          // Stop capturing in case of error
+          try {
+            pyodide.runPython('output_capture.stop_capture()');
+          } catch (e) {
+            // Ignore cleanup errors
+          }
+          
+          resolve({
+            output: '',
+            errors: pythonError.message || 'Python execution error',
+            success: false
+          });
+        }
       } catch (error) {
         resolve({
           output: '',
-          errors: error.message,
+          errors: 'Execution environment error: ' + error.message,
           success: false
         });
       }
@@ -106,6 +194,11 @@ export default function PythonSandbox({
 
   const handleRunCode = async () => {
     if (!files[activeFile]) return;
+    
+    if (!pyodideReady) {
+      setOutput('⏳ Python environment is still loading. Please wait...\n');
+      return;
+    }
     
     setIsRunning(true);
     setOutput('🐍 Running Python code...\n');
@@ -140,12 +233,64 @@ export default function PythonSandbox({
     }
   };
 
-  // Simple and reliable Python test execution
+  // Execute JavaScript test files for Python projects
+  const executeJavaScriptTest = (testCode, userCode) => {
+    try {
+      // Create a function to evaluate the test code
+      const testFunction = new Function('userCode', `
+        ${testCode}
+        
+        // Execute the test suite
+        if (typeof testSuite !== 'undefined' && testSuite.tests) {
+          let totalScore = 0;
+          let allDetails = [];
+          let allPassed = true;
+          
+          for (const test of testSuite.tests) {
+            if (typeof test.test === 'function') {
+              const result = test.test(userCode);
+              totalScore += result.score || 0;
+              if (result.details) {
+                allDetails = allDetails.concat(result.details);
+              }
+              if (!result.passed) {
+                allPassed = false;
+              }
+            }
+          }
+          
+          return {
+            passed: allPassed && totalScore >= 70,
+            score: Math.min(totalScore, 100),
+            details: allDetails,
+            message: testSuite.name + " - Score: " + Math.min(totalScore, 100) + "/100"
+          };
+        }
+        
+        return {
+          passed: false,
+          score: 0,
+          details: ["❌ Invalid test format"],
+          message: "Test execution failed"
+        };
+      `);
+      
+      return testFunction(userCode);
+      
+    } catch (jsError) {
+      console.error('JavaScript test execution error:', jsError);
+      return {
+        passed: false,
+        score: 0,
+        message: "JavaScript test execution error: " + jsError.message,
+        details: ["❌ Test execution failed"]
+      };
+    }
+  };
+
+  // Simple Python test execution for .py test files
   const executePythonTest = (testCode, userCode) => {
     try {
-      // Instead of trying to convert Python to JavaScript, 
-      // implement the test logic directly based on the Python test patterns
-      
       function run_simple_test(user_code) {
         const result = {"passed": false, "score": 0, "message": "", "details": []};
         
@@ -191,14 +336,6 @@ export default function PythonSandbox({
               score += 20;
             } else {
               checks.push("❌ Missing number variable");
-            }
-          } else if (testCode.includes("Arithmetic")) {
-            // Check for arithmetic operations
-            if (/[+\-*/]/.test(user_code)) {
-              checks.push("✅ Has arithmetic operations");
-              score += 40;
-            } else {
-              checks.push("❌ Missing arithmetic operations");
             }
           } else if (testCode.includes("Function")) {
             // Check for function definition
@@ -247,13 +384,13 @@ export default function PythonSandbox({
     setOutput('🧪 Running Python tests...\n');
     
     try {
-      // Look for Python test file
+      // Look for test files (both .py and .js)
       const testFile = Object.keys(files).find(name => 
-        name.includes('test') && name.endsWith('.py')
+        name.includes('test') && (name.endsWith('.py') || name.endsWith('.js'))
       );
       
       if (!testFile) {
-        setOutput(prev => prev + '❌ No Python test file found');
+        setOutput(prev => prev + '❌ No test file found');
         setIsRunning(false);
         return;
       }
@@ -261,9 +398,17 @@ export default function PythonSandbox({
       const testCode = files[testFile];
       const userCode = files[activeFile] || '';
       
-      // Execute Python test using simplified approach
+      // Execute test based on file type
       try {
-        const result = executePythonTest(testCode, userCode);
+        let result;
+        
+        if (testFile.endsWith('.js')) {
+          // Handle JavaScript test files
+          result = executeJavaScriptTest(testCode, userCode);
+        } else {
+          // Handle Python test files
+          result = executePythonTest(testCode, userCode);
+        }
         
         let outputText = '📊 Python Test Results:\n';
         outputText += `Score: ${result.score || 0}/100\n`;
@@ -373,17 +518,17 @@ export default function PythonSandbox({
             <div className="flex space-x-2">
               <button
                 onClick={handleRunCode}
-                disabled={isRunning}
+                disabled={isRunning || !pyodideReady}
                 className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50"
               >
-                {isRunning ? '⏳ Running...' : '🐍 Run'}
+                {isRunning ? '⏳ Running...' : !pyodideReady ? '⏳ Loading...' : '🐍 Run'}
               </button>
               <button
                 onClick={handleRunTests}
-                disabled={isRunning}
+                disabled={isRunning || !pyodideReady}
                 className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
               >
-                {isRunning ? '⏳ Testing...' : '🧪 Test'}
+                {isRunning ? '⏳ Testing...' : !pyodideReady ? '⏳ Loading...' : '🧪 Test'}
               </button>
               <button
                 onClick={clearOutput}

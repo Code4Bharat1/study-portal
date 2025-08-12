@@ -28,12 +28,12 @@ const CssSidebar = () => {
   };
 
   return (
-    <div className="w-70 bg-white text-black p-4 h-screen fixed flex flex-col border-r shadow-lg overflow-hidden">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">CSS Tutorial</h2>
+    <div className="w-full md:w-70 bg-white text-black p-3 md:p-4 h-screen md:fixed flex flex-col border-r shadow-lg overflow-hidden">
+      <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center text-gray-800">CSS Tutorial</h2>
 
       {/* Scrollable list */}
-      <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-        <ul className="space-y-4 pb-29">
+      <div className="flex-1 overflow-y-auto pr-1 md:pr-2 custom-scrollbar">
+        <ul className="space-y-2 md:space-y-4 pb-16 md:pb-29">
           <li>
             <Link href="/CssHome" className={getLinkClass('/csshome')}>
               <FaHome className="inline mr-2 text-xl" /> CSS Roadmap 

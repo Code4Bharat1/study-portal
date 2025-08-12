@@ -1,146 +1,152 @@
-const fs = require("fs");
-const path = require("path");
-const cheerio = require("cheerio");
-const htmlhint = require("htmlhint").HTMLHint;
-const { ESLint } = require("eslint");
+// Test for Responsive Landing Page Project - Intermediate Level 1 (Single HTML File)
+// Tests HTML structure, embedded CSS styling, and embedded JavaScript functionality
 
-const projectDir = path.resolve(__dirname, "../intermediate/1");
-const indexPath = path.join(projectDir, "index.html");
-const attemptsFile = path.join(projectDir, "attempts.txt");
-const resultFile = path.join(projectDir, "results.tests");
+console.log("🧪 Testing: Responsive Landing Page Project (Single HTML File)");
 
-function readFileSafe(filePath) {
-  return fs.existsSync(filePath) ? fs.readFileSync(filePath, "utf8") : "";
+function runProjectTests(htmlContent) {
+    const result = { 
+        passed: false, 
+        score: 0, 
+        message: "", 
+        details: [],
+        breakdown: {
+            html: 0,
+            css: 0,
+            js: 0
+        }
+    };
+
+    try {
+        let totalScore = 0;
+        const checks = [];
+
+        if (!htmlContent) {
+            result.message = "No HTML content provided";
+            return result;
+        }
+
+        // Extract CSS content from <style> tags
+        const styleMatches = htmlContent.match(/<style[^>]*>([\s\S]*?)<\/style>/gi);
+        const cssContent = styleMatches ? styleMatches.join(' ') : '';
+
+        // Extract JavaScript content from <script> tags
+        const scriptMatches = htmlContent.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
+        const jsContent = scriptMatches ? scriptMatches.join(' ') : '';
+
+        console.log("Extracted CSS:", cssContent ? "Found" : "Not found");
+        console.log("Extracted JS:", jsContent ? "Found" : "Not found");
+
+        // HTML Tests (30 points total)
+        let htmlScore = 0;
+        
+        if (/<nav[\s>]/.test(htmlContent)) {
+            checks.push("✅ HTML: Has navigation bar");
+            htmlScore += 10;
+        } else {
+            checks.push("❌ HTML: Missing navigation bar");
+        }
+
+        if (/hero|banner|jumbotron/.test(htmlContent)) {
+            checks.push("✅ HTML: Has hero section");
+            htmlScore += 10;
+        } else {
+            checks.push("❌ HTML: Missing hero section");
+        }
+
+        if (/<form[\s>]/.test(htmlContent)) {
+            checks.push("✅ HTML: Has contact form");
+            htmlScore += 10;
+        } else {
+            checks.push("❌ HTML: Missing contact form");
+        }
+
+        // CSS Tests (40 points total)
+        let cssScore = 0;
+
+        if (cssContent && /(display\s*:\s*flex|display\s*:\s*grid)/.test(cssContent)) {
+            checks.push("✅ CSS: Uses Flexbox or Grid layout");
+            cssScore += 15;
+        } else {
+            checks.push("❌ CSS: Missing Flexbox or Grid layout in <style> tags");
+        }
+
+        if (cssContent && /@media/.test(cssContent)) {
+            checks.push("✅ CSS: Has media queries for responsiveness");
+            cssScore += 15;
+        } else {
+            checks.push("❌ CSS: Missing media queries in <style> tags");
+        }
+
+        if (cssContent && /nav\s*\{|\.nav/.test(cssContent)) {
+            checks.push("✅ CSS: Navigation styling present");
+            cssScore += 10;
+        } else {
+            checks.push("❌ CSS: Missing navigation styling in <style> tags");
+        }
+
+        // JavaScript Tests (30 points total)
+        let jsScore = 0;
+
+        if (jsContent && /(validate|validation)/.test(jsContent)) {
+            checks.push("✅ JS: Has form validation");
+            jsScore += 15;
+        } else {
+            checks.push("❌ JS: Missing form validation in <script> tags");
+        }
+
+        if (jsContent && /preventDefault/.test(jsContent)) {
+            checks.push("✅ JS: Prevents default form submission");
+            jsScore += 15;
+        } else {
+            checks.push("❌ JS: Missing preventDefault for form handling in <script> tags");
+        }
+
+        // Additional checks for single HTML file structure
+        if (htmlContent.includes('<style>') || htmlContent.includes('<style ')) {
+            checks.push("✅ Structure: Has embedded <style> tags");
+        } else {
+            checks.push("❌ Structure: Missing <style> tags for CSS");
+        }
+
+        if (htmlContent.includes('<script>') || htmlContent.includes('<script ')) {
+            checks.push("✅ Structure: Has embedded <script> tags");
+        } else {
+            checks.push("❌ Structure: Missing <script> tags for JavaScript");
+        }
+
+        // Calculate scores
+        result.breakdown.html = Math.min(htmlScore, 30);
+        result.breakdown.css = Math.min(cssScore, 40);
+        result.breakdown.js = Math.min(jsScore, 30);
+        
+        totalScore = result.breakdown.html + result.breakdown.css + result.breakdown.js;
+        
+        result.details = checks;
+        result.score = Math.min(totalScore, 100);
+        result.passed = result.score >= 70;
+        result.message = result.passed 
+            ? `Outstanding! Responsive landing page complete. Score: ${result.score}/100` 
+            : `Score: ${result.score}/100 - Add navigation, hero section, form, Flexbox/Grid, media queries, and validation`;
+
+    } catch (error) {
+        result.message = "Error: " + error.message;
+        console.error("Test error:", error);
+    }
+
+    return result;
 }
 
-function incrementAttempts() {
-  let attempts = 0;
-  if (fs.existsSync(attemptsFile)) {
-    attempts = parseInt(fs.readFileSync(attemptsFile, "utf8"), 10) || 0;
-  }
-  attempts++;
-  fs.writeFileSync(attemptsFile, attempts.toString());
-  return attempts;
+// Export for Monaco Editor
+if (typeof window !== "undefined") {
+    window.exerciseTest = {
+        runTests: runProjectTests,
+        testConfig: {
+            topic: "Responsive Landing Page Project (Single HTML File)",
+            language: "html",
+            type: "project",
+            fileStructure: "single"
+        }
+    };
 }
 
-function clearResultFile() {
-  if (fs.existsSync(resultFile)) {
-    fs.unlinkSync(resultFile);
-  }
-}
-
-function validateProjectStructure() {
-  if (!fs.existsSync(indexPath)) {
-    return { valid: false, error: "index.html not found" };
-  }
-  const html = fs.readFileSync(indexPath, "utf8");
-  const $ = cheerio.load(html);
-
-  // Gather linked CSS and JS files
-  const cssFiles = $('link[rel="stylesheet"]')
-    .map((_, el) => $(el).attr("href"))
-    .get()
-    .filter((href) => href && href.endsWith(".css"));
-  const jsFiles = $('script[src]')
-    .map((_, el) => $(el).attr("src"))
-    .get()
-    .filter((src) => src && src.endsWith(".js"));
-
-  return { valid: true, html, $, cssFiles, jsFiles };
-}
-
-function loadFilesContent(baseDir, files) {
-  return files
-    .map((file) => {
-      const fullPath = path.join(baseDir, file);
-      return readFileSafe(fullPath);
-    })
-    .join("\n");
-}
-
-async function checkJSSyntax(jsCode) {
-  const eslint = new ESLint({ useEslintrc: false, baseConfig: { env: { browser: true, es6: true } } });
-  const results = await eslint.lintText(jsCode);
-  const errors = results[0].messages.filter((msg) => msg.severity === 2);
-  return { valid: errors.length === 0, errors };
-}
-
-async function runTests() {
-  clearResultFile();
-
-  const struct = validateProjectStructure();
-  if (!struct.valid) {
-    console.error(struct.error);
-    const attempts = incrementAttempts();
-    return { success: false, attempts, errors: [struct.error] };
-  }
-
-  const { html, $, cssFiles, jsFiles } = struct;
-
-  const css = loadFilesContent(projectDir, cssFiles);
-  const js = loadFilesContent(projectDir, jsFiles);
-
-  const errors = [];
-
-  // Check presence of navigation bar
-  if ($("nav").length === 0) errors.push("Missing <nav> element");
-
-  // Check presence of hero section
-  if ($("section.hero, .hero, #hero").length === 0) errors.push("Missing hero section (.hero, #hero or <section class='hero'>)");
-
-  // Check presence of contact form
-  if ($("form").length === 0) errors.push("Missing <form> element for contact");
-
-  // CSS Flexbox or Grid check (simple check)
-  if (!/(display\s*:\s*flex|display\s*:\s*grid)/i.test(css)) errors.push("CSS does not use Flexbox or Grid for layout");
-
-  // Media queries presence (responsiveness)
-  if (!/@media/.test(css)) errors.push("CSS missing media queries for responsiveness");
-
-  // JS form validation check (simple heuristic)
-  if (!/(form|submit).*(addEventListener|onsubmit|validate)/i.test(js)) errors.push("JS does not appear to validate form on submit");
-
-  // HTMLHint check
-  const htmlHints = htmlhint.verify(html);
-  if (htmlHints.length > 0) {
-    errors.push(`HTMLHint errors: ${htmlHints.map(h => `${h.line}:${h.col} ${h.message}`).join("; ")}`);
-  }
-
-  // JS lint check
-  const jsLint = await checkJSSyntax(js);
-  if (!jsLint.valid) {
-    const lintErrors = jsLint.errors.map(e => `${e.line}:${e.column} ${e.message}`);
-    errors.push(`JS lint errors: ${lintErrors.join("; ")}`);
-  }
-
-  if (errors.length > 0) {
-    const attempts = incrementAttempts();
-    return { success: false, attempts, errors };
-  }
-
-  // All tests passed: write results.tests
-  fs.writeFileSync(
-    resultFile,
-    JSON.stringify({
-      project: "intermediate/1 Responsive Landing Page",
-      
-      attempts: fs.existsSync(attemptsFile) ? parseInt(fs.readFileSync(attemptsFile, "utf8"), 10) : 0,
-      timestamp: new Date().toISOString(),
-    })
-  );
-
-  // Reset attempts on success
-  if (fs.existsSync(attemptsFile)) fs.unlinkSync(attemptsFile);
-
-  return { success: true, attempts: 0, errors: [] };
-}
-
-// Run tests and output results
-runTests().then((result) => {
-  if (result.success) {
-    console.log("All tests passed for Responsive Landing Page!");
-  } else {
-    console.error(`Tests failed. Attempt #${result.attempts}`);
-    result.errors.forEach((e) => console.error("- " + e));
-  }
-});
+console.log("✅ Test ready for: Responsive Landing Page Project (Single HTML File)");

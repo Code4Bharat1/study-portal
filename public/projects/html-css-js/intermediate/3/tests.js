@@ -1,126 +1,152 @@
-const fs = require("fs");
-const path = require("path");
-const cheerio = require("cheerio");
-const { ESLint } = require("eslint");
-const { HTMLHint } = require("htmlhint");
+// Test for Dynamic Data Table Project - Intermediate Level 3 (Single HTML File)
+// Tests HTML structure, embedded CSS styling, and embedded JavaScript functionality
 
-const projectDir = path.resolve(__dirname);
-const indexPath = path.join(projectDir, "index.html");
-const attemptsFile = path.join(projectDir, "attempts.txt");
-const resultFile = path.join(projectDir, "results.tests");
+console.log("🧪 Testing: Dynamic Data Table Project (Single HTML File)");
 
-function readFileSafe(filePath) {
-  return fs.existsSync(filePath) ? fs.readFileSync(filePath, "utf8") : "";
-}
+function runProjectTests(htmlContent) {
+    const result = { 
+        passed: false, 
+        score: 0, 
+        message: "", 
+        details: [],
+        breakdown: {
+            html: 0,
+            css: 0,
+            js: 0
+        }
+    };
 
-function incrementAttempts() {
-  let attempts = 0;
-  if (fs.existsSync(attemptsFile)) {
-    attempts = parseInt(fs.readFileSync(attemptsFile, "utf8"), 10) || 0;
-  }
-  attempts++;
-  fs.writeFileSync(attemptsFile, attempts.toString());
-  return attempts;
-}
+    try {
+        let totalScore = 0;
+        const checks = [];
 
-function clearResultFile() {
-  if (fs.existsSync(resultFile)) fs.unlinkSync(resultFile);
-}
+        if (!htmlContent) {
+            result.message = "No HTML content provided";
+            return result;
+        }
 
-function validateProjectStructure() {
-  if (!fs.existsSync(indexPath)) {
-    return { valid: false, error: "index.html not found" };
-  }
+        // Extract CSS content from <style> tags
+        const styleMatches = htmlContent.match(/<style[^>]*>([\s\S]*?)<\/style>/gi);
+        const cssContent = styleMatches ? styleMatches.join(' ') : '';
 
-  const html = readFileSafe(indexPath);
-  const $ = cheerio.load(html);
-  const cssFiles = $('link[rel="stylesheet"]').map((_, el) => $(el).attr("href")).get();
-  const jsFiles = $('script[src]').map((_, el) => $(el).attr("src")).get();
+        // Extract JavaScript content from <script> tags
+        const scriptMatches = htmlContent.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
+        const jsContent = scriptMatches ? scriptMatches.join(' ') : '';
 
-  return { valid: true, html, $, cssFiles, jsFiles };
-}
+        console.log("Extracted CSS:", cssContent ? "Found" : "Not found");
+        console.log("Extracted JS:", jsContent ? "Found" : "Not found");
 
-function loadFilesContent(baseDir, files) {
-  return files.map((file) => readFileSafe(path.join(baseDir, file))).join("\n");
-}
+        // HTML Tests (35 points total)
+        let htmlScore = 0;
+        
+        if (/<table[\s>]/.test(htmlContent)) {
+            checks.push("✅ HTML: Has table element");
+            htmlScore += 15;
+        } else {
+            checks.push("❌ HTML: Missing table element");
+        }
 
-async function checkJSSyntax(jsCode) {
-  const eslint = new ESLint({
-    useEslintrc: false,
-    baseConfig: {
-      env: { browser: true, es2021: true },
-      extends: "eslint:recommended"
+        if (/<th[\s>]/.test(htmlContent)) {
+            checks.push("✅ HTML: Has table headers (th)");
+            htmlScore += 10;
+        } else {
+            checks.push("❌ HTML: Missing table headers (th)");
+        }
+
+        if (/<td[\s>]/.test(htmlContent)) {
+            checks.push("✅ HTML: Has table data cells (td)");
+            htmlScore += 10;
+        } else {
+            checks.push("❌ HTML: Missing table data cells (td)");
+        }
+
+        // CSS Tests (35 points total)
+        let cssScore = 0;
+
+        if (cssContent && /table\s*\{/.test(cssContent)) {
+            checks.push("✅ CSS: Table styling present");
+            cssScore += 10;
+        } else {
+            checks.push("❌ CSS: Missing table styling in <style> tags");
+        }
+
+        if (cssContent && /(nth-child|odd|even)/.test(cssContent)) {
+            checks.push("✅ CSS: Alternate row colors implemented");
+            cssScore += 15;
+        } else {
+            checks.push("❌ CSS: Missing alternate row colors in <style> tags");
+        }
+
+        if (cssContent && /(th|td)\s*\{/.test(cssContent)) {
+            checks.push("✅ CSS: Cell styling present");
+            cssScore += 10;
+        } else {
+            checks.push("❌ CSS: Missing cell styling in <style> tags");
+        }
+
+        // JavaScript Tests (30 points total)
+        let jsScore = 0;
+
+        if (jsContent && /sort/.test(jsContent)) {
+            checks.push("✅ JS: Has sorting functionality");
+            jsScore += 20;
+        } else {
+            checks.push("❌ JS: Missing sorting functionality in <script> tags");
+        }
+
+        if (jsContent && /(age|number)/.test(jsContent)) {
+            checks.push("✅ JS: Handles age/numeric sorting");
+            jsScore += 10;
+        } else {
+            checks.push("❌ JS: Missing age/numeric sorting in <script> tags");
+        }
+
+        // Additional checks for single HTML file structure
+        if (htmlContent.includes('<style>') || htmlContent.includes('<style ')) {
+            checks.push("✅ Structure: Has embedded <style> tags");
+        } else {
+            checks.push("❌ Structure: Missing <style> tags for CSS");
+        }
+
+        if (htmlContent.includes('<script>') || htmlContent.includes('<script ')) {
+            checks.push("✅ Structure: Has embedded <script> tags");
+        } else {
+            checks.push("❌ Structure: Missing <script> tags for JavaScript");
+        }
+
+        // Calculate scores
+        result.breakdown.html = Math.min(htmlScore, 35);
+        result.breakdown.css = Math.min(cssScore, 35);
+        result.breakdown.js = Math.min(jsScore, 30);
+        
+        totalScore = result.breakdown.html + result.breakdown.css + result.breakdown.js;
+        
+        result.details = checks;
+        result.score = Math.min(totalScore, 100);
+        result.passed = result.score >= 70;
+        result.message = result.passed 
+            ? `Perfect! Sortable data table complete. Score: ${result.score}/100` 
+            : `Score: ${result.score}/100 - Add table structure (th/td), alternate row colors, and age sorting`;
+
+    } catch (error) {
+        result.message = "Error: " + error.message;
+        console.error("Test error:", error);
     }
-  });
 
-  const results = await eslint.lintText(jsCode);
-  const errors = results[0].messages.filter((msg) => msg.severity === 2);
-  return { valid: errors.length === 0, errors };
+    return result;
 }
 
-async function runTests() {
-  clearResultFile();
-
-  const struct = validateProjectStructure();
-  if (!struct.valid) {
-    const attempts = incrementAttempts();
-    return { success: false, attempts, errors: [struct.error] };
-  }
-
-  const { html, $, cssFiles, jsFiles } = struct;
-  const css = loadFilesContent(projectDir, cssFiles);
-  const js = loadFilesContent(projectDir, jsFiles);
-  const errors = [];
-
-  // HTML Checks
-  if ($("table").length === 0) errors.push("Missing <table>");
-  if ($("table th").length === 0) errors.push("Missing <th> (table headers)");
-  if ($("table td").length === 0) errors.push("Missing <td> (table data)");
-
-  // CSS Checks
-  if (!/tr\s*:\s*nth-child\(even\)/i.test(css) && !/tr\s*:\s*nth-of-type\(even\)/i.test(css)) {
-    errors.push("Missing CSS alternate row styling using :nth-child(even)");
-  }
-
-  // JS Checks
-  if (!/\.sort\s*\(.*(age|function).*?\)/is.test(js)) {
-    errors.push("Missing JS sorting functionality on age column");
-  }
-
-  // HTMLHint
-  const htmlHints = HTMLHint.verify(html);
-  if (htmlHints.length > 0) {
-    errors.push("HTMLHint errors:\n" + htmlHints.map(h => `${h.line}:${h.col} ${h.message}`).join("\n"));
-  }
-
-  // JS Linting
-  const jsLint = await checkJSSyntax(js);
-  if (!jsLint.valid) {
-    errors.push("JS Lint errors:\n" + jsLint.errors.map(e => `${e.line}:${e.column} ${e.message}`).join("\n"));
-  }
-
-  // Final outcome
-  if (errors.length > 0) {
-    const attempts = incrementAttempts();
-    return { success: false, attempts, errors };
-  }
-
-  // All tests passed
-  fs.writeFileSync(resultFile, JSON.stringify({
-    project: "intermediate/3 Dynamic Data Table",
-    
-    timestamp: new Date().toISOString()
-  }, null, 2));
-
-  if (fs.existsSync(attemptsFile)) fs.unlinkSync(attemptsFile);
-  return { success: true, attempts: 0, errors: [] };
+// Export for Monaco Editor
+if (typeof window !== "undefined") {
+    window.exerciseTest = {
+        runTests: runProjectTests,
+        testConfig: {
+            topic: "Dynamic Data Table Project (Single HTML File)",
+            language: "html",
+            type: "project",
+            fileStructure: "single"
+        }
+    };
 }
 
-runTests().then(res => {
-  if (res.success) {
-    console.log("✅ All tests passed for Dynamic Data Table!");
-  } else {
-    console.error(`❌ Attempt #${res.attempts} failed:`);
-    res.errors.forEach(err => console.error(" - " + err));
-  }
-});
+console.log("✅ Test ready for: Dynamic Data Table Project (Single HTML File)");

@@ -333,7 +333,7 @@ export default function PythonExercisePlatform() {
     const setSidebarContent = (event) => {
         const value = event.target.value.toLowerCase();
         let newMenu;
-        switch (value) {
+        switch (value) {    
             case 'basic':
                 newMenu = basicMenu;
                 break;

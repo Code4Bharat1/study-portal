@@ -1,5 +1,5 @@
 // Test for Python Functions and Parameters
-// JavaScript test that validates Python code
+// JavaScript test that validates Python code execution in sandbox
 
 console.log("🧪 Testing: Python Functions and Parameters");
 
@@ -14,6 +14,9 @@ function runSimpleTest(userCode) {
         
         let score = 0;
         const checks = [];
+        
+        // Import required testing functions
+        const { describe, it, expect } = require('mocha');
         
         // Check for function definition
         if (/def\s+\w+\s*\(/.test(userCode)) {

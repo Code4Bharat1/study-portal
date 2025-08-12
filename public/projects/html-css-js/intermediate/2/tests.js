@@ -1,142 +1,150 @@
-const fs = require("fs");
-const path = require("path");
-const cheerio = require("cheerio");
-const htmlhint = require("htmlhint").HTMLHint;
-const { ESLint } = require("eslint");
+// Test for Interactive Photo Gallery Project - Intermediate Level 2 (Single HTML File)
+// Tests HTML structure, embedded CSS styling, and embedded JavaScript functionality
 
-const projectDir = path.resolve(__dirname, "../intermediate/2");
-const indexPath = path.join(projectDir, "index.html");
-const attemptsFile = path.join(projectDir, "attempts.txt");
-const resultFile = path.join(projectDir, "results.tests");
+console.log("🧪 Testing: Interactive Photo Gallery Project (Single HTML File)");
 
-function readFileSafe(filePath) {
-  return fs.existsSync(filePath) ? fs.readFileSync(filePath, "utf8") : "";
+function runProjectTests(htmlContent) {
+    const result = { 
+        passed: false, 
+        score: 0, 
+        message: "", 
+        details: [],
+        breakdown: {
+            html: 0,
+            css: 0,
+            js: 0
+        }
+    };
+
+    try {
+        let totalScore = 0;
+        const checks = [];
+
+        if (!htmlContent) {
+            result.message = "No HTML content provided";
+            return result;
+        }
+
+        // Extract CSS content from <style> tags
+        const styleMatches = htmlContent.match(/<style[^>]*>([\s\S]*?)<\/style>/gi);
+        const cssContent = styleMatches ? styleMatches.join(' ') : '';
+
+        // Extract JavaScript content from <script> tags
+        const scriptMatches = htmlContent.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
+        const jsContent = scriptMatches ? scriptMatches.join(' ') : '';
+
+        console.log("Extracted CSS:", cssContent ? "Found" : "Not found");
+        console.log("Extracted JS:", jsContent ? "Found" : "Not found");
+
+        // HTML Tests (30 points total)
+        let htmlScore = 0;
+        
+        if (/<img\s/.test(htmlContent)) {
+            const imgMatches = htmlContent.match(/<img\s/g);
+            if (imgMatches && imgMatches.length >= 3) {
+                checks.push("✅ HTML: Has multiple images (3+)");
+                htmlScore += 15;
+            } else {
+                checks.push("❌ HTML: Not enough images (need 3+)");
+            }
+        } else {
+            checks.push("❌ HTML: Missing images");
+        }
+
+        if (/(gallery|grid)/.test(htmlContent)) {
+            checks.push("✅ HTML: Has gallery container");
+            htmlScore += 15;
+        } else {
+            checks.push("❌ HTML: Missing gallery container");
+        }
+
+        // CSS Tests (40 points total)
+        let cssScore = 0;
+
+        if (cssContent && /(display\s*:\s*grid|grid-template)/.test(cssContent)) {
+            checks.push("✅ CSS: Uses CSS Grid for layout");
+            cssScore += 15;
+        } else {
+            checks.push("❌ CSS: Missing CSS Grid layout in <style> tags");
+        }
+
+        if (cssContent && /img.*:hover|:hover.*img/.test(cssContent)) {
+            checks.push("✅ CSS: Images have hover effects");
+            cssScore += 15;
+        } else {
+            checks.push("❌ CSS: Missing image hover effects in <style> tags");
+        }
+
+        if (cssContent && /transition/.test(cssContent)) {
+            checks.push("✅ CSS: Has smooth transitions");
+            cssScore += 10;
+        } else {
+            checks.push("❌ CSS: Missing smooth transitions in <style> tags");
+        }
+
+        // JavaScript Tests (30 points total)
+        let jsScore = 0;
+
+        if (jsContent && /modal/.test(jsContent)) {
+            checks.push("✅ JS: Has modal functionality");
+            jsScore += 15;
+        } else {
+            checks.push("❌ JS: Missing modal functionality in <script> tags");
+        }
+
+        if (jsContent && /click/.test(jsContent)) {
+            checks.push("✅ JS: Handles image click events");
+            jsScore += 15;
+        } else {
+            checks.push("❌ JS: Missing click event handling in <script> tags");
+        }
+
+        // Additional checks for single HTML file structure
+        if (htmlContent.includes('<style>') || htmlContent.includes('<style ')) {
+            checks.push("✅ Structure: Has embedded <style> tags");
+        } else {
+            checks.push("❌ Structure: Missing <style> tags for CSS");
+        }
+
+        if (htmlContent.includes('<script>') || htmlContent.includes('<script ')) {
+            checks.push("✅ Structure: Has embedded <script> tags");
+        } else {
+            checks.push("❌ Structure: Missing <script> tags for JavaScript");
+        }
+
+        // Calculate scores
+        result.breakdown.html = Math.min(htmlScore, 30);
+        result.breakdown.css = Math.min(cssScore, 40);
+        result.breakdown.js = Math.min(jsScore, 30);
+        
+        totalScore = result.breakdown.html + result.breakdown.css + result.breakdown.js;
+        
+        result.details = checks;
+        result.score = Math.min(totalScore, 100);
+        result.passed = result.score >= 70;
+        result.message = result.passed 
+            ? `Excellent! Photo gallery with modal ready. Score: ${result.score}/100` 
+            : `Score: ${result.score}/100 - Add multiple images, grid layout, hover effects, transitions, and modal`;
+
+    } catch (error) {
+        result.message = "Error: " + error.message;
+        console.error("Test error:", error);
+    }
+
+    return result;
 }
 
-function incrementAttempts() {
-  let attempts = 0;
-  if (fs.existsSync(attemptsFile)) {
-    attempts = parseInt(fs.readFileSync(attemptsFile, "utf8"), 10) || 0;
-  }
-  attempts++;
-  fs.writeFileSync(attemptsFile, attempts.toString());
-  return attempts;
+// Export for Monaco Editor
+if (typeof window !== "undefined") {
+    window.exerciseTest = {
+        runTests: runProjectTests,
+        testConfig: {
+            topic: "Interactive Photo Gallery Project (Single HTML File)",
+            language: "html",
+            type: "project",
+            fileStructure: "single"
+        }
+    };
 }
 
-function clearResultFile() {
-  if (fs.existsSync(resultFile)) {
-    fs.unlinkSync(resultFile);
-  }
-}
-
-function validateProjectStructure() {
-  if (!fs.existsSync(indexPath)) {
-    return { valid: false, error: "index.html not found" };
-  }
-  const html = fs.readFileSync(indexPath, "utf8");
-  const $ = cheerio.load(html);
-
-  // Gather linked CSS and JS files
-  const cssFiles = $('link[rel="stylesheet"]')
-    .map((_, el) => $(el).attr("href"))
-    .get()
-    .filter((href) => href && href.endsWith(".css"));
-  const jsFiles = $('script[src]')
-    .map((_, el) => $(el).attr("src"))
-    .get()
-    .filter((src) => src && src.endsWith(".js"));
-
-  return { valid: true, html, $, cssFiles, jsFiles };
-}
-
-function loadFilesContent(baseDir, files) {
-  return files
-    .map((file) => {
-      const fullPath = path.join(baseDir, file);
-      return readFileSafe(fullPath);
-    })
-    .join("\n");
-}
-
-async function checkJSSyntax(jsCode) {
-  const eslint = new ESLint({ useEslintrc: false, baseConfig: { env: { browser: true, es6: true } } });
-  const results = await eslint.lintText(jsCode);
-  const errors = results[0].messages.filter((msg) => msg.severity === 2);
-  return { valid: errors.length === 0, errors };
-}
-
-async function runTests() {
-  clearResultFile();
-
-  const struct = validateProjectStructure();
-  if (!struct.valid) {
-    console.error(struct.error);
-    const attempts = incrementAttempts();
-    return { success: false, attempts, errors: [struct.error] };
-  }
-
-  const { html, $, cssFiles, jsFiles } = struct;
-
-  const css = loadFilesContent(projectDir, cssFiles);
-  const js = loadFilesContent(projectDir, jsFiles);
-
-  const errors = [];
-
-  // Check presence of multiple images in a grid container (e.g., with class gallery, photo-gallery, grid)
-  const galleryContainers = $(".gallery, .photo-gallery, .grid");
-  if (galleryContainers.length === 0) errors.push("Missing gallery container element with class .gallery, .photo-gallery or .grid");
-  else if (galleryContainers.find("img").length < 2) errors.push("Gallery container should have multiple images");
-
-  // CSS hover and transition check
-  if (!css.includes(":hover")) errors.push("CSS missing ':hover' effects");
-  if (!css.includes("transition")) errors.push("CSS missing 'transition' property for smooth effects");
-
-  // JS modal opening check (heuristic: event listener on images opening a modal)
-  if (!/(addEventListener.*click.*modal|document\.querySelector.*modal)/i.test(js)) {
-    errors.push("JS does not appear to open modal on image click");
-  }
-
-  // HTMLHint check
-  const htmlHints = htmlhint.verify(html);
-  if (htmlHints.length > 0) {
-    errors.push(`HTMLHint errors: ${htmlHints.map(h => `${h.line}:${h.col} ${h.message}`).join("; ")}`);
-  }
-
-  // JS lint check
-  const jsLint = await checkJSSyntax(js);
-  if (!jsLint.valid) {
-    const lintErrors = jsLint.errors.map(e => `${e.line}:${e.column} ${e.message}`);
-    errors.push(`JS lint errors: ${lintErrors.join("; ")}`);
-  }
-
-  if (errors.length > 0) {
-    const attempts = incrementAttempts();
-    return { success: false, attempts, errors };
-  }
-
-  // All tests passed: write results.tests
-  fs.writeFileSync(
-    resultFile,
-    JSON.stringify({
-      project: "intermediate/2 Interactive Photo Gallery",
-      
-      attempts: fs.existsSync(attemptsFile) ? parseInt(fs.readFileSync(attemptsFile, "utf8"), 10) : 0,
-      timestamp: new Date().toISOString(),
-    })
-  );
-
-  // Reset attempts on success
-  if (fs.existsSync(attemptsFile)) fs.unlinkSync(attemptsFile);
-
-  return { success: true, attempts: 0, errors: [] };
-}
-
-// Run tests and output results
-runTests().then((result) => {
-  if (result.success) {
-    console.log("All tests passed for Interactive Photo Gallery!");
-  } else {
-    console.error(`Tests failed. Attempt #${result.attempts}`);
-    result.errors.forEach((e) => console.error("- " + e));
-  }
-});
+console.log("✅ Test ready for: Interactive Photo Gallery Project (Single HTML File)");

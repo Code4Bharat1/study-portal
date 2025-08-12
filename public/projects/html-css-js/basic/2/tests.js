@@ -1,147 +1,158 @@
-const fs = require("fs");
-const path = require("path");
-const cheerio = require("cheerio");
-const htmlhint = require("htmlhint").HTMLHint;
-const { ESLint } = require("eslint");
+// Test for Styled Blog Post Project - Basic Level 2 (Single HTML File)
+// Tests HTML structure, embedded CSS styling, and embedded JavaScript functionality
 
-const projectDir = path.resolve(__dirname, "../basic/2");
-const indexPath = path.join(projectDir, "index.html");
-const attemptsFile = path.join(projectDir, "attempts.txt");
-const resultFile = path.join(projectDir, "results.tests");
+console.log("🧪 Testing: Styled Blog Post Project (Single HTML File)");
 
-function readFileSafe(filePath) {
-  return fs.existsSync(filePath) ? fs.readFileSync(filePath, "utf8") : "";
+function runProjectTests(htmlContent) {
+    const result = {
+        passed: false,
+        score: 0,
+        message: "",
+        details: [],
+        breakdown: {
+            html: 0,
+            css: 0,
+            js: 0,
+        },
+    };
+
+    try {
+        let totalScore = 0;
+        const checks = [];
+
+        if (!htmlContent) {
+            result.message = "No HTML content provided";
+            return result;
+        }
+
+        // Extract CSS content from <style> tags
+        const styleMatches = htmlContent.match(/<style[^>]*>([\s\S]*?)<\/style>/gi);
+        const cssContent = styleMatches ? styleMatches.join(" ") : "";
+
+        // Extract JavaScript content from <script> tags
+        const scriptMatches = htmlContent.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
+        const jsContent = scriptMatches ? scriptMatches.join(" ") : "";
+
+        console.log("Extracted CSS:", cssContent ? "Found" : "Not found");
+        console.log("Extracted JS:", jsContent ? "Found" : "Not found");
+
+        // HTML Tests (40 points total)
+        let htmlScore = 0;
+
+        if (/<h1[\s>]/.test(htmlContent)) {
+            checks.push("✅ HTML: Has main title (h1)");
+            htmlScore += 10;
+        } else {
+            checks.push("❌ HTML: Missing main title (h1)");
+        }
+
+        if (/<h[2-6][\s>]/.test(htmlContent)) {
+            checks.push("✅ HTML: Has subheadings (h2-h6)");
+            htmlScore += 10;
+        } else {
+            checks.push("❌ HTML: Missing subheadings (h2-h6)");
+        }
+
+        if (/<p[\s>]/.test(htmlContent)) {
+            checks.push("✅ HTML: Has paragraphs");
+            htmlScore += 10;
+        } else {
+            checks.push("❌ HTML: Missing paragraphs");
+        }
+
+        if (/<img\s/.test(htmlContent)) {
+            checks.push("✅ HTML: Has image");
+            htmlScore += 10;
+        } else {
+            checks.push("❌ HTML: Missing image");
+        }
+
+        // CSS Tests (30 points total)
+        let cssScore = 0;
+
+        if (cssContent && /h1\s*\{[\s\S]*text-align\s*:\s*center/.test(cssContent)) {
+            checks.push("✅ CSS: Title is centered");
+            cssScore += 10;
+        } else {
+            checks.push("❌ CSS: Title not centered in <style> tags");
+        }
+
+        if (cssContent && /margin/.test(cssContent)) {
+            checks.push("✅ CSS: Uses margins");
+            cssScore += 10;
+        } else {
+            checks.push("❌ CSS: Missing margin styling in <style> tags");
+        }
+
+        if (cssContent && /\.dark-mode/.test(cssContent)) {
+            checks.push("✅ CSS: Has dark mode styles");
+            cssScore += 10;
+        } else {
+            checks.push("❌ CSS: Missing dark mode styles in <style> tags");
+        }
+
+        // JavaScript Tests (30 points total)
+        let jsScore = 0;
+
+        if (jsContent && /classList\.toggle|classList\.add|classList\.remove/.test(jsContent)) {
+            checks.push("✅ JS: Uses classList manipulation");
+            jsScore += 15;
+        } else {
+            checks.push("❌ JS: Missing classList manipulation in <script> tags");
+        }
+
+        if (jsContent && /dark.*mode|toggle/i.test(jsContent)) {
+            checks.push("✅ JS: Implements theme toggle");
+            jsScore += 15;
+        } else {
+            checks.push("❌ JS: Missing theme toggle functionality in <script> tags");
+        }
+
+        // Additional checks for single HTML file structure
+        if (htmlContent.includes('<style>') || htmlContent.includes('<style ')) {
+            checks.push("✅ Structure: Has embedded <style> tags");
+        } else {
+            checks.push("❌ Structure: Missing <style> tags for CSS");
+        }
+
+        if (htmlContent.includes('<script>') || htmlContent.includes('<script ')) {
+            checks.push("✅ Structure: Has embedded <script> tags");
+        } else {
+            checks.push("❌ Structure: Missing <script> tags for JavaScript");
+        }
+
+        // Calculate scores
+        result.breakdown.html = Math.min(htmlScore, 40);
+        result.breakdown.css = Math.min(cssScore, 30);
+        result.breakdown.js = Math.min(jsScore, 30);
+
+        totalScore = result.breakdown.html + result.breakdown.css + result.breakdown.js;
+
+        result.details = checks;
+        result.score = Math.min(totalScore, 100);
+        result.passed = result.score >= 70;
+        result.message = result.passed
+            ? `Great! Blog post with dark mode ready. Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add blog structure, center title, margins, and dark mode toggle`;
+    } catch (error) {
+        result.message = "Error: " + error.message;
+        console.error("Test error:", error);
+    }
+
+    return result;
 }
 
-function incrementAttempts() {
-  let attempts = 0;
-  if (fs.existsSync(attemptsFile)) {
-    attempts = parseInt(fs.readFileSync(attemptsFile, "utf8"), 10) || 0;
-  }
-  attempts++;
-  fs.writeFileSync(attemptsFile, attempts.toString());
-  return attempts;
+// Export for Monaco Editor
+if (typeof window !== "undefined") {
+    window.exerciseTest = {
+        runTests: runProjectTests,
+        testConfig: {
+            topic: "Styled Blog Post Project (Single HTML File)",
+            language: "html",
+            type: "project",
+            fileStructure: "single"
+        }
+    };
 }
 
-function clearResultFile() {
-  if (fs.existsSync(resultFile)) {
-    fs.unlinkSync(resultFile);
-  }
-}
-
-function validateProjectStructure() {
-  if (!fs.existsSync(indexPath)) {
-    return { valid: false, error: "index.html not found" };
-  }
-  const html = fs.readFileSync(indexPath, "utf8");
-  const $ = cheerio.load(html);
-
-  // Gather linked CSS and JS files
-  const cssFiles = $('link[rel="stylesheet"]')
-    .map((_, el) => $(el).attr("href"))
-    .get()
-    .filter((href) => href && href.endsWith(".css"));
-  const jsFiles = $('script[src]')
-    .map((_, el) => $(el).attr("src"))
-    .get()
-    .filter((src) => src && src.endsWith(".js"));
-
-  return { valid: true, html, $, cssFiles, jsFiles };
-}
-
-function loadFilesContent(baseDir, files) {
-  return files
-    .map((file) => {
-      const fullPath = path.join(baseDir, file);
-      return readFileSafe(fullPath);
-    })
-    .join("\n");
-}
-
-async function checkJSSyntax(jsCode) {
-  const eslint = new ESLint({ useEslintrc: false, baseConfig: { env: { browser: true, es6: true } } });
-  const results = await eslint.lintText(jsCode);
-  const errors = results[0].messages.filter((msg) => msg.severity === 2);
-  return { valid: errors.length === 0, errors };
-}
-
-async function runTests() {
-  clearResultFile();
-
-  const struct = validateProjectStructure();
-  if (!struct.valid) {
-    console.error(struct.error);
-    const attempts = incrementAttempts();
-    return { success: false, attempts, errors: [struct.error] };
-  }
-
-  const { html, $, cssFiles, jsFiles } = struct;
-
-  const css = loadFilesContent(projectDir, cssFiles);
-  const js = loadFilesContent(projectDir, jsFiles);
-
-  const errors = [];
-
-  // HTML structure tests
-  if ($("h1").length === 0) errors.push("Missing <h1> title");
-  if ($("h2, h3").length === 0) errors.push("No secondary headings (<h2> or <h3>)");
-  if ($("p").length < 2) errors.push("Less than 2 paragraphs");
-  if ($("img").length === 0) errors.push("Missing image");
-
-  // CSS style tests (title centered and margins)
-  if (!css.includes("text-align: center") && !css.includes("text-align:center")) {
-    errors.push("Title is not centered in CSS");
-  }
-  if (!css.match(/margin|padding/)) {
-    errors.push("CSS should include margins or padding");
-  }
-
-  // JS dark mode toggle detection
-  const darkModeRegex = /classList\.toggle|classList\.add|classList\.remove|classList\.contains/;
-  const darkModeInJS = darkModeRegex.test(js) && /dark[-_]mode/.test(js);
-  if (!darkModeInJS) errors.push("JS does not toggle dark mode class");
-
-  // HTMLHint validation
-  const htmlHints = htmlhint.verify(html);
-  if (htmlHints.length > 0) {
-    errors.push(`HTMLHint errors: ${htmlHints.map(h => `${h.line}:${h.col} ${h.message}`).join("; ")}`);
-  }
-
-  // JS syntax check
-  const jsLint = await checkJSSyntax(js);
-  if (!jsLint.valid) {
-    const lintErrors = jsLint.errors.map(e => `${e.line}:${e.column} ${e.message}`);
-    errors.push(`JS lint errors: ${lintErrors.join("; ")}`);
-  }
-
-  if (errors.length > 0) {
-    const attempts = incrementAttempts();
-    return { success: false, attempts, errors };
-  }
-
-  // All tests passed
-  fs.writeFileSync(
-    resultFile,
-    JSON.stringify({
-      project: "basic/2 Styled Blog Post",
-      
-      attempts: fs.existsSync(attemptsFile) ? parseInt(fs.readFileSync(attemptsFile, "utf8"), 10) : 0,
-      timestamp: new Date().toISOString(),
-    })
-  );
-
-  // Reset attempts since success
-  if (fs.existsSync(attemptsFile)) fs.unlinkSync(attemptsFile);
-
-  return { success: true, attempts: 0, errors: [] };
-}
-
-// Run tests and output result
-runTests().then((result) => {
-  if (result.success) {
-    console.log("All tests passed!");
-  } else {
-    console.error(`Tests failed. Attempt #${result.attempts}`);
-    result.errors.forEach((e) => console.error("- " + e));
-  }
-});
+console.log("✅ Test ready for: Styled Blog Post Project (Single HTML File)");

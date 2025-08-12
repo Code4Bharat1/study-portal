@@ -1,5 +1,5 @@
-import HtmlCssJsProjectPlatform from "@/components/Project/html-css-js";
+import PythonProjectPlatform from "@/components/Project/python";
 
 export default function ContentDisplay(){
-    return (<HtmlCssJsProjectPlatform></HtmlCssJsProjectPlatform>)
+    return (<PythonProjectPlatform></PythonProjectPlatform>)
 }

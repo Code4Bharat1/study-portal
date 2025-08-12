@@ -1,86 +1,160 @@
-// test/simple-crud-app.test.js
-require('@babel/register')({
-  extensions: ['.js', '.jsx'],
-  presets: [
-    '@babel/preset-env',
-    ['@babel/preset-react', { runtime: 'automatic' }],
-  ],
-  ignore: [/node_modules/],
-});
+// Test for MERN Basic 1 - Simple CRUD App (Single File)
+// Tests Express server, MongoDB integration, CRUD operations, and React frontend
 
-const { ESLint } = require('eslint');
-const fs = require('fs');
-const parser = require('@babel/parser');
-const traverse = require('@babel/traverse').default;
-const request = require('supertest');
-const { Db } = require('tingodb')();
-const path = require('path');
-const { render, screen } = require('@testing-library/react');
-const React = require('react');
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
+console.log("🧪 Testing: MERN Simple CRUD App (Single File)");
 
-const app = require('./backend/index.js');
-const Frontend = require('./frontend/src/App.jsx').default;
+function runProjectTests(jsContent) {
+    const result = { 
+        passed: false, 
+        score: 0, 
+        message: "", 
+        details: [],
+        breakdown: {
+            backend: 0,
+            database: 0,
+            frontend: 0
+        }
+    };
 
-describe('Simple CRUD App with TingoDB – Full Stack Test', () => {
-  let db;
-  let users;
+    try {
+        let totalScore = 0;
+        const checks = [];
 
-  beforeAll(() => {
-    const dbPath = path.join(__dirname, './backend/data');
-    db = new Db(dbPath, {});
-    users = db.collection('users');
-  });
+        if (!jsContent) {
+            result.message = "No JavaScript content provided";
+            return result;
+        }
 
-  afterEach((done) => {
-    users.remove({}, { multi: true }, done); // Clear collection between tests
-  });
+        // Backend/Express Tests (35 points total)
+        let backendScore = 0;
+        
+        if (jsContent.includes('express()') && jsContent.includes('app.listen')) {
+            checks.push("✅ Backend: Express server setup");
+            backendScore += 10;
+        } else {
+            checks.push("❌ Backend: Missing Express server setup");
+        }
 
-  it('Backend: should perform full user CRUD flow', async () => {
-    let res = await request(app).post('/users').send({ name: 'Alice', email: 'alice@example.com' });
-    expect(res.statusCode).toBe(201);
-    const id = res.body._id;
+        if (jsContent.includes('app.use(express.json())')) {
+            checks.push("✅ Backend: JSON middleware configured");
+            backendScore += 5;
+        } else {
+            checks.push("❌ Backend: Missing JSON middleware");
+        }
 
-    res = await request(app).get('/users');
-    expect(res.statusCode).toBe(200);
-    expect(res.body.some(u => u.email === 'alice@example.com')).toBe(true);
+        const hasGetRoute = jsContent.includes("app.get('/api/users'") || jsContent.includes('app.get("/api/users"');
+        const hasPostRoute = jsContent.includes("app.post('/api/users'") || jsContent.includes('app.post("/api/users"');
+        const hasPutRoute = jsContent.includes("app.put('/api/users/:id'") || jsContent.includes('app.put("/api/users/:id"');
+        const hasDeleteRoute = jsContent.includes("app.delete('/api/users/:id'") || jsContent.includes('app.delete("/api/users/:id"');
 
-    res = await request(app).put(`/users/${id}`).send({ name: 'Alice Updated' });
-    expect(res.body.name).toBe('Alice Updated');
+        if (hasGetRoute && hasPostRoute && hasPutRoute && hasDeleteRoute) {
+            checks.push("✅ Backend: All CRUD routes implemented");
+            backendScore += 20;
+        } else {
+            checks.push(`❌ Backend: Missing CRUD routes (GET:${hasGetRoute}, POST:${hasPostRoute}, PUT:${hasPutRoute}, DELETE:${hasDeleteRoute})`);
+        }
 
-    res = await request(app).delete(`/users/${id}`);
-    expect(res.statusCode).toBe(204);
-  });
+        // Database/MongoDB Tests (25 points total)
+        let databaseScore = 0;
 
-  it('Frontend: should render user list UI', () => {
-    const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', { url: 'http://localhost' });
-    global.window = dom.window;
-    global.document = dom.window.document;
+        if (jsContent.includes('mongoose.connect')) {
+            checks.push("✅ Database: MongoDB connection configured");
+            databaseScore += 10;
+        } else {
+            checks.push("❌ Database: Missing MongoDB connection");
+        }
 
-    render(<Frontend />);
-    expect(screen.getByText(/users/i)).toBeInTheDocument();
-  });
+        if (jsContent.includes('mongoose.Schema') && jsContent.includes('mongoose.model')) {
+            checks.push("✅ Database: Mongoose schema and model defined");
+            databaseScore += 10;
+        } else {
+            checks.push("❌ Database: Missing Mongoose schema/model");
+        }
 
-  it('Static Analysis: ESLint and AST check (backend & frontend)', async () => {
-    const eslint = new ESLint();
-    const backendResult = await eslint.lintFiles(['backend/**/*.js']);
-    const frontendResult = await eslint.lintFiles(['frontend/**/*.jsx']);
+        if (jsContent.includes('name') && jsContent.includes('email') && jsContent.includes('age')) {
+            checks.push("✅ Database: User schema has required fields");
+            databaseScore += 5;
+        } else {
+            checks.push("❌ Database: Missing required user fields (name, email, age)");
+        }
 
-    if (backendResult.some(r => r.errorCount > 0) || frontendResult.some(r => r.errorCount > 0)) {
-      throw new Error('ESLint errors found.');
+        // Frontend/React Tests (40 points total)
+        let frontendScore = 0;
+
+        if (jsContent.includes('React') && jsContent.includes('useState')) {
+            checks.push("✅ Frontend: React components with hooks");
+            frontendScore += 15;
+        } else {
+            checks.push("❌ Frontend: Missing React components or hooks");
+        }
+
+        if (jsContent.includes('axios')) {
+            checks.push("✅ Frontend: Axios for API calls");
+            frontendScore += 10;
+        } else {
+            checks.push("❌ Frontend: Missing Axios for API communication");
+        }
+
+        if (jsContent.includes('form') && jsContent.includes('input')) {
+            checks.push("✅ Frontend: User input form");
+            frontendScore += 10;
+        } else {
+            checks.push("❌ Frontend: Missing user input form");
+        }
+
+        if (jsContent.includes('map') && jsContent.includes('user')) {
+            checks.push("✅ Frontend: User list display");
+            frontendScore += 5;
+        } else {
+            checks.push("❌ Frontend: Missing user list display");
+        }
+
+        // Error Handling and Best Practices
+        if (jsContent.includes('try') && jsContent.includes('catch')) {
+            checks.push("✅ Best Practice: Error handling implemented");
+        } else {
+            checks.push("❌ Best Practice: Missing error handling");
+        }
+
+        if (jsContent.includes('res.status(500)') || jsContent.includes('res.status(400)')) {
+            checks.push("✅ Best Practice: HTTP status codes used");
+        } else {
+            checks.push("❌ Best Practice: Missing proper HTTP status codes");
+        }
+
+        // Calculate scores
+        result.breakdown.backend = Math.min(backendScore, 35);
+        result.breakdown.database = Math.min(databaseScore, 25);
+        result.breakdown.frontend = Math.min(frontendScore, 40);
+        
+        totalScore = result.breakdown.backend + result.breakdown.database + result.breakdown.frontend;
+        
+        result.details = checks;
+        result.score = Math.min(totalScore, 100);
+        result.passed = result.score >= 70;
+        result.message = result.passed 
+            ? `Excellent! MERN CRUD app complete. Score: ${result.score}/100` 
+            : `Score: ${result.score}/100 - Complete missing Express routes, MongoDB setup, and React components`;
+
+    } catch (error) {
+        result.message = "Error: " + error.message;
+        console.error("Test error:", error);
     }
 
-    const frontendCode = fs.readFileSync('frontend/src/App.jsx', 'utf8');
-    const ast = parser.parse(frontendCode, { sourceType: 'module', plugins: ['jsx'] });
-    let foundComponent = false;
+    return result;
+}
 
-    traverse(ast, {
-      FunctionDeclaration(path) {
-        if (path.node.id.name === 'App') foundComponent = true;
-      }
-    });
+// Export for Monaco Editor
+if (typeof window !== "undefined") {
+    window.exerciseTest = {
+        runTests: runProjectTests,
+        testConfig: {
+            topic: "MERN Simple CRUD App (Single File)",
+            language: "javascript",
+            type: "project",
+            fileStructure: "single"
+        }
+    };
+}
 
-    expect(foundComponent).toBe(true);
-  });
-});
+console.log("✅ Test ready for: MERN Simple CRUD App (Single File)");
