@@ -95,8 +95,30 @@ const Footer = () => {
       {/* Bottom Bar */}
 <div className="border-t border-gray-700 mt-10 pt-6 text-sm flex justify-center items-center text-gray-400 text-center px-4">
   <p className="flex flex-col items-center space-y-2">
-    <span>Built with ❤️ and passion by <strong>Code4Bharat</strong></span>
-    <span>© 2011 – 2025 <strong>NexCoreAlliance</strong>. All rights reserved.</span>
+  <span>
+  Built with ❤️ and passion by{" "}
+  <a
+    href="https://code4bharat.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-blue-400 hover:underline"
+  >
+    <strong>Code4Bharat</strong>
+  </a>
+</span>
+<span>
+  © 2011 – 2025{" "}
+  <a
+    href="http://nexcorealliance.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-blue-400 hover:underline"
+  >
+    <strong>NexCoreAlliance</strong>
+  </a>
+  . All rights reserved.
+</span>
+
   </p>
 </div>
 

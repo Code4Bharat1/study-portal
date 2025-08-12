@@ -7,7 +7,7 @@ export default function MySQLHome() {
   return (
     <div className="p-6 ml-80">
       <img
-        src="/mysql.jpg"
+        src="/roadmaps/mysql.jpg"
         alt="MySQL"
         className="w-full max-w-8xl rounded-lg mb-6 mx-auto"
       />

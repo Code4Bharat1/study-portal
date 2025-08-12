@@ -8,8 +8,8 @@ export default function ExpressHome() {
     <>
       <div className="p-6 ml-80">
         <img
-          src="/express1.jpg"
-          alt="MySQL"
+          src="/roadmaps/express1.jpg"
+          alt="Express"
           className="w-full max-w-8xl rounded-lg mb-6 mx-auto"
         />
       </div>

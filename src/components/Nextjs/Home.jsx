@@ -4,7 +4,7 @@ const NextHomePage = () => {
   return (
 <>
 <div className="p-6 ">
-    <img src="/Next.js.jpg" alt="Next.js" className="w-full max-w-8xl rounded-lg mb-6 mx-auto" />
+    <img src="/roadmaps/nextjs.jpg" alt="Next.js" className="w-full max-w-8xl rounded-lg mb-6 mx-auto" />
     </div>
 </>
   );
