@@ -185,6 +185,51 @@ const intermediateMenu = [
             return { files };
         },
     },
+    {
+        label: "6. Authentication Integration",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Integrate authentication with NextAuth.js and providers.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Database Integration",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Connect Next.js with databases using Prisma and other ORMs.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. State Management",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Implement state management with Redux, Zustand, and Context API.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Testing Strategies",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Test Next.js applications with Jest, Testing Library, and Cypress.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. PWA Implementation",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Convert Next.js apps to Progressive Web Apps.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/10");
+            return { files };
+        },
+    },
 ];
 
 const hardMenu = [
@@ -230,6 +275,51 @@ const hardMenu = [
         task: "Customize webpack configuration for advanced build optimizations.",
         onClick: async () => {
             const files = await loadExerciseFiles("hard/5");
+            return { files };
+        },
+    },
+    {
+        label: "6. Streaming and Suspense",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Implement streaming SSR with React Suspense boundaries.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Micro-frontends Architecture",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Build micro-frontends architecture with Module Federation.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. Advanced API Routes",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Build complex API routes with GraphQL and real-time subscriptions.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Performance Monitoring",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Implement comprehensive performance monitoring and analytics.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Enterprise Deployment",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Deploy Next.js at enterprise scale with Docker and Kubernetes.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/10");
             return { files };
         },
     },

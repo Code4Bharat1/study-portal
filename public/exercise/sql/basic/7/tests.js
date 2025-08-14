@@ -1,13 +1,11 @@
-// Simple Browser-Compatible Test for Basic Joins
-// No external dependencies - works entirely in browser
+// Test for Basic JOINs
+console.log("🧪 Testing: Basic JOINs");
 
-console.log("🧪 Testing: Basic Joins");
-
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,59 +13,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+        // Check for INNER JOIN
+        const has_inner_join = /INNER\s+JOIN\s+\w+/i.test(user_code);
+        if (has_inner_join) {
+            checks.push("✅ Has INNER JOIN");
+            score += 25;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing INNER JOIN");
         }
         
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+        // Check for ON clause
+        const has_on_clause = /JOIN\s+.*ON\s+\w+/i.test(user_code);
+        if (has_on_clause) {
+            checks.push("✅ Has ON clause");
+            score += 25;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing ON clause");
         }
         
-        // Topic-specific checks
-        const topic = "Basic Joins".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for SELECT with JOIN
+        const has_select_join = /SELECT\s+.*FROM\s+.*INNER\s+JOIN/i.test(user_code);
+        if (has_select_join) {
+            checks.push("✅ Has SELECT with JOIN");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing SELECT with JOIN");
+        }
+        
+        // Check for table alias
+        const has_table_alias = /JOIN\s+\w+\s+\w+/i.test(user_code);
+        if (has_table_alias) {
+            checks.push("✅ Has table alias");
+            score += 25;
+        } else {
+            checks.push("❌ Missing table alias");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more JOIN features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Basic Joins", language: "sql"}
+        runTests: run_simple_test,
+        testConfig: { topic: "Basic JOINs", language: "sql" }
     };
 }
 
-console.log("✅ Test ready for: Basic Joins");
+console.log("✅ Test ready for: Basic JOINs");

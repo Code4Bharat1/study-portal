@@ -1,13 +1,11 @@
-// Test for SQL WHERE Clause and Filtering
-// JavaScript test that validates SQL filtering concepts
+// Test for WHERE Clause and Filtering
+console.log("🧪 Testing: WHERE Clause and Filtering");
 
-console.log("🧪 Testing: SQL WHERE Clause and Filtering");
-
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,65 +13,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        // Remove comments and normalize whitespace
-        const cleanCode = userCode.replace(/--.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
-        
         // Check for WHERE clause
-        if (/WHERE\s+/i.test(cleanCode)) {
-            checks.push("✅ Uses WHERE clause for filtering");
-            score += 30;
+        const has_where = /WHERE\s+\w+/i.test(user_code);
+        if (has_where) {
+            checks.push("✅ Has WHERE clause");
+            score += 25;
         } else {
             checks.push("❌ Missing WHERE clause");
         }
         
-        // Check for comparison operators
-        if (/[><=!]=?/.test(cleanCode)) {
-            checks.push("✅ Uses comparison operators (=, >, <, !=)");
+        // Check for comparison operator
+        const has_comparison = /WHERE\s+[^=><!]+(=|>|>=|<|<=|<>|!=)/i.test(user_code);
+        if (has_comparison) {
+            checks.push("✅ Has comparison operator");
             score += 25;
         } else {
-            checks.push("❌ Missing comparison operators");
+            checks.push("❌ Missing comparison operator");
         }
         
-        // Check for logical operators
-        if (/\b(AND|OR|NOT)\b/i.test(cleanCode)) {
-            checks.push("✅ Uses logical operators (AND, OR, NOT)");
+        // Check for logical operator
+        const has_logical = /WHERE\s+.*(AND|OR)\s+/i.test(user_code);
+        if (has_logical) {
+            checks.push("✅ Has logical operator (AND/OR)");
             score += 25;
         } else {
-            checks.push("❌ Missing logical operators");
+            checks.push("❌ Missing logical operator");
         }
         
-        // Check for advanced filtering (LIKE, IN, BETWEEN)
-        if (/\b(LIKE|IN|BETWEEN|IS\s+NULL|IS\s+NOT\s+NULL)\b/i.test(cleanCode)) {
-            checks.push("✅ Uses advanced filtering (LIKE, IN, BETWEEN, NULL checks)");
-            score += 20;
+        // Check for SELECT with WHERE
+        const has_select_where = /SELECT\s+.*FROM\s+.*WHERE\s+/i.test(user_code);
+        if (has_select_where) {
+            checks.push("✅ Has SELECT with WHERE");
+            score += 25;
         } else {
-            checks.push("❌ Missing advanced filtering operators");
+            checks.push("❌ Missing SELECT with WHERE");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        
-        if (result.passed) {
-            result.message = `Excellent filtering! Score: ${result.score}/100`;
-        } else {
-            result.message = `Score: ${result.score}/100 - Use WHERE clause with comparison and logical operators`;
-        }
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more WHERE clause features`;
+            
     } catch (error) {
-        result.message = "Error analyzing SQL WHERE clause: " + error.message;
-        result.details = ["❌ WHERE clause analysis failed"];
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "SQL WHERE Clause and Filtering", language: "sql"}
+        runTests: run_simple_test,
+        testConfig: { topic: "WHERE Clause and Filtering", language: "sql" }
     };
 }
 
-console.log("✅ SQL WHERE test ready for: WHERE Clause and Filtering");
+console.log("✅ Test ready for: WHERE Clause and Filtering");

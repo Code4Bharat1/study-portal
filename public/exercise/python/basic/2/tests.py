@@ -1,10 +1,9 @@
-# Simple Browser-Compatible Test for Basic Arithmetic Operations
-# No external dependencies - works entirely in browser
-
+# Test for Basic Arithmetic Operations
 print("🧪 Testing: Basic Arithmetic Operations")
 
+import ast
+
 def run_simple_test(user_code):
-    """Simple test that works without external dependencies"""
     result = {"passed": False, "score": 0, "message": "", "details": []}
     
     try:
@@ -14,46 +13,69 @@ def run_simple_test(user_code):
         
         score = 0
         checks = []
+        tree = ast.parse(user_code)
         
-        # Basic Python checks
-        if "print(" in user_code:
-            checks.append("✅ Has print statement")
-            score += 30
+        # Check for addition
+        has_addition = False
+        for node in ast.walk(tree):
+            if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+                has_addition = True
+                break
+        if has_addition:
+            checks.append("✅ Has addition operation")
+            score += 25
         else:
-            checks.append("❌ Missing print statement")
+            checks.append("❌ Missing addition operation")
         
-        if "=" in user_code and not user_code.count("=") == user_code.count("=="):
-            checks.append("✅ Has variable assignment")
-            score += 30
+        # Check for subtraction
+        has_subtraction = False
+        for node in ast.walk(tree):
+            if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Sub):
+                has_subtraction = True
+                break
+        if has_subtraction:
+            checks.append("✅ Has subtraction operation")
+            score += 25
         else:
-            checks.append("❌ Missing variable assignment")
+            checks.append("❌ Missing subtraction operation")
         
-        # Topic-specific checks
-        topic_lower = "Basic Arithmetic Operations".lower()
-        if "variable" in topic_lower and "=" in user_code:
-            checks.append("✅ Topic content found")
-            score += 40
-        elif "function" in topic_lower and "def " in user_code:
-            checks.append("✅ Topic content found")
-            score += 40
-        elif "loop" in topic_lower and ("for " in user_code or "while " in user_code):
-            checks.append("✅ Topic content found")
-            score += 40
-        elif "class" in topic_lower and "class " in user_code:
-            checks.append("✅ Topic content found")
-            score += 40
+        # Check for multiplication
+        has_multiplication = False
+        for node in ast.walk(tree):
+            if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Mult):
+                has_multiplication = True
+                break
+        if has_multiplication:
+            checks.append("✅ Has multiplication operation")
+            score += 25
         else:
-            checks.append("⚠️ Add topic-specific content")
-            score += 20
+            checks.append("❌ Missing multiplication operation")
+        
+        # Check for division
+        has_division = False
+        for node in ast.walk(tree):
+            if isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Div, ast.FloorDiv)):
+                has_division = True
+                break
+        if has_division:
+            checks.append("✅ Has division operation")
+            score += 25
+        else:
+            checks.append("❌ Missing division operation")
         
         result["details"] = checks
         result["score"] = min(score, 100)
-        result["passed"] = score >= 70
-        result["message"] = f"Score: {result['score']}/100"
-        
+        result["passed"] = score >= 75
+        result["message"] = f"Great! Score: {result['score']}/100" if result["passed"] else f"Score: {result['score']}/100 - Add more arithmetic operations"
+            
     except Exception as e:
         result["message"] = f"Error: {str(e)}"
     
     return result
+
+exercise_test = {
+    "run_tests": run_simple_test,
+    "test_config": {"topic": "Basic Arithmetic Operations", "language": "python"}
+}
 
 print("✅ Test ready for: Basic Arithmetic Operations")

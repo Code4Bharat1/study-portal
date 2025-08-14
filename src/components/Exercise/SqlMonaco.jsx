@@ -181,6 +181,51 @@ const intermediateMenu = [
             return { files };
         },
     },
+    {
+        label: "6. Views and Materialized Views",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Create and manage views and materialized views.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Partitioning Tables",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Implement table partitioning for large datasets.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. JSON Data Handling",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Work with JSON data types and functions in SQL.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Full-Text Search",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Implement full-text search capabilities in SQL.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Temporary Tables",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Use temporary tables for intermediate data processing.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/10");
+            return { files };
+        },
+    },
 ];
 
 const hardMenu = [
@@ -226,6 +271,51 @@ const hardMenu = [
         task: "Perform complex data analysis and reporting queries.",
         onClick: async () => {
             const files = await loadExerciseFiles("hard/5");
+            return { files };
+        },
+    },
+    {
+        label: "6. Database Replication",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Set up and manage database replication for high availability.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Sharding and Scalability",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Implement database sharding for scalability.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. Advanced Indexing Strategies",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Use composite and covering indexes for performance.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Dynamic SQL",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Write dynamic SQL queries for flexible applications.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Database Security",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Implement role-based access control and encryption.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/10");
             return { files };
         },
     },

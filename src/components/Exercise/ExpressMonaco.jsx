@@ -194,6 +194,51 @@ const intermediateMenu = [
             return { files };
         },
     },
+    {
+        label: "6. File Upload Handling",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Handle file uploads with multer and storage options.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Caching Strategies",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Implement caching with Redis and memory caching.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. GraphQL Integration",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Integrate GraphQL with Express using Apollo Server.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Logging and Monitoring",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Implement comprehensive logging and application monitoring.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. API Documentation",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Generate API documentation with Swagger/OpenAPI.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/10");
+            return { files };
+        },
+    },
 ];
 
 const hardMenu = [
@@ -239,6 +284,51 @@ const hardMenu = [
         task: "Deploy Express applications to production environments.",
         onClick: async () => {
             const files = await loadExerciseFiles("hard/5");
+            return { files };
+        },
+    },
+    {
+        label: "6. Custom Framework Development",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Build custom middleware frameworks on top of Express.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Advanced Database Patterns",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Implement complex database patterns and ORM optimization.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. Event-Driven Architecture",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Build event-driven systems with message queues.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Container Orchestration",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Deploy Express apps with Docker and Kubernetes.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Advanced Testing Strategies",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Implement comprehensive testing with load and integration tests.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/10");
             return { files };
         },
     },

@@ -1,10 +1,10 @@
-// Test for Node.js Modules and Require
-// Topic-specific tests for exercise 1
+// Test for Node.js Basics and Modules
+// JavaScript test that validates Node.js module usage
 
-console.log("🧪 Testing: Node.js Modules and Require");
+console.log("🧪 Testing: Node.js Basics and Modules");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
@@ -15,49 +15,36 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 20;
-        } catch (e) {
-            checks.push("❌ Syntax error: " + e.message);
-            result.details = checks;
-            result.score = 0;
-            result.message = "Fix syntax errors first";
-            return result;
-        }
-        
-        // Check for require statement
-        if (/require\s*\(/.test(userCode)) {
-            checks.push("✅ Uses require statement");
-            score += 30;
-        } else {
-            checks.push("❌ Missing require statement");
-        }
-        
-        // Check for module.exports
-        if (/module\.exports/.test(userCode)) {
+        // Check for module.exports usage
+        if (/module\.exports\s*=/i.test(userCode)) {
             checks.push("✅ Uses module.exports");
             score += 25;
         } else {
             checks.push("❌ Missing module.exports");
         }
         
-        // Check for console.log
-        if (/console\.log/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 15;
+        // Check for require statement
+        if (/require\s*\(\s*['"][^'"]+['"]\s*\)/i.test(userCode)) {
+            checks.push("✅ Uses require to import module");
+            score += 25;
+        } else {
+            checks.push("❌ Missing require statement");
+        }
+        
+        // Check for basic console.log
+        if (/console\.log\s*\(/.test(userCode)) {
+            checks.push("✅ Uses console.log for output");
+            score += 25;
         } else {
             checks.push("❌ Missing console.log");
         }
         
-        // Check for Node.js built-in modules
-        if (/require\s*\(\s*['"](?:fs|path|http|url|os)['"]/.test(userCode)) {
-            checks.push("✅ Uses Node.js built-in module");
-            score += 10;
+        // Check for function declaration
+        if (/function\s+\w+\s*\(/.test(userCode)) {
+            checks.push("✅ Defines a function");
+            score += 25;
         } else {
-            checks.push("❌ Missing Node.js built-in module");
+            checks.push("❌ Missing function declaration");
         }
         
         result.details = checks;
@@ -65,7 +52,7 @@ function runSimpleTest(userCode) {
         result.passed = score >= 70;
         result.message = result.passed ? 
             `Great! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Use require and module.exports`;
+            `Score: ${result.score}/100 - Implement basic Node.js module patterns`;
         
     } catch (error) {
         result.message = "Error: " + error.message;
@@ -78,8 +65,8 @@ function runSimpleTest(userCode) {
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "Node.js Modules and Require", language: "nodejs"}
+        testConfig: { topic: "Node.js Basics and Modules", language: "javascript" }
     };
 }
 
-console.log("✅ Test ready for: Node.js Modules and Require");
+console.log("✅ Test ready for: Node.js Basics and Modules");

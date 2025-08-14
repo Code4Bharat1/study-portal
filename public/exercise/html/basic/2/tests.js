@@ -1,7 +1,5 @@
-// Simple Browser-Compatible Test for Headings and Paragraphs
-// No external dependencies - works entirely in browser
-
-console.log("🧪 Testing: Headings and Paragraphs");
+// Test for HTML5 APIs
+console.log("🧪 Testing: HTML5 APIs");
 
 function runSimpleTest(userCode) {
     const result = {passed: false, score: 0, message: "", details: []};
@@ -15,46 +13,45 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+        // Check for canvas element
+        if (/<canvas[^>]*>/i.test(userCode)) {
+            checks.push("✅ Has canvas element");
+            score += 25;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing canvas element");
         }
         
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+        // Check for geolocation API usage
+        if (/navigator\.geolocation\.getCurrentPosition/i.test(userCode)) {
+            checks.push("✅ Has geolocation API usage");
+            score += 25;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing geolocation API usage");
         }
         
-        // Topic-specific checks
-        const topic = "Headings and Paragraphs".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for localStorage or sessionStorage
+        if (/(localStorage|sessionStorage)\.(setItem|getItem)/i.test(userCode)) {
+            checks.push("✅ Has web storage usage");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing web storage usage");
+        }
+        
+        // Check for drag and drop or other HTML5 APIs
+        if (/(draggable|ondragstart|ondrop|FileReader|WebSocket)/i.test(userCode)) {
+            checks.push("✅ Has additional HTML5 API features");
+            score += 25;
+        } else {
+            checks.push("❌ Missing additional HTML5 API features");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed ? 
+            `Great! Score: ${result.score}/100` : 
+            `Score: ${result.score}/100 - Add more HTML5 API features`;
+            
     } catch (error) {
         result.message = "Error: " + error.message;
     }
@@ -62,12 +59,11 @@ function runSimpleTest(userCode) {
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "Headings and Paragraphs", language: "html"}
+        testConfig: {topic: "HTML5 APIs", language: "html"}
     };
 }
 
-console.log("✅ Test ready for: Headings and Paragraphs");
+console.log("✅ Test ready for: HTML5 APIs");

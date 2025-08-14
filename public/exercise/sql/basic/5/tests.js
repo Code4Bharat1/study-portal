@@ -1,13 +1,11 @@
-// Simple Browser-Compatible Test for GROUP BY and HAVING
-// No external dependencies - works entirely in browser
-
+// Test for GROUP BY and HAVING
 console.log("🧪 Testing: GROUP BY and HAVING");
 
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,58 +13,60 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+        // Check for GROUP BY clause
+        const has_group_by = /GROUP\s+BY\s+\w+/i.test(user_code);
+        if (has_group_by) {
+            checks.push("✅ Has GROUP BY clause");
+            score += 25;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing GROUP BY clause");
         }
         
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+        // Check for HAVING clause
+        const has_having = /HAVING\s+\w+/i.test(user_code);
+        if (has_having) {
+            checks.push("✅ Has HAVING clause");
+            score += 25;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing HAVING clause");
         }
         
-        // Topic-specific checks
-        const topic = "GROUP BY and HAVING".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for aggregate function
+        const has_aggregate = /(COUNT|SUM|AVG|MIN|MAX)\s*\(/i.test(user_code);
+        if (has_aggregate) {
+            checks.push("✅ Has aggregate function");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing aggregate function");
+        }
+        
+        // Check for SELECT with GROUP BY
+        const has_select_group = /SELECT\s+.*GROUP\s+BY/i.test(user_code);
+        if (has_select_group) {
+            checks.push("✅ Has SELECT with GROUP BY");
+            score += 25;
+        } else {
+            checks.push("❌ Missing SELECT with GROUP BY");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more GROUP BY and HAVING features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "GROUP BY and HAVING", language: "sql"}
+        runTests: run_simple_test,
+        testConfig: { topic: "GROUP BY and HAVING", language: "sql" }
     };
 }
 

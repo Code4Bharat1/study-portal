@@ -1,6 +1,4 @@
-// Simple Browser-Compatible Test for Images and Media
-// No external dependencies - works entirely in browser
-
+// Test for Images and Media
 console.log("🧪 Testing: Images and Media");
 
 function runSimpleTest(userCode) {
@@ -15,46 +13,45 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+        // Check for img tags with src
+        if (/<img[^>]+src\s*=\s*["'][^"']+["'][^>]*>/i.test(userCode)) {
+            checks.push("✅ Has image elements with src");
+            score += 25;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing image elements with src");
         }
         
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+        // Check for alt attributes
+        if (/<img[^>]+alt\s*=\s*["'][^"']*["'][^>]*>/i.test(userCode)) {
+            checks.push("✅ Has alt attributes for images");
+            score += 25;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing alt attributes for images");
         }
         
-        // Topic-specific checks
-        const topic = "Images and Media".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for video elements
+        if (/<video[^>]*>[\s\S]*<\/video>/i.test(userCode)) {
+            checks.push("✅ Has video elements");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing video elements");
+        }
+        
+        // Check for audio or iframe elements
+        if (/<(audio|iframe)[^>]*>/i.test(userCode)) {
+            checks.push("✅ Has audio or embedded media");
+            score += 25;
+        } else {
+            checks.push("❌ Missing audio or embedded media");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed ? 
+            `Great! Score: ${result.score}/100` : 
+            `Score: ${result.score}/100 - Add more media elements`;
+            
     } catch (error) {
         result.message = "Error: " + error.message;
     }
@@ -62,7 +59,6 @@ function runSimpleTest(userCode) {
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,

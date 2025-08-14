@@ -1,6 +1,4 @@
 // Test for HTML Document Structure
-// JavaScript test that validates HTML code
-
 console.log("🧪 Testing: HTML Document Structure");
 
 function runSimpleTest(userCode) {
@@ -53,7 +51,7 @@ function runSimpleTest(userCode) {
         result.message = result.passed ? 
             `Great! Score: ${result.score}/100` : 
             `Score: ${result.score}/100 - Create proper HTML document structure`;
-        
+            
     } catch (error) {
         result.message = "Error: " + error.message;
     }
@@ -61,7 +59,6 @@ function runSimpleTest(userCode) {
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,

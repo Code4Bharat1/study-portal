@@ -1,75 +1,51 @@
-// Simple Browser-Compatible Test for Dynamic Routes
-// No external dependencies - works entirely in browser
+"use client";
 
-console.log("🧪 Testing: Dynamic Routes");
+console.log("🧪 Testing: Environment Variables");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
-    
+    const result = { passed: false, score: 0, message: "", details: [] };
+
     try {
         if (!userCode || userCode.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
-        
+
         let score = 0;
         const checks = [];
-        
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
-        }
-        
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+
+        if (/process\.env\.\w+/i.test(userCode)) {
+            checks.push("✅ Uses process.env for environment variables");
+            score += 50;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing process.env usage");
         }
-        
-        // Topic-specific checks
-        const topic = "Dynamic Routes".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+
+        if (/export\s+async\s+function\s+getStaticProps\s*\(\)\s*{[^}]*process\.env/i.test(userCode)) {
+            checks.push("✅ Uses environment variables in getStaticProps");
+            score += 50;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing environment variables in getStaticProps");
         }
-        
+
         result.details = checks;
         result.score = Math.min(score, 100);
         result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.message = result.passed
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Include process.env in component or getStaticProps`;
     } catch (error) {
         result.message = "Error: " + error.message;
     }
-    
+
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "Dynamic Routes", language: "nextjs"}
+        testConfig: { topic: "Environment Variables", language: "javascript" }
     };
 }
 
-console.log("✅ Test ready for: Dynamic Routes");
+console.log("✅ Test ready for: Environment Variables");

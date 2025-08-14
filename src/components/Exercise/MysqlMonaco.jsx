@@ -193,6 +193,51 @@ const intermediateMenu = [
             return { files };
         },
     },
+    {
+        label: "6. Transactions and ACID",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Use transactions to ensure data consistency and integrity.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Common Table Expressions (CTEs)",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Use CTEs for recursive and complex queries.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. Window Functions",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Use window functions for advanced data analysis.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Full-Text Search",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Implement full-text search capabilities in MySQL.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. JSON Data Types",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Work with JSON data types and functions in MySQL.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/10");
+            return { files };
+        },
+    },
 ];
 
 const hardMenu = [
@@ -238,6 +283,51 @@ const hardMenu = [
         task: "Advanced MySQL performance tuning and monitoring.",
         onClick: async () => {
             const files = await loadExerciseFiles("hard/5");
+            return { files };
+        },
+    },
+    {
+        label: "6. Partitioning Strategies",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Implement table partitioning for large datasets.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. High Availability Setup",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Configure MySQL for high availability and failover.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. Custom Storage Engines",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Work with different storage engines and their optimizations.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Database Migration",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Plan and execute large-scale database migrations.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Advanced Administration",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Master MySQL administration for enterprise environments.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/10");
             return { files };
         },
     },

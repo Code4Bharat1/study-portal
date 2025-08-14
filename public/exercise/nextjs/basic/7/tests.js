@@ -1,75 +1,51 @@
-// Simple Browser-Compatible Test for Environment Variables
-// No external dependencies - works entirely in browser
+"use client";
 
-console.log("🧪 Testing: Environment Variables");
+console.log("🧪 Testing: CSS and Styling");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
-    
+    const result = { passed: false, score: 0, message: "", details: [] };
+
     try {
         if (!userCode || userCode.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
-        
+
         let score = 0;
         const checks = [];
-        
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
-        }
-        
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+
+        if (/import\s+styles\s+from\s+['"].*\.module\.css['"]/i.test(userCode)) {
+            checks.push("✅ Imports CSS module");
+            score += 50;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing CSS module import");
         }
-        
-        // Topic-specific checks
-        const topic = "Environment Variables".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+
+        if (/<[^>]+className\s*=\s*{\s*styles\.\w+\s*}/i.test(userCode)) {
+            checks.push("✅ Uses CSS module className");
+            score += 50;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing CSS module className usage");
         }
-        
+
         result.details = checks;
         result.score = Math.min(score, 100);
         result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.message = result.passed
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Include CSS module import and usage`;
     } catch (error) {
         result.message = "Error: " + error.message;
     }
-    
+
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "Environment Variables", language: "nextjs"}
+        testConfig: { topic: "CSS and Styling", language: "javascript" }
     };
 }
 
-console.log("✅ Test ready for: Environment Variables");
+console.log("✅ Test ready for: CSS and Styling");

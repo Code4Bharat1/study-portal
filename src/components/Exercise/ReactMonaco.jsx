@@ -189,6 +189,51 @@ const intermediateMenu = [
             return { files };
         },
     },
+    {
+        label: "6. React Portals",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Use React Portals for rendering components outside the DOM hierarchy.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Lazy Loading Components",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Implement lazy loading with React Suspense and lazy.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. API Integration",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Fetch and manage data from APIs using fetch or Axios.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Animation in React",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Add animations using libraries like Framer Motion.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Type Checking with PropTypes",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Implement type checking with PropTypes or TypeScript.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/10");
+            return { files };
+        },
+    },
 ];
 
 const hardMenu = [
@@ -234,6 +279,51 @@ const hardMenu = [
         task: "Use React 18 concurrent features like Suspense and transitions.",
         onClick: async () => {
             const files = await loadExerciseFiles("hard/5");
+            return { files };
+        },
+    },
+    {
+        label: "6. Microfrontends",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Implement microfrontends with React for modular applications.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Advanced Routing",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Implement dynamic routing and nested routes with React Router.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. Web Vitals Optimization",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Optimize Core Web Vitals for better performance and SEO.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Custom Renderers",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Create custom renderers for non-browser environments.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Accessibility (a11y)",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Implement accessible components with ARIA and best practices.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/10");
             return { files };
         },
     },

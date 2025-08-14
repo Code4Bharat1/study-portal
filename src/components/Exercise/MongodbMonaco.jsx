@@ -194,6 +194,51 @@ const intermediateMenu = [
             return { files };
         },
     },
+    {
+        label: "6. Backup and Restore",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Implement backup and restore strategies for MongoDB.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Monitoring and Profiling",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Monitor MongoDB performance and profile slow queries.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. Schema Validation",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Implement schema validation rules and data integrity.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. MapReduce Operations",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Use MapReduce for complex data processing tasks.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Time Series Collections",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Work with time series data and specialized collections.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/10");
+            return { files };
+        },
+    },
 ];
 
 const hardMenu = [
@@ -239,6 +284,51 @@ const hardMenu = [
         task: "Master MongoDB administration and operations.",
         onClick: async () => {
             const files = await loadExerciseFiles("hard/5");
+            return { files };
+        },
+    },
+    {
+        label: "6. Custom Storage Engines",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Work with custom storage engines and configurations.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Multi-Document Transactions",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Implement complex multi-document ACID transactions.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. Global Clusters",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Configure global clusters for worldwide data distribution.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Advanced Security",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Implement enterprise-grade security and compliance.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Performance Tuning",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Advanced performance tuning and optimization techniques.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/10");
             return { files };
         },
     },

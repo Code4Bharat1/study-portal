@@ -180,6 +180,51 @@ const intermediateMenu = [
             return { files };
         },
     },
+    {
+        label: "6. Middleware Development",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Create custom middleware for Express.js applications.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. API Documentation",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Document APIs using tools like Swagger or OpenAPI.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. File Upload Handling",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Implement file upload functionality with libraries like Multer.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Caching Strategies",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Implement caching using Redis or in-memory solutions.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Task Scheduling",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Schedule tasks using libraries like node-cron.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/10");
+            return { files };
+        },
+    },
 ];
 
 const hardMenu = [
@@ -225,6 +270,51 @@ const hardMenu = [
         task: "Deploy Node.js applications to production environments.",
         onClick: async () => {
             const files = await loadExerciseFiles("hard/5");
+            return { files };
+        },
+    },
+    {
+        label: "6. Serverless Architecture",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Build serverless applications using AWS Lambda or similar platforms.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Advanced Security Practices",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Implement advanced security measures like JWT and OAuth.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. GraphQL Implementation",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Create GraphQL APIs with Apollo or similar libraries.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Message Queues",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Implement message queues using RabbitMQ or similar systems.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Monitoring and Logging",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Set up monitoring and logging for Node.js applications.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/10");
             return { files };
         },
     },

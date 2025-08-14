@@ -1,7 +1,5 @@
-// Simple Browser-Compatible Test for Semantic HTML Elements
-// No external dependencies - works entirely in browser
-
-console.log("🧪 Testing: Semantic HTML Elements");
+// Test for Web Storage APIs
+console.log("🧪 Testing: Web Storage APIs");
 
 function runSimpleTest(userCode) {
     const result = {passed: false, score: 0, message: "", details: []};
@@ -15,46 +13,45 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+        // Check for localStorage usage
+        if (/localStorage\.(setItem|getItem|removeItem)/i.test(userCode)) {
+            checks.push("✅ Has localStorage usage");
+            score += 25;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing localStorage usage");
         }
         
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+        // Check for sessionStorage usage
+        if (/sessionStorage\.(setItem|getItem|removeItem)/i.test(userCode)) {
+            checks.push("✅ Has sessionStorage usage");
+            score += 25;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing sessionStorage usage");
         }
         
-        // Topic-specific checks
-        const topic = "Semantic HTML Elements".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for storage event listener
+        if (/addEventListener\s*\(\s*["']storage["']/i.test(userCode)) {
+            checks.push("✅ Has storage event listener");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing storage event listener");
+        }
+        
+        // Check for JSON parsing/storage
+        if (/(JSON\.stringify|JSON\.parse)\s*\(\s*[^\)]+\)\s*[\s\S]*(localStorage|sessionStorage)/i.test(userCode)) {
+            checks.push("✅ Has JSON storage usage");
+            score += 25;
+        } else {
+            checks.push("❌ Missing JSON storage usage");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed ? 
+            `Great! Score: ${result.score}/100` : 
+            `Score: ${result.score}/100 - Add more web storage features`;
+            
     } catch (error) {
         result.message = "Error: " + error.message;
     }
@@ -62,12 +59,11 @@ function runSimpleTest(userCode) {
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "Semantic HTML Elements", language: "html"}
+        testConfig: {topic: "Web Storage APIs", language: "html"}
     };
 }
 
-console.log("✅ Test ready for: Semantic HTML Elements");
+console.log("✅ Test ready for: Web Storage APIs");

@@ -181,6 +181,51 @@ const intermediateMenu = [
             return { files };
         },
     },
+    {
+        label: "6. Templating Engines",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Use templating engines like Twig or Blade for view rendering.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Authentication Systems",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Implement user authentication with password hashing.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. File Upload Security",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Handle file uploads securely with validation and storage.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Caching Mechanisms",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Implement caching with Memcached or Redis for performance.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Email Handling",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Send emails using PHPMailer or similar libraries.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("intermediate/10");
+            return { files };
+        },
+    },
 ];
 
 const hardMenu = [
@@ -226,6 +271,51 @@ const hardMenu = [
         task: "Write tests and deploy PHP applications to production.",
         onClick: async () => {
             const files = await loadExerciseFiles("hard/5");
+            return { files };
+        },
+    },
+    {
+        label: "6. Microservices with PHP",
+        icon: <FaUniversalAccess className="inline mr-2 text-xl" />,
+        task: "Design and implement microservices using PHP.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/6");
+            return { files };
+        },
+    },
+    {
+        label: "7. Advanced Database Queries",
+        icon: <FaWindowMaximize className="inline mr-2 text-xl" />,
+        task: "Write complex SQL queries and optimize database interactions.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/7");
+            return { files };
+        },
+    },
+    {
+        label: "8. API Rate Limiting",
+        icon: <FaList className="inline mr-2 text-xl" />,
+        task: "Implement rate limiting for APIs to ensure scalability.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/8");
+            return { files };
+        },
+    },
+    {
+        label: "9. Websockets in PHP",
+        icon: <FaImage className="inline mr-2 text-xl" />,
+        task: "Build real-time applications using PHP WebSocket libraries.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/9");
+            return { files };
+        },
+    },
+    {
+        label: "10. Monitoring and Logging",
+        icon: <FaShieldAlt className="inline mr-2 text-xl" />,
+        task: "Set up monitoring and logging for PHP applications.",
+        onClick: async () => {
+            const files = await loadExerciseFiles("hard/10");
             return { files };
         },
     },

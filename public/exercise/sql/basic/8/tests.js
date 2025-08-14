@@ -1,13 +1,11 @@
-// Simple Browser-Compatible Test for Table Creation and Schema
-// No external dependencies - works entirely in browser
+// Test for String Functions
+console.log("🧪 Testing: String Functions");
 
-console.log("🧪 Testing: Table Creation and Schema");
-
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,59 +13,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+        // Check for CONCAT function
+        const has_concat = /CONCAT\s*\(/i.test(user_code);
+        if (has_concat) {
+            checks.push("✅ Has CONCAT function");
+            score += 25;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing CONCAT function");
         }
         
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+        // Check for SUBSTRING function
+        const has_substring = /(SUBSTRING|SUBSTR)\s*\(/i.test(user_code);
+        if (has_substring) {
+            checks.push("✅ Has SUBSTRING function");
+            score += 25;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing SUBSTRING function");
         }
         
-        // Topic-specific checks
-        const topic = "Table Creation and Schema".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for string function in SELECT
+        const has_string_in_select = /SELECT\s+.*(CONCAT|SUBSTRING|SUBSTR)\s*\(/i.test(user_code);
+        if (has_string_in_select) {
+            checks.push("✅ Has string function in SELECT");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing string function in SELECT");
+        }
+        
+        // Check for AS alias
+        const has_alias = /AS\s+\w+/i.test(user_code);
+        if (has_alias) {
+            checks.push("✅ Has AS alias");
+            score += 25;
+        } else {
+            checks.push("❌ Missing AS alias");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more string function features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Table Creation and Schema", language: "sql"}
+        runTests: run_simple_test,
+        testConfig: { topic: "String Functions", language: "sql" }
     };
 }
 
-console.log("✅ Test ready for: Table Creation and Schema");
+console.log("✅ Test ready for: String Functions");

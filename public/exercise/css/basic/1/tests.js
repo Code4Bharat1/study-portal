@@ -1,6 +1,4 @@
 // Test for CSS Selectors and Properties
-// JavaScript test that validates CSS code
-
 console.log("🧪 Testing: CSS Selectors and Properties");
 
 function runSimpleTest(userCode) {
@@ -15,45 +13,45 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        // Check for CSS selectors
-        if (/[.#]?\w+\s*\{/.test(userCode)) {
-            checks.push("✅ Has CSS selectors");
+        // Check for element selector
+        if (/^[a-zA-Z][a-zA-Z0-9]*(?=\s*\{)/m.test(userCode)) {
+            checks.push("✅ Has element selector");
             score += 25;
         } else {
-            checks.push("❌ Missing CSS selectors");
+            checks.push("❌ Missing element selector");
         }
         
-        // Check for CSS properties
-        if (/\w+\s*:\s*[^;]+;/.test(userCode)) {
-            checks.push("✅ Has CSS properties");
+        // Check for class selector
+        if (/\.[a-zA-Z][a-zA-Z0-9-]*(?=\s*\{)/m.test(userCode)) {
+            checks.push("✅ Has class selector");
             score += 25;
         } else {
-            checks.push("❌ Missing CSS properties");
+            checks.push("❌ Missing class selector");
         }
         
-        // Check for color properties
-        if (/color\s*:|background-color\s*:/.test(userCode)) {
-            checks.push("✅ Uses color properties");
+        // Check for ID selector
+        if (/#[a-zA-Z][a-zA-Z0-9-]*(?=\s*\{)/m.test(userCode)) {
+            checks.push("✅ Has ID selector");
             score += 25;
         } else {
-            checks.push("❌ Missing color properties");
+            checks.push("❌ Missing ID selector");
         }
         
-        // Check for proper CSS syntax
-        if (/\{[^}]*\}/.test(userCode)) {
-            checks.push("✅ Proper CSS syntax structure");
+        // Check for basic properties (color, background-color, width, height)
+        if (/(color|background-color|width|height)\s*:\s*[^;]+;/i.test(userCode)) {
+            checks.push("✅ Has basic styling properties");
             score += 25;
         } else {
-            checks.push("❌ Missing proper CSS syntax structure");
+            checks.push("❌ Missing basic styling properties");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
+        result.passed = score >= 75;
         result.message = result.passed ? 
             `Great! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Use CSS selectors and properties`;
-        
+            `Score: ${result.score}/100 - Add more CSS selectors and properties`;
+            
     } catch (error) {
         result.message = "Error: " + error.message;
     }
@@ -61,7 +59,6 @@ function runSimpleTest(userCode) {
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,

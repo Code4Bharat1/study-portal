@@ -1,13 +1,11 @@
 // Test for Basic SELECT Statements
-// JavaScript test that validates SQL code
-
 console.log("🧪 Testing: Basic SELECT Statements");
 
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,16 +13,18 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        // Check for SELECT statement
-        if (/SELECT\s+/i.test(userCode)) {
-            checks.push("✅ Has SELECT statement");
-            score += 30;
+        // Check for SELECT keyword
+        const has_select = /SELECT\s+/i.test(user_code);
+        if (has_select) {
+            checks.push("✅ Has SELECT keyword");
+            score += 25;
         } else {
-            checks.push("❌ Missing SELECT statement");
+            checks.push("❌ Missing SELECT keyword");
         }
         
         // Check for FROM clause
-        if (/FROM\s+\w+/i.test(userCode)) {
+        const has_from = /FROM\s+\w+/i.test(user_code);
+        if (has_from) {
             checks.push("✅ Has FROM clause");
             score += 25;
         } else {
@@ -32,40 +32,41 @@ function runSimpleTest(userCode) {
         }
         
         // Check for column selection
-        if (/SELECT\s+\w+/i.test(userCode) || /SELECT\s+\*/i.test(userCode)) {
-            checks.push("✅ Selects columns or uses *");
+        const has_columns = /SELECT\s+[^;]+FROM/i.test(user_code);
+        if (has_columns) {
+            checks.push("✅ Has column selection");
             score += 25;
         } else {
             checks.push("❌ Missing column selection");
         }
         
         // Check for semicolon
-        if (/;/.test(userCode)) {
-            checks.push("✅ Has semicolon terminator");
-            score += 20;
+        const has_semicolon = /;/.test(user_code);
+        if (has_semicolon) {
+            checks.push("✅ Has semicolon");
+            score += 25;
         } else {
-            checks.push("❌ Missing semicolon (;)");
+            checks.push("❌ Missing semicolon");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Great! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Write a SELECT statement with FROM clause`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more SELECT statement features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Basic SELECT Statements", language: "sql"}
+        runTests: run_simple_test,
+        testConfig: { topic: "Basic SELECT Statements", language: "sql" }
     };
 }
 
