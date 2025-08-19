@@ -1,13 +1,12 @@
-// Simple Browser-Compatible Test for Backgrounds and Borders
-// No external dependencies - works entirely in browser
+// css/basic/6/tests.js
+// Test for CSS Flexbox
+console.log("🧪 Testing: CSS Flexbox");
 
-console.log("🧪 Testing: Backgrounds and Borders");
-
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,59 +14,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+        // Check for display: flex
+        const has_display_flex = /display\s*:\s*flex\s*;/i.test(user_code);
+        if (has_display_flex) {
+            checks.push("✅ Has display: flex");
+            score += 25;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing display: flex");
         }
         
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+        // Check for flex-direction
+        const has_flex_direction = /flex-direction\s*:\s*[^;]+;/i.test(user_code);
+        if (has_flex_direction) {
+            checks.push("✅ Has flex-direction");
+            score += 25;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing flex-direction");
         }
         
-        // Topic-specific checks
-        const topic = "Backgrounds and Borders".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for justify-content
+        const has_justify_content = /justify-content\s*:\s*[^;]+;/i.test(user_code);
+        if (has_justify_content) {
+            checks.push("✅ Has justify-content");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing justify-content");
+        }
+        
+        // Check for align-items
+        const has_align_items = /align-items\s*:\s*[^;]+;/i.test(user_code);
+        if (has_align_items) {
+            checks.push("✅ Has align-items");
+            score += 25;
+        } else {
+            checks.push("❌ Missing align-items");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more flexbox features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Backgrounds and Borders", language: "css"}
+        runTests: run_simple_test,
+        testConfig: { topic: "CSS Flexbox", language: "css" }
     };
 }
 
-console.log("✅ Test ready for: Backgrounds and Borders");
+console.log("✅ Test ready for: CSS Flexbox");

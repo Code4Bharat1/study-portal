@@ -1,13 +1,12 @@
-// Simple Browser-Compatible Test for CSS Units and Values
-// No external dependencies - works entirely in browser
+// css/basic/9/tests.js
+// Test for CSS Animations
+console.log("🧪 Testing: CSS Animations");
 
-console.log("🧪 Testing: CSS Units and Values");
-
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,59 +14,60 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+        // Check for @keyframes
+        const has_keyframes = /@keyframes\s+\w+\s*{/i.test(user_code);
+        if (has_keyframes) {
+            checks.push("✅ Has @keyframes");
+            score += 25;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing @keyframes");
         }
         
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+        // Check for animation-name
+        const has_animation_name = /animation-name\s*:\s*[^;]+;/i.test(user_code);
+        if (has_animation_name) {
+            checks.push("✅ Has animation-name");
+            score += 25;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing animation-name");
         }
         
-        // Topic-specific checks
-        const topic = "CSS Units and Values".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for animation-duration
+        const has_animation_duration = /animation-duration\s*:\s*[^;]+;/i.test(user_code);
+        if (has_animation_duration) {
+            checks.push("✅ Has animation-duration");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing animation-duration");
+        }
+        
+        // Check for animation shorthand
+        const has_animation = /animation\s*:\s*[^;]+;/i.test(user_code);
+        if (has_animation) {
+            checks.push("✅ Has animation shorthand");
+            score += 25;
+        } else {
+            checks.push("❌ Missing animation shorthand");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more animation features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "CSS Units and Values", language: "css"}
+        runTests: run_simple_test,
+        testConfig: { topic: "CSS Animations", language: "css" }
     };
 }
-
-console.log("✅ Test ready for: CSS Units and Values");
+console.log("✅ Test ready for: CSS Animations");

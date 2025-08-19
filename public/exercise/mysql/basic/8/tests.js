@@ -1,73 +1,53 @@
-// Simple Browser-Compatible Test for Backup and Restore
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Backup and Restore");
+// mysql/basic/8/tests.js
+"use client";
+
+console.log("🧪 Testing: Primary and Foreign Keys");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
-    
+    const result = { passed: false, score: 0, message: "", details: [] };
+
     try {
         if (!userCode || userCode.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
-        
+
         let score = 0;
         const checks = [];
-        
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+
+        if (/PRIMARY\s+KEY\s*\(\s*[`'"]?\w+[`'"]?\s*\)/i.test(userCode)) {
+            checks.push("✅ Defines PRIMARY KEY in table");
+            score += 50;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing PRIMARY KEY definition");
         }
-        
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+
+        if (/FOREIGN\s+KEY\s*\(\s*[`'"]?\w+[`'"]?\s*\)\s+REFERENCES/i.test(userCode)) {
+            checks.push("✅ Defines FOREIGN KEY with REFERENCES");
+            score += 50;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing FOREIGN KEY with REFERENCES");
         }
-        
-        // Topic-specific checks
-        const topic = "Backup and Restore".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
-        }
-        
+
         result.details = checks;
         result.score = Math.min(score, 100);
         result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.message = result.passed
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Include PRIMARY KEY and FOREIGN KEY`;
     } catch (error) {
         result.message = "Error: " + error.message;
     }
-    
+
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "Backup and Restore", language: "mysql"}
+        testConfig: { topic: "Primary and Foreign Keys", language: "javascript" }
     };
 }
 
-console.log("✅ Test ready for: Backup and Restore");
+console.log("✅ Test ready for: Primary and Foreign Keys");

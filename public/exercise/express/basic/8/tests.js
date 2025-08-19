@@ -1,13 +1,13 @@
-// Simple Browser-Compatible Test for Form Data and Body Parsing
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Form Data and Body Parsing");
+// express/basic/8/tests.js
+// Test for URL-Encoded Body Parsing
+console.log("🧪 Testing: URL-Encoded Body Parsing");
 
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,61 +15,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for express.urlencoded middleware
+        const has_urlencoded = /\w+\s*\.\s*use\s*\(\s*express\s*\.\s*urlencoded\s*\(\s*{/i.test(user_code);
+        if (has_urlencoded) {
+            checks.push("✅ Has express.urlencoded middleware");
+            score += 25;
+        } else {
+            checks.push("❌ Missing express.urlencoded middleware");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for extended option
+        const has_extended = /express\s*\.\s*urlencoded\s*\(\s*{\s*extended\s*:\s*(true|false)\s*}/i.test(user_code);
+        if (has_extended) {
+            checks.push("✅ Has extended option");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing extended option");
         }
         
-        // Topic-specific checks
-        const topic = "Form Data and Body Parsing".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for POST route
+        const has_post_route = /\w+\s*\.\s*post\s*\(\s*['"][^'"]+['"]/i.test(user_code);
+        if (has_post_route) {
+            checks.push("✅ Has POST route");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing POST route");
+        }
+        
+        // Check for req.body access
+        const has_body_access = /\w+\s*\.\s*body\s*\.\s*\w+/i.test(user_code);
+        if (has_body_access) {
+            checks.push("✅ Has req.body access");
+            score += 25;
+        } else {
+            checks.push("❌ Missing req.body access");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more URL-encoded body parsing features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Form Data and Body Parsing", language: "express"}
+        runTests: run_simple_test,
+        testConfig: { topic: "URL-Encoded Body Parsing", language: "express" }
     };
 }
 
-console.log("✅ Test ready for: Form Data and Body Parsing");
+console.log("✅ Test ready for: URL-Encoded Body Parsing");

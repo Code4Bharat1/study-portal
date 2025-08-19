@@ -1,75 +1,53 @@
-// Simple Browser-Compatible Test for Sorting and Limiting
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Sorting and Limiting");
+// mongodb/basic/5/tests.js
+"use client";
+
+console.log("🧪 Testing: Updating Documents");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
-    
+    const result = { passed: false, score: 0, message: "", details: [] };
+
     try {
         if (!userCode || userCode.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
-        
+
         let score = 0;
         const checks = [];
-        
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
-        }
-        
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+
+        if (/collection\.updateOne\s*\(\s*{.*},\s*{.*\$set:.*}\s*\)/i.test(userCode)) {
+            checks.push("✅ Uses updateOne with $set");
+            score += 50;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing updateOne with $set");
         }
-        
-        // Topic-specific checks
-        const topic = "Sorting and Limiting".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+
+        if (/await\s+collection\.updateOne/i.test(userCode)) {
+            checks.push("✅ Uses await with updateOne");
+            score += 50;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing await with updateOne");
         }
-        
+
         result.details = checks;
         result.score = Math.min(score, 100);
         result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.message = result.passed
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Include updateOne with $set and await`;
     } catch (error) {
         result.message = "Error: " + error.message;
     }
-    
+
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "Sorting and Limiting", language: "mongodb"}
+        testConfig: { topic: "Updating Documents", language: "javascript" }
     };
 }
 
-console.log("✅ Test ready for: Sorting and Limiting");
+console.log("✅ Test ready for: Updating Documents");

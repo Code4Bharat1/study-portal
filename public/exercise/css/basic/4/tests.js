@@ -1,13 +1,12 @@
-// Test for CSS Layout with Display
-// JavaScript test that validates CSS display properties
+// css/basic/4/tests.js
+// Test for CSS Text Properties
+console.log("🧪 Testing: CSS Text Properties");
 
-console.log("🧪 Testing: CSS Layout with Display");
-
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,58 +14,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        // Check for display property
-        if (/display\s*:\s*(block|inline|inline-block|flex|grid|none)/i.test(userCode)) {
-            checks.push("✅ Uses display property");
-            score += 30;
-        } else {
-            checks.push("❌ Missing display property");
-        }
-        
-        // Check for flexbox properties
-        if (/display\s*:\s*flex/i.test(userCode) || /(justify-content|align-items|flex-direction)\s*:/i.test(userCode)) {
-            checks.push("✅ Uses flexbox layout");
+        // Check for font-size
+        const has_font_size = /font-size\s*:\s*[^;]+;/i.test(user_code);
+        if (has_font_size) {
+            checks.push("✅ Has font-size");
             score += 25;
         } else {
-            checks.push("❌ Missing flexbox layout");
+            checks.push("❌ Missing font-size");
         }
         
-        // Check for grid properties
-        if (/display\s*:\s*grid/i.test(userCode) || /(grid-template|grid-gap|grid-area)\s*:/i.test(userCode)) {
-            checks.push("✅ Uses CSS Grid");
+        // Check for font-family
+        const has_font_family = /font-family\s*:\s*[^;]+;/i.test(user_code);
+        if (has_font_family) {
+            checks.push("✅ Has font-family");
             score += 25;
         } else {
-            checks.push("❌ Missing CSS Grid");
+            checks.push("❌ Missing font-family");
         }
         
-        // Check for positioning
-        if /(position|float|clear)\s*:\s*[^;]+;/i.test(userCode)) {
-            checks.push("✅ Uses positioning properties");
-            score += 20;
+        // Check for text-align
+        const has_text_align = /text-align\s*:\s*[^;]+;/i.test(user_code);
+        if (has_text_align) {
+            checks.push("✅ Has text-align");
+            score += 25;
         } else {
-            checks.push("❌ Missing positioning properties");
+            checks.push("❌ Missing text-align");
+        }
+        
+        // Check for text-decoration
+        const has_text_decoration = /text-decoration\s*:\s*[^;]+;/i.test(user_code);
+        if (has_text_decoration) {
+            checks.push("✅ Has text-decoration");
+            score += 25;
+        } else {
+            checks.push("❌ Missing text-decoration");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Great layout skills! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Use display, flexbox, grid, and positioning`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more text property features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "CSS Layout with Display", language: "css"}
+        runTests: run_simple_test,
+        testConfig: { topic: "CSS Text Properties", language: "css" }
     };
 }
 
-console.log("✅ Test ready for: CSS Layout with Display");
+console.log("✅ Test ready for: CSS Text Properties");

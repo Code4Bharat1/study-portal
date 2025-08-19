@@ -1,13 +1,13 @@
-// Simple Browser-Compatible Test for Static Files and Assets
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Static Files and Assets");
+// express/basic/5/tests.js
+// Test for Query Parameters
+console.log("🧪 Testing: Query Parameters");
 
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,61 +15,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for query parameter access
+        const has_query = /\w+\s*\.\s*query\s*\.\s*\w+/i.test(user_code);
+        if (has_query) {
+            checks.push("✅ Has query parameter access");
+            score += 25;
+        } else {
+            checks.push("❌ Missing query parameter access");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for GET route with query
+        const has_get_query = /\w+\s*\.\s*get\s*\(\s*['"][^'"]+['"]\s*,\s*function\s*\(\s*\w+\s*,\s*\w+\s*\)\s*{[^}]*\w+\s*\.\s*query/i.test(user_code);
+        if (has_get_query) {
+            checks.push("✅ Has GET route with query");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing GET route with query");
         }
         
-        // Topic-specific checks
-        const topic = "Static Files and Assets".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for response with query data
+        const has_res_query = /\w+\s*\.\s*send\s*\(\s*\w+\s*\.\s*query\s*\.\s*\w+/i.test(user_code);
+        if (has_res_query) {
+            checks.push("✅ Has response with query data");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing response with query data");
+        }
+        
+        // Check for conditional query handling
+        const has_conditional = /\w+\s*\.\s*query\s*\.\s*\w+\s*.*if\s*\(/i.test(user_code);
+        if (has_conditional) {
+            checks.push("✅ Has conditional query handling");
+            score += 25;
+        } else {
+            checks.push("❌ Missing conditional query handling");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more query parameter features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Static Files and Assets", language: "express"}
+        runTests: run_simple_test,
+        testConfig: { topic: "Query Parameters", language: "express" }
     };
 }
 
-console.log("✅ Test ready for: Static Files and Assets");
+console.log("✅ Test ready for: Query Parameters");

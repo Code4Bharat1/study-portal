@@ -1,11 +1,12 @@
-// Test for CSS Selectors and Properties
-console.log("🧪 Testing: CSS Selectors and Properties");
+// css/basic/1/tests.js
+// Test for Basic CSS Selectors
+console.log("🧪 Testing: Basic CSS Selectors");
 
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -14,7 +15,8 @@ function runSimpleTest(userCode) {
         const checks = [];
         
         // Check for element selector
-        if (/^[a-zA-Z][a-zA-Z0-9]*(?=\s*\{)/m.test(userCode)) {
+        const has_element_selector = /^[a-zA-Z]+[^{]*{/i.test(user_code);
+        if (has_element_selector) {
             checks.push("✅ Has element selector");
             score += 25;
         } else {
@@ -22,7 +24,8 @@ function runSimpleTest(userCode) {
         }
         
         // Check for class selector
-        if (/\.[a-zA-Z][a-zA-Z0-9-]*(?=\s*\{)/m.test(userCode)) {
+        const has_class_selector = /\.[a-zA-Z][^{]*{/i.test(user_code);
+        if (has_class_selector) {
             checks.push("✅ Has class selector");
             score += 25;
         } else {
@@ -30,30 +33,32 @@ function runSimpleTest(userCode) {
         }
         
         // Check for ID selector
-        if (/#[a-zA-Z][a-zA-Z0-9-]*(?=\s*\{)/m.test(userCode)) {
+        const has_id_selector = /#[a-zA-Z][^{]*{/i.test(user_code);
+        if (has_id_selector) {
             checks.push("✅ Has ID selector");
             score += 25;
         } else {
             checks.push("❌ Missing ID selector");
         }
         
-        // Check for basic properties (color, background-color, width, height)
-        if (/(color|background-color|width|height)\s*:\s*[^;]+;/i.test(userCode)) {
-            checks.push("✅ Has basic styling properties");
+        // Check for CSS property
+        const has_property = /[a-zA-Z-]+:\s*[^;]+;/i.test(user_code);
+        if (has_property) {
+            checks.push("✅ Has CSS property");
             score += 25;
         } else {
-            checks.push("❌ Missing basic styling properties");
+            checks.push("❌ Missing CSS property");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
         result.passed = score >= 75;
-        result.message = result.passed ? 
-            `Great! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Add more CSS selectors and properties`;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more selector features`;
             
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
@@ -61,9 +66,9 @@ function runSimpleTest(userCode) {
 
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "CSS Selectors and Properties", language: "css"}
+        runTests: run_simple_test,
+        testConfig: { topic: "Basic CSS Selectors", language: "css" }
     };
 }
 
-console.log("✅ Test ready for: CSS Selectors and Properties");
+console.log("✅ Test ready for: Basic CSS Selectors");

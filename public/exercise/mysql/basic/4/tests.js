@@ -1,73 +1,53 @@
-// Simple Browser-Compatible Test for MySQL Data Types
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: MySQL Data Types");
+// mysql/basic/4/tests.js
+"use client";
+
+console.log("🧪 Testing: Inserting Data");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
-    
+    const result = { passed: false, score: 0, message: "", details: [] };
+
     try {
         if (!userCode || userCode.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
-        
+
         let score = 0;
         const checks = [];
-        
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+
+        if (/INSERT\s+INTO\s+[`'"]?\w+[`'"]?\s*\(/i.test(userCode)) {
+            checks.push("✅ Uses INSERT INTO query");
+            score += 50;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing INSERT INTO query");
         }
-        
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+
+        if (/VALUES\s*\(\s*[^)]+\)/i.test(userCode)) {
+            checks.push("✅ Specifies VALUES in INSERT query");
+            score += 50;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing VALUES in INSERT query");
         }
-        
-        // Topic-specific checks
-        const topic = "MySQL Data Types".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
-        }
-        
+
         result.details = checks;
         result.score = Math.min(score, 100);
         result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.message = result.passed
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Include INSERT INTO with VALUES`;
     } catch (error) {
         result.message = "Error: " + error.message;
     }
-    
+
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "MySQL Data Types", language: "mysql"}
+        testConfig: { topic: "Inserting Data", language: "javascript" }
     };
 }
 
-console.log("✅ Test ready for: MySQL Data Types");
+console.log("✅ Test ready for: Inserting Data");

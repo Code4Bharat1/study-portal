@@ -1,75 +1,53 @@
-// Simple Browser-Compatible Test for Embedded Documents
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Embedded Documents");
+// mongodb/basic/8/tests.js
+"use client";
+
+console.log("🧪 Testing: Mongoose Schema and Model");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
-    
+    const result = { passed: false, score: 0, message: "", details: [] };
+
     try {
         if (!userCode || userCode.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
-        
+
         let score = 0;
         const checks = [];
-        
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
-        }
-        
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+
+        if (/const\s+\w+\s*=\s*new\s+mongoose\.Schema\s*\(\s*{/i.test(userCode)) {
+            checks.push("✅ Defines Mongoose schema");
+            score += 50;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing Mongoose schema definition");
         }
-        
-        // Topic-specific checks
-        const topic = "Embedded Documents".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+
+        if (/mongoose\.model\s*\(\s*['"][^'"]+['"],\s*\w+\s*\)/i.test(userCode)) {
+            checks.push("✅ Creates Mongoose model");
+            score += 50;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing Mongoose model creation");
         }
-        
+
         result.details = checks;
         result.score = Math.min(score, 100);
         result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.message = result.passed
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Include Mongoose schema and model`;
     } catch (error) {
         result.message = "Error: " + error.message;
     }
-    
+
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "Embedded Documents", language: "mongodb"}
+        testConfig: { topic: "Mongoose Schema and Model", language: "javascript" }
     };
 }
 
-console.log("✅ Test ready for: Embedded Documents");
+console.log("✅ Test ready for: Mongoose Schema and Model");

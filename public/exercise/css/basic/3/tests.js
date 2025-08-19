@@ -1,13 +1,13 @@
-// Test for CSS Box Model
-// JavaScript test that validates CSS box model concepts
 
-console.log("🧪 Testing: CSS Box Model");
+// css/basic/3/tests.js
+// Test for CSS Colors and Backgrounds
+console.log("🧪 Testing: CSS Colors and Backgrounds");
 
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,58 +15,60 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        // Check for margin properties
-        if (/margin(-top|-right|-bottom|-left)?\s*:\s*[^;]+;/.test(userCode)) {
-            checks.push("✅ Uses margin properties");
+        // Check for color property
+        const has_color = /color\s*:\s*[^;]+;/i.test(user_code);
+        if (has_color) {
+            checks.push("✅ Has color property");
             score += 25;
         } else {
-            checks.push("❌ Missing margin properties");
+            checks.push("❌ Missing color property");
         }
         
-        // Check for padding properties
-        if (/padding(-top|-right|-bottom|-left)?\s*:\s*[^;]+;/.test(userCode)) {
-            checks.push("✅ Uses padding properties");
+        // Check for background-color
+        const has_background_color = /background-color\s*:\s*[^;]+;/i.test(user_code);
+        if (has_background_color) {
+            checks.push("✅ Has background-color");
             score += 25;
         } else {
-            checks.push("❌ Missing padding properties");
+            checks.push("❌ Missing background-color");
         }
         
-        // Check for border properties
-        if (/border(-width|-style|-color)?\s*:\s*[^;]+;/.test(userCode)) {
-            checks.push("✅ Uses border properties");
+        // Check for background-image
+        const has_background_image = /background-image\s*:\s*[^;]+;/i.test(user_code);
+        if (has_background_image) {
+            checks.push("✅ Has background-image");
             score += 25;
         } else {
-            checks.push("❌ Missing border properties");
+            checks.push("❌ Missing background-image");
         }
         
-        // Check for width/height properties
-        if (/(width|height)\s*:\s*[^;]+;/.test(userCode)) {
-            checks.push("✅ Uses width/height properties");
+        // Check for background shorthand
+        const has_background = /background\s*:\s*[^;]+;/i.test(user_code);
+        if (has_background) {
+            checks.push("✅ Has background shorthand");
             score += 25;
         } else {
-            checks.push("❌ Missing width/height properties");
+            checks.push("❌ Missing background shorthand");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Great! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Use margin, padding, border, and dimensions`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more color and background features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "CSS Box Model", language: "css"}
+        runTests: run_simple_test,
+        testConfig: { topic: "CSS Colors and Backgrounds", language: "css" }
     };
 }
-
-console.log("✅ Test ready for: CSS Box Model");
+console.log("✅ Test ready for: CSS Colors and Backgrounds");

@@ -1,132 +1,74 @@
-const { ESLint } = require('eslint');
-const esprima = require('esprima');
-console.clear();
-console.clear();
-const fs = require('fs');
-const path = require('path');
+// css/hard/10/tests.js
+// Test for CSS Animations Complex
+console.log("🧪 Testing: CSS Animations Complex");
 
-// File paths
-const attemptsFile = path.join(__dirname, 'attempts.tests');
-const resultFile = path.join(__dirname, 'results.tests');
-
-// Read JavaScript
-const js = fs.readFileSync('index.js', 'utf8');
-
-// Helper: Read Attempts (default to 1)
-function readAttempts() {
-  if (fs.existsSync(attemptsFile)) {
-    const data = fs.readFileSync(attemptsFile, 'utf8');
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
+    
     try {
-      const parsed = JSON.parse(data);
-      return parsed.count >= 1 ? parsed.count : 1;
-    } catch (err) {
-      console.error('Error parsing attempts.tests. Resetting counter.');
-      return 1;
+        if (!user_code || user_code.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
+        }
+        
+        let score = 0;
+        const checks = [];
+        
+        // Check for @keyframes with multiple steps
+        const has_keyframes = /@keyframes\s+\w+\s*\{\s*(0|100|\d+\w*)\%\s*\{.*?\}\s*(0|100|\d+\w*)\%\s*\{.*?\}/i.test(user_code);
+        if (has_keyframes) {
+            checks.push("✅ Has @keyframes with multiple steps");
+            score += 25;
+        } else {
+            checks.push("❌ Missing @keyframes with multiple steps");
+        }
+        
+        // Check for animation with multiple properties
+        const has_animation = /animation\s*:\s*\w+\s+\d+\w*\s+\w+\s+\w+/i.test(user_code);
+        if (has_animation) {
+            checks.push("✅ Has animation with multiple properties");
+            score += 25;
+        } else {
+            checks.push("❌ Missing animation with multiple properties");
+        }
+        
+        // Check for animation-timing-function
+        const has_timing_function = /animation-timing-function\s*:\s*(ease|cubic-bezier|steps)/i.test(user_code);
+        if (has_timing_function) {
+            checks.push("✅ Has animation-timing-function");
+            score += 25;
+        } else {
+            checks.push("❌ Missing animation-timing-function");
+        }
+        
+        // Check for animation-fill-mode
+        const has_fill_mode = /animation-fill-mode\s*:\s*(forwards|backwards|both)/i.test(user_code);
+        if (has_fill_mode) {
+            checks.push("✅ Has animation-fill-mode");
+            score += 25;
+        } else {
+            checks.push("❌ Missing animation-fill-mode");
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more complex animation features`;
+            
+    } catch (error) {
+        result.message = `Error: ${error.message}`;
     }
-  }
-  return 1;
+    
+    return result;
 }
 
-// Helper: Write Attempt Count
-function writeAttempts(count) {
-  try {
-    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
-  } catch (err) {
-    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
-  }
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: run_simple_test,
+        testConfig: { topic: "CSS Animations Complex", language: "css" }
+    };
 }
 
-// Syntax Verification using ESLint
-async function syntaxVerify() {
-  const eslint = new ESLint();
-  const results = await eslint.lintText(js);
-  if (results[0].errorCount === 0) {
-    console.log('✔ JavaScript syntax is valid.');
-    return true;
-  } else {
-    console.log('❌ JavaScript syntax is not valid:');
-    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
-    return false;
-  }
-}
-
-// Code Verification
-function codeVerify() {
-  let allPassed = true;
-  let ast;
-  try {
-    ast = esprima.parseScript(js, { tolerant: true });
-  } catch (err) {
-    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
-    return false;
-  }
-
-  let consoleLogs = 0;
-  function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
-      consoleLogs++;
-    }
-    for (const key in node) {
-      if (node[key] && typeof node[key] === 'object') {
-        traverse(node[key]);
-      }
-    }
-  }
-  traverse(ast);
-
-  if (consoleLogs === 0) {
-    console.log('✘ No console.log statements found');
-    allPassed = false;
-  } else {
-    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
-  }
-
-  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
-  if (variableDeclarations.length === 0) {
-    console.log('✘ No variable declarations found');
-    allPassed = false;
-  } else {
-    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
-  }
-
-  if (allPassed) {
-    console.log('\n🎉 Success! Code verification passed.');
-  } else {
-    console.log('\n❗ Code verification failed. Please review your JavaScript.');
-  }
-  return allPassed;
-}
-
-// Main execution
-(async () => {
-  const startTime = process.hrtime();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  ;
-}
-
-  const structurePassed = codeVerify();
-  const allPassed = syntaxPassed && structurePassed;
-
-  const [sec, nanosec] = process.hrtime(startTime);
-  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
-  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
-
-  let attempts = readAttempts();
-  if (allPassed) {
-    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
-    try {
-      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
-      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
-    } catch (err) {
-      console.error(`Failed to write to ${resultFile}: ${err.message}`);
-    }
-    process.exit(0);
-  } else {
-    attempts += 1;
-    writeAttempts(attempts);
-    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
-    ;
-  }
-})();
+console.log("✅ Test ready for: CSS Animations Complex");

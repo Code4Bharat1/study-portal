@@ -1,13 +1,13 @@
-// Simple Browser-Compatible Test for Template Engines
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Template Engines");
+// express/basic/6/tests.js
+// Test for Route Parameters
+console.log("🧪 Testing: Route Parameters");
 
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,61 +15,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for route parameter
+        const has_route_param = /\w+\s*\.\s*get\s*\(\s*['"]\/:[^'"]+['"]/i.test(user_code);
+        if (has_route_param) {
+            checks.push("✅ Has route parameter");
+            score += 25;
+        } else {
+            checks.push("❌ Missing route parameter");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for params access
+        const has_params = /\w+\s*\.\s*params\s*\.\s*\w+/i.test(user_code);
+        if (has_params) {
+            checks.push("✅ Has params access");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing params access");
         }
         
-        // Topic-specific checks
-        const topic = "Template Engines".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for response with param
+        const has_res_param = /\w+\s*\.\s*send\s*\(\s*\w+\s*\.\s*params\s*\.\s*\w+/i.test(user_code);
+        if (has_res_param) {
+            checks.push("✅ Has response with param");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing response with param");
+        }
+        
+        // Check for multiple route parameters
+        const has_multiple_params = /\w+\s*\.\s*get\s*\(\s*['"]\/:[^'"]+\/:[^'"]+['"]/i.test(user_code);
+        if (has_multiple_params) {
+            checks.push("✅ Has multiple route parameters");
+            score += 25;
+        } else {
+            checks.push("❌ Missing multiple route parameters");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more route parameter features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Template Engines", language: "express"}
+        runTests: run_simple_test,
+        testConfig: { topic: "Route Parameters", language: "express" }
     };
 }
 
-console.log("✅ Test ready for: Template Engines");
+console.log("✅ Test ready for: Route Parameters");

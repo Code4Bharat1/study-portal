@@ -1,13 +1,12 @@
-// Simple Browser-Compatible Test for Middleware Functions
-// No external dependencies - works entirely in browser
+// express/basic/3/tests.js
+// Test for POST Routes
+console.log("🧪 Testing: POST Routes");
 
-console.log("🧪 Testing: Middleware Functions");
-
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,61 +14,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for POST route
+        const has_post_route = /\w+\s*\.\s*post\s*\(\s*['"][^'"]+['"]/i.test(user_code);
+        if (has_post_route) {
+            checks.push("✅ Has POST route");
+            score += 25;
+        } else {
+            checks.push("❌ Missing POST route");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for request body access
+        const has_req_body = /\w+\s*\.\s*body\s*\.\s*\w+/i.test(user_code);
+        if (has_req_body) {
+            checks.push("✅ Has request body access");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing request body access");
         }
         
-        // Topic-specific checks
-        const topic = "Middleware Functions".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for response status
+        const has_res_status = /\w+\s*\.\s*status\s*\(\s*\d+\s*\)/i.test(user_code);
+        if (has_res_status) {
+            checks.push("✅ Has response status");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing response status");
+        }
+        
+        // Check for response json
+        const has_res_json = /\w+\s*\.\s*json\s*\(\s*{/i.test(user_code);
+        if (has_res_json) {
+            checks.push("✅ Has response json");
+            score += 25;
+        } else {
+            checks.push("❌ Missing response json");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more POST route features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Middleware Functions", language: "express"}
+        runTests: run_simple_test,
+        testConfig: { topic: "POST Routes", language: "express" }
     };
 }
 
-console.log("✅ Test ready for: Middleware Functions");
+console.log("✅ Test ready for: POST Routes");

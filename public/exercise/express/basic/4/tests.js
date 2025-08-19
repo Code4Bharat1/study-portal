@@ -1,13 +1,13 @@
-// Simple Browser-Compatible Test for Request and Response Objects
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Request and Response Objects");
+// express/basic/4/tests.js
+// Test for Static Files
+console.log("🧪 Testing: Static Files");
 
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,61 +15,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for express.static
+        const has_static = /\w+\s*\.\s*use\s*\(\s*express\s*\.\s*static\s*\(\s*['"][^'"]+['"]/i.test(user_code);
+        if (has_static) {
+            checks.push("✅ Has express.static");
+            score += 25;
+        } else {
+            checks.push("❌ Missing express.static");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for app.use
+        const has_app_use = /\w+\s*\.\s*use\s*\(\s*['"][^'"]+['"]/i.test(user_code);
+        if (has_app_use) {
+            checks.push("✅ Has app.use");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing app.use");
         }
         
-        // Topic-specific checks
-        const topic = "Request and Response Objects".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for path module
+        const has_path = /const\s+\w+\s*=\s*require\s*\(\s*['"]path['"]\s*\)/i.test(user_code);
+        if (has_path) {
+            checks.push("✅ Has path module");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing path module");
+        }
+        
+        // Check for path.join
+        const has_path_join = /path\s*\.\s*join\s*\(\s*__dirname/i.test(user_code);
+        if (has_path_join) {
+            checks.push("✅ Has path.join");
+            score += 25;
+        } else {
+            checks.push("❌ Missing path.join");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more static file features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Request and Response Objects", language: "express"}
+        runTests: run_simple_test,
+        testConfig: { topic: "Static Files", language: "express" }
     };
 }
 
-console.log("✅ Test ready for: Request and Response Objects");
+console.log("✅ Test ready for: Static Files");

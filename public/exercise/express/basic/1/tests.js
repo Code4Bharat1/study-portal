@@ -1,13 +1,12 @@
-// Test for Express Setup and Basic Routes
-// JavaScript test that validates Express.js code
+// express/basic/1/tests.js
+// Test for Express App Setup
+console.log("🧪 Testing: Express App Setup");
 
-console.log("🧪 Testing: Express Setup and Basic Routes");
-
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,58 +14,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        // Check for Express import/require
-        if (/require\s*\(\s*['"]express['"]\s*\)/.test(userCode)) {
-            checks.push("✅ Imports Express framework");
+        // Check for express import
+        const has_express_import = /const\s+\w+\s*=\s*require\s*\(\s*['"]express['"]\s*\)/i.test(user_code);
+        if (has_express_import) {
+            checks.push("✅ Has express import");
             score += 25;
         } else {
-            checks.push("❌ Missing Express import");
+            checks.push("❌ Missing express import");
         }
         
         // Check for app creation
-        if (/express\s*\(\s*\)/.test(userCode)) {
-            checks.push("✅ Creates Express app instance");
+        const has_app_creation = /const\s+\w+\s*=\s*\w+\s*\(\s*\)/i.test(user_code);
+        if (has_app_creation) {
+            checks.push("✅ Has app creation");
             score += 25;
         } else {
-            checks.push("❌ Missing Express app creation");
+            checks.push("❌ Missing app creation");
         }
         
-        // Check for route definition
-        if (/app\.(get|post|put|delete)\s*\(/.test(userCode)) {
-            checks.push("✅ Defines routes");
+        // Check for app.listen
+        const has_listen = /\w+\s*\.\s*listen\s*\(\s*\d+/i.test(user_code);
+        if (has_listen) {
+            checks.push("✅ Has app.listen");
             score += 25;
         } else {
-            checks.push("❌ Missing route definitions");
+            checks.push("❌ Missing app.listen");
         }
         
-        // Check for server listening
-        if (/app\.listen\s*\(/.test(userCode) || /\.listen\s*\(/.test(userCode)) {
-            checks.push("✅ Server listens on port");
+        // Check for port variable
+        const has_port = /const\s+\w+\s*=\s*\d+/i.test(user_code);
+        if (has_port) {
+            checks.push("✅ Has port variable");
             score += 25;
         } else {
-            checks.push("❌ Missing server listen");
+            checks.push("❌ Missing port variable");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Great! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Set up Express server with routes`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more app setup features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Express Setup and Basic Routes", language: "express"}
+        runTests: run_simple_test,
+        testConfig: { topic: "Express App Setup", language: "express" }
     };
 }
 
-console.log("✅ Test ready for: Express Setup and Basic Routes");
+console.log("✅ Test ready for: Express App Setup");

@@ -1,73 +1,53 @@
-// Simple Browser-Compatible Test for Indexing in MySQL
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Indexing in MySQL");
+// mysql/basic/7/tests.js
+"use client";
+
+console.log("🧪 Testing: Deleting Data");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
-    
+    const result = { passed: false, score: 0, message: "", details: [] };
+
     try {
         if (!userCode || userCode.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
-        
+
         let score = 0;
         const checks = [];
-        
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+
+        if (/DELETE\s+FROM\s+[`'"]?\w+[`'"]?\s+WHERE/i.test(userCode)) {
+            checks.push("✅ Uses DELETE FROM WHERE query");
+            score += 50;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing DELETE FROM WHERE query");
         }
-        
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+
+        if (/connection\.query\s*\(\s*['"]DELETE\s+FROM/i.test(userCode)) {
+            checks.push("✅ Executes DELETE query via connection.query");
+            score += 50;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing connection.query for DELETE");
         }
-        
-        // Topic-specific checks
-        const topic = "Indexing in MySQL".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
-        }
-        
+
         result.details = checks;
         result.score = Math.min(score, 100);
         result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.message = result.passed
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Include DELETE FROM WHERE and connection.query`;
     } catch (error) {
         result.message = "Error: " + error.message;
     }
-    
+
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
         runTests: runSimpleTest,
-        testConfig: {topic: "Indexing in MySQL", language: "mysql"}
+        testConfig: { topic: "Deleting Data", language: "javascript" }
     };
 }
 
-console.log("✅ Test ready for: Indexing in MySQL");
+console.log("✅ Test ready for: Deleting Data");

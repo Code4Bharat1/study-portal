@@ -1,132 +1,74 @@
-const { ESLint } = require('eslint');
-const esprima = require('esprima');
-console.clear();
-console.clear();
-const fs = require('fs');
-const path = require('path');
+// express/hard/5/tests.js
+// Test for RESTful API
+console.log("🧪 Testing: RESTful API");
 
-// File paths
-const attemptsFile = path.join(__dirname, 'attempts.tests');
-const resultFile = path.join(__dirname, 'results.tests');
-
-// Read JavaScript
-const js = fs.readFileSync('index.js', 'utf8');
-
-// Helper: Read Attempts (default to 1)
-function readAttempts() {
-  if (fs.existsSync(attemptsFile)) {
-    const data = fs.readFileSync(attemptsFile, 'utf8');
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
+    
     try {
-      const parsed = JSON.parse(data);
-      return parsed.count >= 1 ? parsed.count : 1;
-    } catch (err) {
-      console.error('Error parsing attempts.tests. Resetting counter.');
-      return 1;
+        if (!user_code || user_code.trim().length < 5) {
+            result.message = "Code is empty or too short";
+            return result;
+        }
+        
+        let score = 0;
+        const checks = [];
+        
+        // Check for CRUD routes
+        const has_crud_routes = /\w+\s*\.\s*(get|post|put|delete)\s*\(\s*['"]\/[^'"]+['"]\s*,\s*function\s*\(\s*\w+\s*,\s*\w+\s*\)/i.test(user_code);
+        if (has_crud_routes) {
+            checks.push("✅ Has CRUD routes");
+            score += 25;
+        } else {
+            checks.push("❌ Missing CRUD routes");
+        }
+        
+        // Check for multiple HTTP methods
+        const has_multiple_methods = user_code.match(/\w+\s*\.\s*(get|post|put|delete)\s*\(\s*['"]/gi)?.length > 2;
+        if (has_multiple_methods) {
+            checks.push("✅ Has multiple HTTP methods");
+            score += 25;
+        } else {
+            checks.push("❌ Missing multiple HTTP methods");
+        }
+        
+        // Check for data handling
+        const has_data_handling = /\w+\s*\.\s*body\s*\.\s*\w+\s*.*\w+\s*\.\s*json\s*\(/i.test(user_code);
+        if (has_data_handling) {
+            checks.push("✅ Has data handling");
+            score += 25;
+        } else {
+            checks.push("❌ Missing data handling");
+        }
+        
+        // Check for resource-based routing
+        const has_resource_routing = /\w+\s*\.\s*(get|post|put|delete)\s*\(\s*['"]\/:[^'"]+['"]/i.test(user_code);
+        if (has_resource_routing) {
+            checks.push("✅ Has resource-based routing");
+            score += 25;
+        } else {
+            checks.push("❌ Missing resource-based routing");
+        }
+        
+        result.details = checks;
+        result.score = Math.min(score, 100);
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more RESTful API features`;
+            
+    } catch (error) {
+        result.message = `Error: ${error.message}`;
     }
-  }
-  return 1;
+    
+    return result;
 }
 
-// Helper: Write Attempt Count
-function writeAttempts(count) {
-  try {
-    fs.writeFileSync(attemptsFile, JSON.stringify({ count }, null, 2));
-  } catch (err) {
-    console.error(`Failed to write to ${attemptsFile}: ${err.message}`);
-  }
+if (typeof window !== 'undefined') {
+    window.exerciseTest = {
+        runTests: run_simple_test,
+        testConfig: { topic: "RESTful API", language: "express" }
+    };
 }
 
-// Syntax Verification using ESLint
-async function syntaxVerify() {
-  const eslint = new ESLint();
-  const results = await eslint.lintText(js);
-  if (results[0].errorCount === 0) {
-    console.log('✔ JavaScript syntax is valid.');
-    return true;
-  } else {
-    console.log('❌ JavaScript syntax is not valid:');
-    results[0].messages.forEach(msg => console.log(`- [${msg.ruleId}] ${msg.message} (line ${msg.line})`));
-    return false;
-  }
-}
-
-// Code Verification
-function codeVerify() {
-  let allPassed = true;
-  let ast;
-  try {
-    ast = esprima.parseScript(js, { tolerant: true });
-  } catch (err) {
-    console.log(`✘ Failed to parse JavaScript: ${err.message}`);
-    return false;
-  }
-
-  let consoleLogs = 0;
-  function traverse(node) {
-    if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && node.callee.object.name === 'console' && node.callee.property.name === 'log') {
-      consoleLogs++;
-    }
-    for (const key in node) {
-      if (node[key] && typeof node[key] === 'object') {
-        traverse(node[key]);
-      }
-    }
-  }
-  traverse(ast);
-
-  if (consoleLogs === 0) {
-    console.log('✘ No console.log statements found');
-    allPassed = false;
-  } else {
-    console.log(`✔ Found ${consoleLogs} console.log statement(s)`);
-  }
-
-  const variableDeclarations = ast.body.filter(node => node.type === 'VariableDeclaration');
-  if (variableDeclarations.length === 0) {
-    console.log('✘ No variable declarations found');
-    allPassed = false;
-  } else {
-    console.log(`✔ Found ${variableDeclarations.length} variable declaration(s)`);
-  }
-
-  if (allPassed) {
-    console.log('\n🎉 Success! Code verification passed.');
-  } else {
-    console.log('\n❗ Code verification failed. Please review your JavaScript.');
-  }
-  return allPassed;
-}
-
-// Main execution
-(async () => {
-  const startTime = process.hrtime();
-const syntaxPassed = await syntaxVerify();
-if (!syntaxPassed) {
-  console.log('\n❌ Syntax errors prevent further checks.');
-  ;
-}
-
-  const structurePassed = codeVerify();
-  const allPassed = syntaxPassed && structurePassed;
-
-  const [sec, nanosec] = process.hrtime(startTime);
-  const executionTime = +(sec + nanosec / 1e9).toFixed(3);
-  const linesOfCode = js.split('\n').filter(line => line.trim()).length;
-
-  let attempts = readAttempts();
-  if (allPassed) {
-    const resultData = { attempts, linesOfCode, executionTime, syntaxCheckPassed: syntaxPassed, structureCheckPassed: structurePassed, timestamp: new Date().toISOString() };
-    try {
-      fs.writeFileSync(resultFile, JSON.stringify(resultData, null, 2));
-      console.log(`\n✅ All tests passed. Results saved to ${resultFile}.`);
-    } catch (err) {
-      console.error(`Failed to write to ${resultFile}: ${err.message}`);
-    }
-    process.exit(0);
-  } else {
-    attempts += 1;
-    writeAttempts(attempts);
-    console.log(`\n❌ One or more tests failed. Attempt #${attempts} recorded.`);
-    ;
-  }
-})();
+console.log("✅ Test ready for: RESTful API");

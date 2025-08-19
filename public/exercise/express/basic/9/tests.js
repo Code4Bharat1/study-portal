@@ -1,13 +1,13 @@
-// Simple Browser-Compatible Test for Session Management
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Session Management");
+// express/basic/9/tests.js
+// Test for Basic Middleware
+console.log("🧪 Testing: Basic Middleware");
 
-function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+function run_simple_test(user_code) {
+    const result = { passed: false, score: 0, message: "", details: [] };
     
     try {
-        if (!userCode || userCode.trim().length < 5) {
+        if (!user_code || user_code.trim().length < 5) {
             result.message = "Code is empty or too short";
             return result;
         }
@@ -15,61 +15,61 @@ function runSimpleTest(userCode) {
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for middleware function
+        const has_middleware = /function\s+\w+\s*\(\s*\w+\s*,\s*\w+\s*,\s*next\s*\)/i.test(user_code);
+        if (has_middleware) {
+            checks.push("✅ Has middleware function");
+            score += 25;
+        } else {
+            checks.push("❌ Missing middleware function");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for app.use
+        const has_app_use = /\w+\s*\.\s*use\s*\(\s*\w+\s*\)/i.test(user_code);
+        if (has_app_use) {
+            checks.push("✅ Has app.use");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing app.use");
         }
         
-        // Topic-specific checks
-        const topic = "Session Management".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for next() call
+        const has_next = /next\s*\(\s*\)/i.test(user_code);
+        if (has_next) {
+            checks.push("✅ Has next() call");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing next() call");
+        }
+        
+        // Check for middleware application
+        const has_middleware_apply = /\w+\s*\.\s*use\s*\(\s*['"][^'"]+['"]\s*,\s*\w+\s*\)/i.test(user_code);
+        if (has_middleware_apply) {
+            checks.push("✅ Has middleware application");
+            score += 25;
+        } else {
+            checks.push("❌ Missing middleware application");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more middleware features`;
+            
     } catch (error) {
-        result.message = "Error: " + error.message;
+        result.message = `Error: ${error.message}`;
     }
     
     return result;
 }
 
-// Export for Monaco Editor
 if (typeof window !== 'undefined') {
     window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Session Management", language: "express"}
+        runTests: run_simple_test,
+        testConfig: { topic: "Basic Middleware", language: "express" }
     };
 }
 
-console.log("✅ Test ready for: Session Management");
+console.log("✅ Test ready for: Basic Middleware");
