@@ -16,8 +16,6 @@ It includes tutorials, quizzes, coding sandboxes, and resources for multiple tec
 
 🔐 Authentication & User Progress Tracking (Planned)
 
-🌐 Deployed with Vercel
-
 🛠️ Getting Started
 
 Clone the repository and install dependencies:
