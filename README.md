@@ -61,15 +61,8 @@ Tailwind CSS Docs
 
 Framer Motion
 
-Monaco Editor
+Monaco Editor 
 
-🚀 Deployment
+ and 
 
-Easily deploy with Vercel
-.
-For other deployment options, check Next.js Deployment Docs
-.
-
-🤝 Contributing
-
-Contributions are welcome! If you’d like to add more tutorials, quizzes, or sandbox improvements, feel free to fork and submit a PR.
+ More 
