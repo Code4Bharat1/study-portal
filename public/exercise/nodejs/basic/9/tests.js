@@ -1,75 +1,78 @@
-// Simple Browser-Compatible Test for Environment Variables
-// No external dependencies - works entirely in browser
-
+// nodejs/basic/9/tests.js
+// Test for Environment Variables
 console.log("🧪 Testing: Environment Variables");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for process.env access
+        const hasProcessEnv = userCode.match(/process\.env\.\w+/);
+        if (hasProcessEnv) {
+            checks.push("✅ Has process.env access");
+            score += 25;
+        } else {
+            checks.push("❌ Missing process.env access");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for default value
+        const hasDefaultValue = userCode.match(/process\.env\.\w+\s*\|\|\s*['"][^'"]+['"]/);
+        if (hasDefaultValue) {
+            checks.push("✅ Has default value for env");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing default value for env");
         }
         
-        // Topic-specific checks
-        const topic = "Environment Variables".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for environment variable usage
+        const hasEnvUsage = userCode.match(/console\.log\s*\(\s*process\.env\.\w+\s*\)/);
+        if (hasEnvUsage) {
+            checks.push("✅ Has environment variable usage");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing environment variable usage");
+        }
+        
+        // Check for configuration object
+        const hasConfigObject = userCode.match(/const\s+\w+\s*=\s*{[^}]*process\.env\.\w+[^}]*}/);
+        if (hasConfigObject) {
+            checks.push("✅ Has configuration object");
+            score += 25;
+        } else {
+            checks.push("❌ Missing configuration object");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more environment variable features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
 
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Environment Variables", language: "nodejs"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Environment Variables",
+      language: "javascript",
+    },
+  };
 }
 
 console.log("✅ Test ready for: Environment Variables");

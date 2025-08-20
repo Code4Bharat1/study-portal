@@ -1,75 +1,76 @@
-// Simple Browser-Compatible Test for Component Composition
-// No external dependencies - works entirely in browser
-
-console.log("🧪 Testing: Component Composition");
+// react/basic/10/tests.js
+// Test for React Router Basics
+console.log("🧪 Testing: React Router Basics");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for react-router-dom import
+        const hasRouterImport = userCode.match(/import\s+{[^}]*BrowserRouter[^}]*}\s+from\s+['"]react-router-dom['"]/);
+        if (hasRouterImport) {
+            checks.push("✅ Has react-router-dom import");
+            score += 25;
+        } else {
+            checks.push("❌ Missing react-router-dom import");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for BrowserRouter
+        const hasBrowserRouter = userCode.match(/<BrowserRouter\s*>/);
+        if (hasBrowserRouter) {
+            checks.push("✅ Has BrowserRouter");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing BrowserRouter");
         }
         
-        // Topic-specific checks
-        const topic = "Component Composition".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for Route component
+        const hasRoute = userCode.match(/<Route\s+[^>]+>/);
+        if (hasRoute) {
+            checks.push("✅ Has Route component");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing Route component");
+        }
+        
+        // Check for Link component
+        const hasLink = userCode.match(/<Link\s+to\s*=\s*['"][^'"]+['"][^>]*>/);
+        if (hasLink) {
+            checks.push("✅ Has Link component");
+            score += 25;
+        } else {
+            checks.push("❌ Missing Link component");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more React Router features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Component Composition", language: "react"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
-
-console.log("✅ Test ready for: Component Composition");
+console.log("✅ Test ready for: React Router Basics");

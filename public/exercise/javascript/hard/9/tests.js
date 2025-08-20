@@ -1,75 +1,78 @@
-// Simple Browser-Compatible Test for Performance Optimization
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Performance Optimization");
+// javascript/hard/9/tests.js
+// Test for Memory Management and Debugging
+console.log("🧪 Testing: Memory Management and Debugging");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for WeakMap
+        const hasWeakMap = userCode.match(/\bnew\s+WeakMap\s*\(\s*\)\s*;/);
+        if (hasWeakMap) {
+            checks.push("✅ Has WeakMap");
+            score += 25;
+        } else {
+            checks.push("❌ Missing WeakMap");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for WeakSet
+        const hasWeakSet = userCode.match(/\bnew\s+WeakSet\s*\(\s*\)\s*;/);
+        if (hasWeakSet) {
+            checks.push("✅ Has WeakSet");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing WeakSet");
         }
         
-        // Topic-specific checks
-        const topic = "Performance Optimization".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for console.time
+        const hasConsoleTime = userCode.match(/\bconsole\.time\s*\(\s*['"][^'"]+['"]\s*\)\s*;/);
+        if (hasConsoleTime) {
+            checks.push("✅ Has console.time");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing console.time");
+        }
+        
+        // Check for console.memory
+        const hasConsoleMemory = userCode.match(/\bconsole\.memory\s*;/);
+        if (hasConsoleMemory) {
+            checks.push("✅ Has console.memory");
+            score += 25;
+        } else {
+            checks.push("❌ Missing console.memory");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more memory management features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Performance Optimization", language: "javascript"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
 
-console.log("✅ Test ready for: Performance Optimization");
+console.log("✅ Test ready for: Memory Management and Debugging");

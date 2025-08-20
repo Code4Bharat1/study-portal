@@ -1,72 +1,78 @@
-// Test for JavaScript Asynchronous Programming
-// JavaScript test that validates async concepts
 
-console.log("🧪 Testing: JavaScript Asynchronous Programming");
+// javascript/basic/7/tests.js
+// Test for Objects and Properties
+console.log("🧪 Testing: Objects and Properties");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        // Check for Promise usage
-        if (/new\s+Promise\s*\(/.test(userCode) || /Promise\.(resolve|reject|all|race)\s*\(/.test(userCode)) {
-            checks.push("✅ Uses Promises");
+        // Check for object declaration
+        const hasObjectDecl = userCode.match(/\b(let|const|var)\s+\w+\s*=\s*{[^}]+}\s*;/);
+        if (hasObjectDecl) {
+            checks.push("✅ Has object declaration");
             score += 25;
         } else {
-            checks.push("❌ Missing Promise usage");
+            checks.push("❌ Missing object declaration");
         }
         
-        // Check for async/await
-        if (/async\s+function/.test(userCode) || /async\s*\(/.test(userCode)) {
-            checks.push("✅ Uses async functions");
+        // Check for dot notation
+        const hasDotNotation = userCode.match(/\b\w+\.\w+\s*(=\s*[^;]+)?;/);
+        if (hasDotNotation) {
+            checks.push("✅ Has dot notation");
             score += 25;
         } else {
-            checks.push("❌ Missing async functions");
+            checks.push("❌ Missing dot notation");
         }
         
-        // Check for await keyword
-        if (/await\s+/.test(userCode)) {
-            checks.push("✅ Uses await keyword");
+        // Check for bracket notation
+        const hasBracketNotation = userCode.match(/\b\w+\[['"][^'"]+['"]\]\s*(=\s*[^;]+)?;/);
+        if (hasBracketNotation) {
+            checks.push("✅ Has bracket notation");
             score += 25;
         } else {
-            checks.push("❌ Missing await keyword");
+            checks.push("❌ Missing bracket notation");
         }
         
-        // Check for .then() or .catch()
-        if (/\.(then|catch)\s*\(/.test(userCode)) {
-            checks.push("✅ Uses Promise chaining (.then/.catch)");
+        // Check for object method
+        const hasObjectMethod = userCode.match(/\b\w+\s*:\s*function\s*\([^)]*\)\s*{/);
+        if (hasObjectMethod) {
+            checks.push("✅ Has object method");
             score += 25;
         } else {
-            checks.push("❌ Missing Promise chaining");
+            checks.push("❌ Missing object method");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Great async programming! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Use Promises, async/await, and error handling`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more object features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "JavaScript Asynchronous Programming", language: "javascript"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
 
-console.log("✅ Test ready for: JavaScript Asynchronous Programming");
+console.log("✅ Test ready for: Objects and Properties");

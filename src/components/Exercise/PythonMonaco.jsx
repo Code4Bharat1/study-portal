@@ -18,7 +18,7 @@ import MonacoTestPlatform from "@/components/MonacoTestPlatform";
 
 const loadExerciseFiles = async (level) => {
   try {
-    const response = await fetch(`/exercise/python/${level}/tests.py`);
+    const response = await fetch(`/exercise/python/${level}/tests.js`);
     const testContent = response.ok
       ? await response.text()
       : "# Test file not found";

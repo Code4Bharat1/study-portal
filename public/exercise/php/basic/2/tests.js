@@ -1,79 +1,76 @@
-// Test for PHP Variables and Data Types
-// JavaScript test that validates PHP variable concepts
-
-console.log("🧪 Testing: PHP Variables and Data Types");
+// php/basic/2/tests.js
+// Test for Variables and Data Types
+console.log("🧪 Testing: Variables and Data Types");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        // Check for PHP variable declaration
-        if (/\$\w+\s*=/.test(userCode)) {
-            checks.push("✅ Declares PHP variables");
+        // Check for integer variable
+        const hasInt = userCode.match(/\$\w+\s*=\s*\d+\s*;/);
+        if (hasInt) {
+            checks.push("✅ Has integer variable");
             score += 25;
         } else {
-            checks.push("❌ Missing PHP variable declarations");
+            checks.push("❌ Missing integer variable");
         }
         
-        // Check for different data types
-        if (/\$\w+\s*=\s*["']/.test(userCode)) {
-            checks.push("✅ Uses string variables");
-            score += 20;
+        // Check for string variable
+        const hasString = userCode.match(/\$\w+\s*=\s*['"][^'"]+['"]\s*;/);
+        if (hasString) {
+            checks.push("✅ Has string variable");
+            score += 25;
         } else {
-            checks.push("❌ Missing string variables");
+            checks.push("❌ Missing string variable");
         }
         
-        if (/\$\w+\s*=\s*\d+/.test(userCode)) {
-            checks.push("✅ Uses numeric variables");
-            score += 20;
+        // Check for array variable
+        const hasArray = userCode.match(/\$\w+\s*=\s*\[\s*[^;]*\]\s*;/);
+        if (hasArray) {
+            checks.push("✅ Has array variable");
+            score += 25;
         } else {
-            checks.push("❌ Missing numeric variables");
+            checks.push("❌ Missing array variable");
         }
         
-        // Check for arrays
-        if (/array\s*\(/.test(userCode) || /\[\s*.*\s*\]/.test(userCode)) {
-            checks.push("✅ Creates arrays");
-            score += 20;
+        // Check for variable type check
+        const hasTypeCheck = userCode.match(/\b(is_int|is_string|is_array)\s*\(\s*\$\w+\s*\)\s*;/);
+        if (hasTypeCheck) {
+            checks.push("✅ Has variable type check");
+            score += 25;
         } else {
-            checks.push("❌ Missing array creation");
-        }
-        
-        // Check for variable output
-        if (/echo\s+\$\w+/.test(userCode) || /print\s+\$\w+/.test(userCode)) {
-            checks.push("✅ Outputs variables");
-            score += 15;
-        } else {
-            checks.push("❌ Missing variable output");
+            checks.push("❌ Missing variable type check");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Excellent PHP variables! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Use PHP variables with different data types`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more variable and data type features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "PHP Variables and Data Types", language: "php"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
-
-console.log("✅ Test ready for: PHP Variables and Data Types");
+console.log("✅ Test ready for: Variables and Data Types");

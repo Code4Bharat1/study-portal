@@ -1,75 +1,78 @@
-// Simple Browser-Compatible Test for Module Bundling and Lazy Loading
-// No external dependencies - works entirely in browser
 
-console.log("🧪 Testing: Module Bundling and Lazy Loading");
+// javascript/hard/7/tests.js
+// Test for Web APIs and Browser Features
+console.log("🧪 Testing: Web APIs and Browser Features");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for Fetch API
+        const hasFetch = userCode.match(/\bfetch\s*\(\s*['"][^'"]+['"]\s*\)\s*;/);
+        if (hasFetch) {
+            checks.push("✅ Has Fetch API");
+            score += 25;
+        } else {
+            checks.push("❌ Missing Fetch API");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for Web Worker
+        const hasWebWorker = userCode.match(/\bnew\s+Worker\s*\(\s*['"][^'"]+['"]\s*\)\s*;/);
+        if (hasWebWorker) {
+            checks.push("✅ Has Web Worker");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing Web Worker");
         }
         
-        // Topic-specific checks
-        const topic = "Module Bundling and Lazy Loading".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for Service Worker
+        const hasServiceWorker = userCode.match(/\bnavigator\.serviceWorker\.register\s*\(\s*['"][^'"]+['"]\s*\)\s*;/);
+        if (hasServiceWorker) {
+            checks.push("✅ Has Service Worker");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing Service Worker");
+        }
+        
+        // Check for Intersection Observer
+        const hasIntersectionObserver = userCode.match(/\bnew\s+IntersectionObserver\s*\(\s*[^)]+\)\s*;/);
+        if (hasIntersectionObserver) {
+            checks.push("✅ Has Intersection Observer");
+            score += 25;
+        } else {
+            checks.push("❌ Missing Intersection Observer");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more Web API features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Module Bundling and Lazy Loading", language: "javascript"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
 
-console.log("✅ Test ready for: Module Bundling and Lazy Loading");
+console.log("✅ Test ready for: Web APIs and Browser Features");

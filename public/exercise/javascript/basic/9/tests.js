@@ -1,72 +1,78 @@
-// Test for JavaScript Modules and Imports
-// JavaScript test that validates module concepts
 
-console.log("🧪 Testing: JavaScript Modules and Imports");
+// javascript/basic/9/tests.js
+// Test for DOM Manipulation Basics
+console.log("🧪 Testing: DOM Manipulation Basics");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        // Check for import statements
-        if (/import\s+/.test(userCode)) {
-            checks.push("✅ Uses import statements");
-            score += 30;
+        // Check for getElementById
+        const hasGetElementById = userCode.match(/\bdocument\.getElementById\s*\(\s*['"][^'"]+['"]\s*\)\s*;/);
+        if (hasGetElementById) {
+            checks.push("✅ Has getElementById");
+            score += 25;
         } else {
-            checks.push("❌ Missing import statements");
+            checks.push("❌ Missing getElementById");
         }
         
-        // Check for export statements
-        if (/export\s+(default\s+)?/.test(userCode)) {
-            checks.push("✅ Uses export statements");
-            score += 30;
+        // Check for querySelector
+        const hasQuerySelector = userCode.match(/\bdocument\.querySelector\s*\(\s*['"][^'"]+['"]\s*\)\s*;/);
+        if (hasQuerySelector) {
+            checks.push("✅ Has querySelector");
+            score += 25;
         } else {
-            checks.push("❌ Missing export statements");
+            checks.push("❌ Missing querySelector");
         }
         
-        // Check for named imports/exports
-        if (/import\s*\{[^}]+\}/.test(userCode) || /export\s*\{[^}]+\}/.test(userCode)) {
-            checks.push("✅ Uses named imports/exports");
-            score += 20;
+        // Check for innerHTML
+        const hasInnerHTML = userCode.match(/\b\w+\.innerHTML\s*=\s*[^;]+;/);
+        if (hasInnerHTML) {
+            checks.push("✅ Has innerHTML");
+            score += 25;
         } else {
-            checks.push("❌ Missing named imports/exports");
+            checks.push("❌ Missing innerHTML");
         }
         
-        // Check for module.exports or require (CommonJS)
-        if (/module\.exports\s*=/.test(userCode) || /require\s*\(/.test(userCode)) {
-            checks.push("✅ Uses CommonJS modules");
-            score += 20;
+        // Check for textContent
+        const hasTextContent = userCode.match(/\b\w+\.textContent\s*=\s*[^;]+;/);
+        if (hasTextContent) {
+            checks.push("✅ Has textContent");
+            score += 25;
         } else {
-            checks.push("❌ Missing CommonJS module syntax");
+            checks.push("❌ Missing textContent");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Great module usage! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Use import/export or require/module.exports`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more DOM manipulation features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "JavaScript Modules and Imports", language: "javascript"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
 
-console.log("✅ Test ready for: JavaScript Modules and Imports");
+console.log("✅ Test ready for: DOM Manipulation Basics");

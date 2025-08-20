@@ -1,75 +1,76 @@
-// Simple Browser-Compatible Test for Hooks (useState, useEffect)
-// No external dependencies - works entirely in browser
-
-console.log("🧪 Testing: Hooks (useState, useEffect)");
+// react/basic/8/tests.js
+// Test for useEffect Hook
+console.log("🧪 Testing: useEffect Hook");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for useEffect import
+        const hasUseEffect = userCode.match(/import\s+{[^}]*useEffect[^}]*}\s+from\s+['"]react['"]/);
+        if (hasUseEffect) {
+            checks.push("✅ Has useEffect import");
+            score += 25;
+        } else {
+            checks.push("❌ Missing useEffect import");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for useEffect call
+        const hasUseEffectCall = userCode.match(/useEffect\s*\(\s*\(\s*\)\s*=>\s*{/);
+        if (hasUseEffectCall) {
+            checks.push("✅ Has useEffect call");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing useEffect call");
         }
         
-        // Topic-specific checks
-        const topic = "Hooks (useState, useEffect)".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for dependency array
+        const hasDependencyArray = userCode.match(/useEffect\s*\(\s*\(\s*\)\s*=>\s*{[^}]+},\s*\[\s*[^\]]*\]\s*\)/);
+        if (hasDependencyArray) {
+            checks.push("✅ Has dependency array");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing dependency array");
+        }
+        
+        // Check for cleanup function
+        const hasCleanup = userCode.match(/useEffect\s*\(\s*\(\s*\)\s*=>\s*{[^}]*return\s*\(\s*\)\s*=>\s*{/);
+        if (hasCleanup) {
+            checks.push("✅ Has cleanup function");
+            score += 25;
+        } else {
+            checks.push("❌ Missing cleanup function");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more useEffect features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Hooks (useState, useEffect)", language: "react"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
-
-console.log("✅ Test ready for: Hooks (useState, useEffect)");
+console.log("✅ Test ready for: useEffect Hook");

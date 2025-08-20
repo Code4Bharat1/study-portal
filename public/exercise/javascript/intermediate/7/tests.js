@@ -1,75 +1,78 @@
-// Simple Browser-Compatible Test for Modules and Imports
-// No external dependencies - works entirely in browser
 
+// javascript/intermediate/7/tests.js
+// Test for Modules and Imports
 console.log("🧪 Testing: Modules and Imports");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for import statement
+        const hasImport = userCode.match(/\bimport\s+{[^}]+}\s+from\s+['"][^'"]+['"]\s*;/);
+        if (hasImport) {
+            checks.push("✅ Has import statement");
+            score += 25;
+        } else {
+            checks.push("❌ Missing import statement");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for default import
+        const hasDefaultImport = userCode.match(/\bimport\s+\w+\s+from\s+['"][^'"]+['"]\s*;/);
+        if (hasDefaultImport) {
+            checks.push("✅ Has default import");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing default import");
         }
         
-        // Topic-specific checks
-        const topic = "Modules and Imports".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for export statement
+        const hasExport = userCode.match(/\bexport\s+(default\s+)?\w+\s*;/);
+        if (hasExport) {
+            checks.push("✅ Has export statement");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing export statement");
+        }
+        
+        // Check for named export
+        const hasNamedExport = userCode.match(/\bexport\s+{[^}]+}\s*;/);
+        if (hasNamedExport) {
+            checks.push("✅ Has named export");
+            score += 25;
+        } else {
+            checks.push("❌ Missing named export");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more module features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Modules and Imports", language: "javascript"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
 
 console.log("✅ Test ready for: Modules and Imports");

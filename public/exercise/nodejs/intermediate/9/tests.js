@@ -1,52 +1,79 @@
-// nodejs/intermediate/9/tests.js
-"use client";
 
+// nodejs/intermediate/9/tests.js
+// Test for Caching Strategies
 console.log("🧪 Testing: Caching Strategies");
 
 function runSimpleTest(userCode) {
-    const result = { passed: false, score: 0, message: "", details: [] };
-
+    const result = { passed: false, score: 0, message: '', details: [] };
+    
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
-
+        
         let score = 0;
         const checks = [];
-
-        if (/const\s+redis\s*=\s*require\s*\(\s*['"]redis['"]\s*\)/i.test(userCode)) {
-            checks.push("✅ Imports redis module");
-            score += 50;
+        
+        // Check for redis import
+        const hasRedisImport = userCode.match(/const\s+\w+\s*=\s*require\s*\(\s*['"]redis['"]\s*\)/);
+        if (hasRedisImport) {
+            checks.push("✅ Has redis import");
+            score += 25;
         } else {
             checks.push("❌ Missing redis import");
         }
-
-        if (/redis\.createClient\s*\(/i.test(userCode)) {
-            checks.push("✅ Creates Redis client");
-            score += 50;
+        
+        // Check for redis client creation
+        const hasRedisClient = userCode.match(/createClient\s*\(\s*{/);
+        if (hasRedisClient) {
+            checks.push("✅ Has redis client creation");
+            score += 25;
         } else {
-            checks.push("❌ Missing Redis client creation");
+            checks.push("❌ Missing redis client creation");
         }
-
+        
+        // Check for cache get
+        const hasCacheGet = userCode.match(/\.get\s*\(\s*['"][^'"]+['"]/);
+        if (hasCacheGet) {
+            checks.push("✅ Has cache get");
+            score += 25;
+        } else {
+            checks.push("❌ Missing cache get");
+        }
+        
+        // Check for cache set
+        const hasCacheSet = userCode.match(/\.set\s*\(\s*['"][^'"]+['"]/);
+        if (hasCacheSet) {
+            checks.push("✅ Has cache set");
+            score += 25;
+        } else {
+            checks.push("❌ Missing cache set");
+        }
+        
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed
+        result.passed = score >= 75;
+        result.message = result.passed 
             ? `Great! Score: ${result.score}/100`
-            : `Score: ${result.score}/100 - Include redis and client creation`;
-    } catch (error) {
-        result.message = "Error: " + error.message;
+            : `Score: ${result.score}/100 - Add more caching features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
-
+    
     return result;
 }
 
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: { topic: "Caching Strategies", language: "javascript" }
-    };
+// Export for Monaco Editor
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Caching Strategies",
+      language: "javascript",
+    },
+  };
 }
 
 console.log("✅ Test ready for: Caching Strategies");

@@ -1,75 +1,78 @@
-// Simple Browser-Compatible Test for Streams and Buffers
-// No external dependencies - works entirely in browser
-
+// nodejs/basic/7/tests.js
+// Test for Streams and Buffers
 console.log("🧪 Testing: Streams and Buffers");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for fs module import
+        const hasFsImport = userCode.match(/const\s+fs\s*=\s*require\s*\(\s*['"]fs['"]\s*\)/);
+        if (hasFsImport) {
+            checks.push("✅ Has fs module import");
+            score += 25;
+        } else {
+            checks.push("❌ Missing fs module import");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for createReadStream
+        const hasReadStream = userCode.match(/fs\.createReadStream\s*\(\s*['"][^'"]+['"]/);
+        if (hasReadStream) {
+            checks.push("✅ Has createReadStream");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing createReadStream");
         }
         
-        // Topic-specific checks
-        const topic = "Streams and Buffers".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for createWriteStream
+        const hasWriteStream = userCode.match(/fs\.createWriteStream\s*\(\s*['"][^'"]+['"]/);
+        if (hasWriteStream) {
+            checks.push("✅ Has createWriteStream");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing createWriteStream");
+        }
+        
+        // Check for Buffer usage
+        const hasBuffer = userCode.match(/Buffer\.from\s*\(\s*['"][^'"]+['"]/);
+        if (hasBuffer) {
+            checks.push("✅ Has Buffer usage");
+            score += 25;
+        } else {
+            checks.push("❌ Missing Buffer usage");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more stream and buffer features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
 
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Streams and Buffers", language: "nodejs"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Streams and Buffers",
+      language: "javascript",
+    },
+  };
 }
 
 console.log("✅ Test ready for: Streams and Buffers");

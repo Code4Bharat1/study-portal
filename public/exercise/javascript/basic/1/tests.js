@@ -1,85 +1,67 @@
+// javascript/basic/1/tests.js
 // Test for Variables and Data Types
-// Topic-specific tests for exercise 1
-
 console.log("🧪 Testing: Variables and Data Types");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 20;
-        } catch (e) {
-            checks.push("❌ Syntax error: " + e.message);
-            result.details = checks;
-            result.score = 0;
-            result.message = "Fix syntax errors first";
-            return result;
-        }
-        
-        // Check for variable declarations
-        if (/(?:let|const|var)\s+\w+/.test(userCode)) {
-            checks.push("✅ Has variable declarations");
+        // Check for let declaration
+        const hasLet = userCode.match(/\blet\s+\w+\s*(=\s*[^;]+)?;/);
+        if (hasLet) {
+            checks.push("✅ Has let declaration");
             score += 25;
         } else {
-            checks.push("❌ Missing variable declarations (use let, const, or var)");
+            checks.push("❌ Missing let declaration");
         }
         
-        // Check for string variable
-        if (/(?:let|const|var)\s+\w+\s*=\s*["'`]/.test(userCode)) {
-            checks.push("✅ Has string variable");
-            score += 20;
+        // Check for const declaration
+        const hasConst = userCode.match(/\bconst\s+\w+\s*=\s*[^;]+;/);
+        if (hasConst) {
+            checks.push("✅ Has const declaration");
+            score += 25;
         } else {
-            checks.push("❌ Missing string variable");
+            checks.push("❌ Missing const declaration");
         }
         
-        // Check for number variable
-        if (/(?:let|const|var)\s+\w+\s*=\s*\d+/.test(userCode)) {
-            checks.push("✅ Has number variable");
-            score += 20;
+        // Check for var declaration
+        const hasVar = userCode.match(/\bvar\s+\w+\s*(=\s*[^;]+)?;/);
+        if (hasVar) {
+            checks.push("✅ Has var declaration");
+            score += 25;
         } else {
-            checks.push("❌ Missing number variable");
+            checks.push("❌ Missing var declaration");
         }
         
-        // Check for boolean variable
-        if (/(?:let|const|var)\s+\w+\s*=\s*(?:true|false)/.test(userCode)) {
-            checks.push("✅ Has boolean variable");
-            score += 15;
+        // Check for multiple data types
+        const hasMultipleTypes = userCode.match(/(\b(let|const|var)\s+\w+\s*=\s*(\d+|["'][^"']*["']|true|false|null|undefined)\s*;)/g)?.length >= 3;
+        if (hasMultipleTypes) {
+            checks.push("✅ Has multiple data types");
+            score += 25;
         } else {
-            checks.push("❌ Missing boolean variable");
+            checks.push("❌ Missing multiple data types");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Great! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Create variables of different data types`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more variable and data type features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
-}
-
-// Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Variables and Data Types", language: "javascript"}
-    };
 }
 
 console.log("✅ Test ready for: Variables and Data Types");

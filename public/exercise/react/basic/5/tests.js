@@ -1,75 +1,77 @@
-// Simple Browser-Compatible Test for Conditional Rendering
-// No external dependencies - works entirely in browser
-
+// react/basic/5/tests.js
+// Test for Conditional Rendering
 console.log("🧪 Testing: Conditional Rendering");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        
-        // JavaScript syntax check
-        try {
-            new Function(userCode);
-            checks.push("✅ Valid syntax");
-            score += 30;
-        } catch (e) {
-            checks.push("❌ Syntax error");
+        // Check for ternary operator
+        const hasTernary = userCode.match(/{\s*\w+\s*\?\s*<\w+[^>]*>\s*:\s*<\w+[^>]*>\s*}/);
+        if (hasTernary) {
+            checks.push("✅ Has ternary operator");
+            score += 25;
+        } else {
+            checks.push("❌ Missing ternary operator");
         }
         
-        // Basic JavaScript checks
-        if (/console\.log\s*\(/.test(userCode)) {
-            checks.push("✅ Has console.log");
-            score += 30;
+        // Check for logical AND operator
+        const hasLogicalAnd = userCode.match(/{\s*\w+\s*&&\s*<\w+[^>]*>\s*}/);
+        if (hasLogicalAnd) {
+            checks.push("✅ Has logical AND operator");
+            score += 25;
         } else {
-            checks.push("❌ Missing console.log");
+            checks.push("❌ Missing logical AND operator");
         }
         
-        // Topic-specific checks
-        const topic = "Conditional Rendering".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for useState for condition
+        const hasStateCondition = userCode.match(/const\s+\[\s*\w+\s*,\s*\w+\s*\]\s*=\s*useState\s*\(/);
+        if (hasStateCondition) {
+            checks.push("✅ Has state for condition");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing state for condition");
+        }
+        
+        // Check for conditional JSX
+        const hasConditionalJsx = userCode.match(/{[^}]*\s*<\w+[^>]*>\s*}/);
+        if (hasConditionalJsx) {
+            checks.push("✅ Has conditional JSX");
+            score += 25;
+        } else {
+            checks.push("❌ Missing conditional JSX");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more conditional rendering features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Conditional Rendering", language: "react"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
 
 console.log("✅ Test ready for: Conditional Rendering");

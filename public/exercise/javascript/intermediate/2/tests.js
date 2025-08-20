@@ -1,72 +1,78 @@
-// Test for JavaScript Advanced Functions
-// JavaScript test that validates advanced function concepts
 
-console.log("🧪 Testing: JavaScript Advanced Functions");
+// javascript/intermediate/2/tests.js
+// Test for Higher-Order Functions
+console.log("🧪 Testing: Higher-Order Functions");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        // Check for higher-order functions
-        if (/\.(map|filter|reduce|forEach)\s*\(/.test(userCode)) {
-            checks.push("✅ Uses higher-order functions (map, filter, reduce)");
+        // Check for function as parameter
+        const hasFunctionParam = userCode.match(/\bfunction\s+\w+\s*\(\s*\w+\s*,\s*function\s*\w*\s*\([^)]*\)\s*{/);
+        if (hasFunctionParam) {
+            checks.push("✅ Has function as parameter");
             score += 25;
         } else {
-            checks.push("❌ Missing higher-order functions");
+            checks.push("❌ Missing function as parameter");
         }
         
-        // Check for closures
-        if (/function\s+\w+\s*\([^)]*\)\s*\{[^}]*return\s+function/.test(userCode)) {
-            checks.push("✅ Implements closures");
-            score += 30;
+        // Check for function return
+        const hasFunctionReturn = userCode.match(/\bfunction\s+\w+\s*\([^)]*\)\s*{[^}]*return\s+function\s*\w*\s*\([^)]*\)\s*{/);
+        if (hasFunctionReturn) {
+            checks.push("✅ Has function return");
+            score += 25;
         } else {
-            checks.push("❌ Missing closure implementation");
+            checks.push("❌ Missing function return");
         }
         
-        // Check for function composition or currying
-        if (/=>\s*[^{]*=>/s.test(userCode) || /function\s*\([^)]*\)\s*\{[^}]*return\s+function\s*\([^)]*\)\s*\{/.test(userCode)) {
-            checks.push("✅ Uses function composition or currying");
+        // Check for callback usage
+        const hasCallback = userCode.match(/\b\w+\s*\(\s*[^,]+,\s*function\s*\w*\s*\([^)]*\)\s*{/);
+        if (hasCallback) {
+            checks.push("✅ Has callback usage");
+            score += 25;
+        } else {
+            checks.push("❌ Missing callback usage");
+        }
+        
+        // Check for function composition
+        const hasComposition = userCode.match(/\b\w+\s*\(\s*\w+\s*\(\s*[^)]+\)\s*\)\s*;/);
+        if (hasComposition) {
+            checks.push("✅ Has function composition");
             score += 25;
         } else {
             checks.push("❌ Missing function composition");
         }
         
-        // Check for callback functions
-        if (/\w+\s*\([^)]*function\s*\([^)]*\)/.test(userCode) || /\w+\s*\([^)]*=>/s.test(userCode)) {
-            checks.push("✅ Uses callback functions");
-            score += 20;
-        } else {
-            checks.push("❌ Missing callback functions");
-        }
-        
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Advanced function mastery! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Use higher-order functions, closures, and callbacks`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more higher-order function features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "JavaScript Advanced Functions", language: "javascript"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
 
-console.log("✅ Test ready for: JavaScript Advanced Functions");
+console.log("✅ Test ready for: Higher-Order Functions");

@@ -1,72 +1,78 @@
-// Test for JavaScript Error Handling
-// JavaScript test that validates error handling concepts
 
-console.log("🧪 Testing: JavaScript Error Handling");
+// javascript/basic/6/tests.js
+// Test for Arrays and Basic Methods
+console.log("🧪 Testing: Arrays and Basic Methods");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        // Check for try-catch blocks
-        if (/try\s*\{/.test(userCode) && /catch\s*\([^)]*\)\s*\{/.test(userCode)) {
-            checks.push("✅ Uses try-catch blocks");
-            score += 40;
-        } else {
-            checks.push("❌ Missing try-catch blocks");
-        }
-        
-        // Check for throw statements
-        if (/throw\s+/.test(userCode)) {
-            checks.push("✅ Uses throw statements");
+        // Check for array declaration
+        const hasArrayDecl = userCode.match(/\b(let|const|var)\s+\w+\s*=\s*\[\s*[^]]*\]\s*;/);
+        if (hasArrayDecl) {
+            checks.push("✅ Has array declaration");
             score += 25;
         } else {
-            checks.push("❌ Missing throw statements");
+            checks.push("❌ Missing array declaration");
         }
         
-        // Check for finally block
-        if (/finally\s*\{/.test(userCode)) {
-            checks.push("✅ Uses finally block");
-            score += 20;
+        // Check for push or pop
+        const hasPushPop = userCode.match(/\b\w+\.(push|pop)\s*\(\s*[^)]*\)\s*;/);
+        if (hasPushPop) {
+            checks.push("✅ Has push or pop");
+            score += 25;
         } else {
-            checks.push("❌ Missing finally block");
+            checks.push("❌ Missing push or pop");
         }
         
-        // Check for Error object usage
-        if (/new\s+Error\s*\(/.test(userCode) || /Error\s*\(/.test(userCode)) {
-            checks.push("✅ Creates Error objects");
-            score += 15;
+        // Check for shift or unshift
+        const hasShiftUnshift = userCode.match(/\b\w+\.(shift|unshift)\s*\(\s*[^)]*\)\s*;/);
+        if (hasShiftUnshift) {
+            checks.push("✅ Has shift or unshift");
+            score += 25;
         } else {
-            checks.push("❌ Missing Error object creation");
+            checks.push("❌ Missing shift or unshift");
+        }
+        
+        // Check for slice or splice
+        const hasSliceSplice = userCode.match(/\b\w+\.(slice|splice)\s*\(\s*[^)]+\)\s*;/);
+        if (hasSliceSplice) {
+            checks.push("✅ Has slice or splice");
+            score += 25;
+        } else {
+            checks.push("❌ Missing slice or splice");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Great! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Implement proper error handling`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more array method features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "JavaScript Error Handling", language: "javascript"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
 
-console.log("✅ Test ready for: JavaScript Error Handling");
+console.log("✅ Test ready for: Arrays and Basic Methods");

@@ -1,73 +1,76 @@
-// Simple Browser-Compatible Test for Include and Require
-// No external dependencies - works entirely in browser
-
+// php/basic/9/tests.js
+// Test for Include and Require
 console.log("🧪 Testing: Include and Require");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        
-        // Basic code checks
-        if (userCode.trim().length > 10) {
-            checks.push("✅ Has content");
-            score += 30;
+        // Check for include
+        const hasInclude = userCode.match(/\binclude\s+['"][^'"]+['"]\s*;/);
+        if (hasInclude) {
+            checks.push("✅ Has include statement");
+            score += 25;
         } else {
-            checks.push("❌ Too short");
+            checks.push("❌ Missing include statement");
         }
         
-        if (userCode.split('\n').length >= 3) {
-            checks.push("✅ Multi-line code");
-            score += 30;
+        // Check for require
+        const hasRequire = userCode.match(/\brequire\s+['"][^'"]+['"]\s*;/);
+        if (hasRequire) {
+            checks.push("✅ Has require statement");
+            score += 25;
         } else {
-            checks.push("❌ Add more lines");
+            checks.push("❌ Missing require statement");
         }
         
-        // Topic-specific checks
-        const topic = "Include and Require".toLowerCase();
-        if (topic.includes("variable") && /\w+\s*=/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("function") && /function\s+\w+/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("loop") && /(for|while)\s*\(/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
-        } else if (topic.includes("array") && /\[.*\]/.test(userCode)) {
-            checks.push("✅ Topic content found");
-            score += 40;
+        // Check for include_once
+        const hasIncludeOnce = userCode.match(/\binclude_once\s+['"][^'"]+['"]\s*;/);
+        if (hasIncludeOnce) {
+            checks.push("✅ Has include_once statement");
+            score += 25;
         } else {
-            checks.push("⚠️ Add topic-specific content");
-            score += 20;
+            checks.push("❌ Missing include_once statement");
+        }
+        
+        // Check for require_once
+        const hasRequireOnce = userCode.match(/\brequire_once\s+['"][^'"]+['"]\s*;/);
+        if (hasRequireOnce) {
+            checks.push("✅ Has require_once statement");
+            score += 25;
+        } else {
+            checks.push("❌ Missing require_once statement");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = `Score: ${result.score}/100`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more include/require features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "Include and Require", language: "php"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
-
 console.log("✅ Test ready for: Include and Require");

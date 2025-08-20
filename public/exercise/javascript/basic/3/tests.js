@@ -1,72 +1,79 @@
-// Test for JavaScript Objects and Arrays
-// JavaScript test that validates object and array concepts
 
-console.log("🧪 Testing: JavaScript Objects and Arrays");
+// javascript/basic/2/tests.js
+// Test for Basic Arithmetic Operations
+console.log("🧪 Testing: Basic Arithmetic Operations");
 
 function runSimpleTest(userCode) {
-    const result = {passed: false, score: 0, message: "", details: []};
+    const result = { passed: false, score: 0, message: '', details: [] };
     
     try {
         if (!userCode || userCode.trim().length < 5) {
-            result.message = "Code is empty or too short";
+            result.message = 'Code is empty or too short';
             return result;
         }
         
         let score = 0;
         const checks = [];
         
-        // Check for array creation
-        if (/\[\s*.*\s*\]/.test(userCode) || /new\s+Array\s*\(/.test(userCode)) {
-            checks.push("✅ Creates arrays");
+        // Check for arithmetic operators
+        const hasArithmetic = userCode.match(/[-+*/%]\s*\w+\s*[-+*/%]\s*\w+/);
+        if (hasArithmetic) {
+            checks.push("✅ Has arithmetic operators");
             score += 25;
         } else {
-            checks.push("❌ Missing array creation");
+            checks.push("❌ Missing arithmetic operators");
         }
         
-        // Check for object creation
-        if (/\{\s*.*\s*\}/.test(userCode) || /new\s+Object\s*\(/.test(userCode)) {
-            checks.push("✅ Creates objects");
+        // Check for exponentiation
+        const hasExponentiation = userCode.match(/\w+\s*\*\*\s*\w+/);
+        if (hasExponentiation) {
+            checks.push("✅ Has exponentiation");
             score += 25;
         } else {
-            checks.push("❌ Missing object creation");
+            checks.push("❌ Missing exponentiation");
         }
         
-        // Check for array methods
-        if (/\.(push|pop|shift|unshift|slice|splice|map|filter|forEach)\s*\(/.test(userCode)) {
-            checks.push("✅ Uses array methods");
+        // Check for type coercion
+        const hasTypeCoercion = userCode.match(/\w+\s*==\s*['"]\d+['"]|\w+\s*\+\s*['"][^'"]*['"]/);
+        if (hasTypeCoercion) {
+            checks.push("✅ Has type coercion");
             score += 25;
         } else {
-            checks.push("❌ Missing array methods");
+            checks.push("❌ Missing type coercion");
         }
         
-        // Check for object property access
-        if (/\w+\.\w+/.test(userCode) || /\w+\[['"].*['"]\]/.test(userCode)) {
-            checks.push("✅ Accesses object properties");
+        // Check for operator precedence
+        const hasPrecedence = userCode.match(/\(\s*\w+\s*[-+*/%]\s*\w+\s*\)\s*[-+*/%]\s*\w+/);
+        if (hasPrecedence) {
+            checks.push("✅ Has operator precedence");
             score += 25;
         } else {
-            checks.push("❌ Missing object property access");
+            checks.push("❌ Missing operator precedence");
         }
         
         result.details = checks;
         result.score = Math.min(score, 100);
-        result.passed = score >= 70;
-        result.message = result.passed ? 
-            `Great! Score: ${result.score}/100` : 
-            `Score: ${result.score}/100 - Work with objects and arrays`;
-        
-    } catch (error) {
-        result.message = "Error: " + error.message;
+        result.passed = score >= 75;
+        result.message = result.passed 
+            ? `Great! Score: ${result.score}/100`
+            : `Score: ${result.score}/100 - Add more arithmetic operation features`;
+            
+    } catch (e) {
+        result.message = `Error: ${e.message}`;
     }
     
     return result;
 }
-
 // Export for Monaco Editor
-if (typeof window !== 'undefined') {
-    window.exerciseTest = {
-        runTests: runSimpleTest,
-        testConfig: {topic: "JavaScript Objects and Arrays", language: "javascript"}
-    };
+if (typeof window !== "undefined") {
+  window.exerciseTest = {
+    runTests: runSimpleTest,
+    testConfig: {
+      topic: "Basic Arithmetic Operations",
+      language: "javascript",
+    },
+  };
 }
 
-console.log("✅ Test ready for: JavaScript Objects and Arrays");
+
+console.log("✅ Test ready for: Basic Arithmetic Operations");
